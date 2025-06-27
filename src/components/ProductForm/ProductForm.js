@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import './ProductForm.css';
 
-const ProductForm = ({ 
-  editandoId, 
-  productoAEditar, 
-  onAgregar, 
-  onEditar, 
-  onCancelar 
+const ProductForm = ({
+  editandoId,
+  productoAEditar,
+  onAgregar,
+  onEditar,
+  onCancelar,
+  categories // <--- AÑADIMOS LA PROP 'categories'
 }) => {
   const [formulario, setFormulario] = useState({
     nombre: '',
@@ -14,6 +15,7 @@ const ProductForm = ({
     cantidad: ''
   });
 
+  const [selectedCategory, setSelectedCategory] = useState(''); // <--- NUEVO ESTADO PARA LA CATEGORÍA SELECCIONADA
   const [errores, setErrores] = useState({});
 
   useEffect(() => {
@@ -23,11 +25,23 @@ const ProductForm = ({
         valor: productoAEditar.valor.toString(),
         cantidad: productoAEditar.cantidad.toString()
       });
+      // <--- CONFIGURAR CATEGORÍA PARA EDICIÓN
+      setSelectedCategory(productoAEditar.category ? productoAEditar.category.toString() : '');
     } else {
       setFormulario({ nombre: '', valor: '', cantidad: '' });
+      // <--- RESETEAR CATEGORÍA CUANDO NO SE ESTÁ EDITANDO
+      setSelectedCategory('');
     }
     setErrores({});
   }, [productoAEditar]);
+
+  // <--- NUEVO useEffect para preseleccionar la primera categoría si hay
+  useEffect(() => {
+    if (categories && categories.length > 0 && !selectedCategory && !editandoId) {
+      setSelectedCategory(categories[0].id.toString());
+    }
+  }, [categories, selectedCategory, editandoId]); // Dependencias actualizadas
+
 
   const validarFormulario = () => {
     const nuevosErrores = {};
@@ -44,21 +58,33 @@ const ProductForm = ({
       nuevosErrores.cantidad = 'La cantidad debe ser mayor a 0';
     }
 
+    if (!selectedCategory) { // <--- VALIDACIÓN DE CATEGORÍA
+      nuevosErrores.categoria = 'Debes seleccionar una categoría';
+    }
+
     setErrores(nuevosErrores);
     return Object.keys(nuevosErrores).length === 0;
   };
 
   const manejarSubmit = (e) => {
     e.preventDefault();
-    
+
     if (!validarFormulario()) {
       return;
     }
 
+    // <--- ENCONTRAR ICONO Y CATEGORÍA A PARTIR DE selectedCategory
+    const categoryObject = categories.find(cat => cat.id.toString() === selectedCategory);
+    const categoryId = categoryObject ? parseInt(categoryObject.id) : 0; // Usar 0 (Otros) como fallback
+    const icon = categoryObject ? categoryObject.icon : '🔤'; // Icono por defecto si no se encuentra
+
+
     const producto = {
       nombre: formulario.nombre.trim(),
       valor: parseFloat(formulario.valor),
-      cantidad: parseInt(formulario.cantidad)
+      cantidad: parseInt(formulario.cantidad),
+      category: categoryId, // <--- AÑADIMOS CATEGORÍA
+      icon: icon           // <--- AÑADIMOS ICONO
     };
 
     if (editandoId) {
@@ -68,15 +94,23 @@ const ProductForm = ({
     }
 
     setFormulario({ nombre: '', valor: '', cantidad: '' });
+    setSelectedCategory(''); // <--- RESETEAR CATEGORÍA DESPUÉS DE SUBMIT
     setErrores({});
   };
 
   const manejarCambio = (campo, valor) => {
     setFormulario({ ...formulario, [campo]: valor });
-    
-    // Limpiar error del campo cuando el usuario empiece a escribir
+
     if (errores[campo]) {
       setErrores({ ...errores, [campo]: '' });
+    }
+  };
+
+  // <--- NUEVA FUNCIÓN PARA MANEJAR CAMBIOS EN EL SELECT DE CATEGORÍAS
+  const manejarCambioCategoria = (e) => {
+    setSelectedCategory(e.target.value);
+    if (errores.categoria) {
+      setErrores({ ...errores, categoria: '' });
     }
   };
 
@@ -138,6 +172,26 @@ const ProductForm = ({
             {errores.cantidad && <span className="error-message">{errores.cantidad}</span>}
           </div>
         </div>
+
+        {/* <--- NUEVO SELECTOR DE CATEGORÍA */}
+        <div className="input-group">
+          <label htmlFor="categoria">Categoría</label>
+          <select
+            id="categoria"
+            value={selectedCategory}
+            onChange={manejarCambioCategoria}
+            className={errores.categoria ? 'input-error' : ''}
+          >
+            <option value="">Selecciona una categoría</option>
+            {categories.map((cat) => (
+              <option key={cat.id} value={cat.id}>
+                {cat.icon} {cat.title}
+              </option>
+            ))}
+          </select>
+          {errores.categoria && <span className="error-message">{errores.categoria}</span>}
+        </div>
+
 
         {(formulario.valor || formulario.cantidad) && (
           <div className="total-preview fade-in">

@@ -1,0 +1,88 @@
+/* src/pages/AuthPage/AuthPage.css */
+.auth-page-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f0f2f5;
+  padding: 20px;
+}
+
+.auth-form-card {
+  background-color: #ffffff;
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+}
+
+.auth-form-card h2 {
+  margin-bottom: 30px;
+  color: #333;
+  font-size: 2em;
+}
+
+.auth-form-card .form-group {
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.auth-form-card label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+  color: #555;
+}
+
+.auth-form-card input {
+  width: calc(100% - 20px);
+  padding: 12px 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1.1em;
+}
+
+.auth-form-card button {
+  width: 100%;
+  padding: 12px 15px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 1.2em;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.auth-form-card button:hover:not(:disabled) {
+  background-color: #45a049;
+}
+
+.auth-form-card button:disabled {
+  background-color: #a5d6a7;
+  cursor: not-allowed;
+}
+
+.auth-error {
+  color: #dc3545;
+  margin-bottom: 15px;
+  font-weight: bold;
+}
+
+.toggle-auth {
+  margin-top: 25px;
+  color: #666;
+}
+
+.toggle-auth span {
+  color: #007bff;
+  cursor: pointer;
+  font-weight: bold;
+  margin-left: 5px;
+}
+
+.toggle-auth span:hover {
+  text-decoration: underline;
+}

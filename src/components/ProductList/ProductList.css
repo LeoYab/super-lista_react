@@ -1,0 +1,22 @@
+.ProductList {
+  margin-top: 20px;
+}
+
+.ProductList ul {
+  list-style: none;
+  padding: 0;
+}
+
+.ProductList li {
+  padding: 12px 16px;
+  border-bottom: 1px solid #eee;
+}
+
+.ProductList li:last-child {
+  border-bottom: none;
+}
+
+.ProductList h2 {
+  font-size: 24px;
+  margin-bottom: 12px;
+}

@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import Header from '../components/header/Header';
+import Header from '../components/Header/Header';
 import SearchBar from '../components/SearchBar/SearchBar';
 import ProductForm from '../components/ProductForm/ProductForm';
 import ProductList from '../components/ProductList/ProductList';
 import TotalSummary from '../TotalSummary/TotalSummary';
-import { productService } from '../services/productService';2
+import { productService } from '../services/productService';
 import './SuperLista.css';
 
 const SuperLista = () => {
