@@ -1,0 +1,26 @@
+.total-summary {
+  border: 1px solid #eee;
+  border-radius: 5px;
+  padding: 16px;
+  margin-top: 16px;
+  text-align: center;
+}
+
+.total-summary h3 {
+  margin: 0 0 8px;
+  font-size: 1.5em;
+}
+
+.total-summary p {
+  margin: 0;
+  font-size: 1.2em;
+  font-weight: bold;
+}
+.total-summary .total-value {
+  color: #28a745;
+}
+.total-summary .total-value {
+  font-size: 1.2em;
+  font-weight: bold;
+  color: #28a745; /* Green color for total value */
+}
