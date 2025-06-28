@@ -10,6 +10,7 @@ import Header from './components/Header/Header';
 import ProductForm from './components/ProductForm/ProductForm';
 import ProductList from './components/ProductList/ProductList';
 import AuthPage from './pages/AuthPage/AuthPage';
+import SidebarMenu from './components/SidebarMenu/SidebarMenu'; // Importa el nuevo componente
 
 import './App.css';
 import './components/Header/Header.css';
@@ -17,6 +18,7 @@ import './components/ProductForm/ProductForm.css';
 import './components/ProductList/ProductList.css';
 import './components/ProductItem/ProductItem.css';
 import './pages/AuthPage/AuthPage.css';
+import './components/SidebarMenu/SidebarMenu.css'; // Importa el nuevo CSS del menú
 
 
 function MainAppContent() {
@@ -26,14 +28,19 @@ function MainAppContent() {
   const [loadingProducts, setLoadingProducts] = useState(true);
   const [loadingCategories, setLoadingCategories] = useState(true);
 
-  // Estados para la funcionalidad de edición
+  // Nuevos estados para la gestión de listas
+  const [userLists, setUserLists] = useState([]); // Array de {id, nameList, createdAt}
+  const [currentListId, setCurrentListId] = useState(null); // ID de la lista actualmente activa
+
+  // Estados para la funcionalidad de edición de productos
   const [editandoId, setEditandoId] = useState(null);
   const [productoAEditar, setProductoAEditar] = useState(null);
 
-  const userProductsRef = currentUser ?
-    ref(db, `Users/${currentUser.uid}/List_Products`) : null;
+  // Referencias de Firebase para listas y categorías
+  const userListsRef = currentUser ? ref(db, `Users/${currentUser.uid}/User_Lists`) : null;
   const categoriesRef = ref(db, 'Categories');
 
+  // Efecto para cargar categorías (se mantiene igual)
   useEffect(() => {
     setLoadingCategories(true);
     const unsubscribe = onValue(categoriesRef, (snapshot) => {
@@ -51,15 +58,59 @@ function MainAppContent() {
     return () => unsubscribe();
   }, []);
 
+  // Nuevo efecto: Carga las listas del usuario y establece una por defecto si no hay
   useEffect(() => {
     if (!currentUser) {
+      setUserLists([]);
+      setCurrentListId(null);
+      return;
+    }
+
+    const unsubscribe = onValue(userListsRef, (snapshot) => {
+      const data = snapshot.val();
+      const loadedLists = [];
+      if (data) {
+        for (let key in data) {
+          loadedLists.push({
+            id: key,
+            nameList: data[key].nameList || 'Lista sin nombre',
+            createdAt: data[key].createdAt || null // Asegurarse de que createdAt exista
+          });
+        }
+        // Ordenar listas por fecha de creación (más reciente primero)
+        loadedLists.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+      }
+      setUserLists(loadedLists);
+
+      // Si hay listas cargadas y no hay una lista actual seleccionada
+      // o la lista actual no existe, selecciona la primera.
+      if (loadedLists.length > 0 && (!currentListId || !loadedLists.some(list => list.id === currentListId))) {
+        setCurrentListId(loadedLists[0].id);
+      } else if (loadedLists.length === 0) {
+        // Si no existen listas, crea una por defecto
+        // NOTA: Esto se ejecutará solo una vez al inicio si el usuario no tiene listas.
+        // Si el usuario borra todas las listas, deberá crear una manualmente.
+        // createList("Mi Primera Lista"); // Descomentar si quieres que siempre cree una por defecto
+      }
+    }, (error) => {
+      console.error("Error al cargar listas del usuario:", error);
+    });
+
+    return () => unsubscribe();
+  }, [currentUser, userListsRef, currentListId]);
+
+  // Efecto para cargar productos, ahora depende de currentListId
+  useEffect(() => {
+    if (!currentUser || !currentListId) {
       setProducts([]);
       setLoadingProducts(false);
       return;
     }
 
     setLoadingProducts(true);
-    const unsubscribe = onValue(userProductsRef, (snapshot) => {
+    const currentListProductsRef = ref(db, `Users/${currentUser.uid}/User_Lists/${currentListId}/products`);
+
+    const unsubscribe = onValue(currentListProductsRef, (snapshot) => {
       const data = snapshot.val();
       const loadedProducts = [];
       if (data) {
@@ -83,13 +134,61 @@ function MainAppContent() {
     });
 
     return () => unsubscribe();
-  }, [currentUser]);
+  }, [currentUser, currentListId]);
 
-  const onAgregar = async (productoDataFormulario) => {
-    if (!currentUser) return;
+  // FUNCIÓN ACTUALIZADA: Para crear una nueva lista con nameList y createdAt
+  const createList = async (listName) => {
+    if (!currentUser || !listName.trim()) return;
 
     try {
-      const newProductRef = push(userProductsRef);
+      const newListRef = push(userListsRef);
+      await set(newListRef, {
+        nameList: listName.trim(), // Asegura que se usa el nombre del input
+        createdAt: Date.now()      // Añade la marca de tiempo de creación
+      });
+      setCurrentListId(newListRef.key); // Selecciona automáticamente la nueva lista
+    } catch (error) {
+      console.error("Error al crear nueva lista:", error);
+    }
+  };
+
+  // NUEVA FUNCIÓN: Para eliminar una lista
+  const deleteList = async (listIdToDelete) => {
+    if (!currentUser || !listIdToDelete) return;
+
+    try {
+      const listRefToDelete = ref(db, `Users/${currentUser.uid}/User_Lists/${listIdToDelete}`);
+      await remove(listRefToDelete);
+
+      // Después de eliminar, si la lista eliminada era la actual,
+      // intenta seleccionar la primera lista restante o ninguna si no hay más.
+      if (listIdToDelete === currentListId) {
+        const remainingLists = userLists.filter(list => list.id !== listIdToDelete);
+        if (remainingLists.length > 0) {
+          setCurrentListId(remainingLists[0].id);
+        } else {
+          setCurrentListId(null); // No hay listas restantes
+        }
+      }
+    } catch (error) {
+      console.error("Error al eliminar lista:", error);
+    }
+  };
+
+
+  // NUEVA FUNCIÓN: Para seleccionar una lista existente
+  const selectList = (listId) => {
+    setCurrentListId(listId);
+    setEditandoId(null); // Reinicia el estado de edición al cambiar de lista
+    setProductoAEditar(null);
+  };
+
+  // Funciones de Firebase existentes, actualizadas para usar currentListId
+  const onAgregar = async (productoDataFormulario) => {
+    if (!currentUser || !currentListId) return;
+    try {
+      const productsRef = ref(db, `Users/${currentUser.uid}/User_Lists/${currentListId}/products`);
+      const newProductRef = push(productsRef);
       await set(newProductRef, {
         nameProd: productoDataFormulario.nombre,
         price: parseFloat(productoDataFormulario.valor),
@@ -105,10 +204,9 @@ function MainAppContent() {
   };
 
   const onEditar = async (idFirebase, productoDataFormulario) => {
-    if (!currentUser) return;
-
+    if (!currentUser || !currentListId) return;
     try {
-      const productRef = ref(db, `Users/${currentUser.uid}/List_Products/${idFirebase}`);
+      const productRef = ref(db, `Users/${currentUser.uid}/User_Lists/${currentListId}/products/${idFirebase}`);
       await update(productRef, {
         nameProd: productoDataFormulario.nombre,
         price: parseFloat(productoDataFormulario.valor),
@@ -134,10 +232,9 @@ function MainAppContent() {
   };
 
   const toggleComplete = async (firebaseId) => {
-    if (!currentUser) return;
-
+    if (!currentUser || !currentListId) return;
     try {
-      const productRef = ref(db, `Users/${currentUser.uid}/List_Products/${firebaseId}`);
+      const productRef = ref(db, `Users/${currentUser.uid}/User_Lists/${currentListId}/products/${firebaseId}`);
       const productToUpdate = products.find(p => p.firebaseId === firebaseId);
       if (productToUpdate) {
         await update(productRef, {
@@ -150,10 +247,9 @@ function MainAppContent() {
   };
 
   const deleteProduct = async (firebaseId) => {
-    if (!currentUser) return;
-
+    if (!currentUser || !currentListId) return;
     try {
-      const productRef = ref(db, `Users/${currentUser.uid}/List_Products/${firebaseId}`);
+      const productRef = ref(db, `Users/${currentUser.uid}/User_Lists/${currentListId}/products/${firebaseId}`);
       await remove(productRef);
     } catch (error) {
       console.error("Error al eliminar producto:", error);
@@ -161,10 +257,10 @@ function MainAppContent() {
   };
 
   const clearProducts = async () => {
-    if (!currentUser) return;
-
+    if (!currentUser || !currentListId) return;
     try {
-      await remove(userProductsRef);
+      const productsRef = ref(db, `Users/${currentUser.uid}/User_Lists/${currentListId}/products`);
+      await remove(productsRef);
     } catch (error) {
       console.error("Error al vaciar la lista:", error);
     }
@@ -174,35 +270,60 @@ function MainAppContent() {
     <div className="App">
       <Header />
       <div className="container">
-        {currentUser && <p className="user-info">Hola, {currentUser.email}!</p>}
-        <button className="logout-button" onClick={logout}>Cerrar Sesión</button>
+        {/* Componente del menú lateral */}
+        <SidebarMenu
+          currentUser={currentUser}
+          logout={logout}
+          userLists={userLists}
+          createList={createList}
+          selectList={selectList}
+          currentListId={currentListId}
+          deleteList={deleteList} // Pasa la nueva función para eliminar listas
+        />
 
-        {/* Renderiza ProductForm */}
-        {loadingCategories ? (
-          <p>Cargando categorías para formulario...</p>
-        ) : (
-          <ProductForm
-            editandoId={editandoId}
-            productoAEditar={productoAEditar}
-            onAgregar={onAgregar}
-            onEditar={onEditar}
-            onCancelar={onCancelar}
-            categories={categories}
-          />
-        )}
+        {/* Renderiza el contenido principal solo si una lista está seleccionada */}
+        {currentListId ? (
+          <>
+            {/* Muestra el nombre de la lista actual */}
+            <h3 className="current-list-title">
+               <strong>Nombre de lista: </strong>
+                {userLists.find(list => list.id === currentListId)?.nameList || 'Cargando Lista...'}
+            </h3>
 
-        {/* Renderiza ProductList */}
-        {loadingProducts ? (
-          <p>Cargando lista...</p>
+            {/* Formulario de producto */}
+            {loadingCategories ? (
+              <p>Cargando categorías para formulario...</p>
+            ) : (
+              <ProductForm
+                editandoId={editandoId}
+                productoAEditar={productoAEditar}
+                onAgregar={onAgregar}
+                onEditar={onEditar}
+                onCancelar={onCancelar}
+                categories={categories}
+              />
+            )}
+
+            {/* Lista de productos */}
+            {loadingProducts ? (
+              <p>Cargando lista...</p>
+            ) : (
+              <ProductList
+                productos={products}
+                busqueda={''}
+                onEditar={iniciarEdicion}
+                onEliminar={deleteProduct}
+                onToggleComplete={toggleComplete}
+                onClearProducts={clearProducts}
+              />
+            )}
+          </>
         ) : (
-          <ProductList
-            productos={products}
-            busqueda={''}
-            onEditar={iniciarEdicion}
-            onEliminar={deleteProduct}
-            onToggleComplete={toggleComplete}
-            onClearProducts={clearProducts}
-          />
+          <div className="empty-state">
+             <div className="empty-icon">📂</div>
+             <h3 className="empty-title">Crea o selecciona una lista</h3>
+             <p className="empty-description">Usa el botón de menú (☰) en la esquina superior izquierda para gestionar tus listas.</p>
+          </div>
         )}
       </div>
     </div>
@@ -213,11 +334,15 @@ function MainAppContent() {
 function AppRouter() {
   const { currentUser } = useAuth();
 
+  // Muestra un loader o spinner mientras el estado de autenticación se está cargando
+  if (typeof currentUser === 'undefined') {
+    return <div className="loading-auth">Cargando usuario...</div>; // O un spinner
+  }
+
   return (
     <Routes>
       <Route path="/auth" element={currentUser ? <Navigate to="/" /> : <AuthPage />} />
       <Route path="/" element={currentUser ? <MainAppContent /> : <Navigate to="/auth" />} />
-      {/* Si tienes otras rutas, agrégalas aquí */}
     </Routes>
   );
 }

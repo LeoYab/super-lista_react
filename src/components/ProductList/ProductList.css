@@ -1,22 +1,112 @@
-.ProductList {
-  margin-top: 20px;
+/* src/components/ProductList/ProductList.css */
+
+.product-list-container {
+  margin-top: 30px;
+  background-color: var(--card-bg-color);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-light);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
-.ProductList ul {
-  list-style: none;
-  padding: 0;
+.no-products-message {
+  text-align: center;
+  color: var(--text-color-secondary);
+  font-style: italic;
+  padding: 20px;
+  border: 1px dashed var(--border-color);
+  border-radius: var(--border-radius);
 }
 
-.ProductList li {
-  padding: 12px 16px;
-  border-bottom: 1px solid #eee;
+.table-wrapper {
+  overflow-x: auto; /* Permite scroll horizontal si la tabla es demasiado ancha en pantallas pequeñas */
+  width: 100%;
 }
 
-.ProductList li:last-child {
+.product-table {
+  width: 100%;
+  border-collapse: collapse; /* Colapsa los bordes de la tabla */
+  margin-bottom: 20px;
+}
+
+.product-table th,
+.product-table td {
+  padding: 12px 15px; /* Relleno para celdas */
+  text-align: left;
+  border-bottom: 1px solid var(--border-color); /* Separador entre filas */
+}
+
+.product-table thead th {
+  background-color: var(--primary-light-color); /* Fondo para encabezados */
+  color: var(--primary-dark-color);
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.9em;
+  position: sticky; /* Encabezado pegajoso para scroll */
+  top: 0;
+  z-index: 1; /* Asegura que el encabezado esté por encima del contenido */
+}
+
+/* Alineación específica para algunas columnas */
+.header-cantidad,
+.header-precio,
+.header-total {
+  text-align: center;
+}
+
+.header-acciones {
+  text-align: right; /* Alinea los botones a la derecha en el encabezado */
+}
+
+/* Estilo para la última fila sin borde inferior */
+.product-table tbody tr:last-child td {
   border-bottom: none;
 }
 
-.ProductList h2 {
-  font-size: 24px;
-  margin-bottom: 12px;
+/* Estilos para la fila completada (tachada) */
+.product-item-row.completed {
+  text-decoration: line-through;
+  color: var(--text-color-secondary);
+  opacity: 0.7;
+}
+
+.list-actions {
+  display: flex; /* Hacemos que sea un contenedor flex */
+  justify-content: center; /* Centramos el contenido horizontalmente */
+  align-items: center; /* Centramos el contenido verticalmente (si es necesario) */
+  width: 100%; /* Aseguramos que ocupe todo el ancho disponible */
+  padding: 15px 0; /* Añade un poco de espacio vertical */
+  border-top: 1px solid var(--border-color); /* Opcional: una línea para separarlo de la tabla */
+  margin-top: 20px; /* Opcional: espacio superior */
+  background-color: var(--background-light-color); /* Opcional: un color de fondo sutil */
+  border-radius: var(--border-radius);
+}
+
+.clear-products-button {
+  background-color: var(--delete-color);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  font-size: 0.95em;
+  transition: background-color 0.3s ease;
+}
+
+.clear-products-button:hover {
+  background-color: #cc0000;
+}
+
+.total-general {
+  font-size: 1.3em; /* Hace el texto un poco más grande */
+  font-weight: bold; /* Asegura que el texto sea negrita */
+  color: var(--text-color-dark); /* Opcional: un color de texto más oscuro */
+  display: flex; /* Para alinear el span y el strong si necesitas control granular */
+  gap: 8px; /* Espacio entre "Total General:" y el valor */
+}
+
+/* Puedes añadir más estilos a la etiqueta strong si quieres que el valor destaque aún más */
+.total-general strong {
+  color: var(--primary-color); /* Por ejemplo, usar el color principal de tu tema */
 }

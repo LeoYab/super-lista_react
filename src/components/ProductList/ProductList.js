@@ -3,49 +3,59 @@ import React from 'react';
 import ProductItem from '../ProductItem/ProductItem';
 import './ProductList.css';
 
-// Aseguramos que ProductList reciba todas las props necesarias
-const ProductList = ({ productos, busqueda, onEditar, onEliminar, onToggleComplete, onClearProducts }) => {
-  const productosToDisplay = productos || [];
+const ProductList = ({ productos, busqueda, onEditar, onEliminar /* <-- onClearProducts eliminado */ }) => {
+  const filteredProducts = productos.filter(producto =>
+    producto.nombre.toLowerCase().includes(busqueda.toLowerCase())
+  );
 
-  if (productosToDisplay.length === 0) {
-    return (
-      <div className="product-list card">
-        <div className="empty-state">
-          <div className="empty-icon">
-            {busqueda ? '🔍' : '📦'}
-          </div>
-          <h3 className="empty-title">
-            {busqueda ? 'No se encontraron productos' : 'No hay productos en tu lista'}
-          </h3>
-          <p className="empty-description">
-            {busqueda
-              ? `No hay productos que coincidan con "${busqueda}"`
-              : 'Comienza agregando tu primer producto a la lista'
-            }
-          </p>
-        </div>
-      </div>
-    );
-  }
+  const totalGeneral = filteredProducts.reduce((sum, producto) => {
+    if (!producto.completed) {
+      const itemTotal = (producto.valor || 0) * (producto.cantidad || 0);
+      return sum + itemTotal;
+    }
+    return sum;
+  }, 0);
 
   return (
-    <div className="product-list card">
-      {productosToDisplay.map((producto) => (
-        <ProductItem
-          key={producto.firebaseId || producto.id} // Usar firebaseId como clave principal
-          producto={producto}
-          onEditar={onEditar}           // Pasa la función para iniciar la edición
-          onEliminar={onEliminar}       // Pasa la función para eliminar
-          onToggleComplete={onToggleComplete} // Pasa la función para marcar/desmarcar como completado
-        />
-      ))}
-      {/* Botón para vaciar la lista, solo si hay productos */}
-      {productosToDisplay.length > 0 && (
-        <div className="list-summary">
-          <p>Total de productos: <strong>{productosToDisplay.length}</strong></p>
-          <button className="clear-button" onClick={onClearProducts}>Vaciar Lista</button>
+    <div className="product-list-container">
+      {filteredProducts.length === 0 ? (
+        <p className="no-products-message">
+          No hay productos en esta lista o no coinciden con tu búsqueda.
+        </p>
+      ) : (
+        <div className="table-wrapper">
+          <table className="product-table">
+            <thead>
+              <tr>
+                <th className="header-producto">Producto</th>
+                <th className="header-cantidad">Cantidad</th>
+                <th className="header-precio">Precio</th>
+                <th className="header-total">Total</th>
+                <th className="header-acciones desktop-only-actions-header">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredProducts.map((producto) => (
+                <ProductItem
+                  key={producto.firebaseId}
+                  producto={producto}
+                  onEditar={onEditar}
+                  onEliminar={onEliminar}
+                />
+              ))}
+            </tbody>
+          </table>
         </div>
       )}
+
+      {/* MODIFICACIÓN: El div 'list-actions' ahora solo contendrá el total general */}
+      <div className="list-actions">
+        {/* ELIMINADO: El botón "Vaciar Lista" */}
+        <div className="total-general">
+          <span>Total General:</span>
+          <strong>${totalGeneral.toFixed(2)}</strong>
+        </div>
+      </div>
     </div>
   );
 };
