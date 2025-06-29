@@ -1,10 +1,24 @@
-// src/components/SidebarMenu/SidebarMenu.js
 import React, { useState } from 'react';
 import './SidebarMenu.css';
+import Swal from 'sweetalert2'; // Asegúrate de tener SweetAlert2 instalado
+
+// Importa tus componentes Button e Input
+import Button from '../Buttons/Button';
+import Input from '../Input/Input';
 
 // Función auxiliar para formatear la fecha
 const formatDate = (timestamp) => {
   if (!timestamp) return 'Fecha desconocida';
+  // Verifica si el timestamp es un objeto de Firebase Timestamp
+  if (timestamp && typeof timestamp.toDate === 'function') {
+    const date = timestamp.toDate();
+    return date.toLocaleDateString('es-ES', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
+    });
+  }
+  // Si es un número o una cadena de fecha estándar
   const date = new Date(timestamp);
   return date.toLocaleDateString('es-ES', {
     year: 'numeric',
@@ -21,27 +35,44 @@ const SidebarMenu = ({ currentUser, logout, userLists, createList, selectList, c
     if (newListName.trim()) {
       createList(newListName.trim());
       setNewListName('');
-      setIsMenuOpen(false);
+      setIsMenuOpen(false); // Cierra el menú al crear una lista
     }
   };
 
-  const handleDeleteList = (listId, listName) => {
-    if (window.confirm(`¿Estás seguro de que quieres eliminar la lista "${listName}"? Esta acción no se puede deshacer.`)) {
-      deleteList(listId);
-    }
+  // Función de confirmación para eliminar una lista usando SweetAlert2
+  const handleDeleteListConfirm = (listId, listName) => {
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: `¿Quieres eliminar la lista "${listName}"? Esta acción no se puede deshacer.`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33', // Rojo para confirmar (peligro)
+      cancelButtonColor: '#3085d6', // Azul para cancelar
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        deleteList(listId); // Llama a la función real para eliminar la lista
+        Swal.fire('¡Eliminada!', 'La lista ha sido eliminada.', 'success');
+      }
+    });
   };
 
   return (
     <>
-      {/* Botón para abrir/cerrar el menú */}
-      <button className="menu-toggle-button" onClick={() => setIsMenuOpen(!isMenuOpen)}>
-        {isMenuOpen ? '✖️' : '☰'}
-      </button>
+      {/* Botón para abrir/cerrar el menú (ahora un componente Button) */}
+      <Button
+        className="menu-toggle-button round" // Añade 'round' si quieres que sea circular
+        onClick={() => setIsMenuOpen(!isMenuOpen)}
+        icon={isMenuOpen ? '✖️' : '☰'} // Icono dinámico para abrir/cerrar
+        variant="primary" // O el que mejor se adapte a tu diseño
+        title={isMenuOpen ? 'Cerrar menú' : 'Abrir menú'} // Tooltip
+      />
 
-      {/* Overlay para cerrar el menú al hacer clic fuera */}
+      {/* Overlay para cerrar el menú al hacer clic fuera de él */}
       {isMenuOpen && <div className="menu-overlay" onClick={() => setIsMenuOpen(false)}></div>}
 
-      {/* El menú lateral */}
+      {/* El menú lateral en sí */}
       <div className={`sidebar-menu ${isMenuOpen ? 'open' : ''}`}>
         <div className="menu-header">
           {currentUser && (
@@ -50,7 +81,10 @@ const SidebarMenu = ({ currentUser, logout, userLists, createList, selectList, c
               <strong>{currentUser.email}</strong>
             </p>
           )}
-          <button className="logout-button-menu" onClick={logout}>Cerrar Sesión</button>
+          {/* Botón de Cerrar Sesión (ahora un componente Button) */}
+          <Button className="logout-button-menu" onClick={logout} variant="danger">
+            Cerrar Sesión
+          </Button>
         </div>
 
         <div className="menu-section">
@@ -66,37 +100,40 @@ const SidebarMenu = ({ currentUser, logout, userLists, createList, selectList, c
                 >
                   <span onClick={() => {
                     selectList(list.id);
-                    setIsMenuOpen(false);
+                    setIsMenuOpen(false); // Cierra el menú al seleccionar una lista
                   }}>
                     {list.nameList}
-                    {/* Añade la fecha de creación aquí */}
                     <br />
                     <span className="list-date">Creada: {formatDate(list.createdAt)}</span>
                   </span>
-                  {/* Botón de eliminar lista */}
-                  <button
-                    className="delete-list-button"
+                  {/* Botón de eliminar lista (ahora un componente Button) */}
+                  <Button
+                    className="delete-list-button round" // Clase para estilos y 'round' para circular
                     onClick={(e) => {
-                      e.stopPropagation();
-                      handleDeleteList(list.id, list.nameList);
+                      e.stopPropagation(); // Evita que el clic en el botón active el selectList de la <li>
+                      handleDeleteListConfirm(list.id, list.nameList); // Llama a la confirmación de SweetAlert2
                     }}
                     title={`Eliminar lista "${list.nameList}"`}
-                  >
-                    🗑️
-                  </button>
+                    icon="🗑️" // Ícono de papelera
+                    variant="danger" // Estilo rojo para peligro
+                    size="small" // Tamaño pequeño
+                  />
                 </li>
               ))
             )}
           </ul>
           <div className="create-list-section">
-            <input
+            {/* Input para el nombre de la nueva lista (ahora un componente Input) */}
+            <Input
               type="text"
               placeholder="Nombre de nueva lista..."
               value={newListName}
               onChange={(e) => setNewListName(e.target.value)}
+              // Maneja la creación al presionar Enter en el input
               onKeyPress={(e) => { if (e.key === 'Enter') handleCreateList(); }}
             />
-            <button onClick={handleCreateList}>Crear Lista</button>
+            {/* Botón para crear lista (ahora un componente Button) */}
+            <Button onClick={handleCreateList} variant="success">Crear</Button>
           </div>
         </div>
       </div>

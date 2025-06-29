@@ -4,22 +4,25 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { useAuth, AuthProvider } from './context/AuthContext';
 import { db } from './firebase/config';
 import { ref, onValue, push, remove, update, set } from 'firebase/database';
+import Swal from 'sweetalert2';
 
-// Importa tus componentes y estilos
+// Importa tus componentes
 import Header from './components/Header/Header';
 import ProductForm from './components/ProductForm/ProductForm';
 import ProductList from './components/ProductList/ProductList';
 import AuthPage from './pages/AuthPage/AuthPage';
-import SidebarMenu from './components/SidebarMenu/SidebarMenu'; // Importa el nuevo componente
+import SidebarMenu from './components/SidebarMenu/SidebarMenu';
+import SearchBar from './components/SearchBar/SearchBar';
+import TotalSummary from './TotalSummary/TotalSummary';
+import Button from './components/Buttons/Button'; // Make sure to import Button
 
+// Importa tus estilos
 import './App.css';
 import './components/Header/Header.css';
-import './components/ProductForm/ProductForm.css';
-import './components/ProductList/ProductList.css';
-import './components/ProductItem/ProductItem.css';
-import './pages/AuthPage/AuthPage.css';
-import './components/SidebarMenu/SidebarMenu.css'; // Importa el nuevo CSS del menú
-
+import './components/Input/Input.css';
+import './components/Select/Select.css';
+import './TotalSummary/TotalSummary.css';
+import './components/Buttons/Button.css'; // Don't forget to import Button's CSS
 
 function MainAppContent() {
   const { currentUser, logout } = useAuth();
@@ -28,28 +31,25 @@ function MainAppContent() {
   const [loadingProducts, setLoadingProducts] = useState(true);
   const [loadingCategories, setLoadingCategories] = useState(true);
 
-  // Nuevos estados para la gestión de listas
-  const [userLists, setUserLists] = useState([]); // Array de {id, nameList, createdAt}
-  const [currentListId, setCurrentListId] = useState(null); // ID de la lista actualmente activa
+  const [userLists, setUserLists] = useState([]);
+  const [currentListId, setCurrentListId] = useState(null);
+  const [currentListName, setCurrentListName] = useState('');
 
-  // Estados para la funcionalidad de edición de productos
-  const [editandoId, setEditandoId] = useState(null);
-  const [productoAEditar, setProductoAEditar] = useState(null);
+  const [editingProduct, setEditingProduct] = useState(null);
+  const [showProductForm, setShowProductForm] = useState(false);
 
-  // Referencias de Firebase para listas y categorías
+  const [searchTerm, setSearchTerm] = useState('');
+
+  // Firebase Refs
   const userListsRef = currentUser ? ref(db, `Users/${currentUser.uid}/User_Lists`) : null;
   const categoriesRef = ref(db, 'Categories');
 
-  // Efecto para cargar categorías (se mantiene igual)
+  // Load Categories
   useEffect(() => {
     setLoadingCategories(true);
     const unsubscribe = onValue(categoriesRef, (snapshot) => {
       const data = snapshot.val();
-      if (data) {
-        setCategories(Object.values(data));
-      } else {
-        setCategories([]);
-      }
+      setCategories(data ? Object.values(data) : []);
       setLoadingCategories(false);
     }, (error) => {
       console.error("Error al cargar categorías:", error);
@@ -58,11 +58,12 @@ function MainAppContent() {
     return () => unsubscribe();
   }, []);
 
-  // Nuevo efecto: Carga las listas del usuario y establece una por defecto si no hay
+  // Load User Lists and Set Default List
   useEffect(() => {
     if (!currentUser) {
       setUserLists([]);
       setCurrentListId(null);
+      setCurrentListName('');
       return;
     }
 
@@ -74,23 +75,25 @@ function MainAppContent() {
           loadedLists.push({
             id: key,
             nameList: data[key].nameList || 'Lista sin nombre',
-            createdAt: data[key].createdAt || null // Asegurarse de que createdAt exista
+            createdAt: data[key].createdAt || null
           });
         }
-        // Ordenar listas por fecha de creación (más reciente primero)
         loadedLists.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
       }
       setUserLists(loadedLists);
 
-      // Si hay listas cargadas y no hay una lista actual seleccionada
-      // o la lista actual no existe, selecciona la primera.
-      if (loadedLists.length > 0 && (!currentListId || !loadedLists.some(list => list.id === currentListId))) {
-        setCurrentListId(loadedLists[0].id);
-      } else if (loadedLists.length === 0) {
-        // Si no existen listas, crea una por defecto
-        // NOTA: Esto se ejecutará solo una vez al inicio si el usuario no tiene listas.
-        // Si el usuario borra todas las listas, deberá crear una manualmente.
-        // createList("Mi Primera Lista"); // Descomentar si quieres que siempre cree una por defecto
+      if (loadedLists.length > 0) {
+        const selectedList = loadedLists.find(list => list.id === currentListId);
+        if (selectedList) {
+          setCurrentListId(selectedList.id);
+          setCurrentListName(selectedList.nameList);
+        } else {
+          setCurrentListId(loadedLists[0].id);
+          setCurrentListName(loadedLists[0].nameList);
+        }
+      } else {
+        setCurrentListId(null);
+        setCurrentListName('');
       }
     }, (error) => {
       console.error("Error al cargar listas del usuario:", error);
@@ -99,7 +102,7 @@ function MainAppContent() {
     return () => unsubscribe();
   }, [currentUser, userListsRef, currentListId]);
 
-  // Efecto para cargar productos, ahora depende de currentListId
+  // Load Products for current list
   useEffect(() => {
     if (!currentUser || !currentListId) {
       setProducts([]);
@@ -136,77 +139,69 @@ function MainAppContent() {
     return () => unsubscribe();
   }, [currentUser, currentListId]);
 
-  // FUNCIÓN ACTUALIZADA: Para crear una nueva lista con nameList y createdAt
+  // List management functions
   const createList = async (listName) => {
     if (!currentUser || !listName.trim()) return;
-
     try {
       const newListRef = push(userListsRef);
       await set(newListRef, {
-        nameList: listName.trim(), // Asegura que se usa el nombre del input
-        createdAt: Date.now()      // Añade la marca de tiempo de creación
+        nameList: listName.trim(),
+        createdAt: Date.now()
       });
-      setCurrentListId(newListRef.key); // Selecciona automáticamente la nueva lista
+      Swal.fire('¡Lista Creada!', `"${listName}" ha sido creada.`, 'success');
     } catch (error) {
       console.error("Error al crear nueva lista:", error);
+      Swal.fire('Error', 'No se pudo crear la lista.', 'error');
     }
   };
 
-  // NUEVA FUNCIÓN: Para eliminar una lista
   const deleteList = async (listIdToDelete) => {
     if (!currentUser || !listIdToDelete) return;
-
     try {
       const listRefToDelete = ref(db, `Users/${currentUser.uid}/User_Lists/${listIdToDelete}`);
       await remove(listRefToDelete);
-
-      // Después de eliminar, si la lista eliminada era la actual,
-      // intenta seleccionar la primera lista restante o ninguna si no hay más.
-      if (listIdToDelete === currentListId) {
-        const remainingLists = userLists.filter(list => list.id !== listIdToDelete);
-        if (remainingLists.length > 0) {
-          setCurrentListId(remainingLists[0].id);
-        } else {
-          setCurrentListId(null); // No hay listas restantes
-        }
-      }
+      Swal.fire('¡Eliminada!', 'La lista ha sido eliminada.', 'success');
     } catch (error) {
       console.error("Error al eliminar lista:", error);
+      Swal.fire('Error', 'No se pudo eliminar la lista.', 'error');
     }
   };
 
-
-  // NUEVA FUNCIÓN: Para seleccionar una lista existente
   const selectList = (listId) => {
     setCurrentListId(listId);
-    setEditandoId(null); // Reinicia el estado de edición al cambiar de lista
-    setProductoAEditar(null);
+    const selected = userLists.find(list => list.id === listId);
+    if (selected) {
+      setCurrentListName(selected.nameList);
+    }
+    setEditingProduct(null);
+    setShowProductForm(false);
   };
 
-  // Funciones de Firebase existentes, actualizadas para usar currentListId
-  const onAgregar = async (productoDataFormulario) => {
+  // Product management functions (Firebase operations)
+  const handleAddProduct = async (productoDataFormulario) => {
     if (!currentUser || !currentListId) return;
     try {
       const productsRef = ref(db, `Users/${currentUser.uid}/User_Lists/${currentListId}/products`);
-      const newProductRef = push(productsRef);
-      await set(newProductRef, {
+      await push(productsRef, {
         nameProd: productoDataFormulario.nombre,
         price: parseFloat(productoDataFormulario.valor),
         quantity: parseInt(productoDataFormulario.cantidad),
         completed: false,
         category: productoDataFormulario.category,
         icon: productoDataFormulario.icon,
-        id: Date.now(),
       });
+      Swal.fire('¡Producto Añadido!', '', 'success');
+      setShowProductForm(false);
     } catch (error) {
       console.error("Error al añadir producto:", error);
+      Swal.fire('Error', 'No se pudo añadir el producto.', 'error');
     }
   };
 
-  const onEditar = async (idFirebase, productoDataFormulario) => {
+  const handleEditProduct = async (firebaseId, productoDataFormulario) => {
     if (!currentUser || !currentListId) return;
     try {
-      const productRef = ref(db, `Users/${currentUser.uid}/User_Lists/${currentListId}/products/${idFirebase}`);
+      const productRef = ref(db, `Users/${currentUser.uid}/User_Lists/${currentListId}/products/${firebaseId}`);
       await update(productRef, {
         nameProd: productoDataFormulario.nombre,
         price: parseFloat(productoDataFormulario.valor),
@@ -214,21 +209,34 @@ function MainAppContent() {
         category: productoDataFormulario.category,
         icon: productoDataFormulario.icon,
       });
-      setEditandoId(null);
-      setProductoAEditar(null);
+      Swal.fire('¡Producto Actualizado!', '', 'success');
+      setEditingProduct(null);
+      setShowProductForm(false);
     } catch (error) {
       console.error("Error al actualizar producto:", error);
+      Swal.fire('Error', 'No se pudo actualizar el producto.', 'error');
     }
   };
 
-  const iniciarEdicion = (producto) => {
-    setEditandoId(producto.firebaseId);
-    setProductoAEditar(producto);
+  const handleStartEditing = (product) => {
+    setEditingProduct(product);
+    setShowProductForm(true);
   };
 
-  const onCancelar = () => {
-    setEditandoId(null);
-    setProductoAEditar(null);
+  const handleCancelForm = () => {
+    setEditingProduct(null);
+    setShowProductForm(false);
+  };
+
+  const handleDeleteProduct = async (firebaseId) => {
+    if (!currentUser || !currentListId) return;
+    try {
+      const productRef = ref(db, `Users/${currentUser.uid}/User_Lists/${currentListId}/products/${firebaseId}`);
+      await remove(productRef);
+    } catch (error) {
+      console.error("Error al eliminar producto:", error);
+      Swal.fire('Error', 'No se pudo eliminar el producto.', 'error');
+    }
   };
 
   const toggleComplete = async (firebaseId) => {
@@ -246,31 +254,56 @@ function MainAppContent() {
     }
   };
 
-  const deleteProduct = async (firebaseId) => {
+  const clearAllProducts = async () => {
     if (!currentUser || !currentListId) return;
-    try {
-      const productRef = ref(db, `Users/${currentUser.uid}/User_Lists/${currentListId}/products/${firebaseId}`);
-      await remove(productRef);
-    } catch (error) {
-      console.error("Error al eliminar producto:", error);
-    }
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: `¿Quieres vaciar todos los productos de "${currentListName}"?`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Sí, vaciar',
+      cancelButtonText: 'Cancelar'
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const productsRef = ref(db, `Users/${currentUser.uid}/User_Lists/${currentListId}/products`);
+          await remove(productsRef);
+          Swal.fire('¡Lista Vaciada!', 'Todos los productos han sido eliminados.', 'success');
+        } catch (error) {
+          console.error("Error al vaciar la lista:", error);
+          Swal.fire('Error', 'No se pudo vaciar la lista.', 'error');
+        }
+      }
+    });
   };
 
-  const clearProducts = async () => {
-    if (!currentUser || !currentListId) return;
-    try {
-      const productsRef = ref(db, `Users/${currentUser.uid}/User_Lists/${currentListId}/products`);
-      await remove(productsRef);
-    } catch (error) {
-      console.error("Error al vaciar la lista:", error);
+  const filteredProducts = products.filter(producto =>
+    producto.nombre.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const totalProductos = filteredProducts.length;
+
+  const totalGeneral = filteredProducts.reduce((sum, producto) => {
+    if (!producto.completed) {
+      return sum + ((producto.valor || 0) * (producto.cantidad || 0));
     }
+    return sum;
+  }, 0);
+
+  // Function to handle toggle form button click (now directly in App.js)
+  const handleToggleForm = () => {
+    if (editingProduct) {
+      setEditingProduct(null); // Clear editing state if we're canceling an edit
+    }
+    setShowProductForm(prev => !prev); // Toggle the form visibility
   };
 
   return (
     <div className="App">
       <Header />
       <div className="container">
-        {/* Componente del menú lateral */}
         <SidebarMenu
           currentUser={currentUser}
           logout={logout}
@@ -278,51 +311,80 @@ function MainAppContent() {
           createList={createList}
           selectList={selectList}
           currentListId={currentListId}
-          deleteList={deleteList} // Pasa la nueva función para eliminar listas
+          deleteList={deleteList}
         />
 
-        {/* Renderiza el contenido principal solo si una lista está seleccionada */}
-        {currentListId ? (
-          <>
-            {/* Muestra el nombre de la lista actual */}
-            <h3 className="current-list-title">
-               <strong>Nombre de lista: </strong>
-                {userLists.find(list => list.id === currentListId)?.nameList || 'Cargando Lista...'}
-            </h3>
+        {/* MAIN CONTENT AREA */}
+        <div className="main-content-area">
+          {currentListId ? (
+            <>
+              <div className="list-header">
+                <h3 className="current-list-title">
+                  <strong>Lista Actual: </strong>
+                  {currentListName || 'Cargando...'}
+                </h3>
+                <h4>Total de Productos: {totalProductos || 'Vacío'}</h4>
+              </div>
+              {/* ProductList always visible */}
+              {loadingProducts ? (
+                <p className="loading-message">Cargando lista...</p>
+              ) : (
+                <ProductList
+                  productos={filteredProducts}
+                  busqueda={searchTerm}
+                  onEditar={handleStartEditing}
+                  onEliminar={handleDeleteProduct}
+                  onToggleComplete={toggleComplete}
+                  onClearAllProducts={clearAllProducts}
+                />
+              )}
+            </>
+          ) : (
+            <div className="empty-state card">
+              <div className="empty-icon">📂</div>
+              <h3 className="empty-title">Crea o selecciona una lista</h3>
+              <p className="empty-description">Usa el botón de menú (☰) en la esquina superior derecha para gestionar tus listas.</p>
+            </div>
+          )}
+        </div> {/* END OF main-content-area */}
 
-            {/* Formulario de producto */}
-            {loadingCategories ? (
-              <p>Cargando categorías para formulario...</p>
-            ) : (
-              <ProductForm
-                editandoId={editandoId}
-                productoAEditar={productoAEditar}
-                onAgregar={onAgregar}
-                onEditar={onEditar}
-                onCancelar={onCancelar}
-                categories={categories}
+        {/* FIXED BOTTOM SECTION: Controls + Product Form (if visible) */}
+        {currentListId && (
+          <div className="fixed-bottom-controls">
+            {/* These elements are always visible in the bottom bar */}
+            <div className="bottom-controls-header">
+              <SearchBar
+                busqueda={searchTerm}
+                setBusqueda={setSearchTerm}
+              // REMOVED: mostrarFormulario, setMostrarFormulario, onCancelar props
               />
-            )}
+              {/* NEW: Button moved here */}
+              <Button
+                onClick={handleToggleForm}
+                variant={showProductForm ? 'secondary' : 'primary'}
+                icon={showProductForm ? '❌' : '➕'}
+                className="toggle-form-button" // Add a class for styling if needed
+              >
+                {showProductForm ? 'Cancelar' : 'Agregar Producto'}
+              </Button>
+              <TotalSummary total={totalGeneral} />
+            </div>
 
-            {/* Lista de productos */}
-            {loadingProducts ? (
-              <p>Cargando lista...</p>
-            ) : (
-              <ProductList
-                productos={products}
-                busqueda={''}
-                onEditar={iniciarEdicion}
-                onEliminar={deleteProduct}
-                onToggleComplete={toggleComplete}
-                onClearProducts={clearProducts}
-              />
+            {/* Product Form (conditionally rendered below the controls) */}
+            {showProductForm && (
+              loadingCategories ? (
+                <p className="loading-message">Cargando categorías para formulario...</p>
+              ) : (
+                <ProductForm
+                  editandoId={editingProduct ? editingProduct.firebaseId : null}
+                  productoAEditar={editingProduct}
+                  onAgregar={handleAddProduct}
+                  onEditar={handleEditProduct}
+                  onCancelar={handleCancelForm}
+                  categories={categories}
+                />
+              )
             )}
-          </>
-        ) : (
-          <div className="empty-state">
-             <div className="empty-icon">📂</div>
-             <h3 className="empty-title">Crea o selecciona una lista</h3>
-             <p className="empty-description">Usa el botón de menú (☰) en la esquina superior izquierda para gestionar tus listas.</p>
           </div>
         )}
       </div>
@@ -330,13 +392,19 @@ function MainAppContent() {
   );
 }
 
-// Componente para manejar las rutas y la autenticación
 function AppRouter() {
   const { currentUser } = useAuth();
+  const [authLoaded, setAuthLoaded] = useState(false);
 
-  // Muestra un loader o spinner mientras el estado de autenticación se está cargando
-  if (typeof currentUser === 'undefined') {
-    return <div className="loading-auth">Cargando usuario...</div>; // O un spinner
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setAuthLoaded(true);
+    }, 300);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (!authLoaded) {
+    return <div className="loading-auth">Cargando autenticación...</div>;
   }
 
   return (
@@ -347,7 +415,6 @@ function AppRouter() {
   );
 }
 
-// Componente principal de la aplicación
 function App() {
   return (
     <Router>

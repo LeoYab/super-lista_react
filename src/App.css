@@ -1,23 +1,187 @@
-/* src/App.css (añadir al final) */
+/* src/App.css */
+@import url('./styles/variables.css'); /* Importa tus variables */
+
+/* Reset básico */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background-color: var(--background-color);
+  color: var(--text-color-primary);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* El scroll principal lo maneja el body */
+  overflow-y: scroll; 
+  min-height: 100vh;
+}
+
+#root {
+  display: flex;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+.App {
+  width: 100%;
+  max-width: 1200px; /* Limita el ancho general de la aplicación */
+  position: relative;
+  display: flex;
+  flex-direction: column; /* Apila Header con el resto del contenido */
+  padding: 0;
+  min-height: 100vh;
+}
+
+/* El contenedor que aloja SidebarMenu y el contenido principal */
+.container {
+  display: flex;
+  flex-grow: 1; /* Permite que ocupe el espacio restante */
+  position: relative;
+  max-width: 100%;
+  padding: 0;
+}
+
+/* Área principal de contenido (a la derecha del SidebarMenu) */
+.main-content-area {
+  flex-grow: 1; /* Ocupa todo el espacio horizontal disponible */
+  padding: 5px; /* Padding general para el contenido */
+  padding-top: 0px; /* Espacio para el Header fijo (ajusta según la altura real de tu Header) */
+
+  /*
+   * ¡¡¡VALOR CRÍTICO PARA EVITAR SUPERPOSICIÓN!!!
+   * Este `padding-bottom` es el que crea el espacio para tu barra fija inferior.
+   * Su valor DEBE ser IGUAL O LIGERAMENTE MAYOR que la ALTURA MÁXIMA que alcanza
+   * tu `.fixed-bottom-controls` cuando el formulario de producto está ABIERTO.
+   *
+   * Si la barra mide 260px cuando el formulario está abierto, pon al menos 260px,
+   * o 280px para tener un poco de margen extra y asegurarte.
+   *
+   * POR FAVOR, REALIZA LA MEDICIÓN QUE SE INDICA ABAJO para establecer este valor con precisión.
+   */
+  padding-bottom: 280px; /* <--- AJUSTA ESTE VALOR DESPUÉS DE LA MEDICIÓN REAL */
+  
+  position: relative;
+}
+
+/* SECCIÓN FIJA INFERIOR: Controles + Formulario si showProductForm es true */
+.fixed-bottom-controls {
+  position: fixed;
+  bottom: 0;
+  left: 280px;
+  width: calc(100% - 280px);
+  background-color: var(--card-bg-color);
+  border-top: 1px solid var(--border-color);
+  box-shadow: var(--shadow-strong);
+  border-radius: var(--border-radius) var(--border-radius) 0 0;
+  padding: 15px 25px;
+  
+  display: flex;
+  flex-direction: column;
+  gap: 15px; /* Espacio entre el bloque de controles y el formulario */
+
+  z-index: 100;
+  transition: all 0.3s ease-in-out; 
+}
+
+/* Un contenedor para los elementos que siempre están visibles en la barra inferior (SearchBar, TotalSummary, Button) */
+.bottom-controls-header {
+    display: flex; /* Contenedor flex */
+    flex-wrap: nowrap; /* ¡CAMBIO CLAVE! Evita que los elementos salten de línea */
+    justify-content: space-between; /* Distribuye el espacio equitativamente */
+    align-items: center; /* Alinea los elementos verticalmente al centro */
+    width: 100%; /* Ocupa todo el ancho disponible */
+    gap: 15px; /* Mantiene un espacio mínimo entre ellos */
+}
+
+/* Estilos para el formulario cuando está dentro de fixed-bottom-controls */
+/* Asegúrate de que tu componente ProductForm tenga una clase base como 'product-form' */
+.fixed-bottom-controls .product-form {
+    width: 100%; /* El formulario ocupa todo el ancho de la barra */
+    margin-top: 15px; /* Espacio entre el header de la barra y el formulario */
+    padding-top: 15px; /* Padding interno para separar del borde superior del div */
+    border-top: 1px solid var(--border-color-light); /* Una línea divisoria sutil */
+}
+
+/* Otros estilos generales de tarjeta */
+.card {
+  background-color: var(--card-bg-color);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-light);
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.list-header{
+display: flex;
+flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+/* Otros estilos globales específicos de App.css */
 .user-info {
   margin-top: 10px;
   font-size: 1.1em;
   font-weight: bold;
-  color: #555;
+  color: var(--text-color-primary);
 }
 
-.logout-button {
-  background-color: #f44336; /* Rojo */
-  color: white;
-  padding: 8px 15px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 0.9em;
-  margin-top: 10px;
-  margin-bottom: 20px;
+.current-list-title {
+  text-align: center;
+  margin-top: 20px;
+  color: var(--primary-dark-color);
+  font-size: 1.6em;
+  font-weight: 600;
 }
 
-.logout-button:hover {
-  background-color: #d32f2f;
+.loading-auth, .loading-message {
+  text-align: center;
+  padding: 40px;
+  font-size: 1.2em;
+  color: var(--text-color-secondary);
+}
+
+/* Media Queries para Responsividad                     */
+@media (max-width: 768px) {
+  .App {
+    padding: 0;
+    margin-top: 0;
+  }
+
+  .container {
+    flex-direction: column; /* Apila el sidebar y el contenido principal en móvil */
+  }
+
+  .main-content-area {
+    padding-top: 0px; /* Espacio para el Header en móvil */
+    /*
+     * ¡¡¡VALOR CRÍTICO PARA MÓVILES!!!
+     * Aquí también necesitas ajustar el padding-bottom para móviles.
+     * La barra inferior puede ser más alta en móvil si los elementos (SearchBar, Total, Button)
+     * y el formulario se apilan verticalmente.
+     * Mide la altura máxima de '.fixed-bottom-controls' en un dispositivo móvil
+     * (o reduciendo la ventana del navegador) cuando el formulario está abierto.
+     */
+    padding-bottom: 380px; /* <--- AJUSTA ESTE VALOR DESPUÉS DE LA MEDICIÓN REAL EN MÓVILES */
+  }
+
+  .fixed-bottom-controls {
+    width: 100%;       /* Ocupa todo el ancho en móviles */
+    left: 0;           /* Se pega a la izquierda */
+    margin-left: 0;    /* Sin margen si el sidebar se superpone o esconde */
+    border-radius: var(--border-radius) var(--border-radius) 0 0;
+    padding: 10px 15px; /* Menor padding en móviles */
+    flex-direction: column; /* Apila los controles y el formulario verticalmente */
+    align-items: stretch; /* Estira los elementos para que ocupen todo el ancho en móvil */
+  }
+
+  /* Asegura que los elementos del header de la barra inferior también se apilen en móvil */
+  .bottom-controls-header {
+      flex-direction: column; /* Apila SearchBar, TotalSummary y Button en vertical */
+      align-items: stretch; /* Estira los elementos para ocupar el ancho */
+  }
 }

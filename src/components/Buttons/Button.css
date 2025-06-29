@@ -1,0 +1,93 @@
+/* src/components/Button/Button.css */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: none;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
+  text-decoration: none; /* Para usar con links si es necesario */
+  white-space: nowrap; /* Evita que el texto del botón se rompa */
+}
+
+/* Tamaños */
+.btn-small {
+  padding: 6px 12px;
+  font-size: 0.85em;
+}
+.btn-medium {
+  padding: 10px 20px;
+  font-size: 1em;
+}
+.btn-large {
+  padding: 14px 28px;
+  font-size: 1.1em;
+}
+
+/* Variantes de color */
+.btn-primary {
+  background-color: var(--primary-color);
+  color: white;
+}
+.btn-primary:hover:not(:disabled) {
+  background-color: var(--primary-dark-color);
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  background-color: var(--text-color-secondary);
+  color: white;
+}
+.btn-secondary:hover:not(:disabled) {
+  background-color: #5a6268; /* Un gris más oscuro */
+  transform: translateY(-1px);
+}
+
+.btn-danger {
+  background-color: var(--delete-color);
+  color: white;
+}
+.btn-danger:hover:not(:disabled) {
+  background-color: #cc0000;
+  transform: translateY(-1px);
+}
+
+.btn-success {
+  background-color: var(--accent-color);
+  color: white;
+}
+.btn-success:hover:not(:disabled) {
+  background-color: #218838;
+  transform: translateY(-1px);
+}
+
+.btn-ghost {
+  background-color: transparent;
+  color: var(--primary-color);
+  border: 1px solid var(--primary-color);
+}
+.btn-ghost:hover:not(:disabled) {
+  background-color: var(--primary-light-color);
+  transform: translateY(-1px);
+}
+
+/* Botones redondos (específicos para iconos pequeños) */
+.btn.round {
+  border-radius: 50%;
+  width: 36px; /* Ajusta según el tamaño deseado */
+  height: 36px;
+  padding: 0;
+}
+
+.btn-icon {
+  font-size: 1.2em; /* Ajusta el tamaño del icono dentro del botón */
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  box-shadow: none;
+}

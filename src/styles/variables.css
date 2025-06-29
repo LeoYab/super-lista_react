@@ -1,0 +1,45 @@
+/* src/styles/variables.css */
+
+:root {
+  /* Colores Primarios */
+  --primary-color: #667eea; /* Azul violeta */
+  --primary-light-color: #e0e7ff; /* Azul violeta muy claro */
+  --primary-dark-color: #5a67d8; /* Azul violeta oscuro */
+  --accent-color: #28a745; /* Verde para totales/éxito */
+  --add-button-color: #28a745; /* Verde para agregar (igual que accent) */
+
+  /* Colores de Texto */
+  --text-color-primary: #333;
+  --text-color-secondary: #6c757d;
+  --text-color-dark: #212529; /* Para encabezados importantes */
+
+  /* Colores de Fondo y Bordes */
+  --background-color: #f8f9fa;
+  --background-light-color: #f0f2f5;
+  --card-bg-color: #ffffff;
+  --border-color: #e9ecef;
+  --input-bg-color: #fdfefe; /* Blanco casi puro para inputs */
+  --hover-color: #f3f4f6; /* Gris claro para hover de filas */
+  --hover-color-light: #f9f9fa; /* Gris más claro para hover sutil */
+
+  /* Colores de Estado */
+  --delete-color: #dc3545; /* Rojo para eliminar/peligro */
+  --warning-color: #ffc107; /* Amarillo para advertencias */
+  --info-color: #17a2b8; /* Azul claro para información */
+
+  /* Sombras */
+  --shadow-light: 0 2px 8px rgba(0, 0, 0, 0.08);
+  --shadow-medium: 0 5px 15px rgba(0, 0, 0, 0.12);
+  --shadow-heavy: 0 10px 30px rgba(0, 0, 0, 0.15);
+
+  /* Radios de Borde */
+  --border-radius: 8px; /* Para cards, botones, inputs */
+  --border-radius-small: 4px; /* Para elementos más pequeños */
+
+  /* Espaciado (Ejemplos, puedes expandir) */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+}

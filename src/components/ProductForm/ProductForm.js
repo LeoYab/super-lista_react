@@ -1,20 +1,33 @@
 // src/components/ProductForm/ProductForm.js
 import React, { useState, useEffect } from 'react';
 import './ProductForm.css';
+import Input from '../Input/Input';
+import Select from '../Select/Select';
+import Button from '../Buttons/Button';
+import Swal from 'sweetalert2';
 
-const ProductForm = ({ editandoId, productoAEditar, onAgregar, onEditar, onCancelar, categories }) => {
-  const otrosCategory = categories.find(cat => cat.title === 'Otros' || cat.id === 0);
-  const defaultCategoryId = otrosCategory ? otrosCategory.id : 0;
-  const defaultCategoryIcon = otrosCategory ? otrosCategory.icon : '🔤';
+// Nos aseguramos de que 'categories' siempre sea un array, incluso si es vacío.
+const ProductForm = ({ editandoId, productoAEditar, onAgregar, onEditar, onCancelar, categories = [] }) => {
+
+  // Definimos una categoría de respaldo por si no hay categorías cargadas.
+  const fallbackDefaultCategory = { id: 0, title: 'Sin Categoría', icon: '🔤', icons: ['🔤'] };
+
+  // Buscamos la categoría 'Otros' o la primera categoría si existe.
+  // Si 'categories' está vacío, 'find' devolverá undefined y categories[0] será undefined.
+  // En ese caso, usamos 'fallbackDefaultCategory'.
+  const otrosCategory = categories.find(cat => cat.title === 'Otros');
+  const initialDefaultCategory = otrosCategory || categories[0] || fallbackDefaultCategory;
 
   const [productData, setProductData] = useState({
     nombre: '',
     valor: '',
     cantidad: '',
-    category: defaultCategoryId,
-    icon: defaultCategoryIcon
+    category: initialDefaultCategory.id, // Usamos la categoría inicial para el estado.
+    icon: initialDefaultCategory.icon
   });
+  const [error, setError] = useState('');
 
+  // Efecto para inicializar o resetear el formulario.
   useEffect(() => {
     if (editandoId && productoAEditar) {
       const loadedCategory = typeof productoAEditar.category === 'string'
@@ -23,56 +36,24 @@ const ProductForm = ({ editandoId, productoAEditar, onAgregar, onEditar, onCance
 
       setProductData({
         nombre: productoAEditar.nombre,
-        valor: productoAEditar.valor,
-        cantidad: productoAEditar.cantidad,
-        category: loadedCategory || defaultCategoryId,
-        icon: productoAEditar.icon || defaultCategoryIcon
+        valor: productoAEditar.valor.toString(),
+        cantidad: productoAEditar.cantidad.toString(),
+        category: loadedCategory || initialDefaultCategory.id,
+        icon: productoAEditar.icon || initialDefaultCategory.icon
       });
     } else {
+      // Si no estamos editando, reiniciamos el formulario a sus valores por defecto
+      // usando la categoría inicial que ya está garantizada como válida.
       setProductData({
         nombre: '',
         valor: '',
         cantidad: '',
-        category: defaultCategoryId,
-        icon: defaultCategoryIcon
+        category: initialDefaultCategory.id,
+        icon: initialDefaultCategory.icon
       });
+      setError('');
     }
-  }, [editandoId, productoAEditar, categories, defaultCategoryId, defaultCategoryIcon]);
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    const parsedValor = parseFloat(productData.valor) || 0;
-    const parsedCantidad = parseInt(productData.cantidad, 10) || 1;
-    const selectedCategoryId = parseInt(productData.category, 10);
-    const selectedCategory = categories.find(cat => cat.id === selectedCategoryId);
-
-    if (editandoId) {
-      onEditar(editandoId, {
-        nombre: productData.nombre,
-        valor: parsedValor,
-        cantidad: parsedCantidad,
-        category: selectedCategoryId,
-        icon: selectedCategory ? selectedCategory.icon : defaultCategoryIcon
-      });
-    } else {
-      onAgregar({
-        nombre: productData.nombre,
-        valor: parsedValor,
-        cantidad: parsedCantidad,
-        category: selectedCategoryId,
-        icon: selectedCategory ? selectedCategory.icon : defaultCategoryIcon
-      });
-    }
-
-    setProductData({
-      nombre: '',
-      valor: '',
-      cantidad: '',
-      category: defaultCategoryId,
-      icon: defaultCategoryIcon
-    });
-  };
+  }, [editandoId, productoAEditar, initialDefaultCategory]); // Dependencia actualizada a initialDefaultCategory
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -84,94 +65,133 @@ const ProductForm = ({ editandoId, productoAEditar, onAgregar, onEditar, onCance
 
   const handleCategoryChange = (e) => {
     const selectedCategoryId = parseInt(e.target.value, 10);
-    const selectedCategory = categories.find(cat => cat.id === selectedCategoryId);
+    // Aseguramos que 'categories' es un array antes de usar 'find'
+    const selectedCat = categories.find(cat => cat.id === selectedCategoryId);
+
     setProductData(prev => ({
       ...prev,
       category: selectedCategoryId,
-      icon: selectedCategory ? selectedCategory.icon : defaultCategoryIcon
+      // Si la categoría seleccionada tiene íconos, usa el primero. Si no, usa el ícono de la categoría misma.
+      // Si 'selectedCat' es undefined (lo cual no debería pasar con el 'required' en el Select), usa el fallback.
+      icon: selectedCat ? (selectedCat.icons && selectedCat.icons[0] ? selectedCat.icons[0] : selectedCat.icon) : fallbackDefaultCategory.icon
     }));
   };
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (!productData.nombre.trim() || !productData.valor || !productData.cantidad || productData.category === undefined || !productData.icon) {
+      setError('Todos los campos son obligatorios.');
+      Swal.fire('Error', 'Por favor, completa todos los campos.', 'error');
+      return;
+    }
+    setError('');
+
+    const parsedValor = parseFloat(productData.valor);
+    const parsedCantidad = parseInt(productData.cantidad, 10);
+
+    if (isNaN(parsedValor) || parsedValor < 0) {
+      setError('El valor unitario debe ser un número positivo.');
+      Swal.fire('Error', 'El valor unitario debe ser un número positivo.', 'error');
+      return;
+    }
+    if (isNaN(parsedCantidad) || parsedCantidad < 1) {
+      setError('La cantidad debe ser un número entero positivo.');
+      Swal.fire('Error', 'La cantidad debe ser un número entero positivo.', 'error');
+      return;
+    }
+
+    const dataToSubmit = {
+      nombre: productData.nombre.trim(),
+      valor: parsedValor,
+      cantidad: parsedCantidad,
+      category: productData.category,
+      icon: productData.icon,
+    };
+
+    if (editandoId) {
+      onEditar(editandoId, dataToSubmit);
+    } else {
+      onAgregar(dataToSubmit);
+    }
+
+    // Reinicia el formulario al estado inicial después de enviar
+    setProductData({
+      nombre: '',
+      valor: '',
+      cantidad: '',
+      category: initialDefaultCategory.id,
+      icon: initialDefaultCategory.icon
+    });
+  };
+
+  // Prepara las opciones para el componente Select de Categoría
+  // Garantizamos que 'categories' es un array antes de mapear.
+  const categoryOptions = categories.map(cat => ({
+    value: cat.id,
+    label: `${cat.icon} ${cat.title}`
+  }));
+
   return (
-    <form onSubmit={handleSubmit} className="product-form">
-      <h2 className="form-title">{editandoId ? 'Editar Producto' : 'Añadir Nuevo Producto'}</h2>
+    <div className="product-form-container card">
+      <h3>{editandoId ? 'Editar Producto' : 'Agregar Nuevo Producto'}</h3>
+      {error && <p className="form-error">{error}</p>}
+      <form onSubmit={handleSubmit}>
+        <Input
+          label="Nombre del Producto:"
+          id="nombre"
+          name="nombre"
+          value={productData.nombre}
+          onChange={handleChange}
+          placeholder="Ej: Leche, Pan, Arroz"
+          required
+        />
 
-      {/* UNA SOLA FILA que contendrá TODOS los grupos de campos */}
-      <div className="form-row">
-        {/* Nombre del Producto - Le damos más flex-grow para que ocupe más espacio */}
-        <div className="form-group flex-grow-2">
-          <label htmlFor="nombre">Nombre del Producto:</label>
-          <input
-            type="text"
-            id="nombre"
-            name="nombre"
-            value={productData.nombre}
-            onChange={handleChange}
-            placeholder="Ej: Leche"
-            required
-          />
+        <Input
+          label="Valor Unitario ($):"
+          id="valor"
+          name="valor"
+          type="number"
+          value={productData.valor}
+          onChange={handleChange}
+          placeholder="Ej: 1.50, 25.75"
+          step="0.01"
+          min="0"
+          required
+        />
+
+        <Input
+          label="Cantidad:"
+          id="cantidad"
+          name="cantidad"
+          type="number"
+          value={productData.cantidad}
+          onChange={handleChange}
+          placeholder="Ej: 1, 2, 5"
+          min="1"
+          required
+        />
+
+        <Select
+          label="Categoría:"
+          id="category"
+          name="category"
+          value={productData.category}
+          onChange={handleCategoryChange}
+          options={[...categoryOptions]}
+          required
+        />
+
+        <div className="form-actions">
+          <Button type="submit" variant="primary">
+            {editandoId ? 'Guardar Cambios' : 'Agregar Producto'}
+          </Button>
+          <Button type="button" variant="secondary" onClick={onCancelar}>
+            Cancelar
+          </Button>
         </div>
-
-        {/* Valor Unitario */}
-        <div className="form-group">
-          <label htmlFor="valor">Valor Unitario:</label>
-          <input
-            type="number"
-            id="valor"
-            name="valor"
-            value={productData.valor}
-            onChange={handleChange}
-            placeholder="0.00"
-            step="0.01"
-            min="0"
-          />
-        </div>
-
-        {/* Cantidad */}
-        <div className="form-group">
-          <label htmlFor="cantidad">Cantidad:</label>
-          <input
-            type="number"
-            id="cantidad"
-            name="cantidad"
-            value={productData.cantidad}
-            onChange={handleChange}
-            placeholder="1"
-            min="1"
-            required
-          />
-        </div>
-
-        {/* Categoría (select) - También le damos algo de flex-grow */}
-        <div className="form-group flex-grow-1">
-          <label htmlFor="category">Categoría:</label>
-          <select
-            id="category"
-            name="category"
-            value={productData.category}
-            onChange={handleCategoryChange}
-            required
-          >
-            {categories.map((cat) => (
-              <option key={cat.id} value={cat.id}>
-                {cat.icon} {cat.title}
-              </option>
-            ))}
-          </select>
-        </div>
-      </div>
-
-      <div className="form-buttons">
-        <button type="submit" className="submit-button">
-          {editandoId ? 'Guardar Cambios' : 'Añadir Producto'}
-        </button>
-        {editandoId && (
-          <button type="button" className="cancel-button" onClick={onCancelar}>
-            Cancelar Edición
-          </button>
-        )}
-      </div>
-    </form>
+      </form>
+    </div>
   );
 };
 

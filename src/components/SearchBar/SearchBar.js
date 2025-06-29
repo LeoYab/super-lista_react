@@ -1,27 +1,18 @@
+// src/components/SearchBar/SearchBar.js
 import React from 'react';
 import './SearchBar.css';
+import Input from '../Input/Input'; // Keep Input import
 
-const SearchBar = ({ 
-  busqueda, 
-  setBusqueda, 
-  mostrarFormulario, 
-  setMostrarFormulario, 
-  onCancelar 
-}) => {
-  const manejarToggleFormulario = () => {
-    if (mostrarFormulario) {
-      onCancelar();
-    } else {
-      setMostrarFormulario(true);
-    }
-  };
+const SearchBar = ({ busqueda, setBusqueda }) => {
+  // REMOVED: mostrarFormulario, setMostrarFormulario, onCancelar, and manejarToggleFormulario
+  // The button and its logic are now in App.js
 
   return (
     <div className="search-bar">
       <div className="search-controls">
         <div className="search-input-container">
           <div className="search-icon">🔍</div>
-          <input
+          <Input
             type="text"
             placeholder="Buscar productos..."
             value={busqueda}
@@ -29,16 +20,7 @@ const SearchBar = ({
             className="search-input"
           />
         </div>
-
-        <button
-          onClick={manejarToggleFormulario}
-          className={`btn ${mostrarFormulario ? 'btn-secondary' : 'btn-primary'}`}
-        >
-          <span className="btn-icon">
-            {mostrarFormulario ? '❌' : '➕'}
-          </span>
-          {mostrarFormulario ? 'Cancelar' : 'Agregar Producto'}
-        </button>
+        {/* REMOVED: The Button component was here */}
       </div>
     </div>
   );

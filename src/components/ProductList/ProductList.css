@@ -1,54 +1,51 @@
 /* src/components/ProductList/ProductList.css */
 
 .product-list-container {
-  margin-top: 30px;
-  background-color: var(--card-bg-color);
-  border-radius: var(--border-radius);
-  box-shadow: var(--shadow-light);
+  margin-top: var(--spacing-xl); /* Usar variable */
+  /* background-color, border-radius, box-shadow movidos a .card en App.css */
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: var(--spacing-lg); /* Usar variable */
 }
 
 .no-products-message {
   text-align: center;
   color: var(--text-color-secondary);
   font-style: italic;
-  padding: 20px;
+  padding: var(--spacing-lg); /* Usar variable */
   border: 1px dashed var(--border-color);
   border-radius: var(--border-radius);
 }
 
 .table-wrapper {
-  overflow-x: auto; /* Permite scroll horizontal si la tabla es demasiado ancha en pantallas pequeñas */
+  overflow-x: auto;
   width: 100%;
 }
 
 .product-table {
   width: 100%;
-  border-collapse: collapse; /* Colapsa los bordes de la tabla */
-  margin-bottom: 20px;
+  border-collapse: collapse;
+  margin-bottom: var(--spacing-lg); /* Usar variable */
 }
 
 .product-table th,
 .product-table td {
-  padding: 12px 15px; /* Relleno para celdas */
+  padding: var(--spacing-md) var(--spacing-lg); /* Usar variables */
   text-align: left;
-  border-bottom: 1px solid var(--border-color); /* Separador entre filas */
+  border-bottom: 1px solid var(--border-color);
 }
 
 .product-table thead th {
-  background-color: var(--primary-light-color); /* Fondo para encabezados */
+  background-color: var(--primary-light-color);
   color: var(--primary-dark-color);
   font-weight: 600;
   text-transform: uppercase;
   font-size: 0.9em;
-  position: sticky; /* Encabezado pegajoso para scroll */
+  position: sticky;
   top: 0;
-  z-index: 1; /* Asegura que el encabezado esté por encima del contenido */
+  z-index: 1;
 }
 
-/* Alineación específica para algunas columnas */
 .header-cantidad,
 .header-precio,
 .header-total {
@@ -56,57 +53,114 @@
 }
 
 .header-acciones {
-  text-align: right; /* Alinea los botones a la derecha en el encabezado */
+  text-align: right;
 }
 
-/* Estilo para la última fila sin borde inferior */
 .product-table tbody tr:last-child td {
   border-bottom: none;
 }
 
-/* Estilos para la fila completada (tachada) */
-.product-item-row.completed {
-  text-decoration: line-through;
-  color: var(--text-color-secondary);
-  opacity: 0.7;
-}
+/* Los estilos para .product-item-row.completed deberían estar solo en ProductItem.css */
+/* .product-item-row.completed {
+    text-decoration: line-through;
+    color: var(--text-color-secondary);
+    opacity: 0.7;
+} */
 
 .list-actions {
-  display: flex; /* Hacemos que sea un contenedor flex */
-  justify-content: center; /* Centramos el contenido horizontalmente */
-  align-items: center; /* Centramos el contenido verticalmente (si es necesario) */
-  width: 100%; /* Aseguramos que ocupe todo el ancho disponible */
-  padding: 15px 0; /* Añade un poco de espacio vertical */
-  border-top: 1px solid var(--border-color); /* Opcional: una línea para separarlo de la tabla */
-  margin-top: 20px; /* Opcional: espacio superior */
-  background-color: var(--background-light-color); /* Opcional: un color de fondo sutil */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: var(--spacing-md) 0; /* Usar variable */
+  border-top: 1px solid var(--border-color);
+  margin-top: var(--spacing-md); /* Usar variable */
+  background-color: var(--background-light-color);
   border-radius: var(--border-radius);
 }
 
-.clear-products-button {
-  background-color: var(--delete-color);
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: var(--border-radius);
-  cursor: pointer;
-  font-size: 0.95em;
-  transition: background-color 0.3s ease;
-}
-
-.clear-products-button:hover {
-  background-color: #cc0000;
-}
+/* .clear-products-button se elimina si ya no está en uso */
 
 .total-general {
-  font-size: 1.3em; /* Hace el texto un poco más grande */
-  font-weight: bold; /* Asegura que el texto sea negrita */
-  color: var(--text-color-dark); /* Opcional: un color de texto más oscuro */
-  display: flex; /* Para alinear el span y el strong si necesitas control granular */
-  gap: 8px; /* Espacio entre "Total General:" y el valor */
+  font-size: 1.3em;
+  font-weight: bold;
+  color: var(--text-color-dark);
+  display: flex;
+  gap: var(--spacing-sm); /* Usar variable */
 }
 
-/* Puedes añadir más estilos a la etiqueta strong si quieres que el valor destaque aún más */
 .total-general strong {
-  color: var(--primary-color); /* Por ejemplo, usar el color principal de tu tema */
+  color: var(--primary-color);
+}
+
+@media (max-width: 768px) {
+  .product-table th,
+  .product-table td {
+    padding: var(--spacing-xs); /* Paddings muy pequeños para todas las celdas en móvil */
+    font-size: 0.7em; /* Tamaño de fuente global para todas las celdas en móvil */
+    white-space: normal; /* Permitir que el texto se envuelva */
+    overflow: hidden; /* Asegura que no haya desbordamiento inesperado */
+  }
+
+  /* Ajustes específicos para los encabezados TH en móvil si la cabecera es visible */
+  .product-table thead th {
+    font-size: 0.65em; /* Fuente ligeramente más pequeña para los encabezados */
+    padding: var(--spacing-xs) calc(var(--spacing-xs) / 2); /* Padding aún más reducido horizontalmente */
+  }
+
+  /* Si deseas ocultar la cabecera en móvil, puedes descomentar esto: */
+  /* .product-table thead {
+    display: none;
+  } */
+
+  /* Ajustes finos para anchos de columna en móvil (asegurando que sumen 100% y que todo quepa) */
+  .header-producto, .product-item-name-cell {
+    width: 35%; /* Puede ser un poco más grande si "Cantidad" se reduce */
+    max-width: 35%;
+    min-width: unset;
+  }
+
+  .header-cantidad, .product-item-quantity-cell {
+    width: 8%; /* ¡CAMBIO CLAVE: Más estrecho para Cantidad! */
+    max-width: 8%;
+    min-width: unset;
+    text-align: center;
+    white-space: nowrap; /* Mantener la cantidad en una línea si es un número corto */
+  }
+
+  .header-precio, .product-item-price-cell {
+    width: 17%; /* Ajustado */
+    max-width: 17%;
+    min-width: unset;
+    text-align: right;
+  }
+
+  .header-total, .product-item-total-cell {
+    width: 17%; /* ¡CAMBIO CLAVE: Más estrecho para Total! */
+    max-width: 17%;
+    min-width: unset;
+    text-align: right;
+  }
+
+  .header-acciones, .product-item-actions-cell {
+    width: 23%; /* Más espacio para los botones si es necesario */
+    max-width: 23%;
+    min-width: unset;
+    text-align: center;
+  }
+  
+  /* Asegúrate de que los botones en ProductItem sean muy compactos en móvil */
+  .product-item-actions-cell .button {
+    padding: 2px 4px !important;
+    font-size: 0.6em !important;
+    min-width: unset !important;
+    height: auto !important;
+    line-height: 1;
+  }
+
+  /* Ajuste para el margin-right del ícono si es necesario */
+  .product-item-name-cell .product-icon {
+    margin-right: 3px;
+    font-size: 1em;
+  }
 }

@@ -8,14 +8,6 @@ const ProductList = ({ productos, busqueda, onEditar, onEliminar /* <-- onClearP
     producto.nombre.toLowerCase().includes(busqueda.toLowerCase())
   );
 
-  const totalGeneral = filteredProducts.reduce((sum, producto) => {
-    if (!producto.completed) {
-      const itemTotal = (producto.valor || 0) * (producto.cantidad || 0);
-      return sum + itemTotal;
-    }
-    return sum;
-  }, 0);
-
   return (
     <div className="product-list-container">
       {filteredProducts.length === 0 ? (
@@ -26,7 +18,7 @@ const ProductList = ({ productos, busqueda, onEditar, onEliminar /* <-- onClearP
         <div className="table-wrapper">
           <table className="product-table">
             <thead>
-              <tr>
+              <tr className="product-table-header">
                 <th className="header-producto">Producto</th>
                 <th className="header-cantidad">Cantidad</th>
                 <th className="header-precio">Precio</th>
@@ -47,15 +39,6 @@ const ProductList = ({ productos, busqueda, onEditar, onEliminar /* <-- onClearP
           </table>
         </div>
       )}
-
-      {/* MODIFICACIÓN: El div 'list-actions' ahora solo contendrá el total general */}
-      <div className="list-actions">
-        {/* ELIMINADO: El botón "Vaciar Lista" */}
-        <div className="total-general">
-          <span>Total General:</span>
-          <strong>${totalGeneral.toFixed(2)}</strong>
-        </div>
-      </div>
     </div>
   );
 };

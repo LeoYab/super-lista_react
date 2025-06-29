@@ -2,42 +2,29 @@
 
 .product-item-row {
   transition: background-color 0.2s ease;
-  cursor: pointer; /* <-- Añadido para indicar que la fila es clickeable */
 }
 
 .product-item-row .clickable-cell {
-  cursor: pointer; /* Indica que la celda es interactiva */
+  cursor: pointer;
+  transition: background-color 0.2s ease;
 }
 
-/* Opcional: Un pequeño cambio de color al pasar el ratón por las celdas clickeables */
 .product-item-row .clickable-cell:hover {
-  background-color: var(--hover-color-light); /* O un color más sutil que el de la fila completa */
+  background-color: var(--hover-color-light);
 }
 
-/* Si quieres que al pasar el ratón por cualquier parte de la fila se siga viendo un hover general */
 .product-item-row:hover {
   background-color: var(--hover-color);
 }
 
 .product-cell {
-  vertical-align: middle; /* Alinea el contenido verticalmente al centro */
-  /* Los paddings y bordes se definen en ProductList.css */
-}
-
-.product-checkbox-cell {
-  width: 40px; /* Ancho fijo para el checkbox */
-  text-align: center;
-}
-
-.product-completed-checkbox {
-  transform: scale(1.3); /* Hace el checkbox un poco más grande */
-  cursor: pointer;
+  vertical-align: middle;
 }
 
 .product-name-cell {
-  display: flex; /* Para alinear el icono y el nombre */
+  display: flex;
   align-items: center;
-  gap: 8px; /* Espacio entre icono y nombre */
+  gap: var(--spacing-sm); /* Usar variable */
 }
 
 .product-icon {
@@ -52,98 +39,56 @@
 .product-quantity-cell,
 .product-price-cell,
 .product-item-total-cell {
-  text-align: center; /* Centra el texto en estas celdas */
-  color: var(--text-color);
+  text-align: center;
+  color: var(--text-color); /* Asegúrate de que --text-color esté definida o usa --text-color-primary */
   font-weight: 400;
 }
 
 .product-item-total-cell {
-  font-weight: 600; /* Total más resaltado */
+  font-weight: 600;
   color: var(--accent-color);
 }
 
-
 .product-actions-cell {
-  text-align: right; /* Alinea los botones a la derecha dentro de la celda */
+  text-align: right;
 }
 
 .product-buttons {
   display: flex;
-  gap: 8px; /* Espacio entre los botones */
-  justify-content: flex-end; /* Alinea los botones a la derecha dentro de su contenedor */
+  gap: var(--spacing-sm); /* Usar variable */
+  justify-content: flex-end;
 }
 
-.edit-button,
-.delete-button {
-  border: none;
-  padding: 8px;
-  border-radius: 50%; /* Hace los botones redondos */
-  cursor: pointer;
-  font-size: 1em;
-  width: 36px; /* Ancho y alto para que sean cuadrados antes de border-radius */
-  height: 36px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  transition: background-color 0.2s ease, transform 0.2s ease;
-}
+/* Los estilos de .edit-button y .delete-button se mueven a Button.css si usas el componente Button */
+/* Si no usas el componente Button, asegúrate de usar las variables aquí */
+/*
+.edit-button, .delete-button { ... }
+.edit-button { background-color: var(--primary-light-color); color: var(--primary-dark-color); }
+.edit-button:hover { background-color: var(--primary-color); color: white; transform: scale(1.05); }
+.delete-button { background-color: var(--delete-color); color: white; }
+.delete-button:hover { background-color: #cc0000; transform: scale(1.05); }
+*/
 
-.edit-button {
-  background-color: var(--primary-light-color);
-  color: var(--primary-dark-color);
-}
-
-.edit-button:hover {
-  background-color: var(--primary-color);
-  color: white;
-  transform: scale(1.05);
-}
-
-.delete-button {
-  background-color: var(--delete-color);
-  color: white;
-}
-
-.delete-button:hover {
-  background-color: #cc0000;
-  transform: scale(1.05);
-}
-
-/* Estilo para las filas completadas */
 .product-item-row.completed .product-name,
 .product-item-row.completed .product-quantity-cell,
 .product-item-row.completed .product-price-cell,
 .product-item-row.completed .product-item-total-cell {
-  color: var(--text-color-secondary); /* Color más tenue para el texto */
+  color: var(--text-color-secondary);
+  text-decoration: line-through;
+  opacity: 0.7;
 }
 
-/* Asegurarse de que los botones no se tachen */
-.product-item-row.completed .edit-button,
-.product-item-row.completed .delete-button {
+.product-item-row.completed .btn { /* Los botones no se tachan ni pierden opacidad */
   text-decoration: none;
-  opacity: 1; /* Mantener la opacidad de los botones */
+  opacity: 1;
 }
 
 @media (max-width: 768px) {
   .product-item-row .desktop-only-actions {
     display: none;
   }
-
-  /* Oculta el encabezado de acciones (th) en ProductList (si no tienes ProductList.css) */
+  /* Oculta el encabezado de acciones (th) en ProductList */
   .desktop-only-actions-header {
     display: none;
   }
-}
-
-/* Asegura que las celdas clickeables tengan el cursor adecuado */
-.product-item-row .clickable-cell {
-  cursor: pointer;
-}
-
-.product-item-row .clickable-cell:hover {
-  background-color: var(--hover-color-light);
-}
-
-.product-item-row:hover {
-  background-color: var(--hover-color);
 }

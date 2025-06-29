@@ -5,8 +5,8 @@ import "./TotalSummary.css";
 const TotalSummary = ({ total }) => {
   return (
     <div className="total-summary">
-      <h3>Total General</h3>
-      <p>${total.toFixed(2)}</p>
+      <h2>Total General:</h2>
+      <h3>${total.toFixed(2)}</h3>
     </div>
   );
 };
