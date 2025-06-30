@@ -47,19 +47,20 @@ function MainAppContent() {
   const userListsRef = currentUser ? ref(db, `Users/${currentUser.uid}/User_Lists`) : null;
   const categoriesRef = ref(db, 'Categories');
 
-  // Load Categories
-  useEffect(() => {
-    setLoadingCategories(true);
-    const unsubscribe = onValue(categoriesRef, (snapshot) => {
-      const data = snapshot.val();
-      setCategories(data ? Object.values(data) : []);
-      setLoadingCategories(false);
-    }, (error) => {
-      console.error("Error al cargar categorías:", error);
-      setLoadingCategories(false);
-    });
-    return () => unsubscribe();
-  }, []);
+/* eslint-disable react-hooks/exhaustive-deps */
+useEffect(() => {
+  setLoadingCategories(true);
+  const unsubscribe = onValue(categoriesRef, (snapshot) => {
+    const data = snapshot.val();
+    setCategories(data ? Object.values(data) : []);
+    setLoadingCategories(false);
+  }, (error) => {
+    console.error("Error al cargar categorías:", error);
+    setLoadingCategories(false);
+  });
+  return () => unsubscribe();
+}, []);
+/* eslint-enable react-hooks/exhaustive-deps */
 
   // Load User Lists and Set Default List
   useEffect(() => {
