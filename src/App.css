@@ -94,7 +94,7 @@ body {
     justify-content: space-between; /* Distribuye el espacio equitativamente */
     align-items: center; /* Alinea los elementos verticalmente al centro */
     width: 100%; /* Ocupa todo el ancho disponible */
-    gap: 15px; /* Mantiene un espacio mínimo entre ellos */
+    gap: 15px;
 }
 
 /* Estilos para el formulario cuando está dentro de fixed-bottom-controls */
