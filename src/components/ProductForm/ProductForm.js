@@ -147,6 +147,7 @@ const ProductForm = ({ editandoId, productoAEditar, onAgregar, onEditar, onCance
           value={productData.nombre}
           onChange={handleChange}
           placeholder="Ej: Leche, Pan, Arroz"
+          maxLength={23}
           required
         />
 

@@ -19,13 +19,18 @@
 
 .table-wrapper {
   overflow-x: auto;
+  overflow-y: auto; /* Permitir scroll vertical */
   width: 100%;
+  max-height: 60vh; /* Limitar la altura para que el header se mantenga visible */
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  position: relative; /* Necesario para el posicionamiento sticky */
 }
 
 .product-table {
   width: 100%;
   border-collapse: collapse;
-  margin-bottom: var(--spacing-lg); /* Usar variable */
+  margin-bottom: 0; /* Removido margin-bottom para evitar espacios extraños */
 }
 
 .product-table th,
@@ -41,9 +46,10 @@
   font-weight: 600;
   text-transform: uppercase;
   font-size: 0.9em;
-  position: sticky;
-  top: 0;
-  z-index: 1;
+  position: sticky; /* ¡CLAVE! Hace que el header se mantenga fijo */
+  top: 0; /* Se pega al top del contenedor */
+  z-index: 10; /* Asegura que esté por encima del contenido */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra sutil para separarlo del contenido */
 }
 
 .header-cantidad,
@@ -74,7 +80,6 @@
   cursor: pointer; /* Indica que la fila es interactiva */
 }
 
-
 .list-actions {
   display: flex;
   justify-content: center;
@@ -102,6 +107,10 @@
 }
 
 @media (max-width: 768px) {
+  .table-wrapper {
+    max-height: 45vh; /* Altura menor en móviles */
+  }
+
   .product-table th,
   .product-table td {
     padding: var(--spacing-xs); /* Paddings muy pequeños para todas las celdas en móvil */
@@ -114,6 +123,11 @@
   .product-table thead th {
     font-size: 0.65em; /* Fuente ligeramente más pequeña para los encabezados */
     padding: var(--spacing-xs) calc(var(--spacing-xs) / 2); /* Padding aún más reducido horizontalmente */
+    /* Mantener las propiedades sticky en móvil */
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
 
   /* Si deseas ocultar la cabecera en móvil, puedes descomentar esto: */

@@ -185,7 +185,7 @@ flex-direction: column;
      * Mide la altura máxima de '.fixed-bottom-controls' en un dispositivo móvil
      * (o reduciendo la ventana del navegador) cuando el formulario está abierto.
      */
-    padding-bottom: 380px; /* <--- AJUSTA ESTE VALOR DESPUÉS DE LA MEDICIÓN REAL EN MÓVILES */
+    padding-bottom: 265px; /* <--- AJUSTA ESTE VALOR DESPUÉS DE LA MEDICIÓN REAL EN MÓVILES */
   }
 
   .fixed-bottom-controls {
