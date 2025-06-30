@@ -21,14 +21,20 @@ jobs:
       run: node -v && npm -v
 
     - name: Checkout dev branch
-      run: |
-        git clone --branch=dev https://github.com/${{ github.repository }}.git
-        cd ${{ github.event.repository.name }}
-        git status
+      uses: actions/checkout@v4
+      with:
+        ref: dev
         
     - name: Install dependencies & run tests
+      env:
+        REACT_APP_FIREBASE_API_KEY: ${{ secrets.REACT_APP_FIREBASE_API_KEY }}
+        REACT_APP_FIREBASE_AUTH_DOMAIN: ${{ secrets.REACT_APP_FIREBASE_AUTH_DOMAIN }}
+        REACT_APP_FIREBASE_DATABASE_URL: ${{ secrets.REACT_APP_FIREBASE_DATABASE_URL }}
+        REACT_APP_FIREBASE_PROJECT_ID: ${{ secrets.REACT_APP_FIREBASE_PROJECT_ID }}
+        REACT_APP_FIREBASE_STORAGE_BUCKET: ${{ secrets.REACT_APP_FIREBASE_STORAGE_BUCKET }}
+        REACT_APP_FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.REACT_APP_FIREBASE_MESSAGING_SENDER_ID }}
+        REACT_APP_FIREBASE_APP_ID: ${{ secrets.REACT_APP_FIREBASE_APP_ID }}
       run: |
-        cd ${{ github.event.repository.name }}
         npm install
         npm test
 

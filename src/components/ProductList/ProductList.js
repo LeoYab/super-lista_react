@@ -3,7 +3,7 @@ import React from 'react';
 import ProductItem from '../ProductItem/ProductItem';
 import './ProductList.css';
 
-const ProductList = ({ productos, busqueda, onEditar, onEliminar /* <-- onClearProducts eliminado */ }) => {
+const ProductList = ({ productos, busqueda, onEditar, onEliminar }) => {
   const filteredProducts = productos.filter(producto =>
     producto.nombre.toLowerCase().includes(busqueda.toLowerCase())
   );
