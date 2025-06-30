@@ -1,6 +1,10 @@
+// src/components/SidebarMenu/SidebarMenu.js
 import React, { useState } from 'react';
 import './SidebarMenu.css';
-import Swal from 'sweetalert2'; // Asegúrate de tener SweetAlert2 instalado
+// REMOVED: import Swal from 'sweetalert2'; // ¡Eliminamos esta importación!
+
+// IMPORT NEW SERVICE: Importa tus funciones de notificación
+import { showConfirmAlert, showSuccessToast, showErrorAlert } from '../../Notifications/NotificationsServices';
 
 // Importa tus componentes Button e Input
 import Button from '../Buttons/Button';
@@ -40,40 +44,24 @@ const SidebarMenu = ({ currentUser, logout, userLists, createList, selectList, c
   };
 
   // Función de confirmación para eliminar una lista usando SweetAlert2
-  const handleDeleteListConfirm = (listId, listName) => {
-  Swal.fire({
-    title: '¿Estás seguro?',
-    text: `¿Quieres eliminar la lista "${listName}"? Esta acción no se puede deshacer.`,
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonColor: '#d33', // Rojo para confirmar (peligro)
-    cancelButtonColor: '#3085d6', // Azul para cancelar
-    confirmButtonText: 'Sí, eliminar',
-    cancelButtonText: 'Cancelar'
-  }).then(async (result) => { // Añadimos 'async' aquí porque 'deleteList' podría ser asíncrona
-    if (result.isConfirmed) {
+  const handleDeleteListConfirm = async (listId, listName) => { // Made async
+    const isConfirmed = await showConfirmAlert({ // Replaced Swal.fire
+      title: '¿Estás seguro?',
+      text: `¿Quieres eliminar la lista "${listName}"? Esta acción no se puede deshacer.`,
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar'
+    });
+
+    if (isConfirmed) {
       try {
-        await deleteList(listId); // Asegúrate de que 'deleteList' se resuelva antes de mostrar el toast
-
-        // --- ¡AQUÍ ESTÁ EL CAMBIO CLAVE PARA EL TOAST! ---
-        Swal.fire({
-          title: '¡Lista Eliminada!',
-          icon: 'success',
-          showConfirmButton: false, // <-- ¡Importante! Oculta el botón "OK"
-          timer: 1500,              // <-- ¡Importante! Cierra automáticamente después de 1.5 segundos
-          toast: true,              // <-- ¡Importante! Activa el estilo de notificación pequeña
-          position: 'top-end'       // <-- Posiciona el toast en la esquina superior derecha
-        });
-        // --- FIN DEL CAMBIO CLAVE ---
-
+        await deleteList(listId);
+        showSuccessToast(`¡Lista <strong>"${listName}"</strong> Eliminada!`); // Replaced Swal.fire
       } catch (error) {
         console.error("Error al eliminar la lista:", error);
-        // Si 'deleteList' falla, mostrar un SweetAlert de error normal
-        Swal.fire('Error', 'No se pudo eliminar la lista.', 'error');
+        showErrorAlert('Error', 'No se pudo eliminar la lista.'); // Replaced Swal.fire
       }
     }
-  });
-};
+  };
 
   return (
     <>

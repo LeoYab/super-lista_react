@@ -4,7 +4,10 @@ import './ProductForm.css';
 import Input from '../Input/Input';
 import Select from '../Select/Select';
 import Button from '../Buttons/Button';
-import Swal from 'sweetalert2';
+// REMOVED: import Swal from 'sweetalert2'; // ¡Eliminamos esta importación!
+
+// IMPORT NEW SERVICE: Importa tus funciones de notificación
+import { showErrorAlert } from '../../Notifications/NotificationsServices';
 
 // Nos aseguramos de que 'categories' siempre sea un array, incluso si es vacío.
 const ProductForm = ({ editandoId, productoAEditar, onAgregar, onEditar, onCancelar, categories = [] }) => {
@@ -82,7 +85,7 @@ const ProductForm = ({ editandoId, productoAEditar, onAgregar, onEditar, onCance
 
     if (!productData.nombre.trim() || !productData.valor || !productData.cantidad || productData.category === undefined || !productData.icon) {
       setError('Todos los campos son obligatorios.');
-      Swal.fire('Error', 'Por favor, completa todos los campos.', 'error');
+      showErrorAlert('Error', 'Por favor, completa todos los campos.'); // Replaced Swal.fire
       return;
     }
     setError('');
@@ -92,12 +95,12 @@ const ProductForm = ({ editandoId, productoAEditar, onAgregar, onEditar, onCance
 
     if (isNaN(parsedValor) || parsedValor < 0) {
       setError('El valor unitario debe ser un número positivo.');
-      Swal.fire('Error', 'El valor unitario debe ser un número positivo.', 'error');
+      showErrorAlert('Error', 'El valor unitario debe ser un número positivo.'); // Replaced Swal.fire
       return;
     }
     if (isNaN(parsedCantidad) || parsedCantidad < 1) {
       setError('La cantidad debe ser un número entero positivo.');
-      Swal.fire('Error', 'La cantidad debe ser un número entero positivo.', 'error');
+      showErrorAlert('Error', 'La cantidad debe ser un número entero positivo.'); // Replaced Swal.fire
       return;
     }
 

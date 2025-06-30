@@ -4,7 +4,10 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { useAuth, AuthProvider } from './context/AuthContext';
 import { db } from './firebase/config';
 import { ref, onValue, push, remove, update, set } from 'firebase/database';
-import Swal from 'sweetalert2';
+// REMOVED: import Swal from 'sweetalert2'; // ¡Eliminamos esta importación!
+
+// IMPORT NEW SERVICE: Importa tus funciones de notificación
+import { showSuccessToast, showSuccessAlert, showErrorAlert, showConfirmAlert } from './Notifications/NotificationsServices';
 
 // Importa tus componentes
 import Header from './components/Header/Header';
@@ -14,7 +17,7 @@ import AuthPage from './pages/AuthPage/AuthPage';
 import SidebarMenu from './components/SidebarMenu/SidebarMenu';
 import SearchBar from './components/SearchBar/SearchBar';
 import TotalSummary from './TotalSummary/TotalSummary';
-import Button from './components/Buttons/Button'; // Make sure to import Button
+import Button from './components/Buttons/Button';
 
 // Importa tus estilos
 import './App.css';
@@ -22,7 +25,7 @@ import './components/Header/Header.css';
 import './components/Input/Input.css';
 import './components/Select/Select.css';
 import './TotalSummary/TotalSummary.css';
-import './components/Buttons/Button.css'; // Don't forget to import Button's CSS
+import './components/Buttons/Button.css';
 
 function MainAppContent() {
   const { currentUser, logout } = useAuth();
@@ -148,25 +151,22 @@ function MainAppContent() {
         nameList: listName.trim(),
         createdAt: Date.now()
       });
-      Swal.fire('¡Lista Creada!', `"${listName}" ha sido creada.`, 'success');
+      showSuccessToast(`¡Lista <strong>"${listName}"</strong> Creada! `); // Replaced Swal.fire
     } catch (error) {
       console.error("Error al crear nueva lista:", error);
-      Swal.fire('Error', 'No se pudo crear la lista.', 'error');
+      showErrorAlert('Error', 'No se pudo crear la lista.'); // Replaced Swal.fire
     }
   };
 
- const deleteList = async (listIdToDelete) => {
+  const deleteList = async (listIdToDelete) => {
     if (!currentUser || !listIdToDelete) return;
     try {
       const listRefToDelete = ref(db, `Users/${currentUser.uid}/User_Lists/${listIdToDelete}`);
       await remove(listRefToDelete);
-      // ¡IMPORTANTE! Hemos ELIMINADO:
-      // Swal.fire('¡Eliminada!', 'La lista ha sido eliminada.', 'success');
-      // Ahora esta función NO muestra éxito, solo lanza un error si lo hay.
+      // Success toast is handled in SidebarMenu's handleDeleteListConfirm
     } catch (error) {
       console.error("Error al eliminar lista:", error);
-      // Mantener el Swal.fire de error aquí, ya que es un fallo directo de la operación
-      throw new Error('Failed to delete list'); // Relanzar el error para que sea capturado en SidebarMenu.js
+      throw new Error('Failed to delete list');
     }
   };
 
@@ -182,35 +182,25 @@ function MainAppContent() {
 
   // Product management functions (Firebase operations)
   const handleAddProduct = async (productoDataFormulario) => {
-  if (!currentUser || !currentListId) return;
-  try {
-    const productsRef = ref(db, `Users/${currentUser.uid}/User_Lists/${currentListId}/products`);
-    await push(productsRef, {
-      nameProd: productoDataFormulario.nombre,
-      price: parseFloat(productoDataFormulario.valor),
-      quantity: parseInt(productoDataFormulario.cantidad),
-      completed: false,
-      category: productoDataFormulario.category,
-      icon: productoDataFormulario.icon,
-    });
+    if (!currentUser || !currentListId) return;
+    try {
+      const productsRef = ref(db, `Users/${currentUser.uid}/User_Lists/${currentListId}/products`);
+      await push(productsRef, {
+        nameProd: productoDataFormulario.nombre,
+        price: parseFloat(productoDataFormulario.valor),
+        quantity: parseInt(productoDataFormulario.cantidad),
+        completed: false,
+        category: productoDataFormulario.category,
+        icon: productoDataFormulario.icon,
+      });
 
-    // --- ¡CAMBIO CLAVE AQUÍ! ---
-    Swal.fire({
-      title: '¡Producto Añadido!',
-      icon: 'success',
-      showConfirmButton: false, // ¡Oculta el botón de confirmación!
-      timer: 1500, // ¡Cierra automáticamente después de 1.5 segundos (1500 ms)!
-      toast: true, // Opcional: para que aparezca como una notificación "toast" (más pequeña y en la esquina)
-      position: 'top-end' // Opcional: si usas toast, posiciona en la esquina superior derecha
-    });
-    // --- FIN DEL CAMBIO CLAVE ---
-
-    setShowProductForm(false);
-  } catch (error) {
-    console.error("Error al añadir producto:", error);
-    Swal.fire('Error', 'No se pudo añadir el producto.', 'error');
-  }
-};
+      showSuccessToast(`¡Producto <strong>"${productoDataFormulario.nombre}"</strong> Añadido!`); // Replaced Swal.fire
+      setShowProductForm(false);
+    } catch (error) {
+      console.error("Error al añadir producto:", error);
+      showErrorAlert('Error', 'No se pudo añadir el producto.'); // Replaced Swal.fire
+    }
+  };
 
   const handleEditProduct = async (firebaseId, productoDataFormulario) => {
     if (!currentUser || !currentListId) return;
@@ -223,12 +213,12 @@ function MainAppContent() {
         category: productoDataFormulario.category,
         icon: productoDataFormulario.icon,
       });
-      Swal.fire('¡Producto Actualizado!', '', 'success');
+      showSuccessAlert('¡Producto Actualizado!'); // Replaced Swal.fire
       setEditingProduct(null);
       setShowProductForm(false);
     } catch (error) {
       console.error("Error al actualizar producto:", error);
-      Swal.fire('Error', 'No se pudo actualizar el producto.', 'error');
+      showErrorAlert('Error', 'No se pudo actualizar el producto.'); // Replaced Swal.fire
     }
   };
 
@@ -247,9 +237,10 @@ function MainAppContent() {
     try {
       const productRef = ref(db, `Users/${currentUser.uid}/User_Lists/${currentListId}/products/${firebaseId}`);
       await remove(productRef);
+      // Success toast is handled in ProductItem's confirmDelete
     } catch (error) {
       console.error("Error al eliminar producto:", error);
-      Swal.fire('Error', 'No se pudo eliminar el producto.', 'error');
+      showErrorAlert('Error', 'No se pudo eliminar el producto.'); // Replaced Swal.fire
     }
   };
 
@@ -270,27 +261,23 @@ function MainAppContent() {
 
   const clearAllProducts = async () => {
     if (!currentUser || !currentListId) return;
-    Swal.fire({
+    const isConfirmed = await showConfirmAlert({ // Replaced Swal.fire
       title: '¿Estás seguro?',
       text: `¿Quieres vaciar todos los productos de "${currentListName}"?`,
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#d33',
-      cancelButtonColor: '#3085d6',
       confirmButtonText: 'Sí, vaciar',
       cancelButtonText: 'Cancelar'
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        try {
-          const productsRef = ref(db, `Users/${currentUser.uid}/User_Lists/${currentListId}/products`);
-          await remove(productsRef);
-          Swal.fire('¡Lista Vaciada!', 'Todos los productos han sido eliminados.', 'success');
-        } catch (error) {
-          console.error("Error al vaciar la lista:", error);
-          Swal.fire('Error', 'No se pudo vaciar la lista.', 'error');
-        }
-      }
     });
+
+    if (isConfirmed) {
+      try {
+        const productsRef = ref(db, `Users/${currentUser.uid}/User_Lists/${currentListId}/products`);
+        await remove(productsRef);
+        showSuccessAlert('¡Lista Vaciada!', 'Todos los productos han sido eliminados.'); // Replaced Swal.fire
+      } catch (error) {
+        console.error("Error al vaciar la lista:", error);
+        showErrorAlert('Error', 'No se pudo vaciar la lista.'); // Replaced Swal.fire
+      }
+    }
   };
 
   const filteredProducts = products.filter(producto =>

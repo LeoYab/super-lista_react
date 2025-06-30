@@ -1,7 +1,10 @@
 // src/components/ProductItem/ProductItem.js
 import React, { useState, useRef } from 'react';
 import './ProductItem.css';
-import Swal from 'sweetalert2'; // Importa SweetAlert2 (asegúrate de haberlo instalado)
+// REMOVED: import Swal from 'sweetalert2'; // ¡Eliminamos esta importación!
+
+// IMPORT NEW SERVICE: Importa tus funciones de notificación
+import { showConfirmAlert, showSuccessToast } from '../../Notifications/NotificationsServices';
 
 // Importa el componente Button
 import Button from '../Buttons/Button';
@@ -23,35 +26,18 @@ const ProductItem = ({ producto, onEditar, onEliminar, onToggleComplete /* Aseg�
   const MIN_DRAG_DISTANCE = 15; // Distancia mínima en píxeles para considerar un arrastre (ajustar si es necesario)
 
   // Función para mostrar la alerta de eliminación (encapsulada para reutilización)
-  const confirmDelete = () => {
-    Swal.fire({
+  const confirmDelete = async () => { // Make this async
+    const isConfirmed = await showConfirmAlert({ // Replaced Swal.fire
       title: '¿Estás seguro?',
       text: `¿Quieres eliminar "${producto.nombre}" de la lista?`,
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#d33', // Rojo para confirmar
-      cancelButtonColor: '#3085d6', // Azul para cancelar
       confirmButtonText: 'Sí, eliminar',
       cancelButtonText: 'Cancelar'
-    }).then(async (result) => { // Agrega 'async' aquí por si 'onEliminar' es asíncrona
-      if (result.isConfirmed) {
-        // Llama a la función para eliminar el producto.
-        // Asumiendo que 'onEliminar' manejará su propio SweetAlert de éxito tipo toast,
-        // o que lo quieres aquí para una confirmación inmediata si 'onEliminar' no lo hace.
-        await onEliminar(producto.firebaseId); // Usa 'await' si onEliminar es asíncrona
-
-        // --- ¡AQUÍ ESTÁ EL CAMBIO CLAVE PARA EL TOAST! ---
-        Swal.fire({
-          title: '¡Producto Eliminado!',
-          icon: 'success',
-          showConfirmButton: false, // <-- ¡Importante! Oculta el botón "OK"
-          timer: 1500,              // <-- ¡Importante! Cierra automáticamente después de 1.5 segundos
-          toast: true,              // <-- ¡Importante! Activa el estilo de notificación pequeña
-          position: 'top-end'       // <-- Posiciona el toast en la esquina superior derecha
-        });
-        // --- FIN DEL CAMBIO CLAVE ---
-      }
     });
+
+    if (isConfirmed) {
+      await onEliminar(producto.firebaseId);
+      showSuccessToast(`¡Producto <strong>"${producto.nombre}"</strong> Eliminado!`); // Replaced Swal.fire
+    }
   };
 
   // --- NUEVA LÓGICA PARA MANEJAR TOUCH Y DRAG ---
@@ -155,7 +141,7 @@ const ProductItem = ({ producto, onEditar, onEliminar, onToggleComplete /* Aseg�
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
       onTouchCancel={handleTouchEnd} // Para cuando el toque se interrumpe (ej. llamada)
-      // Nota: onMouseDown/Up/Leave se aplicarán a las celdas individuales para su clic/long press
+    // Nota: onMouseDown/Up/Leave se aplicarán a las celdas individuales para su clic/long press
     >
       {/* Celdas para Producto, Cantidad, Precio y Total: Tap para editar, Mantener para eliminar */}
       {/* Usamos onClick para el tap/clic normal y onMouseDown/Up/Leave para long press en desktop */}
@@ -231,7 +217,6 @@ const ProductItem = ({ producto, onEditar, onEliminar, onToggleComplete /* Aseg�
             className="round"
             onClick={(e) => {
               e.stopPropagation(); // Evita que el evento burbujee
-              // Abre SweetAlert directamente en el clic para desktop/botón
               confirmDelete(); // Usa la función común de confirmación
             }}
             title="Eliminar producto"
