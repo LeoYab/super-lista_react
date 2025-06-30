@@ -145,6 +145,25 @@ flex-direction: column;
   color: var(--text-color-secondary);
 }
 
+.swal2-container * {
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none;   /* Safari */
+  -khtml-user-select: none;    /* Konqueror HTML */
+  -moz-user-select: none;      /* Old versions of Firefox */
+  -ms-user-select: none;       /* Internet Explorer/Edge */
+  user-select: none;           /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
+}
+
+/* También puedes aplicar a elementos específicos del alert si solo quieres que ciertas partes no sean seleccionables */
+.swal2-title,
+.swal2-html-container,
+.swal2-content {
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
 /* Media Queries para Responsividad                     */
 @media (max-width: 768px) {
   .App {

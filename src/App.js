@@ -155,15 +155,18 @@ function MainAppContent() {
     }
   };
 
-  const deleteList = async (listIdToDelete) => {
+ const deleteList = async (listIdToDelete) => {
     if (!currentUser || !listIdToDelete) return;
     try {
       const listRefToDelete = ref(db, `Users/${currentUser.uid}/User_Lists/${listIdToDelete}`);
       await remove(listRefToDelete);
-      Swal.fire('¡Eliminada!', 'La lista ha sido eliminada.', 'success');
+      // ¡IMPORTANTE! Hemos ELIMINADO:
+      // Swal.fire('¡Eliminada!', 'La lista ha sido eliminada.', 'success');
+      // Ahora esta función NO muestra éxito, solo lanza un error si lo hay.
     } catch (error) {
       console.error("Error al eliminar lista:", error);
-      Swal.fire('Error', 'No se pudo eliminar la lista.', 'error');
+      // Mantener el Swal.fire de error aquí, ya que es un fallo directo de la operación
+      throw new Error('Failed to delete list'); // Relanzar el error para que sea capturado en SidebarMenu.js
     }
   };
 
@@ -179,24 +182,35 @@ function MainAppContent() {
 
   // Product management functions (Firebase operations)
   const handleAddProduct = async (productoDataFormulario) => {
-    if (!currentUser || !currentListId) return;
-    try {
-      const productsRef = ref(db, `Users/${currentUser.uid}/User_Lists/${currentListId}/products`);
-      await push(productsRef, {
-        nameProd: productoDataFormulario.nombre,
-        price: parseFloat(productoDataFormulario.valor),
-        quantity: parseInt(productoDataFormulario.cantidad),
-        completed: false,
-        category: productoDataFormulario.category,
-        icon: productoDataFormulario.icon,
-      });
-      Swal.fire('¡Producto Añadido!', '', 'success');
-      setShowProductForm(false);
-    } catch (error) {
-      console.error("Error al añadir producto:", error);
-      Swal.fire('Error', 'No se pudo añadir el producto.', 'error');
-    }
-  };
+  if (!currentUser || !currentListId) return;
+  try {
+    const productsRef = ref(db, `Users/${currentUser.uid}/User_Lists/${currentListId}/products`);
+    await push(productsRef, {
+      nameProd: productoDataFormulario.nombre,
+      price: parseFloat(productoDataFormulario.valor),
+      quantity: parseInt(productoDataFormulario.cantidad),
+      completed: false,
+      category: productoDataFormulario.category,
+      icon: productoDataFormulario.icon,
+    });
+
+    // --- ¡CAMBIO CLAVE AQUÍ! ---
+    Swal.fire({
+      title: '¡Producto Añadido!',
+      icon: 'success',
+      showConfirmButton: false, // ¡Oculta el botón de confirmación!
+      timer: 1500, // ¡Cierra automáticamente después de 1.5 segundos (1500 ms)!
+      toast: true, // Opcional: para que aparezca como una notificación "toast" (más pequeña y en la esquina)
+      position: 'top-end' // Opcional: si usas toast, posiciona en la esquina superior derecha
+    });
+    // --- FIN DEL CAMBIO CLAVE ---
+
+    setShowProductForm(false);
+  } catch (error) {
+    console.error("Error al añadir producto:", error);
+    Swal.fire('Error', 'No se pudo añadir el producto.', 'error');
+  }
+};
 
   const handleEditProduct = async (firebaseId, productoDataFormulario) => {
     if (!currentUser || !currentListId) return;

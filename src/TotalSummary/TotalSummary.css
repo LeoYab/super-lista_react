@@ -1,8 +1,6 @@
 .total-summary {
   display: flex;
   justify-content: space-evenly;
-  border: 1px solid #eee;
-  border-radius: 5px;
   padding: 16px;
   margin-top: 16px;
   text-align: center;

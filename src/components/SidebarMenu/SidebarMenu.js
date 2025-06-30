@@ -41,22 +41,39 @@ const SidebarMenu = ({ currentUser, logout, userLists, createList, selectList, c
 
   // Función de confirmación para eliminar una lista usando SweetAlert2
   const handleDeleteListConfirm = (listId, listName) => {
-    Swal.fire({
-      title: '¿Estás seguro?',
-      text: `¿Quieres eliminar la lista "${listName}"? Esta acción no se puede deshacer.`,
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#d33', // Rojo para confirmar (peligro)
-      cancelButtonColor: '#3085d6', // Azul para cancelar
-      confirmButtonText: 'Sí, eliminar',
-      cancelButtonText: 'Cancelar'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        deleteList(listId); // Llama a la función real para eliminar la lista
-        Swal.fire('¡Eliminada!', 'La lista ha sido eliminada.', 'success');
+  Swal.fire({
+    title: '¿Estás seguro?',
+    text: `¿Quieres eliminar la lista "${listName}"? Esta acción no se puede deshacer.`,
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#d33', // Rojo para confirmar (peligro)
+    cancelButtonColor: '#3085d6', // Azul para cancelar
+    confirmButtonText: 'Sí, eliminar',
+    cancelButtonText: 'Cancelar'
+  }).then(async (result) => { // Añadimos 'async' aquí porque 'deleteList' podría ser asíncrona
+    if (result.isConfirmed) {
+      try {
+        await deleteList(listId); // Asegúrate de que 'deleteList' se resuelva antes de mostrar el toast
+
+        // --- ¡AQUÍ ESTÁ EL CAMBIO CLAVE PARA EL TOAST! ---
+        Swal.fire({
+          title: '¡Lista Eliminada!',
+          icon: 'success',
+          showConfirmButton: false, // <-- ¡Importante! Oculta el botón "OK"
+          timer: 1500,              // <-- ¡Importante! Cierra automáticamente después de 1.5 segundos
+          toast: true,              // <-- ¡Importante! Activa el estilo de notificación pequeña
+          position: 'top-end'       // <-- Posiciona el toast en la esquina superior derecha
+        });
+        // --- FIN DEL CAMBIO CLAVE ---
+
+      } catch (error) {
+        console.error("Error al eliminar la lista:", error);
+        // Si 'deleteList' falla, mostrar un SweetAlert de error normal
+        Swal.fire('Error', 'No se pudo eliminar la lista.', 'error');
       }
-    });
-  };
+    }
+  });
+};
 
   return (
     <>
@@ -64,7 +81,7 @@ const SidebarMenu = ({ currentUser, logout, userLists, createList, selectList, c
       <Button
         className="menu-toggle-button round" // Añade 'round' si quieres que sea circular
         onClick={() => setIsMenuOpen(!isMenuOpen)}
-        icon={isMenuOpen ? '✖️' : '☰'} // Icono dinámico para abrir/cerrar
+        icon={isMenuOpen ? 'X' : '☰'} // Icono dinámico para abrir/cerrar
         variant="primary" // O el que mejor se adapte a tu diseño
         title={isMenuOpen ? 'Cerrar menú' : 'Abrir menú'} // Tooltip
       />

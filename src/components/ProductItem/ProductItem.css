@@ -36,12 +36,15 @@
   color: var(--text-color-primary);
 }
 
-.product-quantity-cell,
 .product-price-cell,
 .product-item-total-cell {
   text-align: center;
   color: var(--text-color); /* Asegúrate de que --text-color esté definida o usa --text-color-primary */
   font-weight: 400;
+}
+
+.product-quantity-cell{
+  text-align: center !important; 
 }
 
 .product-item-total-cell {

@@ -60,12 +60,20 @@
   border-bottom: none;
 }
 
-/* Los estilos para .product-item-row.completed deberían estar solo en ProductItem.css */
-/* .product-item-row.completed {
-    text-decoration: line-through;
-    color: var(--text-color-secondary);
-    opacity: 0.7;
-} */
+.product-table tbody tr:nth-child(odd) {
+  background-color: var(--card-bg-color); /* Blanco o el color de fondo base de tus tarjetas */
+}
+
+.product-table tbody tr:nth-child(even) {
+  background-color: var(--background-light-color); /* Un gris muy claro o un blanco azulado */
+}
+
+/* Opcional: Para el hover, si quieres que se vea resaltado */
+.product-table tbody tr:hover {
+  background-color: var(--primary-light-color); /* Un color que resalte al pasar el ratón */
+  cursor: pointer; /* Indica que la fila es interactiva */
+}
+
 
 .list-actions {
   display: flex;
