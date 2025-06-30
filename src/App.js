@@ -10,7 +10,7 @@ import { ref, onValue, push, remove, update, set } from 'firebase/database';
 import { showSuccessToast, showSuccessAlert, showErrorAlert, showConfirmAlert } from './Notifications/NotificationsServices';
 
 // Importa tus componentes
-import Header from './components/Header/Header';
+import Header from './components/header/Header';
 import ProductForm from './components/ProductForm/ProductForm';
 import ProductList from './components/ProductList/ProductList';
 import AuthPage from './pages/AuthPage/AuthPage';
@@ -21,7 +21,7 @@ import Button from './components/Buttons/Button';
 
 // Importa tus estilos
 import './App.css';
-import './components/Header/Header.css';
+import './components/header/Header.css';
 import './components/Input/Input.css';
 import './components/Select/Select.css';
 import './TotalSummary/TotalSummary.css';
