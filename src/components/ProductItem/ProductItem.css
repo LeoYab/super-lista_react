@@ -9,8 +9,10 @@
   --card-bg-color: #ffffff;
   --text-color-primary: #333333;
   --text-color-secondary: #666666;
-  --delete-color: #dc3545; /* Rojo peligro */
-  --edit-color: #007bff; /* Usar el mismo azul primario o uno específico para editar */
+  --delete-color: #dc3545;
+  /* Rojo peligro */
+  --edit-color: #007bff;
+  /* Usar el mismo azul primario o uno específico para editar */
   --background-light-color: #f8f9fa;
 
   --spacing-xs: 4px;
@@ -29,33 +31,44 @@
 
 .product-item-wrapper {
   position: relative;
-  overflow: hidden; 
+  overflow: hidden;
   border-radius: var(--border-radius);
   box-shadow: var(--shadow-light);
   border: 1px solid var(--border-color);
   background-color: var(--card-bg-color);
-  display: flex; /* Para contener la tarjeta y los overlays */
+  display: flex;
+  /* Para contener la tarjeta y los overlays */
   align-items: center;
   width: 100%;
-  transform: none; /* El wrapper no se mueve */
-  touch-action: pan-y; /* Permite scroll vertical, maneja horizontal para swipe */
+  transform: none;
+  /* El wrapper no se mueve */
+  touch-action: pan-y;
+  /* Permite scroll vertical, maneja horizontal para swipe */
   user-select: none;
-  margin-bottom: var(--spacing-xs); /* Espacio entre las tarjetas */
+  margin-bottom: var(--spacing-xs);
+  /* Espacio entre las tarjetas */
 }
 
 /* La tarjeta principal que se desliza */
 .product-item-card {
-  flex-grow: 1; /* Ocupa todo el espacio horizontal disponible */
+  flex-grow: 1;
+  /* Ocupa todo el espacio horizontal disponible */
   background-color: var(--card-bg-color);
   padding: var(--spacing-md) var(--spacing-lg);
-  display: flex; /* Contenedor flex para sus hijos (left-content, right-content, actions) */
-  justify-content: space-between; /* Espacia los elementos a los extremos */
-  align-items: center; /* Centra verticalmente los elementos */
+  display: flex;
+  /* Contenedor flex para sus hijos (left-content, right-content, actions) */
+  justify-content: space-between;
+  /* Espacia los elementos a los extremos */
+  align-items: center;
+  /* Centra verticalmente los elementos */
   cursor: pointer;
   transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
-  width: 100%; /* La tarjeta ocupa el 100% del wrapper inicialmente */
-  z-index: 2; /* Asegura que esté por encima de los overlays */
-  box-shadow: none; /* La sombra se maneja en el wrapper o al hover */
+  width: 100%;
+  /* La tarjeta ocupa el 100% del wrapper inicialmente */
+  z-index: 2;
+  /* Asegura que esté por encima de los overlays */
+  box-shadow: none;
+  /* La sombra se maneja en el wrapper o al hover */
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
@@ -63,7 +76,8 @@
 }
 
 .product-item-card.dragging {
-  transition: none; /* Deshabilita la transición durante el arrastre */
+  transition: none;
+  /* Deshabilita la transición durante el arrastre */
   cursor: grabbing;
 }
 
@@ -88,7 +102,7 @@
 
 .product-item-card.completed .product-item-total-price,
 .product-item-card.completed .product-item-actions .button {
-  text-decoration: none; 
+  text-decoration: none;
   opacity: 1;
 }
 
@@ -97,8 +111,10 @@
   display: flex;
   align-items: center;
   gap: var(--spacing-md);
-  flex-grow: 1; /* Permite que este elemento crezca y empuje el contenido derecho */
-  pointer-events: none; /* Permite que los eventos pasen al contenedor padre */
+  flex-grow: 1;
+  /* Permite que este elemento crezca y empuje el contenido derecho */
+  pointer-events: none;
+  /* Permite que los eventos pasen al contenedor padre */
 }
 
 .product-item-image {
@@ -144,18 +160,24 @@
 
 .product-item-right-content {
   display: flex;
-  flex-direction: column; /* Apila los elementos verticalmente */
-  align-items: flex-end; /* Alinea el texto a la derecha dentro de esta columna */
-  white-space: nowrap; /* Evita que el texto se rompa en varias líneas */
-  margin-left: var(--spacing-md); /* Espacio con el contenido de la izquierda */
-  flex-shrink: 0; /* Evita que se encoja */
+  flex-direction: column;
+  /* Apila los elementos verticalmente */
+  align-items: flex-end;
+  /* Alinea el texto a la derecha dentro de esta columna */
+  white-space: nowrap;
+  /* Evita que el texto se rompa en varias líneas */
+  margin-left: var(--spacing-md);
+  /* Espacio con el contenido de la izquierda */
+  flex-shrink: 0;
+  /* Evita que se encoja */
   pointer-events: none;
 }
 
 .product-item-quantity-text {
   font-size: var(--font-size-sm);
   color: var(--text-color-secondary);
-  margin-bottom: 2px; /* Pequeño espacio entre Cantidad y Total */
+  margin-bottom: 2px;
+  /* Pequeño espacio entre Cantidad y Total */
   pointer-events: none;
 }
 
@@ -168,11 +190,14 @@
 
 /* Acciones de escritorio (siempre visibles en escritorio, ocultas en móvil) */
 .product-item-actions-desktop {
-  display: flex; /* Asegura que estén visibles */
+  display: flex;
+  /* Asegura que estén visibles */
   gap: var(--spacing-xs);
-  margin-left: var(--spacing-md); /* Espacio con el contenido de la derecha */
+  margin-left: var(--spacing-md);
+  /* Espacio con el contenido de la derecha */
   flex-shrink: 0;
-  pointer-events: auto; /* Los botones sí deben capturar eventos */
+  pointer-events: auto;
+  /* Los botones sí deben capturar eventos */
 }
 
 /* --- OVERLAYS PARA SWIPE EN MÓVIL --- */
@@ -181,34 +206,34 @@
 .product-item-delete-overlay {
   position: absolute;
   top: 0;
-  right: 0; 
+  right: 0;
   height: 100%;
   width: var(--swipe-threshold, 90px);
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: var(--delete-color); 
+  background-color: var(--delete-color);
   border-top-right-radius: var(--border-radius);
   border-bottom-right-radius: var(--border-radius);
-  z-index: 1; 
-  pointer-events: none; 
+  z-index: 1;
+  pointer-events: none;
 }
 
 /* Overlay de EDITAR (azul, a la izquierda del contenido) */
 .product-item-edit-overlay {
   position: absolute;
   top: 0;
-  left: 0; 
+  left: 0;
   height: 100%;
   width: var(--swipe-threshold, 90px);
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: var(--edit-color); 
+  background-color: var(--edit-color);
   border-top-left-radius: var(--border-radius);
   border-bottom-left-radius: var(--border-radius);
-  z-index: 1; 
-  pointer-events: none; 
+  z-index: 1;
+  pointer-events: none;
 }
 
 /* Estilos para los botones dentro de los overlays de swipe */
@@ -231,24 +256,28 @@
 
 /* --- Media Queries para Responsividad --- */
 @media (max-width: 768px) {
+
   /* Ocultar acciones de escritorio en móvil */
   .product-item-actions-desktop {
     display: none;
   }
 
   .product-item-card {
-    flex-wrap: nowrap; /* Permite que los ítems se envuelvan a la siguiente línea si no hay espacio */
+    flex-wrap: nowrap;
+    /* Permite que los ítems se envuelvan a la siguiente línea si no hay espacio */
     padding: var(--spacing-sm);
-    gap: var(--spacing-sm); /* Espacio entre los flex items (left, right, actions) */
+    gap: var(--spacing-sm);
+    /* Espacio entre los flex items (left, right, actions) */
   }
 
   .product-item-left-content {
-    width: 100%; /* Ocupa todo el ancho disponible en la primera fila */
+    width: 100%;
+    /* Ocupa todo el ancho disponible en la primera fila */
     justify-content: flex-start;
   }
 
   .product-item-details {
-      flex-grow: 1;
+    flex-grow: 1;
   }
 
   .product-item-name {
@@ -260,18 +289,11 @@
   }
 
   .product-item-right-content {
-    /* En móvil, queremos que esté a la derecha del left-content si hay espacio,
-       o debajo si no lo hay. Si quieres que SIEMPRE esté abajo en móvil,
-       descomenta y ajusta el `width: 100%` y `order`.
-    */
-    /* Si quieres que se ajuste a la misma línea que left-content si cabe, mantén flex-shrink: 0.
-       Si quieres que vaya SIEMPRE abajo, dale width: 100% y un order mayor.
-    */
-    width: auto; /* Permite que se ajuste al contenido o a la línea */
+    width: 25%;
     flex-direction: column;
-    align-items: flex-end;
-    margin-left: auto; /* Empuja el contenido lo más a la derecha posible en la misma línea */
-    order: unset; /* Restaura el orden normal de los flex items */
+    align-items: flex-start;
+    margin-left: auto;
+    order: unset;
   }
 
   /* Si quieres que la cantidad y el total SIEMPRE vayan en una fila separada en móvil,
@@ -291,7 +313,7 @@
   */
 
   .product-item-quantity-text {
-      margin-bottom: 0;
+    margin-bottom: 0;
   }
 
   .product-item-total-price {
