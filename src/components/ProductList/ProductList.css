@@ -1,188 +1,48 @@
 /* src/components/ProductList/ProductList.css */
 
 .product-list-container {
-  margin-top: var(--spacing-xl); /* Usar variable */
-  /* background-color, border-radius, box-shadow movidos a .card en App.css */
+  margin-top: var(--spacing-xl);
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-lg); /* Usar variable */
+  flex-grow: 1;
 }
 
 .no-products-message {
   text-align: center;
   color: var(--text-color-secondary);
   font-style: italic;
-  padding: var(--spacing-lg); /* Usar variable */
+  padding: var(--spacing-lg);
   border: 1px dashed var(--border-color);
   border-radius: var(--border-radius);
+  background-color: var(--card-bg-color);
 }
 
-.table-wrapper {
-  overflow-x: auto;
-  overflow-y: auto; /* Permitir scroll vertical */
-  width: 100%;
-  max-height: 60vh; /* Limitar la altura para que el header se mantenga visible */
-  border: 1px solid var(--border-color);
-  border-radius: var(--border-radius);
-  position: relative; /* Necesario para el posicionamiento sticky */
-}
-
-.product-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-bottom: 0; /* Removido margin-bottom para evitar espacios extraños */
-}
-
-.product-table th,
-.product-table td {
-  padding: var(--spacing-md) var(--spacing-lg); /* Usar variables */
-  text-align: left;
-  border-bottom: 1px solid var(--border-color);
-}
-
-.product-table thead th {
-  background-color: var(--primary-light-color);
-  color: var(--primary-dark-color);
-  font-weight: 600;
-  text-transform: uppercase;
-  font-size: 0.9em;
-  position: sticky; /* ¡CLAVE! Hace que el header se mantenga fijo */
-  top: 0; /* Se pega al top del contenedor */
-  z-index: 10; /* Asegura que esté por encima del contenido */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra sutil para separarlo del contenido */
-}
-
-.header-cantidad,
-.header-precio,
-.header-total {
-  text-align: center;
-}
-
-.header-acciones {
-  text-align: right;
-}
-
-.product-table tbody tr:last-child td {
-  border-bottom: none;
-}
-
-.product-table tbody tr:nth-child(odd) {
-  background-color: var(--card-bg-color); /* Blanco o el color de fondo base de tus tarjetas */
-}
-
-.product-table tbody tr:nth-child(even) {
-  background-color: var(--background-light-color); /* Un gris muy claro o un blanco azulado */
-}
-
-/* Opcional: Para el hover, si quieres que se vea resaltado */
-.product-table tbody tr:hover {
-  background-color: var(--primary-light-color); /* Un color que resalte al pasar el ratón */
-  cursor: pointer; /* Indica que la fila es interactiva */
-}
-
-.list-actions {
+.product-cards-wrapper {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  padding: var(--spacing-md) 0; /* Usar variable */
-  border-top: 1px solid var(--border-color);
-  margin-top: var(--spacing-md); /* Usar variable */
-  background-color: var(--background-light-color);
-  border-radius: var(--border-radius);
+  flex-direction: column;
+  gap: var(--spacing-md);
+  
+  /* REMOVIDO: max-height y overflow-y para permitir que el swipe funcione correctamente */
+  /* El scroll lo maneja el contenedor padre (main-content-area) */
+  
+  /* Padding para dar espacio y mejorar la experiencia visual */
+  padding: 0 2px; /* Pequeño padding horizontal */
+  padding-bottom: var(--spacing-md); /* Espacio al final de la lista */
 }
 
-/* .clear-products-button se elimina si ya no está en uso */
-
-.total-general {
-  font-size: 1.3em;
-  font-weight: bold;
-  color: var(--text-color-dark);
-  display: flex;
-  gap: var(--spacing-sm); /* Usar variable */
-}
-
-.total-general strong {
-  color: var(--primary-color);
-}
-
+/* Estilos adicionales para mejorar la experiencia en móviles */
 @media (max-width: 768px) {
-  .table-wrapper {
-    max-height: 45vh; 
-  }
-
-  .product-table th,
-  .product-table td {
-    padding: var(--spacing-xs); /* Paddings muy pequeños para todas las celdas en móvil */
-    font-size: 0.7em; /* Tamaño de fuente global para todas las celdas en móvil */
-    white-space: normal; /* Permitir que el texto se envuelva */
-    overflow: hidden; /* Asegura que no haya desbordamiento inesperado */
-  }
-
-  /* Ajustes específicos para los encabezados TH en móvil si la cabecera es visible */
-  .product-table thead th {
-    font-size: 0.65em; /* Fuente ligeramente más pequeña para los encabezados */
-    padding: var(--spacing-xs) calc(var(--spacing-xs) / 2); /* Padding aún más reducido horizontalmente */
-    /* Mantener las propiedades sticky en móvil */
-    position: sticky;
-    top: 0;
-    z-index: 10;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-
-  /* Si deseas ocultar la cabecera en móvil, puedes descomentar esto: */
-  /* .product-table thead {
-    display: none;
-  } */
-
-  /* Ajustes finos para anchos de columna en móvil (asegurando que sumen 100% y que todo quepa) */
-  .header-producto, .product-item-name-cell {
-    width: 35%; /* Puede ser un poco más grande si "Cantidad" se reduce */
-    max-width: 35%;
-    min-width: unset;
-  }
-
-  .header-cantidad, .product-item-quantity-cell {
-    width: 8%; /* ¡CAMBIO CLAVE: Más estrecho para Cantidad! */
-    max-width: 8%;
-    min-width: unset;
-    text-align: center;
-    white-space: nowrap; /* Mantener la cantidad en una línea si es un número corto */
-  }
-
-  .header-precio, .product-item-price-cell {
-    width: 17%; /* Ajustado */
-    max-width: 17%;
-    min-width: unset;
-    text-align: right;
-  }
-
-  .header-total, .product-item-total-cell {
-    width: 17%; /* ¡CAMBIO CLAVE: Más estrecho para Total! */
-    max-width: 17%;
-    min-width: unset;
-    text-align: right;
-  }
-
-  .header-acciones, .product-item-actions-cell {
-    width: 23%; /* Más espacio para los botones si es necesario */
-    max-width: 23%;
-    min-width: unset;
-    text-align: center;
+  .product-list-container {
+    margin-top: var(--spacing-lg);
   }
   
-  /* Asegúrate de que los botones en ProductItem sean muy compactos en móvil */
-  .product-item-actions-cell .button {
-    padding: 2px 4px !important;
-    font-size: 0.6em !important;
-    min-width: unset !important;
-    height: auto !important;
-    line-height: 1;
+  .product-cards-wrapper {
+    gap: var(--spacing-sm);
+    padding: 0 1px;
   }
-
-  /* Ajuste para el margin-right del ícono si es necesario */
-  .product-item-name-cell .product-icon {
-    margin-right: 3px;
-    font-size: 1em;
+  
+  .no-products-message {
+    margin: var(--spacing-md) 0;
+    padding: var(--spacing-md);
   }
 }

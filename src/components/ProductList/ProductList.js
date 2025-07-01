@@ -3,40 +3,32 @@ import React from 'react';
 import ProductItem from '../ProductItem/ProductItem';
 import './ProductList.css';
 
-const ProductList = ({ productos, busqueda, onEditar, onEliminar }) => {
+const ProductList = ({ productos, busqueda, onEditar, onEliminar, onToggleComplete }) => {
+  // Filtrar productos basado en la búsqueda
   const filteredProducts = productos.filter(producto =>
-    producto.nombre.toLowerCase().includes(busqueda.toLowerCase())
+    producto.nombre && producto.nombre.toLowerCase().includes(busqueda.toLowerCase())
   );
 
   return (
     <div className="product-list-container">
       {filteredProducts.length === 0 ? (
-        <p className="no-products-message">
-          No hay productos en esta lista o no coinciden con tu búsqueda.
-        </p>
+        <div className="no-products-message">
+          {productos.length === 0 
+            ? "No hay productos en esta lista. ¡Agrega tu primer producto!" 
+            : `No se encontraron productos que coincidan con "${busqueda}"`
+          }
+        </div>
       ) : (
-        <div className="table-wrapper">
-          <table className="product-table">
-            <thead>
-              <tr className="product-table-header">
-                <th className="header-producto">Producto</th>
-                <th className="header-cantidad">Cantidad</th>
-                <th className="header-precio">Precio</th>
-                <th className="header-total">Total</th>
-                <th className="header-acciones desktop-only-actions-header">Acciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredProducts.map((producto) => (
-                <ProductItem
-                  key={producto.firebaseId}
-                  producto={producto}
-                  onEditar={onEditar}
-                  onEliminar={onEliminar}
-                />
-              ))}
-            </tbody>
-          </table>
+        <div className="product-cards-wrapper">
+          {filteredProducts.map((producto) => (
+            <ProductItem
+              key={producto.firebaseId}
+              producto={producto}
+              onEditar={onEditar}
+              onEliminar={onEliminar}
+              onToggleComplete={onToggleComplete}
+            />
+          ))}
         </div>
       )}
     </div>
