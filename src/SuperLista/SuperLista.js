@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Header from '../components/Header/Header';
+import Header from '../components/header/Header';
 import SearchBar from '../components/SearchBar/SearchBar';
 import ProductForm from '../components/ProductForm/ProductForm';
 import ProductList from '../components/ProductList/ProductList';
