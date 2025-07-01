@@ -5,7 +5,7 @@ import './Button.css';
 const Button = ({
   children,
   onClick,
-  variant = 'primary', // primary, secondary, danger, success, ghost
+  variant = 'primary', 
   size = 'medium', // small, medium, large
   icon, // '➕', '🗑️', '✏️', etc.
   disabled = false,
