@@ -7,30 +7,49 @@ import { showConfirmAlert, showSuccessToast } from '../../Notifications/Notifica
 const ProductItem = ({ producto, onEditar, onEliminar, onToggleComplete }) => {
   const itemTotal = (producto.valor || 0) * (producto.cantidad || 0);
 
-  const formattedPrice = (producto.valor || 0).toLocaleString('es-AR', { style: 'currency', currency: 'ARS' });
-  const formattedTotal = itemTotal.toLocaleString('es-AR', { style: 'currency', currency: 'ARS' });
+  // Asegúrate de que formattedPrice y formattedTotal tengan 2 decimales si lo deseas,
+  // ya que tu código previo eliminó `minimumFractionDigits` y `maximumFractionDigits`.
+  // Los he añadido de nuevo para mantener la consistencia con el uso anterior.
+  const formattedPrice = (producto.valor || 0).toLocaleString('es-AR', { 
+    style: 'currency', 
+    currency: 'ARS',
+    minimumFractionDigits: 2, 
+    maximumFractionDigits: 2  
+  });
+  const formattedTotal = itemTotal.toLocaleString('es-AR', { 
+    style: 'currency', 
+    currency: 'ARS',
+    minimumFractionDigits: 2, 
+    maximumFractionDigits: 2  
+  });
+
+  // --- MODIFICACIÓN SOLICITADA ---
+  const ProductNameLength = 18; // Constante para la longitud máxima del nombre
+  const truncatedProductName = producto.nombre.length > ProductNameLength
+    ? producto.nombre.substring(0, ProductNameLength) + '...'
+    : producto.nombre;
+  // --- FIN MODIFICACIÓN SOLICITADA ---
 
   const itemRef = useRef(null);
   const [translateX, setTranslateX] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
   const startX = useRef(0);
   const currentX = useRef(0);
-  const [isMobile, setIsMobile] = useState(false); // Nuevo estado para detectar móvil
+  const [isMobile, setIsMobile] = useState(false);
 
-  const SWIPE_THRESHOLD = 90; // Umbral para activar la acción de swipe
+  const SWIPE_THRESHOLD = 90; // This is the distance to reveal the full button
 
-  // Detectar si es un dispositivo móvil (basado en el ancho de la ventana)
+  // Detect if it's a mobile device (based on window width)
   useEffect(() => {
     const checkIsMobile = () => {
-      // Usamos un breakpoint similar al de las media queries en CSS
       setIsMobile(window.innerWidth <= 768); 
     };
 
-    checkIsMobile(); // Comprobar al montar el componente
-    window.addEventListener('resize', checkIsMobile); // Recomprobar al redimensionar
+    checkIsMobile();
+    window.addEventListener('resize', checkIsMobile);
 
     return () => {
-      window.removeEventListener('resize', checkIsMobile); // Limpieza al desmontar
+      window.removeEventListener('resize', checkIsMobile);
     };
   }, []);
 
@@ -51,20 +70,20 @@ const ProductItem = ({ producto, onEditar, onEliminar, onToggleComplete }) => {
         await onEliminar(producto.firebaseId);
         showSuccessToast(`¡Producto <strong>"${producto.nombre}"</strong> Eliminado!`);
       } else {
-        closeSwipe();
+        closeSwipe(); // Close swipe if user cancels
       }
     } catch (error) {
       console.error('Error al confirmar eliminación:', error);
-      closeSwipe();
+      closeSwipe(); // Close swipe on error
     }
   }, [producto.firebaseId, producto.nombre, onEliminar, closeSwipe]);
 
   const triggerEdit = useCallback(() => {
-    closeSwipe(); // Cierra el swipe antes de editar
+    closeSwipe(); // Close swipe before editing
     onEditar(producto);
   }, [closeSwipe, onEditar, producto]);
 
-  // Función unificada para obtener la coordenada X del evento
+  // Unified function to get the event's X coordinate
   const getClientX = useCallback((e) => {
     if (e.touches && e.touches.length > 0) {
       return e.touches[0].clientX;
@@ -73,12 +92,10 @@ const ProductItem = ({ producto, onEditar, onEliminar, onToggleComplete }) => {
   }, []);
 
   const handleStart = useCallback((e) => {
-    // Si no es móvil o si se hizo clic en un botón, no iniciar swipe
     if (!isMobile || e.target.closest('.product-item-actions')) {
       return;
     }
     
-    // Prevenir clic derecho
     if (e.button === 2) {
       return;
     }
@@ -95,7 +112,6 @@ const ProductItem = ({ producto, onEditar, onEliminar, onToggleComplete }) => {
       }
     }
     
-    // Prevenir el comportamiento por defecto (scroll vertical, selección de texto)
     e.preventDefault(); 
   }, [isMobile, getClientX]);
 
@@ -105,16 +121,15 @@ const ProductItem = ({ producto, onEditar, onEliminar, onToggleComplete }) => {
     currentX.current = getClientX(e);
     const deltaX = currentX.current - startX.current;
     
-    // Limitar el swipe para ambos lados
-    // Si deltaX es positivo (swipe a la derecha), limitarlo al umbral
-    // Si deltaX es negativo (swipe a la izquierda), limitarlo al -umbral
-    const maxSwipeRight = SWIPE_THRESHOLD;
-    const maxSwipeLeft = -SWIPE_THRESHOLD;
+    // Allow more "pull" beyond the threshold to make the button fully visible
+    // and also allow for "bounce" effect.
+    const maxSwipeRight = SWIPE_THRESHOLD * 1.2; // Max distance to swipe right
+    const maxSwipeLeft = -SWIPE_THRESHOLD * 1.2; // Max distance to swipe left
 
-    const newTranslateX = Math.max(maxSwipeLeft * 1.2, Math.min(maxSwipeRight * 1.2, deltaX)); // Permitir un poco de "rebote"
+    // Keep translateX within the bounds for visual feedback
+    const newTranslateX = Math.max(maxSwipeLeft, Math.min(maxSwipeRight, deltaX));
     setTranslateX(newTranslateX);
 
-    // Prevenir el scroll durante el arrastre horizontal
     e.preventDefault(); 
   }, [isDragging, SWIPE_THRESHOLD, getClientX]);
 
@@ -131,48 +146,46 @@ const ProductItem = ({ producto, onEditar, onEliminar, onToggleComplete }) => {
       }
     }
 
-    // Determinar la acción basada en la dirección y el umbral
-    if (translateX < -SWIPE_THRESHOLD / 2) { // Swipe a la izquierda (eliminar)
+    // Determine action based on final translateX value when released
+    if (translateX < -SWIPE_THRESHOLD) { // Swipe left for delete, must pass full threshold
       confirmDelete(); 
-    } else if (translateX > SWIPE_THRESHOLD / 2) { // Swipe a la derecha (editar)
+    } else if (translateX > SWIPE_THRESHOLD) { // Swipe right for edit, must pass full threshold
       triggerEdit();
     }
     
-    setTranslateX(0); // Siempre volver a la posición original después de soltar
+    // Always snap back to 0 after release, regardless of whether an action was triggered
+    setTranslateX(0); 
   }, [isDragging, translateX, SWIPE_THRESHOLD, confirmDelete, triggerEdit]);
 
   const handlePointerLeave = useCallback((e) => {
     if (isDragging) {
-      // Si el puntero se sale del elemento mientras se arrastra, resetear
       setIsDragging(false);
-      setTranslateX(0);
+      setTranslateX(0); // Snap back if pointer leaves while dragging
     }
   }, [isDragging]);
 
   const handleCardClick = useCallback((e) => {
-    // Si hubo algún movimiento de swipe, prevenir el click
+    // If there was any swipe movement, prevent the click
     if (translateX !== 0) { 
       e.stopPropagation();
       e.preventDefault();
-      closeSwipe(); // Asegurarse de que la tarjeta regrese a su lugar
+      closeSwipe(); // Ensure the card snaps back
       return;
     }
     
-    // Si no hubo swipe, proceder con el toggle de completado
     if (onToggleComplete) {
       onToggleComplete(producto.firebaseId);
     }
   }, [translateX, closeSwipe, onToggleComplete, producto.firebaseId]);
 
   const handleEditButtonClick = useCallback((e) => {
-    e.stopPropagation(); // Prevenir que el clic del botón se propague a la tarjeta
-    closeSwipe(); // Asegurarse de que el swipe se cierre si está abierto
+    e.stopPropagation();
+    closeSwipe();
     onEditar(producto);
   }, [closeSwipe, onEditar, producto]);
 
   const handleDeleteButtonClick = useCallback(async (e) => {
-    e.stopPropagation(); // Prevenir que el clic del botón se propague a la tarjeta
-    // No necesitamos closeSwipe() aquí porque no estamos en modo swipe.
+    e.stopPropagation();
     confirmDelete();
   }, [confirmDelete]);
 
@@ -195,25 +208,25 @@ const ProductItem = ({ producto, onEditar, onEliminar, onToggleComplete }) => {
         style={{ transform: `translateX(${translateX}px)` }}
         onClick={handleCardClick}
       >
-        {/* Contenido principal de la tarjeta */}
+        {/* Left content */}
         <div className="product-item-left-content">
           <div className="product-item-image">
             <span className="emoji-icon">{producto.icon || '❓'}</span>
           </div>
           <div className="product-item-details">
-            <span className="product-item-name">{producto.nombre}</span>
+            {/* Usamos la nueva variable truncada aquí */}
+            <span className="product-item-name">{truncatedProductName}</span>
             <span className="product-item-unit-detail">Precio Unitario: {formattedPrice}</span>
           </div>
         </div>
 
-        {/* Contenido principal de la tarjeta - derecha */}
+        {/* Right content - quantity and total */}
         <div className="product-item-right-content">
           <span className="product-item-quantity-text">Cantidad: {producto.cantidad}</span>
-          <span className="product-item-total-price">Total: {formattedTotal}</span>
+          <span className="product-item-total-price">{formattedTotal}</span> 
         </div>
 
-        {/* Botones de acción VISIBLES SOLO EN ESCRITORIO */}
-        {/* En móvil, estos se ocultarán por CSS y la funcionalidad será swipe */}
+        {/* Desktop actions */}
         {!isMobile && (
           <div className="product-item-actions product-item-actions-desktop">
             <Button
@@ -234,32 +247,28 @@ const ProductItem = ({ producto, onEditar, onEliminar, onToggleComplete }) => {
         )}
       </div>
 
-      {/* Overlay para "Editar" (aparece con swipe a la derecha en móvil) */}
+      {/* Mobile swipe overlays */}
       {isMobile && (
-        <div className="product-item-edit-overlay" style={{ width: `${SWIPE_THRESHOLD}px` }}>
-          <Button
-            title="Editar"
-            variant="primary" // o un color azul que tengas en tus variables
-            className="swipe-edit-button"
-            // No necesita onClick aquí, se activa al soltar el swipe
-          >
-            Editar
-          </Button>
-        </div>
-      )}
-
-      {/* Overlay para "Eliminar" (aparece con swipe a la izquierda en móvil) */}
-      {isMobile && (
-        <div className="product-item-delete-overlay" style={{ width: `${SWIPE_THRESHOLD}px` }}>
-          <Button
-            title="Eliminar"
-            variant="danger"
-            className="swipe-delete-button"
-            // No necesita onClick aquí, se activa al soltar el swipe
-          >
-            Eliminar
-          </Button>
-        </div>
+        <>
+          <div className="product-item-edit-overlay" style={{ width: `${SWIPE_THRESHOLD}px` }}>
+            <Button
+              title="Editar"
+              variant="primary"
+              className="swipe-edit-button"
+            >
+              Editar
+            </Button>
+          </div>
+          <div className="product-item-delete-overlay" style={{ width: `${SWIPE_THRESHOLD}px` }}>
+            <Button
+              title="Eliminar"
+              variant="danger"
+              className="swipe-delete-button"
+            >
+              Eliminar
+            </Button>
+          </div>
+        </>
       )}
     </div>
   );
