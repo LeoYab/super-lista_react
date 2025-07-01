@@ -16,7 +16,7 @@ jobs:
 
     steps:
       - name: Automerge PR if all checks pass and approved
-        uses: pascalgn/automerge-action@v0.16.0
+        uses: pascalgn/automerge-action@v0.16.4
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
