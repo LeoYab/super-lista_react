@@ -69,22 +69,18 @@ body {
 
 /* SECCIÓN FIJA INFERIOR: Controles + Formulario si showProductForm es true */
 .fixed-bottom-controls {
-  position: fixed;
-  bottom: 0;
-  left: 280px;
-  width: calc(100% - 280px);
-  background-color: var(--card-bg-color);
-  border-top: 1px solid var(--border-color);
-  box-shadow: var(--shadow-strong);
-  border-radius: var(--border-radius) var(--border-radius) 0 0;
-  padding: 15px 25px;
-  
-  display: flex;
-  flex-direction: column;
-  gap: 15px; /* Espacio entre el bloque de controles y el formulario */
-
-  z-index: 100;
-  transition: all 0.3s ease-in-out; 
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    max-width: 1200px;
+    background-color: var(--card-bg-color);
+    border-top: 1px solid var(--border-color);
+    box-shadow: var(--shadow-strong);
+    border-radius: var(--border-radius) var(--border-radius) 0 0;
+    padding: 15px 25px;
+    gap: 15px;
+    z-index: 100;
+    transition: all 0.3s ease-in-out;
 }
 
 /* Un contenedor para los elementos que siempre están visibles en la barra inferior (SearchBar, TotalSummary, Button) */
