@@ -4,7 +4,7 @@ import ProductItem from '../ProductItem/ProductItem';
 import './ProductList.css';
 
 const ProductList = ({ productos, busqueda, onEditar, onEliminar, onToggleComplete }) => {
-  // Filtrar productos basado en la búsqueda
+
   const filteredProducts = productos.filter(producto =>
     producto.nombre && producto.nombre.toLowerCase().includes(busqueda.toLowerCase())
   );
