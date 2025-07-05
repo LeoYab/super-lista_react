@@ -43,7 +43,7 @@ jobs:
           BASE_BRANCH=${{ github.event.pull_request.base.ref }}
           git fetch origin $MERGE_BRANCH
           echo "Attempting to merge PR #$PR_NUMBER ($MERGE_BRANCH into $BASE_BRANCH)..."
-          git merge --no-ff origin/$MERGE_BRANCH -m "Auto-merge PR #$PR_NUMBER from $MERGE_BRANCH into $BASE_BRANCH [skip ci]"
+          git merge --no-ff --allow-unrelated-histories origin/$MERGE_BRANCH -m "Auto-merge PR #$PR_NUMBER from $MERGE_BRANCH into $BASE_BRANCH [skip ci]"
           git push origin $BASE_BRANCH
 
       - name: Close PR if merge successful (Optional)
