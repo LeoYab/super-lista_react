@@ -13,8 +13,8 @@ const ProductList = ({ productos, busqueda, onEditar, onEliminar, onToggleComple
     <div className="product-list-container">
       {filteredProducts.length === 0 ? (
         <div className="no-products-message">
-          {productos.length === 0 
-            ? "No hay productos en esta lista. ¡Agrega tu primer producto!" 
+          {productos.length === 0
+            ? "No hay productos en esta lista. ¡Agrega tu primer producto!"
             : `No se encontraron productos que coincidan con "${busqueda}"`
           }
         </div>
