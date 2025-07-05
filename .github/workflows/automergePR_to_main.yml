@@ -1,24 +1,59 @@
-name: Automerge PR to main
+name: Auto-merge Pull Request to main
 
 on:
   pull_request:
-    types: [opened, reopened, synchronize, labeled]
+    types:
+      - opened
+      - synchronize
+      - reopened
     branches:
       - main
 
-permissions:
-  pull-requests: write
-  contents: write
-
 jobs:
-  automerge:
+  auto_merge_pr:
     runs-on: ubuntu-latest
 
-    steps:
-      - name: Automerge PR if all checks pass and approved
-        uses: pascalgn/automerge-action@v0.16.4
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          auto_approve: true
+    permissions:
+      contents: write
+      pull-requests: write
 
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.base.ref }}
+
+      - name: Set up Git
+        run: |
+          git config user.name "LeoYab"
+          git config user.email "Leonel.Yaborski@gmail.com"
+
+      - name: Get PR information
+        id: pr_info
+        run: |
+          echo "PR HEAD REF: ${{ github.event.pull_request.head.ref }}"
+          echo "PR BASE REF: ${{ github.event.pull_request.base.ref }}"
+          echo "PR NUMBER: ${{ github.event.pull_request.number }}"
+
+      - name: Auto-merge PR if target is main
+        if: github.event.pull_request.base.ref == 'main' && github.event.pull_request.state == 'open'
+        run: |
+          PR_NUMBER=${{ github.event.pull_request.number }}
+          MERGE_BRANCH=${{ github.event.pull_request.head.ref }}
+          BASE_BRANCH=${{ github.event.pull_request.base.ref }}
+          git fetch origin $MERGE_BRANCH
+          echo "Attempting to merge PR #$PR_NUMBER ($MERGE_BRANCH into $BASE_BRANCH)..."
+          git merge --no-ff origin/$MERGE_BRANCH -m "Auto-merge PR #$PR_NUMBER from $MERGE_BRANCH into $BASE_BRANCH [skip ci]"
+          git push origin $BASE_BRANCH
+
+      - name: Close PR if merge successful (Optional)
+        if: success() && github.event.pull_request.state == 'open'
+        uses: actions/github-script@v6
+        with:
+          script: |
+            github.rest.pulls.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.issue.number,
+              state: 'closed'
+            });
