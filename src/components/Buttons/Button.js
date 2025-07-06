@@ -6,7 +6,7 @@ const Button = ({
   children,
   onClick,
   variant = 'primary', 
-  size = 'medium', // small, medium, large
+  size = 'medium', 
   icon, // '➕', '🗑️', '✏️', etc.
   disabled = false,
   type = 'button',
