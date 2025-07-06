@@ -1,59 +1,27 @@
-name: Auto-merge Pull Request to main
-
+name: Enable Auto-merge
 on:
   pull_request:
-    types:
-      - opened
-      - synchronize
-      - reopened
-    branches:
-      - main
+    types: [opened, ready_for_review]
+    branches: [main]
 
 jobs:
-  auto_merge_pr:
+  enable-auto-merge:
     runs-on: ubuntu-latest
-
-    permissions:
-      contents: write
-      pull-requests: write
-
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.pull_request.base.ref }}
-
-      - name: Set up Git
-        run: |
-          git config user.name "LeoYab"
-          git config user.email "Leonel.Yaborski@gmail.com"
-
-      - name: Get PR information
-        id: pr_info
-        run: |
-          echo "PR HEAD REF: ${{ github.event.pull_request.head.ref }}"
-          echo "PR BASE REF: ${{ github.event.pull_request.base.ref }}"
-          echo "PR NUMBER: ${{ github.event.pull_request.number }}"
-
-      - name: Auto-merge PR if target is main
-        if: github.event.pull_request.base.ref == 'main' && github.event.pull_request.state == 'open'
-        run: |
-          PR_NUMBER=${{ github.event.pull_request.number }}
-          MERGE_BRANCH=${{ github.event.pull_request.head.ref }}
-          BASE_BRANCH=${{ github.event.pull_request.base.ref }}
-          git fetch origin $MERGE_BRANCH
-          echo "Attempting to merge PR #$PR_NUMBER ($MERGE_BRANCH into $BASE_BRANCH)..."
-          git merge --no-ff --allow-unrelated-histories origin/$MERGE_BRANCH -m "Auto-merge PR #$PR_NUMBER from $MERGE_BRANCH into $BASE_BRANCH [skip ci]"
-          git push origin $BASE_BRANCH
-
-      - name: Close PR if merge successful (Optional)
-        if: success() && github.event.pull_request.state == 'open'
+      - name: Enable auto-merge
         uses: actions/github-script@v6
         with:
           script: |
-            github.rest.pulls.update({
+            github.rest.pulls.createReview({
               owner: context.repo.owner,
               repo: context.repo.repo,
               pull_number: context.issue.number,
-              state: 'closed'
+              event: 'APPROVE'
+            });
+            
+            github.rest.pulls.merge({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.issue.number,
+              merge_method: 'merge'
             });
