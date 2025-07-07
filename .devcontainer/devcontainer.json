@@ -1,0 +1,14 @@
+{
+    "name": "superlista",
+    "image": "yaboleo/superlista:lts",
+    "appPort": 3000,
+    "workspaceFolder": "/app",
+    "settings": {
+        "terminal.integrated.shell.linux": "/bin/bash"
+    },
+    "extensions": [
+        "ms-azuretools.vscode-docker",
+        "esbenp.prettier-vscode"
+    ],
+    "postCreateCommand": "npm install"
+}
