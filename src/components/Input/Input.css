@@ -34,7 +34,6 @@
   opacity: 0.7;
 }
 
-/* Estilo para inputs con error */
 .input-group.error .input-field {
   border-color: var(--delete-color);
 }
