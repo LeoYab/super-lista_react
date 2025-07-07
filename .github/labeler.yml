@@ -1,0 +1,53 @@
+component:
+    - 'src/components/**/*.js'
+    - 'src/SuperLista/**/*.js'
+    - 'src/TotalSummary/**/*.js'
+    - 'src/Notifications/**/*.js'
+
+
+feature:
+    - 'src/pages/AuthPage/**'
+    - 'src/services/**'
+    - 'src/context/**'
+    - 'src/firebase/**'
+
+bug:
+    - 'src/**/*.fix'
+    - 'src/App.js'
+
+performance:
+    - 'src/services/**'
+    - 'src/components/**'
+
+style:
+    - 'src/styles/**'
+    - 'src/App.css'
+    - 'src/index.css'
+    - 'src/components/**/*.css'
+    - 'src/SuperLista/**/*.css'
+    - 'src/TotalSummary/**/*.css'
+    - 'src/Notifications/**/*.css'
+
+docker:
+    - 'Dockerfile'
+    - '.devcontainer/**'
+
+dependencies:
+    - 'package.json'
+    - 'package-lock.json'
+
+github_actions:
+    - '.github/workflows/**'
+
+documentation:
+    - 'README.md'
+    - 'docs/**'
+
+tests:
+    - 'src/**/*.test.js'
+    - 'src/App.test.js'
+    - 'src/setupTests.js'
+
+chore:
+    - '.gitignore'
+    - '.vscode/**'
