@@ -9,11 +9,10 @@
   cursor: pointer;
   font-weight: 500;
   transition: all 0.2s ease-in-out;
-  text-decoration: none; /* Para usar con links si es necesario */
-  white-space: nowrap; /* Evita que el texto del botón se rompa */
+  text-decoration: none;
+  white-space: nowrap;
 }
 
-/* Tamaños */
 .btn-small {
   padding: 6px 12px;
   font-size: 0.85em;
@@ -27,7 +26,6 @@
   font-size: 1.1em;
 }
 
-/* Variantes de color */
 .btn-primary {
   background-color: var(--primary-color);
   color: white;
@@ -42,7 +40,7 @@
   color: white;
 }
 .btn-secondary:hover:not(:disabled) {
-  background-color: #5a6268; /* Un gris más oscuro */
+  background-color: #5a6268; 
   transform: translateY(-1px);
 }
 
@@ -74,16 +72,15 @@
   transform: translateY(-1px);
 }
 
-/* Botones redondos (específicos para iconos pequeños) */
 .btn.round {
   border-radius: 50%;
-  width: 36px; /* Ajusta según el tamaño deseado */
+  width: 36px;
   height: 36px;
   padding: 0;
 }
 
 .btn-icon {
-  font-size: 1.2em; /* Ajusta el tamaño del icono dentro del botón */
+  font-size: 1.2em;
 }
 
 .btn:disabled {
