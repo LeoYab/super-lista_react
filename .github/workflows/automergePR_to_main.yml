@@ -8,10 +8,17 @@ on:
 jobs:
   enable-auto-merge:
     runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      contents: write
+      statuses: write
+      checks: write
+
     steps:
       - name: Enable auto-merge
         uses: actions/github-script@v6
         with:
+          github-token: ${{ secrets.AUTOMERGE_DISPATCH }}
           script: |
             github.rest.pulls.createReview({
               owner: context.repo.owner,
