@@ -2,7 +2,8 @@ name: Build & Push Docker Image
 
 on:
   push:
-    branches: [main]
+    branches: 
+        - main
 
 jobs:
   build:
@@ -32,13 +33,13 @@ jobs:
       - name: Calculate new Docker tag
         id: calculate_tag
         run: |
-           LAST_TAG=$(curl -s https://hub.docker.com/v2/repositories/${{ vars.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}/tags/?page_size=5 | jq -r '.results[0].name' || echo "0.0")
-           echo "Last tag: $LAST_TAG"
-           MAJOR=$(echo "$LAST_TAG" | cut -d'.' -f1)
-           NEW_MAJOR=$((MAJOR + 1))
-           NEW_TAG="${NEW_MAJOR}.0"
-           echo "Calculated new tag: $NEW_TAG"
-           echo "NEW_TAG=$NEW_TAG" >> "$GITHUB_OUTPUT"
+          LAST_TAG=$(curl -s https://hub.docker.com/v2/repositories/${{ vars.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}/tags/?page_size=5 | jq -r '.results[0].name' || echo "0.0")
+          echo "Last tag: $LAST_TAG"
+          MAJOR=$(echo "$LAST_TAG" | cut -d'.' -f1)
+          NEW_MAJOR=$((MAJOR + 1))
+          NEW_TAG="${NEW_MAJOR}.0"
+          echo "Calculated new tag: $NEW_TAG"
+          echo "NEW_TAG=$NEW_TAG" >> "$GITHUB_OUTPUT"
 
       - name: Build Docker image
         uses: docker/build-push-action@v5
