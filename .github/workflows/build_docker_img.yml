@@ -47,6 +47,7 @@ jobs:
           context: .
           file: ./Dockerfile
           push: false
+          load: true
           tags: |
             ${{ vars.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:${{ steps.calculate_tag.outputs.NEW_TAG }}
             ${{ vars.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:lts
@@ -55,15 +56,16 @@ jobs:
         run: |
           docker run -d -p 3000:3000 ${{ vars.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:${{ steps.calculate_tag.outputs.NEW_TAG }}
           sleep 15
-          curl -f http://localhost:3000 || { echo "La aplicación no respondió en el puerto 3000"; exit 1; }
-          echo "La aplicación respondió correctamente en el puerto 3000."
+          curl -f http://localhost:3000 || { echo "The application didn't respond on port 3000"; exit 1; }
+          echo "The application responds correctly on port 3000."
 
       - name: Push Docker image
+        if: success()
         uses: docker/build-push-action@v5
         with:
           context: .
           file: ./Dockerfile
-          push: false
+          push: true
           tags: |
             ${{ vars.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:${{ steps.calculate_tag.outputs.NEW_TAG }}
             ${{ vars.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:lts
