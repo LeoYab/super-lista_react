@@ -16,5 +16,5 @@ jobs:
       - name: Label PR
         uses: actions/labeler@v5
         with:
-          repo-token: ${{ secrets.REPO_ACCESS_TOKEN }}
+          repo-token: ${{ secrets.LABELER_TOKEN }}
           configuration-path: .github/labeler.yml
