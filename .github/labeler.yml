@@ -72,3 +72,6 @@ chore:
     - any-glob-to-any-file:
       - .gitignore
       - .vscode/**
+
+release:
+  - base-branch: 'main'
