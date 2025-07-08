@@ -7,6 +7,10 @@ on:
 jobs:
   enable-auto-merge:
     runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      contents: read
+      
     steps:
       - name: Enable auto-merge
         uses: actions/github-script@v6
