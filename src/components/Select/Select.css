@@ -19,12 +19,12 @@
   font-size: 1em;
   background-color: var(--input-bg-color);
   color: var(--text-color-primary);
-  appearance: none; /* Elimina estilos por defecto del navegador */
+  appearance: none;
   background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%236c757d%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13.4-6.4H18.8c-5%200-9.3%201.8-13.4%206.4-4%204.4-6.4%209.6-6.4%2015.6s2.4%2011.2%206.4%2015.6l127.2%20128.8c4%204.4%209.2%206.4%2014.4%206.4s10.4-2%2014.4-6.4l127.2-128.8c4-4.4%206.4-9.6%206.4-15.6s-2.4-11.2-6.4-15.6z%22%2F%3E%3C%2Fsvg%3E'); /* Icono de flecha SVG */
   background-repeat: no-repeat;
   background-position: right 10px center;
   background-size: 12px;
-  padding-right: 30px; /* Espacio para el icono de flecha */
+  padding-right: 30px;
   transition: all 0.2s ease-in-out;
 }
 
