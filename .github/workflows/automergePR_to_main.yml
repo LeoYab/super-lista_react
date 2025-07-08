@@ -11,6 +11,7 @@ jobs:
       - name: Enable auto-merge
         uses: actions/github-script@v6
         with:
+          github-token: ${{ secrets.REPO_ACCESS_TOKEN}} 
           script: |
             github.rest.pulls.createReview({
               owner: context.repo.owner,
