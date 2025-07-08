@@ -28,10 +28,10 @@ body {
 
 .App {
   width: 100%;
-  max-width: 1200px; /* Limita el ancho general de la aplicación */
+  max-width: 1200px;
   position: relative;
   display: flex;
-  flex-direction: column; /* Apila Header con el resto del contenido */
+  flex-direction: column;
   padding: 0;
   min-height: 100vh;
 }
@@ -39,7 +39,7 @@ body {
 /* El contenedor que aloja SidebarMenu y el contenido principal */
 .container {
   display: flex;
-  flex-grow: 1; /* Permite que ocupe el espacio restante */
+  flex-grow: 1;
   position: relative;
   max-width: 100%;
   padding: 0;
@@ -50,18 +50,6 @@ body {
   flex-grow: 1; /* Ocupa todo el espacio horizontal disponible */
   padding: 5px; /* Padding general para el contenido */
   padding-top: 0px; /* Espacio para el Header fijo (ajusta según la altura real de tu Header) */
-
-  /*
-   * ¡¡¡VALOR CRÍTICO PARA EVITAR SUPERPOSICIÓN!!!
-   * Este `padding-bottom` es el que crea el espacio para tu barra fija inferior.
-   * Su valor DEBE ser IGUAL O LIGERAMENTE MAYOR que la ALTURA MÁXIMA que alcanza
-   * tu `.fixed-bottom-controls` cuando el formulario de producto está ABIERTO.
-   *
-   * Si la barra mide 260px cuando el formulario está abierto, pon al menos 260px,
-   * o 280px para tener un poco de margen extra y asegurarte.
-   *
-   * POR FAVOR, REALIZA LA MEDICIÓN QUE SE INDICA ABAJO para establecer este valor con precisión.
-   */
   padding-bottom: 280px; /* <--- AJUSTA ESTE VALOR DESPUÉS DE LA MEDICIÓN REAL */
   
   position: relative;
