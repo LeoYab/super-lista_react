@@ -1,25 +1,34 @@
 component:
+  - changed-files:
+    - any-glob-to-any-file:
     - 'src/components/**/*.js'
     - 'src/SuperLista/**/*.js'
     - 'src/TotalSummary/**/*.js'
     - 'src/Notifications/**/*.js'
 
-
 feature:
+  - changed-files:
+    - any-glob-to-any-file:
     - 'src/pages/AuthPage/**'
     - 'src/services/**'
     - 'src/context/**'
     - 'src/firebase/**'
 
 bug:
+  - changed-files:
+    - any-glob-to-any-file:
     - 'src/**/*.fix'
     - 'src/App.js'
 
 performance:
+  - changed-files:
+    - any-glob-to-any-file:
     - 'src/services/**'
     - 'src/components/**'
 
 style:
+  - changed-files:
+    - any-glob-to-any-file:
     - 'src/styles/**'
     - 'src/App.css'
     - 'src/index.css'
@@ -29,25 +38,37 @@ style:
     - 'src/Notifications/**/*.css'
 
 docker:
+  - changed-files:
+    - any-glob-to-any-file:
     - 'Dockerfile'
     - '.devcontainer/**'
 
 dependencies:
+  - changed-files:
+    - any-glob-to-any-file:
     - 'package.json'
     - 'package-lock.json'
 
 github_actions:
+  - changed-files:
+    - any-glob-to-any-file:
     - '.github/workflows/**'
 
 documentation:
+  - changed-files:
+    - any-glob-to-any-file:
     - 'README.md'
     - 'docs/**'
 
 tests:
+  - changed-files:
+    - any-glob-to-any-file:
     - 'src/**/*.test.js'
     - 'src/App.test.js'
     - 'src/setupTests.js'
 
 chore:
+  - changed-files:
+    - any-glob-to-any-file:
     - '.gitignore'
     - '.vscode/**'
