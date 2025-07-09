@@ -1,4 +1,5 @@
 name: Enable Auto-merge
+run-name: 🤖 Auto-merge PR
 on:
   pull_request:
     types: [opened, synchronize, ready_for_review]

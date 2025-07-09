@@ -1,5 +1,5 @@
 name: Labeler PR
-
+run-name: 🏷️ Apply Labels to PR
 on:
   pull_request_target:
     types: [opened, synchronize, reopened]
