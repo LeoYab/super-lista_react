@@ -296,22 +296,6 @@
     order: unset;
   }
 
-  /* Si quieres que la cantidad y el total SIEMPRE vayan en una fila separada en móvil,
-     independientemente del espacio: */
-  /*
-  .product-item-right-content {
-    width: 100%;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    margin-left: 0;
-    order: 3; // Asegura que vaya después del left-content
-  }
-  .product-item-quantity-text {
-      margin-bottom: 0; // Deshacer el margin de columna si ahora es fila
-  }
-  */
-
   .product-item-quantity-text {
     margin-bottom: 0;
   }
@@ -319,7 +303,4 @@
   .product-item-total-price {
     font-size: var(--font-size-md);
   }
-
-  /* Las acciones en móvil ahora se gestionan por swipe */
-  /* .product-item-actions ya no se usa directamente para botones en móvil */
 }
