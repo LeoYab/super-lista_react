@@ -1,5 +1,5 @@
 name: Build & Push Docker Image
-run-name: 🐳 Build Docker
+run-name: 🐳 Build & Push Docker Image
 on:
   push:
     branches: 
