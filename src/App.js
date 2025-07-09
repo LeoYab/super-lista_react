@@ -368,7 +368,7 @@ function MainAppContent() {
                 onClick={handleToggleForm}
                 variant={showProductForm ? 'secondary' : 'primary'}
                 icon={showProductForm ? '❌' : '➕'}
-                className="toggle-form-button" // Add a class for styling if needed
+                className="toggle-form-button"
               >
                 {showProductForm ? 'Cancelar' : 'Agregar Producto'}
               </Button>
