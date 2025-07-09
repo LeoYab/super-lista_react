@@ -15,21 +15,14 @@ jobs:
       checks: write
 
     steps:
-      - name: Enable auto-merge
+      - name: Auto-merge PR
         uses: actions/github-script@v6
         with:
           github-token: ${{ secrets.AUTOMERGE_DISPATCH }}
           script: |
-            github.rest.pulls.createReview({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              pull_number: context.issue.number,
-              event: 'APPROVE'
-            });
-            
             github.rest.pulls.merge({
               owner: context.repo.owner,
               repo: context.repo.repo,
               pull_number: context.issue.number,
               merge_method: 'merge'
-            });
+              });
