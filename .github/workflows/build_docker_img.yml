@@ -33,7 +33,7 @@ jobs:
       - name: Calculate new Docker tag
         id: calculate_tag
         run: |
-          LAST_TAG=$(curl -s https://hub.docker.com/v2/repositories/${{ vars.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}/tags/?page_size=5 | jq -r '.results[0].name' || echo "0.0")
+          LAST_TAG=$(curl -s https://hub.docker.com/v2/repositories/${{ vars.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}/tags/?page_size=5 | jq -r '.results[1].name' || echo "0.0")
           echo "Last tag: $LAST_TAG"
           MAJOR=$(echo "$LAST_TAG" | cut -d'.' -f1)
           NEW_MAJOR=$((MAJOR + 1))
