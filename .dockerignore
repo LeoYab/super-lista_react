@@ -1,0 +1,28 @@
+# Dependency folders
+node_modules
+
+# Environment configuration files
+.env
+.env.test
+.env.local
+.env.*.local
+
+# Log files
+npm-debug.log*
+
+# Production output (in case you've built locally)
+dist
+build
+
+# Editor configuration folders
+.vscode
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Docker-related files you don't want to copy
+docker-compose*
+*.bak
+*.swp
+
