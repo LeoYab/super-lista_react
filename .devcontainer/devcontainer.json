@@ -15,8 +15,8 @@
         }
     },
     "postCreateCommand": [
-        "apk update",
-        "apk add git",
-        "npm install"
+        "sudo apk update --no-cache",
+        "sudo apk add git",
+        "sudo npm install"
     ]
 }
