@@ -1,14 +1,20 @@
 {
     "name": "superlista",
-    "image": "yaboleo/superlista:lts",
+    "image": "yaboleo/super-lista_react:lts",
     "appPort": 3000,
     "workspaceFolder": "/app",
-    "settings": {
-        "terminal.integrated.shell.linux": "/bin/bash"
+    "customizations": {
+        "vscode": {
+            "settings": {
+                "terminal.integrated.shell.linux": "/bin/bash"
+            },
+            "extensions": [
+                "ms-azuretools.vscode-docker",
+                "esbenp.prettier-vscode"
+            ]
+        }
     },
-    "extensions": [
-        "ms-azuretools.vscode-docker",
-        "esbenp.prettier-vscode"
-    ],
-    "postCreateCommand": "npm install"
+    "postCreateCommand": [
+    "apt-get update && apt-get install -y git && npm install"
+  ]
 }
