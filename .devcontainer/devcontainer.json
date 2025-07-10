@@ -14,5 +14,9 @@
             ]
         }
     },
-    "postCreateCommand": ["sh -c \"apk update && apk add git && npm install\""]
+    "postCreateCommand": [
+        "apk update",
+        "apk add git",
+        "npm install"
+    ]
 }
