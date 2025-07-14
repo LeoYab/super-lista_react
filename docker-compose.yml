@@ -1,0 +1,28 @@
+
+version: '3.8'
+services:
+  app:
+    build: .
+    container_name: superlista-react-app
+    ports:
+      - "3000:3000"
+    volumes:
+      # Mapear el código fuente para hot reload
+      - ./src:/app/src
+      - ./public:/app/public
+      - ./.env:/app/.env
+      # Excluir node_modules para evitar conflictos
+      - /app/node_modules
+    environment:
+      # Variables para hot reload
+      - CHOKIDAR_USEPOLLING=true
+      - WATCHPACK_POLLING=true
+      - FAST_REFRESH=true
+      # Para desarrollo
+      - NODE_ENV=development
+    env_file:
+      - ./.env
+    stdin_open: true
+    tty: true
+    # Reiniciar automáticamente si el container se detiene
+    restart: unless-stopped
