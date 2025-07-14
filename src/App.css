@@ -1,5 +1,6 @@
 /* src/App.css */
-@import url('./styles/variables.css'); /* Importa tus variables */
+@import url('./styles/variables.css');
+/* Importa tus variables */
 
 /* Reset básico */
 * {
@@ -16,7 +17,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   /* El scroll principal lo maneja el body */
-  overflow-y: scroll; 
+  overflow-y: scroll;
   min-height: 100vh;
 }
 
@@ -47,47 +48,60 @@ body {
 
 /* Área principal de contenido (a la derecha del SidebarMenu) */
 .main-content-area {
-  flex-grow: 1; /* Ocupa todo el espacio horizontal disponible */
-  padding: 5px; /* Padding general para el contenido */
-  padding-top: 0px; /* Espacio para el Header fijo (ajusta según la altura real de tu Header) */
-  padding-bottom: 280px; /* <--- AJUSTA ESTE VALOR DESPUÉS DE LA MEDICIÓN REAL */
-  
+  flex-grow: 1;
+  /* Ocupa todo el espacio horizontal disponible */
+  padding: 5px;
+  /* Padding general para el contenido */
+  padding-top: 0px;
+  /* Espacio para el Header fijo (ajusta según la altura real de tu Header) */
+  padding-bottom: 280px;
+  /* <--- AJUSTA ESTE VALOR DESPUÉS DE LA MEDICIÓN REAL */
+
   position: relative;
 }
 
 /* SECCIÓN FIJA INFERIOR: Controles + Formulario si showProductForm es true */
 .fixed-bottom-controls {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    max-width: 1200px;
-    background-color: var(--card-bg-color);
-    border-top: 1px solid var(--border-color);
-    box-shadow: var(--shadow-strong);
-    border-radius: var(--border-radius) var(--border-radius) 0 0;
-    padding: 15px 25px;
-    gap: 15px;
-    z-index: 100;
-    transition: all 0.3s ease-in-out;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  max-width: 1200px;
+  background-color: var(--card-bg-color);
+  border-top: 1px solid var(--border-color);
+  box-shadow: var(--shadow-strong);
+  border-radius: var(--border-radius) var(--border-radius) 0 0;
+  padding: 15px 25px;
+  gap: 15px;
+  z-index: 100;
+  transition: all 0.3s ease-in-out;
 }
 
 /* Un contenedor para los elementos que siempre están visibles en la barra inferior (SearchBar, TotalSummary, Button) */
 .bottom-controls-header {
-    display: flex; /* Contenedor flex */
-    flex-wrap: nowrap; /* ¡CAMBIO CLAVE! Evita que los elementos salten de línea */
-    justify-content: space-between; /* Distribuye el espacio equitativamente */
-    align-items: center; /* Alinea los elementos verticalmente al centro */
-    width: 100%; /* Ocupa todo el ancho disponible */
-    gap: 15px;
+  display: flex;
+  /* Contenedor flex */
+  flex-wrap: nowrap;
+  /* ¡CAMBIO CLAVE! Evita que los elementos salten de línea */
+  justify-content: space-between;
+  /* Distribuye el espacio equitativamente */
+  align-items: center;
+  /* Alinea los elementos verticalmente al centro */
+  width: 100%;
+  /* Ocupa todo el ancho disponible */
+  gap: 15px;
 }
 
 /* Estilos para el formulario cuando está dentro de fixed-bottom-controls */
 /* Asegúrate de que tu componente ProductForm tenga una clase base como 'product-form' */
 .fixed-bottom-controls .product-form {
-    width: 100%; /* El formulario ocupa todo el ancho de la barra */
-    margin-top: 15px; /* Espacio entre el header de la barra y el formulario */
-    padding-top: 15px; /* Padding interno para separar del borde superior del div */
-    border-top: 1px solid var(--border-color-light); /* Una línea divisoria sutil */
+  width: 100%;
+  /* El formulario ocupa todo el ancho de la barra */
+  margin-top: 15px;
+  /* Espacio entre el header de la barra y el formulario */
+  padding-top: 15px;
+  /* Padding interno para separar del borde superior del div */
+  border-top: 1px solid var(--border-color-light);
+  /* Una línea divisoria sutil */
 }
 
 /* Otros estilos generales de tarjeta */
@@ -99,13 +113,42 @@ body {
   margin-bottom: 20px;
 }
 
-.list-header{
-display: flex;
-flex-direction: column;
+/*
+ * INICIO DE LA MODIFICACIÓN:
+ * Estilos para hacer que el list-header sea sticky.
+ */
+.list-header {
+  display: flex;
+  flex-direction: row;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
+  /* Mantén el margen para el espacio inicial */
+
+  /* PROPIEDADES CLAVE PARA STICKY */
+  position: sticky;
+  /* Hace que el elemento se "pegue" */
+  top: 0;
+  /* Se pega a la parte superior cuando su posición llega a 0px del viewport */
+  z-index: 50;
+  /* Asegura que esté por encima de otros contenidos al hacer scroll */
+  background-color: var(--background-color);
+  /* Fondo para que el contenido no se vea debajo */
+  padding: 10px 5px;
+  /* Añade un poco de padding vertical para que no quede pegado al borde */
+  /* NOTA: El padding horizontal debe coincidir con el del .main-content-area si quieres que esté alineado */
+  margin-left: -5px;
+  /* Compensa el padding horizontal del main-content-area */
+  margin-right: -5px;
+  /* Compensa el padding horizontal del main-content-area */
+  width: calc(100% + 10px);
+  /* Ajusta el ancho para que coincida con el main-content-area */
 }
+
+/*
+ * FIN DE LA MODIFICACIÓN
+ */
+
 /* Otros estilos globales específicos de App.css */
 .user-info {
   margin-top: 10px;
@@ -116,13 +159,12 @@ flex-direction: column;
 
 .current-list-title {
   text-align: center;
-  margin-top: 20px;
   color: var(--primary-dark-color);
-  font-size: 1.6em;
   font-weight: 600;
 }
 
-.loading-auth, .loading-message {
+.loading-auth,
+.loading-message {
   text-align: center;
   padding: 40px;
   font-size: 1.2em;
@@ -130,25 +172,31 @@ flex-direction: column;
 }
 
 .swal2-container * {
-  -webkit-touch-callout: none; /* iOS Safari */
-  -webkit-user-select: none;   /* Safari */
-  -khtml-user-select: none;    /* Konqueror HTML */
-  -moz-user-select: none;      /* Old versions of Firefox */
-  -ms-user-select: none;       /* Internet Explorer/Edge */
-  user-select: none;           /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
+  -webkit-touch-callout: none;
+  /* iOS Safari */
+  -webkit-user-select: none;
+  /* Safari */
+  -khtml-user-select: none;
+  /* Konqueror HTML */
+  -moz-user-select: none;
+  /* Old versions of Firefox */
+  -ms-user-select: none;
+  /* Internet Explorer/Edge */
+  user-select: none;
+  /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
 }
 
 /* También puedes aplicar a elementos específicos del alert si solo quieres que ciertas partes no sean seleccionables */
 .swal2-title,
 .swal2-html-container,
 .swal2-content {
-    user-select: none;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
 }
 
-/* Media Queries para Responsividad                     */
+/* Media Queries para Responsividad                                  */
 @media (max-width: 768px) {
   .App {
     padding: 0;
@@ -156,11 +204,13 @@ flex-direction: column;
   }
 
   .container {
-    flex-direction: column; /* Apila el sidebar y el contenido principal en móvil */
+    flex-direction: column;
+    /* Apila el sidebar y el contenido principal en móvil */
   }
 
   .main-content-area {
-    padding-top: 0px; /* Espacio para el Header en móvil */
+    padding-top: 0px;
+    /* Espacio para el Header en móvil */
     /*
      * ¡¡¡VALOR CRÍTICO PARA MÓVILES!!!
      * Aquí también necesitas ajustar el padding-bottom para móviles.
@@ -169,22 +219,42 @@ flex-direction: column;
      * Mide la altura máxima de '.fixed-bottom-controls' en un dispositivo móvil
      * (o reduciendo la ventana del navegador) cuando el formulario está abierto.
      */
-    padding-bottom: 265px; /* <--- AJUSTA ESTE VALOR DESPUÉS DE LA MEDICIÓN REAL EN MÓVILES */
+    padding-bottom: 265px;
+    /* <--- AJUSTA ESTE VALOR DESPUÉS DE LA MEDICIÓN REAL EN MÓVILES */
   }
 
   .fixed-bottom-controls {
-    width: 100%;       /* Ocupa todo el ancho en móviles */
-    left: 0;           /* Se pega a la izquierda */
-    margin-left: 0;    /* Sin margen si el sidebar se superpone o esconde */
+    width: 100%;
+    /* Ocupa todo el ancho en móviles */
+    left: 0;
+    /* Se pega a la izquierda */
+    margin-left: 0;
+    /* Sin margen si el sidebar se superpone o esconde */
     border-radius: var(--border-radius) var(--border-radius) 0 0;
-    padding: 10px 15px; /* Menor padding en móviles */
-    flex-direction: column; /* Apila los controles y el formulario verticalmente */
-    align-items: stretch; /* Estira los elementos para que ocupen todo el ancho en móvil */
+    padding: 10px 15px;
+    /* Menor padding en móviles */
+    flex-direction: column;
+    /* Apila los controles y el formulario verticalmente */
+    align-items: stretch;
+    /* Estira los elementos para que ocupen todo el ancho en móvil */
   }
 
   /* Asegura que los elementos del header de la barra inferior también se apilen en móvil */
   .bottom-controls-header {
-      flex-direction: column; /* Apila SearchBar, TotalSummary y Button en vertical */
-      align-items: stretch; /* Estira los elementos para ocupar el ancho */
+    flex-direction: column;
+    /* Apila SearchBar, TotalSummary y Button en vertical */
+    align-items: stretch;
+    /* Estira los elementos para ocupar el ancho */
+  }
+
+  /*
+   * EN MÓVILES, ajusta el list-header para que quede pegado a la parte superior
+   * sin el espacio del sidebar.
+   * El padding horizontal del main-content-area también cambia en móvil.
+   */
+  .list-header {
+    padding: 60px 5px 0px 5px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-light);
   }
 }

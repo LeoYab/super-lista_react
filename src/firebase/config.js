@@ -3,7 +3,6 @@ import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getDatabase } from 'firebase/database';
 
-// Accede a las variables de entorno usando process.env
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
   authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
@@ -14,9 +13,9 @@ const firebaseConfig = {
   appId: process.env.REACT_APP_FIREBASE_APP_ID
 };
 
-// Inicializa Firebase
 const app = initializeApp(firebaseConfig);
+
 const auth = getAuth(app);
-const db = getDatabase(app);
+const db = getDatabase(app);   // Realtime Database (si lo seguís usando)
 
 export { auth, db };

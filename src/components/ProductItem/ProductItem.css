@@ -62,7 +62,9 @@
   align-items: center;
   /* Centra verticalmente los elementos */
   cursor: pointer;
-  transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
+  /* Añade una transición para la opacidad si en algún momento quieres usarla de nuevo,
+       o para el background-color para una transición suave al completar. */
+  transition: transform 0.2s ease-out, box-shadow 0.2s ease-out, background-color 0.2s ease-out;
   width: 100%;
   /* La tarjeta ocupa el 100% del wrapper inicialmente */
   z-index: 2;
@@ -88,8 +90,9 @@
 
 /* Estado de completado */
 .product-item-card.completed {
-  opacity: 0.8;
+  /* IMPORTANTE: La propiedad opacity ha sido eliminada para evitar la transparencia */
   background-color: var(--background-light-color);
+  /* Esto le dará un fondo ligeramente grisáceo */
 }
 
 /* Estilos específicos para el texto cuando el producto está completado */
@@ -97,13 +100,17 @@
 .product-item-card.completed .product-item-quantity-text,
 .product-item-card.completed .product-item-unit-detail {
   text-decoration: line-through;
+  /* Esto aplica el tachado */
   color: var(--text-color-secondary);
+  /* Esto hace el texto un poco más claro */
 }
 
 .product-item-card.completed .product-item-total-price,
 .product-item-card.completed .product-item-actions .button {
   text-decoration: none;
+  /* Asegura que el precio total y los botones no se tachen */
   opacity: 1;
+  /* Asegura que los botones y el precio total sean completamente visibles */
 }
 
 /* --- ESTILOS PARA LA DISPOSICIÓN DE CONTENIDO --- */
@@ -174,6 +181,7 @@
 }
 
 .product-item-quantity-text {
+  align-self: center;
   font-size: var(--font-size-sm);
   color: var(--text-color-secondary);
   margin-bottom: 2px;
@@ -184,7 +192,11 @@
 .product-item-total-price {
   font-size: var(--font-size-lg);
   font-weight: bold;
-  color: var(--accent-color);
+  background: #28a745;
+  border-radius: 50px;
+  text-align: center;
+  width: 100%;
+  color: var(--card-bg-color);
   pointer-events: none;
 }
 
@@ -208,7 +220,11 @@
   top: 0;
   right: 0;
   height: 100%;
-  width: var(--swipe-threshold, 90px);
+  /* Nota: el --swipe-threshold se define en JS, pero si quieres
+       que el overlay tenga un ancho fijo que coincida con el umbral,
+       asegúrate de que este valor coincida con el de JS (ej. 50px). */
+  width: var(--swipe-threshold, 50px);
+  /* Ajustado a 50px si la variable no está definida */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -216,7 +232,8 @@
   border-top-right-radius: var(--border-radius);
   border-bottom-right-radius: var(--border-radius);
   z-index: 1;
-  pointer-events: none;
+  /* pointer-events: none; */
+  /* Permitir clics en el botón de overlay (comentado si se gestiona en el botón directamente) */
 }
 
 /* Overlay de EDITAR (azul, a la izquierda del contenido) */
@@ -225,7 +242,11 @@
   top: 0;
   left: 0;
   height: 100%;
-  width: var(--swipe-threshold, 90px);
+  /* Nota: el --swipe-threshold se define en JS, pero si quieres
+       que el overlay tenga un ancho fijo que coincida con el umbral,
+       asegúrate de que este valor coincida con el de JS (ej. 50px). */
+  width: var(--swipe-threshold, 50px);
+  /* Ajustado a 50px si la variable no está definida */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -233,7 +254,8 @@
   border-top-left-radius: var(--border-radius);
   border-bottom-left-radius: var(--border-radius);
   z-index: 1;
-  pointer-events: none;
+  /* pointer-events: none; */
+  /* Permitir clics en el botón de overlay (comentado si se gestiona en el botón directamente) */
 }
 
 /* Estilos para los botones dentro de los overlays de swipe */
@@ -246,6 +268,8 @@
   padding: var(--spacing-sm) var(--spacing-md);
   border-radius: var(--border-radius-small);
   transition: background-color 0.2s ease;
+  /* Asegúrate de que los botones en los overlays capturen eventos */
+  pointer-events: auto;
 }
 
 .swipe-delete-button:hover,
@@ -264,7 +288,6 @@
 
   .product-item-card {
     flex-wrap: nowrap;
-    /* Permite que los ítems se envuelvan a la siguiente línea si no hay espacio */
     padding: var(--spacing-sm);
     gap: var(--spacing-sm);
     /* Espacio entre los flex items (left, right, actions) */
@@ -289,7 +312,7 @@
   }
 
   .product-item-right-content {
-    width: 25%;
+    width: 30%;
     flex-direction: column;
     align-items: flex-start;
     margin-left: auto;

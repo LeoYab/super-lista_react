@@ -1,4 +1,3 @@
-// src/components/ProductItem/ProductItem.js
 import React, { useState, useCallback, useEffect } from 'react';
 import './ProductItem.css';
 import Button from '../Buttons/Button';
@@ -9,17 +8,17 @@ import { useSwipeable } from '../../hooks/useSwipeable';
 const ProductItem = ({ producto, onEditar, onEliminar, onToggleComplete }) => {
     const itemTotal = (producto.valor || 0) * (producto.cantidad || 0);
 
-    const formattedPrice = (producto.valor || 0).toLocaleString('es-AR', { 
-        style: 'currency', 
+    const formattedPrice = (producto.valor || 0).toLocaleString('es-AR', {
+        style: 'currency',
         currency: 'ARS',
-        minimumFractionDigits: 2, 
-        maximumFractionDigits: 2  
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
     });
-    const formattedTotal = itemTotal.toLocaleString('es-AR', { 
-        style: 'currency', 
+    const formattedTotal = itemTotal.toLocaleString('es-AR', {
+        style: 'currency',
         currency: 'ARS',
-        minimumFractionDigits: 2, 
-        maximumFractionDigits: 2  
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
     });
 
     const ProductNameLength = 18;
@@ -29,11 +28,13 @@ const ProductItem = ({ producto, onEditar, onEliminar, onToggleComplete }) => {
 
     const [isMobile, setIsMobile] = useState(false);
 
-    const SWIPE_THRESHOLD = 90; // Debe coincidir con el valor en el CSS
+    // Hemos reducido el umbral para que el swipe sea más sensible.
+    // Puedes ajustar este valor (ej. 50, 60, 70) según lo que sientas más natural.
+    const SWIPE_THRESHOLD = 50; // ¡Valor ajustado!
 
     useEffect(() => {
         const checkIsMobile = () => {
-            setIsMobile(window.innerWidth <= 768); 
+            setIsMobile(window.innerWidth <= 768);
         };
 
         checkIsMobile();
@@ -57,7 +58,7 @@ const ProductItem = ({ producto, onEditar, onEliminar, onToggleComplete }) => {
             if (isConfirmed) {
                 await onEliminar(producto.firebaseId);
                 showSuccessToast(`¡Producto <strong>"${producto.nombre}"</strong> Eliminado!`);
-            } 
+            }
             // NO se llama a closeSwipe aquí, el hook se encarga de eso automáticamente
             // después de que la acción se dispara.
         } catch (error) {
@@ -78,10 +79,10 @@ const ProductItem = ({ producto, onEditar, onEliminar, onToggleComplete }) => {
     }, [onToggleComplete, producto.firebaseId]);
 
     // --- Uso del hook useSwipeable ---
-    const { 
-        wrapperProps, 
-        translateX, 
-        isDragging 
+    const {
+        wrapperProps,
+        translateX,
+        isDragging
     } = useSwipeable({
         swipeThreshold: SWIPE_THRESHOLD,
         onSwipeLeftAction: handleConfirmDelete, // Esta acción se disparará al soltar swipe izquierda
@@ -113,8 +114,8 @@ const ProductItem = ({ producto, onEditar, onEliminar, onToggleComplete }) => {
 
 
     return (
-        <div 
-            className="product-item-wrapper" 
+        <div
+            className="product-item-wrapper"
             // Aplicamos las props del hook aquí
             {...wrapperProps}
         >
@@ -138,7 +139,7 @@ const ProductItem = ({ producto, onEditar, onEliminar, onToggleComplete }) => {
                 {/* Right content - quantity and total */}
                 <div className="product-item-right-content">
                     <span className="product-item-quantity-text">Cantidad: {producto.cantidad}</span>
-                    <span className="product-item-total-price">{formattedTotal}</span> 
+                    <span className="product-item-total-price">{formattedTotal}</span>
                 </div>
 
                 {/* Desktop actions */}
