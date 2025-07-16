@@ -1,4 +1,5 @@
-name: Importar Datos a Firestore (Cron Diario 11 AM Argentina)
+name: Import data into Firebase
+run-name: 🔥 Import data into Firebase
 
 on:
   schedule:
