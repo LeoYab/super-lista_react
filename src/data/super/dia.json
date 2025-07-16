@@ -11,6 +11,9 @@
     "marca": "Dia",
     "latitud": -34.532479,
     "longitud": -58.575497,
-    "ultima_actualizacion": {}
+    "ultima_actualizacion": {
+      "_seconds": 1752687303,
+      "_nanoseconds": 8000000
+    }
   }
 ]
