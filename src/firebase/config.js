@@ -13,13 +13,6 @@ const firebaseConfig = {
   storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
   messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
   appId: process.env.REACT_APP_FIREBASE_APP_ID,
-  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
-  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
-  databaseURL: process.env.REACT_APP_FIREBASE_DATABASE_URL,
-  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
-  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.REACT_APP_FIREBASE_APP_ID
 };
 
 const app = initializeApp(firebaseConfig);
@@ -27,11 +20,7 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
 const dbRealtime = getDatabase(app);
-const dbFirestore = getFirestore(app); // <-- ¡IMPORTANTE: Añade esta línea para inicializar Firestore!
+const dbFirestore = getFirestore(app);
+export { auth, dbRealtime, dbFirestore };
 
-export { auth, dbRealtime, dbFirestore }; // <-- ¡IMPORTANTE: Añade dbFirestore aquí para exportarlo!
-
-const db = getDatabase(app);   // Realtime Database (si lo seguís usando)
-
-export { auth, db };
 
