@@ -1,0 +1,15 @@
+[
+  {
+    "id_sucursal": "1004",
+    "nombre_sucursal": "",
+    "direccion_sucursal": "",
+    "provincia": "AR-B",
+    "localidad": "SAN FERNANDO",
+    "id_comercio": "11",
+    "comercio_razon_social": "dorinka srl",
+    "comercio_bandera_nombre": "HiperChangomas",
+    "marca": "ChangoMas",
+    "latitud": -34.484169,
+    "longitud": -58.595829
+  }
+]

@@ -1,0 +1,168 @@
+/* src/components/supermercados/SupermarketProductItem/SupermarketProductItem.css */
+
+/* Reutiliza o define variables si no están globales */
+:root {
+    --border-radius: 8px;
+    --shadow-light: 0 2px 4px rgba(0, 0, 0, 0.1);
+    --shadow-medium: 0 4px 8px rgba(0, 0, 0, 0.15);
+    --border-color: #e0e0e0;
+    --card-bg-color: #ffffff;
+    --text-color-primary: #333333;
+    --text-color-secondary: #666666;
+    --primary-color: #007bff; /* Color principal de tu app */
+    --primary-dark-color: #0056b3; /* Un tono más oscuro del primary */
+    --background-light-color: #f8f9fa;
+
+    --spacing-xs: 4px;
+    --spacing-sm: 8px;
+    --spacing-md: 16px;
+    --spacing-lg: 24px;
+
+    --font-size-xs: 0.75rem;
+    --font-size-sm: 0.875rem;
+    --font-size-md: 1rem;
+    --font-size-lg: 1.125rem;
+
+    --border-radius-small: 4px;
+}
+
+.supermarket-product-item-card {
+    background-color: var(--card-bg-color);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-light);
+    border: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-md) var(--spacing-lg);
+    margin-bottom: var(--spacing-xs); /* Espacio entre las tarjetas */
+    transition: box-shadow 0.2s ease;
+}
+
+.supermarket-product-item-card:hover {
+    box-shadow: var(--shadow-medium);
+}
+
+.product-details-left {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    flex-grow: 1;
+}
+
+.product-item-image-placeholder {
+    flex-shrink: 0;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: var(--border-radius-small);
+    background-color: var(--background-light-color);
+    font-size: 28px; /* Para el emoji */
+    line-height: 1;
+}
+
+.product-info-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.product-name {
+    font-size: var(--font-size-lg);
+    font-weight: bold;
+    color: var(--text-color-primary);
+    line-height: 1.2;
+}
+
+.product-brand {
+    font-size: var(--font-size-sm);
+    color: var(--text-color-secondary);
+    line-height: 1.2;
+    margin-top: 2px;
+}
+
+.product-details-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    white-space: nowrap;
+    margin-left: var(--spacing-md);
+    flex-shrink: 0;
+    gap: var(--spacing-xs); /* Espacio entre precio, stock y botón */
+}
+
+.product-price {
+    font-size: var(--font-size-lg);
+    font-weight: bold;
+    color: var(--primary-dark-color); /* O el color de acento que uses para precios */
+}
+
+.product-stock {
+    font-size: var(--font-size-xs);
+    padding: 3px 8px;
+    border-radius: 15px;
+    flex-shrink: 0;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.product-stock.in-stock {
+    background-color: #e6ffe6; /* Verde claro */
+    color: #008000; /* Verde oscuro */
+}
+
+.product-stock.no-stock {
+    background-color: #ffe6e6; /* Rojo claro */
+    color: #cc0000; /* Rojo oscuro */
+}
+
+/* Media Queries para Responsividad del item */
+@media (max-width: 768px) {
+    .supermarket-product-item-card {
+        padding: var(--spacing-sm);
+        flex-wrap: wrap; /* Permitir que los elementos se envuelvan */
+    }
+
+    .product-details-left {
+        width: 100%; /* Ocupa todo el ancho en móvil */
+        justify-content: flex-start;
+        margin-bottom: var(--spacing-xs); /* Espacio antes de la siguiente fila */
+    }
+
+    .product-item-image-placeholder {
+        width: 40px;
+        height: 40px;
+        font-size: 24px;
+    }
+
+    .product-name {
+        font-size: var(--font-size-md);
+    }
+
+    .product-brand {
+        font-size: var(--font-size-xs);
+    }
+
+    .product-details-right {
+        flex-direction: row; /* Coloca precio, stock, botón en una fila */
+        width: 100%;
+        justify-content: space-between; /* Espacia entre ellos */
+        align-items: center;
+        margin-left: 0;
+        gap: var(--spacing-sm);
+    }
+
+    .product-price {
+        font-size: var(--font-size-md);
+    }
+
+    .product-stock {
+        font-size: var(--font-size-xs);
+        padding: 2px 6px;
+    }
+    .product-details-right button {
+        padding: 5px 10px;
+        font-size: 0.8em;
+    }
+}

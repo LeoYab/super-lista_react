@@ -1,8 +1,8 @@
 // src/App.js
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'; // Agregamos Link
 import { useAuth, AuthProvider } from './context/AuthContext';
-import { db } from './firebase/config';
+import { dbRealtime } from './firebase/config';
 import { ref, onValue, push, remove, update, set } from 'firebase/database';
 // REMOVED: import Swal from 'sweetalert2'; // ¡Eliminamos esta importación!
 
@@ -18,6 +18,7 @@ import SidebarMenu from './components/SidebarMenu/SidebarMenu';
 import SearchBar from './components/SearchBar/SearchBar';
 import TotalSummary from './TotalSummary/TotalSummary';
 import Button from './components/Buttons/Button';
+import Supermercados from './components/supermercados/Supermercados'; 
 
 // Importa tus estilos
 import './App.css';
@@ -44,8 +45,8 @@ function MainAppContent() {
   const [searchTerm, setSearchTerm] = useState('');
 
   // Firebase Refs
-  const userListsRef = currentUser ? ref(db, `Users/${currentUser.uid}/User_Lists`) : null;
-  const categoriesRef = ref(db, 'Categories');
+  const userListsRef = currentUser ? ref(dbRealtime, `Users/${currentUser.uid}/User_Lists`) : null;
+  const categoriesRef = ref(dbRealtime, 'Categories');
 
   /* eslint-disable react-hooks/exhaustive-deps */
   useEffect(() => {
@@ -115,7 +116,7 @@ function MainAppContent() {
     }
 
     setLoadingProducts(true);
-    const currentListProductsRef = ref(db, `Users/${currentUser.uid}/User_Lists/${currentListId}/products`);
+    const currentListProductsRef = ref(dbRealtime, `Users/${currentUser.uid}/User_Lists/${currentListId}/products`);
 
     const unsubscribe = onValue(currentListProductsRef, (snapshot) => {
       const data = snapshot.val();
@@ -162,7 +163,7 @@ function MainAppContent() {
   const deleteList = async (listIdToDelete) => {
     if (!currentUser || !listIdToDelete) return;
     try {
-      const listRefToDelete = ref(db, `Users/${currentUser.uid}/User_Lists/${listIdToDelete}`);
+      const listRefToDelete = ref(dbRealtime, `Users/${currentUser.uid}/User_Lists/${listIdToDelete}`);
       await remove(listRefToDelete);
       // Success toast is handled in SidebarMenu's handleDeleteListConfirm
     } catch (error) {
@@ -185,7 +186,7 @@ function MainAppContent() {
   const handleAddProduct = async (productoDataFormulario) => {
     if (!currentUser || !currentListId) return;
     try {
-      const productsRef = ref(db, `Users/${currentUser.uid}/User_Lists/${currentListId}/products`);
+      const productsRef = ref(dbRealtime, `Users/${currentUser.uid}/User_Lists/${currentListId}/products`);
       await push(productsRef, {
         nameProd: productoDataFormulario.nombre,
         price: parseFloat(productoDataFormulario.valor),
@@ -206,7 +207,7 @@ function MainAppContent() {
   const handleEditProduct = async (firebaseId, productoDataFormulario) => {
     if (!currentUser || !currentListId) return;
     try {
-      const productRef = ref(db, `Users/${currentUser.uid}/User_Lists/${currentListId}/products/${firebaseId}`);
+      const productRef = ref(dbRealtime, `Users/${currentUser.uid}/User_Lists/${currentListId}/products/${firebaseId}`);
       await update(productRef, {
         nameProd: productoDataFormulario.nombre,
         price: parseFloat(productoDataFormulario.valor),
@@ -236,7 +237,7 @@ function MainAppContent() {
   const handleDeleteProduct = async (firebaseId) => {
     if (!currentUser || !currentListId) return;
     try {
-      const productRef = ref(db, `Users/${currentUser.uid}/User_Lists/${currentListId}/products/${firebaseId}`);
+      const productRef = ref(dbRealtime, `Users/${currentUser.uid}/User_Lists/${currentListId}/products/${firebaseId}`);
       await remove(productRef);
       // Success toast is handled in ProductItem's confirmDelete
     } catch (error) {
@@ -248,7 +249,7 @@ function MainAppContent() {
   const toggleComplete = async (firebaseId) => {
     if (!currentUser || !currentListId) return;
     try {
-      const productRef = ref(db, `Users/${currentUser.uid}/User_Lists/${currentListId}/products/${firebaseId}`);
+      const productRef = ref(dbRealtime, `Users/${currentUser.uid}/User_Lists/${currentListId}/products/${firebaseId}`);
       const productToUpdate = products.find(p => p.firebaseId === firebaseId);
       if (productToUpdate) {
         await update(productRef, {
@@ -271,7 +272,7 @@ function MainAppContent() {
 
     if (isConfirmed) {
       try {
-        const productsRef = ref(db, `Users/${currentUser.uid}/User_Lists/${currentListId}/products`);
+        const productsRef = ref(dbRealtime, `Users/${currentUser.uid}/User_Lists/${currentListId}/products`);
         await remove(productsRef);
         showSuccessAlert('¡Lista Vaciada!', 'Todos los productos han sido eliminados.'); // Replaced Swal.fire
       } catch (error) {
@@ -314,6 +315,9 @@ function MainAppContent() {
           selectList={selectList}
           currentListId={currentListId}
           deleteList={deleteList}
+          // Puedes agregar un enlace o botón para "Supermercados" aquí
+          // Por ejemplo:
+          // onGoToSupermercados={() => navigate('/supermercados')}
         />
 
         {/* MAIN CONTENT AREA */}
@@ -415,7 +419,12 @@ function AppRouter() {
   return (
     <Routes>
       <Route path="/auth" element={currentUser ? <Navigate to="/" /> : <AuthPage />} />
+      {/* Ruta para la aplicación principal (tus listas) */}
       <Route path="/" element={currentUser ? <MainAppContent /> : <Navigate to="/auth" />} />
+      {/* NUEVA RUTA PARA SUPERMERCADOS */}
+      <Route path="/supermercados" element={currentUser ? <Supermercados /> : <Navigate to="/auth" />} />
+      {/* Opcional: Redirigir a una ruta por defecto si la URL no coincide con ninguna */}
+      <Route path="*" element={<Navigate to="/" />} />
     </Routes>
   );
 }
