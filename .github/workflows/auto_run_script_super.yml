@@ -1,0 +1,40 @@
+name: Importar Datos a Firestore (Cron Diario 11 AM Argentina)
+
+on:
+  schedule:
+    - cron: '0 14 * * *'
+  workflow_dispatch: 
+
+jobs:
+  import-data:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout del código
+      uses: actions/checkout@v4
+
+    - name: Configurar Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20' 
+
+    - name: Instalar dependencias
+      run: npm install
+
+    - name: Configurar Credenciales de Firebase
+      run: |
+        echo "${{ secrets.FIREBASE_SERVICE_ACCOUNT_KEY }}" > ./scripts/serviceAccountKey.json
+      env:
+        FIREBASE_SERVICE_ACCOUNT_KEY: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_KEY }}
+
+    - name: Configurar variables de entorno (.env para el script)
+      run: |
+        echo "FIREBASE_SERVICE_ACCOUNT_PATH=./scripts/serviceAccountKey.json" >> .env
+        # Agrega cualquier otra variable de entorno que necesite tu script aquí
+
+    - name: Ejecutar Script de Importación
+      run: node scripts/importProducts.js
+
+    - name: Limpiar credenciales (opcional, pero buena práctica de seguridad)
+      if: always()
+      run: rm ./scripts/serviceAccountKey.json
