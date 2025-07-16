@@ -189,15 +189,15 @@
 }
 
 /* Acciones de escritorio (siempre visibles en escritorio, ocultas en móvil) */
-.product-item-actions-desktop {
-  display: flex;
-  /* Asegura que estén visibles */
-  gap: var(--spacing-xs);
-  margin-left: var(--spacing-md);
-  /* Espacio con el contenido de la derecha */
-  flex-shrink: 0;
-  pointer-events: auto;
-  /* Los botones sí deben capturar eventos */
+.product-item-total-price {
+  font-size: var(--font-size-lg);
+  font-weight: bold;
+  background: #28a745;
+  border-radius: 50px;
+  text-align: center;
+  width: 100%;
+  color: var(--card-bg-color);
+  pointer-events: none;
 }
 
 /* --- OVERLAYS PARA SWIPE EN MÓVIL --- */

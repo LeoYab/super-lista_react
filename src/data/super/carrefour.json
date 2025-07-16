@@ -1,0 +1,16 @@
+[
+  {
+    "id_sucursal": "1",
+    "nombre_sucursal": "",
+    "direccion_sucursal": "",
+    "provincia": "AR-B",
+    "localidad": "San Isidro",
+    "id_comercio": "10",
+    "comercio_razon_social": "inc s.a.",
+    "comercio_bandera_nombre": "Hipermercado Carrefour",
+    "marca": "Carrefour",
+    "latitud": -34.491345,
+    "longitud": -58.589025,
+    "ultima_actualizacion": {}
+  }
+]
