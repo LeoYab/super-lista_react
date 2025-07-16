@@ -23,4 +23,4 @@ yarn-debug.log*
 yarn-error.log*
 
 /scripts/serviceAccountKey.json
-/scripts/temptemp_sepa.zip
+/scripts/temp_sepa.zip
