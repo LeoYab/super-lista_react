@@ -11,6 +11,9 @@
     "marca": "Carrefour",
     "latitud": -34.491345,
     "longitud": -58.589025,
-    "ultima_actualizacion": {}
+    "ultima_actualizacion": {
+      "_seconds": 1752687324,
+      "_nanoseconds": 438000000
+    }
   }
 ]

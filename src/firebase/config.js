@@ -2,6 +2,7 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getDatabase } from 'firebase/database';
+import { getFirestore } from 'firebase/firestore'; // <-- ¡IMPORTANTE: Añade esta línea!
 
 // Accede a las variables de entorno usando process.env
 const firebaseConfig = {
@@ -17,6 +18,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 
 const auth = getAuth(app);
-const db = getDatabase(app);   // Realtime Database (si lo seguís usando)
+const dbRealtime = getDatabase(app);
+const dbFirestore = getFirestore(app); // <-- ¡IMPORTANTE: Añade esta línea para inicializar Firestore!
 
-export { auth, db };
+export { auth, dbRealtime, dbFirestore }; // <-- ¡IMPORTANTE: Añade dbFirestore aquí para exportarlo!
