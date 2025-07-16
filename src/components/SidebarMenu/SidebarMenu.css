@@ -1,59 +1,59 @@
 /* src/components/SidebarMenu/SidebarMenu.css */
 
 .menu-toggle-button {
-  position: fixed;
-  top: 20px;
-  right: 20px; /* CAMBIO: de 'left: 20px;' a 'right: 20px;' */
-  z-index: 1001;
-  background-color: var(--primary-color);
-  color: white;
-  border: none;
-  border-radius: 50%;
-  width: 50px;
-  height: 50px;
-  font-size: 1.5em;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  transition: background-color 0.3s ease, transform 0.3s ease;
+    position: fixed;
+    top: 20px;
+    right: 20px; /* CAMBIO: de 'left: 20px;' a 'right: 20px;' */
+    z-index: 1001;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    font-size: 1.5em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
 .menu-toggle-button:hover {
-  background-color: var(--primary-dark-color);
-  transform: scale(1.05);
+    background-color: var(--primary-dark-color);
+    transform: scale(1.05);
 }
 
 .menu-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 999;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
 }
 
 .sidebar-menu {
-  position: fixed;
-  top: 0;
-  right: -300px; /* CAMBIO: de 'left: -300px;' a 'right: -300px;' */
-  width: 280px;
-  height: 100%;
-  background-color: white; /* O el color que hayas elegido, por ejemplo: var(--card-bg-color); */
-  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.3); /* CAMBIO: Ajusta la sombra para que se vea bien en el lado derecho */
-  z-index: 1000;
-  transition: right 0.3s ease-in-out; /* CAMBIO: de 'left' a 'right' */
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  overflow-y: auto;
+    position: fixed;
+    top: 0;
+    right: -300px; /* CAMBIO: de 'left: -300px;' a 'right: -300px;' */
+    width: 280px;
+    height: 100%;
+    background-color: white; /* O el color que hayas elegido, por ejemplo: var(--card-bg-color); */
+    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.3); /* CAMBIO: Ajusta la sombra para que se vea bien en el lado derecho */
+    z-index: 1000;
+    transition: right 0.3s ease-in-out; /* CAMBIO: de 'left' a 'right' */
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    overflow-y: auto;
 }
 
 .sidebar-menu.open {
-  right: 0; /* CAMBIO: de 'left: 0;' a 'right: 0;' */
+    right: 0; /* CAMBIO: de 'left: 0;' a 'right: 0;' */
 }
 
 .menu-header {
@@ -117,16 +117,19 @@
     font-weight: 500;
     display: flex;
     align-items: center;
-    justify-content: space-between; 
+    justify-content: space-between;
+    /* Esto ya lo tenías, asegura espacio entre contenido y botón */
     align-items: center;
 }
 
 .list-names .list-item:nth-child(odd) {
-  background-color: var(--card-bg-color); /* Blanco o tu color de fondo principal de tarjeta */
+    background-color: var(--card-bg-color);
+    /* Blanco o tu color de fondo principal de tarjeta */
 }
 
 .list-names .list-item:nth-child(even) {
-  background-color: var(--background-light-color); /* Gris muy claro o color alterno */
+    background-color: var(--background-light-color);
+    /* Gris muy claro o color alterno */
 }
 
 .list-item:hover {
@@ -135,7 +138,7 @@
 }
 
 .list-item.active {
-    background-color: #205185!important;
+    background-color: #205185 !important;
     color: white;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
 }
@@ -143,17 +146,23 @@
 .list-item.active:hover {
     background-color: var(--primary-dark-color);
 }
-    
+
 .list-item span {
-  flex-grow: 1; /* Para que el nombre ocupe el espacio restante */
-  cursor: pointer; /* Indica que es clickeable */
+    flex-grow: 1;
+    /* Para que el nombre ocupe el espacio restante */
+    cursor: pointer;
+    /* Indica que es clickeable */
 }
 
 .list-item .list-date {
-  font-size: 0.8em; /* Tamaño de fuente más pequeño */
-  color: var(--text-color-secondary); /* Color más tenue */
-  margin-top: 3px; /* Pequeño margen superior */
-  display: block; /* Para que aparezca en una nueva línea debajo del nombre */
+    font-size: 0.8em;
+    /* Tamaño de fuente más pequeño */
+    color: var(--text-color-secondary);
+    /* Color más tenue */
+    margin-top: 3px;
+    /* Pequeño margen superior */
+    display: block;
+    /* Para que aparezca en una nueva línea debajo del nombre */
 }
 
 .no-lists-message {
@@ -230,22 +239,59 @@
 }
 
 .delete-list-button {
-  background-color: rgba(0,0,0,0); /* Usamos el color de eliminar que ya tienes */
-  color: white;
-  border: none;
-  border-radius: 50%; /* Para que sea redondo */
-  width: 28px;
-  height: 28px;
-  font-size: 0.8em;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  margin-left: 10px; /* Espacio entre el nombre y el botón */
-  flex-shrink: 0; /* Evita que el botón se encoja */
-  transition: background-color 0.2s ease;
+    background-color: rgba(0, 0, 0, 0);
+    /* Usamos el color de eliminar que ya tienes */
+    color: var(--delete-color); /* CAMBIO: Haz el ícono de la papelera rojo */
+    border: none;
+    border-radius: 50%;
+    /* Para que sea redondo */
+    width: 28px;
+    height: 28px;
+    font-size: 0.8em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    margin-left: 10px;
+    /* Espacio entre el nombre y el botón */
+    flex-shrink: 0;
+    /* Evita que el botón se encoja */
+    transition: background-color 0.2s ease;
 }
 
 .delete-list-button:hover {
-  background-color: #cc0000; /* Un rojo más oscuro al pasar el ratón */
+    background-color: rgba(255, 0, 0, 0.1); /* Un rojo muy suave al pasar el ratón */
+    color: #cc0000; /* Color rojo más oscuro para el ícono al hover */
+}
+
+
+/* --- NUEVOS ESTILOS PARA LA SECCIÓN DE ENLACES ADICIONALES --- */
+.sidebar-menu .additional-links {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(0, 0, 0, 0.1); /* Una línea divisoria más visible */
+}
+
+.sidebar-menu .additional-links li {
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Espacio entre ícono y texto */
+    color: var(--text-color); /* Color de texto predeterminado */
+    font-weight: 500;
+    background-color: var(--input-bg-color); /* Fondo similar a otros items */
+    border-radius: var(--border-radius);
+    margin-bottom: 5px; /* Espacio entre ítems de esta sección */
+}
+
+.sidebar-menu .additional-links li:hover {
+    background-color: var(--hover-color); /* Color al pasar el mouse */
+    transform: translateX(5px); /* Pequeña animación al pasar el mouse */
+}
+
+/* Estilo para el ícono dentro de la lista de enlaces adicionales */
+.sidebar-menu .additional-links li span:first-child {
+    font-size: 1.2em; /* Hace el ícono un poco más grande */
 }

@@ -1,5 +1,6 @@
 // src/components/SidebarMenu/SidebarMenu.js
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // <--- IMPORTA useNavigate
 import './SidebarMenu.css';
 // REMOVED: import Swal from 'sweetalert2'; // ¡Eliminamos esta importación!
 
@@ -34,6 +35,7 @@ const formatDate = (timestamp) => {
 const SidebarMenu = ({ currentUser, logout, userLists, createList, selectList, currentListId, deleteList }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [newListName, setNewListName] = useState('');
+  const navigate = useNavigate(); // <--- INICIALIZA useNavigate
 
   const handleCreateList = () => {
     if (newListName.trim()) {
@@ -61,6 +63,12 @@ const SidebarMenu = ({ currentUser, logout, userLists, createList, selectList, c
         showErrorAlert('Error', 'No se pudo eliminar la lista.'); // Replaced Swal.fire
       }
     }
+  };
+
+  // NUEVA FUNCIÓN para navegar a la página de supermercados
+  const handleGoToSupermercados = () => {
+    navigate('/supermercados'); // Redirige a la ruta /supermercados
+    setIsMenuOpen(false); // Cierra el menú después de navegar
   };
 
   return (
@@ -141,6 +149,18 @@ const SidebarMenu = ({ currentUser, logout, userLists, createList, selectList, c
             <Button onClick={handleCreateList} variant="success">Crear</Button>
           </div>
         </div>
+
+        {/* NUEVA SECCIÓN: Enlaces adicionales */}
+        <div className="menu-section additional-links">
+          <h4>Otras Secciones</h4>
+          <ul>
+            <li className="list-item" onClick={handleGoToSupermercados}>
+              <span className="list-date">🛒</span> Explorar Supermercados
+            </li>
+            {/* Puedes agregar más enlaces aquí si los necesitas */}
+          </ul>
+        </div>
+
       </div>
     </>
   );

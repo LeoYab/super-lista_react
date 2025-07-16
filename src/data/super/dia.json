@@ -1,0 +1,16 @@
+[
+  {
+    "id_sucursal": "87",
+    "nombre_sucursal": "",
+    "direccion_sucursal": "",
+    "provincia": "AR-B",
+    "localidad": "BUENOS AIRES",
+    "id_comercio": "15",
+    "comercio_razon_social": "dia argentina s.a.",
+    "comercio_bandera_nombre": "Supermercados DIA",
+    "marca": "Dia",
+    "latitud": -34.532479,
+    "longitud": -58.575497,
+    "ultima_actualizacion": {}
+  }
+]
