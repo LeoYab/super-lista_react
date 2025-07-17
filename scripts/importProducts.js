@@ -6,7 +6,7 @@ const stream = require('stream');
 const { promisify } = require('util');
 const path = require('path');
 const fs = require('fs');
-const fsp = require('fs/promises'); // Usamos 'fs/promises' para operaciones asíncronas
+const fsp = require('fs/promises');
 const admin = require('firebase-admin');
 const { getFirestore, Timestamp } = require('firebase-admin/firestore');
 
@@ -18,9 +18,10 @@ if (!serviceAccountPath) {
 
 let serviceAccount;
 try {
-  serviceAccount = require(path.resolve(serviceAccountPath));
+  serviceAccount = require(path.resolve(process.cwd(), serviceAccountPath));
 } catch (error) {
   console.error(`Error al cargar el archivo de cuenta de servicio de Firebase desde ${serviceAccountPath}:`, error);
+  console.error(`Asegúrate de que la ruta en FIREBASE_SERVICE_ACCOUNT_PATH es correcta y el archivo existe.`);
   process.exit(1);
 }
 
@@ -37,13 +38,14 @@ const DAILY_URLS = {
   2: 'https://datos.produccion.gob.ar/dataset/6f47ec76-d1ce-4e34-a7e1-621fe9b1d0b5/resource/9dc06241-cc83-44f4-8e25-c9b1636b8bc8/download/sepa_martes.zip',
   3: 'https://datos.produccion.gob.ar/dataset/6f47ec76-d1ce-4e34-a7e1-621fe9b1d0b5/resource/1e92cd42-4f94-4071-a165-62c4cb2ce23c/download/sepa_miercoles.zip',
   4: 'https://datos.produccion.gob.ar/dataset/6f47ec76-d1ce-4e34-a7e1-621fe9b1d0b5/resource/d076720f-a7f0-4af8-b1d6-1b99d5a90c14/download/sepa_jueves.zip',
-  5: 'https://datos.produccion.gob.ar/dataset/6f47ec76-d1ce-4e34-a7e1-85ec-4a8467aad27e/download/sepa_viernes.zip', // URL Corregida
+  5: 'https://datos.produccion.gob.ar/dataset/6f47ec76-d1ce-4e34-a7e1-85ec-4a8467aad27e/download/sepa_viernes.zip',
   6: 'https://datos.produccion.gob.ar/dataset/6f47ec76-d1ce-4e34-a7e1-621fe9b1d0b5/resource/b3c3da5d-213d-41e7-8d74-f23fda0a3c30/download/sepa_sabado.zip',
 };
 
-
 const TEMP_DATA_DIR = path.join(__dirname, '../src/data/temp_processing');
 const tempZipPath = path.join(TEMP_DATA_DIR, 'temp_sepa.zip');
+const BASE_SUPER_DIR = path.join(__dirname, '../src/data/super');
+const BASE_PRODUCTS_DIR = path.join(__dirname, '../src/data/products');
 
 const KNOWN_ZIPS_TO_PROCESS_PREFIXES = new Set([
   'sepa_1_comercio-sepa-10',
@@ -82,33 +84,35 @@ const MARCAS_NORMALIZADAS_INTERES = new Set([
 
 async function downloadZipForDay(url, outputPath) {
   console.log(`Descargando ZIP para el día desde: ${url}`);
-  const response = await fetch(url);
+  try {
+    const response = await fetch(url);
 
-  if (!response.ok) {
-    throw new Error(`Error al descargar el archivo ZIP: ${response.statusText}`);
+    if (!response.ok) {
+      throw new Error(`Error al descargar el archivo ZIP: ${response.statusText}`);
+    }
+
+    const arrayBuffer = await response.arrayBuffer();
+    const buffer = Buffer.from(arrayBuffer);
+
+    await fsp.writeFile(outputPath, buffer);
+    console.log(`ZIP del día descargado en ${outputPath}.`);
+    return buffer;
+  } catch (error) {
+    console.error(`ERROR al descargar el ZIP de ${url}:`, error);
+    throw error;
   }
-
-  const arrayBuffer = await response.arrayBuffer();
-  const buffer = Buffer.from(arrayBuffer);
-
-  await fsp.writeFile(outputPath, buffer);
-  console.log(`ZIP del día descargado en ${outputPath}.`);
-  return buffer;
 }
 
-// writeToJson se mantiene para escribir los JSONs finales
 async function writeToJson(data, filename) {
   if (!data || (Array.isArray(data) && data.length === 0)) {
     console.log(`No hay datos para escribir en ${filename}. El archivo estará vacío o no se creará.`);
-    // Asegurarse de que el directorio existe incluso si no hay datos.
     const dir = path.dirname(filename);
     await fsp.mkdir(dir, { recursive: true });
-    await fsp.writeFile(filename, JSON.stringify([], null, 2), 'utf8'); // Escribir un array vacío
+    await fsp.writeFile(filename, JSON.stringify([], null, 2), 'utf8');
     return;
   }
   try {
     await fsp.writeFile(filename, JSON.stringify(data, null, 2), 'utf8');
-    console.log(`Datos guardados en ${filename}`);
   } catch (err) {
     console.error(`Error al escribir en ${filename}:`, err);
     throw err;
@@ -132,15 +136,15 @@ async function procesarCsvStream(streamCsv, filenameForLog = 'CSV desconocido') 
 
     const commonColumnMaps = {
       'id_comercio': ['id_comercio', 'id'],
-      'id_sucursal': ['id_sucursal', '0', '1', '2'],
+      'id_sucursal': ['id_sucursal', '0', '1', '2', 'sucursal_id'],
       'comercio_cuit': ['comercio_cuit', 'cuit'],
       'comercio_razon_social': ['comercio_razon_social', 'razon_social', 'razon social'],
       'sucursales_latitud': ['sucursales_latitud', 'latitud'],
       'sucursales_longitud': ['sucursales_longitud', 'longitud'],
-      'productos_descripcion': ['productos_descripcion', 'descripcion'],
-      'productos_precio_lista': ['productos_precio_lista', 'precio_lista'],
+      'productos_descripcion': ['productos_descripcion', 'descripcion', 'producto_nombre'],
+      'productos_precio_lista': ['productos_precio_lista', 'precio_lista', 'precio'],
       'productos_ean': ['productos_ean', 'ean'],
-      'productos_marca': ['productos_marca', 'marca'],
+      'productos_marca': ['productos_marca', 'marca_producto', 'marca'],
       'productos_cantidad_presentacion': ['productos_cantidad_presentacion', 'cantidad_presentacion'],
       'productos_unidad_medida_presentacion': ['productos_unidad_medida_presentacion', 'unidad_medida_presentacion'],
       'sucursal_nombre': ['sucursal_nombre', 'nombre'],
@@ -160,7 +164,7 @@ async function procesarCsvStream(streamCsv, filenameForLog = 'CSV desconocido') 
           const firstLine = buffer.split('\n')[0];
           let detectedDelimiter = ',';
           let maxMatches = -1;
-          const potentialDelimiters = [',', ';', '|'];
+          const potentialDelimiters = [',', ';', '|', '\t'];
           const lowerCaseFirstLine = firstLine.toLowerCase();
 
           for (const delim of potentialDelimiters) {
@@ -177,15 +181,12 @@ async function procesarCsvStream(streamCsv, filenameForLog = 'CSV desconocido') 
             }
           }
 
-          if (maxMatches === -1 && firstLine.length > 0) {
-            if (firstLine.includes('|')) {
-              detectedDelimiter = '|';
-            } else if (firstLine.includes(';')) {
-              detectedDelimiter = ';';
-            } else {
-              detectedDelimiter = ',';
-            }
-            console.warn(`[WARN] No se pudieron encontrar encabezados esperados para ${filenameForLog}. Intentando inferir delimitador basado en caracteres: '${detectedDelimiter}'`);
+          if (maxMatches <= 0 && firstLine.length > 0) {
+            if (firstLine.includes('|')) detectedDelimiter = '|';
+            else if (firstLine.includes(';')) detectedDelimiter = ';';
+            else if (firstLine.includes('\t')) detectedDelimiter = '\t';
+            else detectedDelimiter = ',';
+            console.warn(`[WARN] Delimitador inferido para ${filenameForLog} como '${detectedDelimiter}'.`);
           } else if (firstLine.length === 0) {
             detectedDelimiter = ',';
           }
@@ -222,28 +223,23 @@ async function procesarCsvStream(streamCsv, filenameForLog = 'CSV desconocido') 
       .on('end', () => {
         if (!delimiterDetected) {
           if (buffer.length > 0) {
-            console.warn(`[WARN] El archivo ${filenameForLog} es muy pequeño para una detección robusta. Intentando con delimitador por defecto (',').`);
-            const firstLine = buffer.split('\n')[0];
-            let finalFallbackDelimiter = ',';
-            if (firstLine.includes('|')) finalFallbackDelimiter = '|';
-            else if (firstLine.includes(';')) finalFallbackDelimiter = ';';
-
-            parser = csv({
-              separator: finalFallbackDelimiter,
-              strict: false,
-              mapHeaders: ({ header, index }) => {
-                const normalizedHeader = header.toLowerCase().trim();
-                for (const key in commonColumnMaps) {
-                  if (commonColumnMaps[key].includes(normalizedHeader)) {
-                    return key;
-                  }
-                }
-                return normalizedHeader || `col_${index}`;
-              },
-              mapValues: ({ header, index, value }) => value.trim()
-            });
-            passthrough.pipe(parser);
-            passthrough.write(buffer);
+             console.warn(`[WARN] Archivo ${filenameForLog} es muy pequeño. Procesando con delimitador '${detectedDelimiter}'.`);
+             parser = csv({
+               separator: detectedDelimiter,
+               strict: false,
+               mapHeaders: ({ header, index }) => {
+                 const normalizedHeader = header.toLowerCase().trim();
+                 for (const key in commonColumnMaps) {
+                   if (commonColumnMaps[key].includes(normalizedHeader)) {
+                     return key;
+                   }
+                 }
+                 return normalizedHeader || `col_${index}`;
+               },
+               mapValues: ({ header, index, value }) => value.trim()
+             });
+             passthrough.pipe(parser);
+             passthrough.write(buffer);
           }
           passthrough.end();
           resolve(docs);
@@ -255,23 +251,22 @@ async function procesarCsvStream(streamCsv, filenameForLog = 'CSV desconocido') 
   });
 }
 
-function normalizeSupermarketBrand(detectedBrand) {
-  return detectedBrand;
-}
-
-// --- Funciones auxiliares para procesarZipInterno (Aquí van las nuevas/faltantes) ---
-
 function findMatchingBranch(branch, targetLocations) {
   for (const target of targetLocations) {
-    if (getDistance(parseFloat(branch.sucursales_latitud), parseFloat(branch.sucursales_longitud), target.lat, target.lon) < DISTANCE_THRESHOLD) {
-      const normalizedBranchName = branch.sucursal_nombre ? branch.sucursal_nombre.toLowerCase() : '';
-      const normalizedTargetName = target.name ? target.name.toLowerCase() : '';
+    if (String(branch.id_sucursal) === String(target.id_sucursal)) {
+        return target;
+    }
+
+    if (parseFloat(branch.sucursales_latitud) && parseFloat(branch.sucursales_longitud) &&
+        getDistance(parseFloat(branch.sucursales_latitud), parseFloat(branch.sucursales_longitud), target.lat, target.lon) < DISTANCE_THRESHOLD) {
+      const normalizedBranchName = (branch.sucursal_nombre || '').toLowerCase();
+      const normalizedTargetName = (target.name || '').toLowerCase();
 
       if (normalizedBranchName.includes(normalizedTargetName.split(' ')[0].toLowerCase()) ||
-        normalizedTargetName.includes(normalizedBranchName.split(' ')[0].toLowerCase())) {
+          normalizedTargetName.includes(normalizedBranchName.split(' ')[0].toLowerCase())) {
         return target;
       }
-      return target; // Si la distancia es muy cercana, igual la consideramos
+      return target;
     }
   }
   return null;
@@ -282,36 +277,42 @@ function normalizeProductData(product, brand, branchId) {
     return null;
   }
 
-  const productId = `${product.productos_ean}_${brand.replace(/[^a-z0-9]/gi, '').toLowerCase()}_${branchId}`;
+  const sanitizedEan = String(product.productos_ean).replace(/\D/g, '');
+  if (!sanitizedEan) return null;
+
+  const productId = `${sanitizedEan}_${brand.replace(/[^a-z0-9]/gi, '').toLowerCase()}_${branchId}`;
+
+  let precio = parseFloat(String(product.productos_precio_lista).replace(',', '.'));
+  if (isNaN(precio)) precio = 0;
 
   return {
-    id: productId, // ID único para Firestore
-    ean: product.productos_ean,
+    id: productId,
+    ean: sanitizedEan,
     nombre: product.productos_descripcion,
-    marca_producto: product.productos_marca || 'N/A',
-    precio: parseFloat(product.productos_precio_lista.replace(',', '.')) || 0,
-    cantidad_presentacion: product.productos_cantidad_presentacion || '',
-    unidad_medida_presentacion: product.productos_unidad_medida_presentacion || '',
-    supermercado_marca: brand, // Marca normalizada del supermercado
-    sucursal_id: branchId, // ID de la sucursal
-    stock: true, // Asumimos que si está en el archivo, hay stock
+    marca_producto: product.productos_marca || 'Sin Marca',
+    precio: precio,
+    cantidad_presentacion: product.productos_cantidad_presentacion || '1',
+    unidad_medida_presentacion: product.productos_unidad_medida_presentacion || 'unidad',
+    supermercado_marca: brand,
+    sucursal_id: branchId,
+    stock: true,
     ultima_actualizacion: Timestamp.now()
   };
 }
 
 function normalizeBranchData(branch, brand, matchedTarget) {
   return {
-    id_sucursal: matchedTarget.id_sucursal, // Usar el ID de la sucursal de tu lista fija
-    comercio_id: String(branch.id_comercio || ''), // Asegurar que sea string
+    id_sucursal: matchedTarget.id_sucursal,
+    comercio_id: String(branch.id_comercio || ''),
     comercio_cuit: String(branch.comercio_cuit || ''),
     comercio_razon_social: branch.comercio_razon_social || '',
     nombre_sucursal: branch.sucursal_nombre || '',
     direccion_sucursal: branch.sucursal_direccion || '',
     provincia: branch.sucursales_provincia || '',
     localidad: branch.sucursales_localidad || '',
-    latitud: parseFloat(branch.sucursales_latitud),
-    longitud: parseFloat(branch.sucursales_longitud),
-    marca: brand, // Marca normalizada
+    latitud: parseFloat(branch.sucursales_latitud) || 0,
+    longitud: parseFloat(branch.sucursales_longitud) || 0,
+    marca: brand,
     ultima_actualizacion: Timestamp.now()
   };
 }
@@ -321,18 +322,23 @@ async function procesarZipInterno(bufferZipInterno, allFilteredSucursalesByBrand
 
   for (const innerFile of innerDirectory.files) {
     if (innerFile.path.toLowerCase().endsWith('.csv')) {
-      console.log(`    Procesando CSV: ${innerFile.path}`);
+      console.log(`     Procesando CSV: ${innerFile.path}`);
       const csvStream = innerFile.stream();
-      const docs = await procesarCsvStream(csvStream, innerFile.path);
+      let docs;
+      try {
+        docs = await procesarCsvStream(csvStream, innerFile.path);
+      } catch (csvError) {
+        console.error(`    [ERROR] Falló el procesamiento de CSV ${innerFile.path}:`, csvError.message);
+        continue;
+      }
 
       if (docs.length === 0) {
         console.warn(`    [WARN] El archivo CSV ${innerFile.path} está vacío o no contiene datos válidos.`);
         continue;
       }
 
-      // Determinar si es un archivo de sucursales o productos basado en los encabezados
       const firstDoc = docs[0];
-      const isProductFile = firstDoc.hasOwnProperty('productos_ean') && firstDoc.hasOwnProperty('productos_descripcion');
+      const isProductFile = firstDoc.hasOwnProperty('productos_ean') || firstDoc.hasOwnProperty('productos_descripcion');
       const isBranchFile = firstDoc.hasOwnProperty('id_sucursal') && firstDoc.hasOwnProperty('sucursales_latitud');
 
       if (isBranchFile) {
@@ -342,7 +348,7 @@ async function procesarZipInterno(bufferZipInterno, allFilteredSucursalesByBrand
             const keywords = TARGET_COMERCIO_IDENTIFIERS[brand].razon_social_keywords;
             const cuits = TARGET_COMERCIO_IDENTIFIERS[brand].cuits;
             if (keywords.some(kw => (doc.comercio_razon_social || '').toLowerCase().includes(kw.toLowerCase())) ||
-              cuits.includes(String(doc.comercio_cuit))) {
+                cuits.includes(String(doc.comercio_cuit))) {
               foundBrand = brand;
               break;
             }
@@ -355,7 +361,7 @@ async function procesarZipInterno(bufferZipInterno, allFilteredSucursalesByBrand
               if (!allFilteredSucursalesByBrand.has(foundBrand)) {
                 allFilteredSucursalesByBrand.set(foundBrand, new Map());
               }
-              allFilteredSucursalesByBrand.get(foundBrand).set(normalizedSucursal.id_sucursal, normalizedSucursal);
+              allFilteredSucursalesByBrand.get(foundBrand).set(matchedTargetBranch.id_sucursal, normalizedSucursal);
             }
           }
         }
@@ -394,11 +400,8 @@ async function procesarZipInterno(bufferZipInterno, allFilteredSucursalesByBrand
   }
 }
 
-
-// Función auxiliar para cargar datos JSON locales
-// isProduct es true para src/data/products (estructura anidada por marca/sucursal)
 async function loadLocalJsonData(basePath, isProduct = false) {
-  const dataMap = new Map(); // Para sucursales: Map<id_sucursal, data>, para productos: Map<marca, Map<id_sucursal, Map<id_product, data>>>
+  const dataMap = new Map();
 
   if (!fs.existsSync(basePath)) {
     console.log(`No se encontró el directorio local: ${basePath}. Se asumirá que no hay datos locales existentes.`);
@@ -411,6 +414,9 @@ async function loadLocalJsonData(basePath, isProduct = false) {
     for (const brandDirEntry of brandDirs) {
       if (brandDirEntry.isDirectory()) {
         const brandName = brandDirEntry.name;
+        if (!MARCAS_NORMALIZADAS_INTERES.has(brandName)) {
+            continue;
+        }
         const brandPath = path.join(basePath, brandName);
         const branchFiles = await fsp.readdir(brandPath, { withFileTypes: true });
         const productsByBranch = new Map();
@@ -431,11 +437,17 @@ async function loadLocalJsonData(basePath, isProduct = false) {
         dataMap.set(brandName, productsByBranch);
       }
     }
-  } else { // Para sucursales
+  } else { // This block handles supermarkets (sucursales)
     for (const fileEntry of brandDirs) {
       if (fileEntry.isFile() && fileEntry.name.endsWith('.json')) {
+        const brandNameFromFile = fileEntry.name.split('.')[0];
+        // Only load if the brand is one of interest
+        if (!MARCAS_NORMALIZADAS_INTERES.has(brandNameFromFile.charAt(0).toUpperCase() + brandNameFromFile.slice(1))) { // Adjust to match normalized brand names
+            continue;
+        }
         try {
           const sucursalesList = JSON.parse(await fsp.readFile(path.join(basePath, fileEntry.name), 'utf8'));
+          // Store by sucursal_id for easy lookup
           sucursalesList.forEach(s => dataMap.set(s.id_sucursal, s));
         } catch (error) {
           console.warn(`[WARN] Error al leer sucursales de ${path.join(basePath, fileEntry.name)}:`, error.message);
@@ -446,33 +458,6 @@ async function loadLocalJsonData(basePath, isProduct = false) {
   return dataMap;
 }
 
-// Función para guardar los datos recién procesados en el directorio temporal
-async function saveTempJsons(newSucursalesByBrand, newProductsByBranch) {
-  await fsp.mkdir(TEMP_DATA_DIR, { recursive: true });
-
-  // Guardar sucursales temporales
-  const tempSuperDir = path.join(TEMP_DATA_DIR, 'super');
-  await fsp.mkdir(tempSuperDir, { recursive: true });
-  for (const [brandName, sucursalesMap] of newSucursalesByBrand.entries()) {
-    const safeBrandName = brandName.replace(/[^a-z0-9]/gi, '').toLowerCase();
-    await fsp.writeFile(path.join(tempSuperDir, `${safeBrandName}.json`), JSON.stringify(Array.from(sucursalesMap.values()), null, 2), 'utf8');
-  }
-
-  // Guardar productos temporales
-  const tempProductsDir = path.join(TEMP_DATA_DIR, 'products');
-  await fsp.mkdir(tempProductsDir, { recursive: true });
-  for (const [brandName, branchesMap] of newProductsByBranch.entries()) {
-    const safeBrandName = brandName.replace(/[^a-z0-9]/gi, '').toLowerCase();
-    const brandDir = path.join(tempProductsDir, safeBrandName);
-    await fsp.mkdir(brandDir, { recursive: true });
-    for (const [branchId, productsList] of branchesMap.entries()) {
-      await fsp.writeFile(path.join(brandDir, `${branchId}.json`), JSON.stringify(productsList, null, 2), 'utf8');
-    }
-  }
-  console.log(`Datos recién procesados guardados temporalmente en ${TEMP_DATA_DIR}`);
-}
-
-// Función para eliminar los archivos temporales
 async function cleanTempJsons() {
     console.log(`[LIMPIEZA] Intentando eliminar el directorio temporal: ${TEMP_DATA_DIR}`);
     try {
@@ -483,43 +468,32 @@ async function cleanTempJsons() {
             console.log(`[LIMPIEZA] Directorio temporal '${TEMP_DATA_DIR}' no existía, no es necesario eliminar.`);
         } else {
             console.error(`[LIMPIEZA] ERROR crítico al limpiar el directorio temporal '${TEMP_DATA_DIR}':`, error);
-            // Si llegamos aquí, algo salió mal y no es un ENOENT.
-            // Podríamos incluso intentar un unlink de los archivos específicos si el directorio no se borra.
         }
     }
 }
 
-// Función central de comparación y preparación del estado final y cambios para Firestore
-async function compareDataAndPrepareFinalState(
+async function compareDataAndPrepareFirestoreChanges(
   newSucursalesByBrand, newProductsByBranch,
   existingLocalSucursales, existingLocalProducts
 ) {
   const currentTimestamp = Timestamp.now();
 
-  // --- Comparación y preparación para SUCURSALES ---
   const sucursalesToAdd = [];
   const sucursalesToUpdate = [];
-  const finalLocalSucursalesMap = new Map(); // Este mapa representará el estado FINAL de las sucursales locales
 
-  // 1. Añadir todas las sucursales existentes localmente al mapa final primero
-  for (const [id, data] of existingLocalSucursales.entries()) {
-    finalLocalSucursalesMap.set(id, { ...data }); // Copia para evitar mutación directa
-  }
-
-  // 2. Procesar las nuevas sucursales (del ZIP de hoy)
   for (const [brandName, sucursalesMap] of newSucursalesByBrand.entries()) {
+    if (!MARCAS_NORMALIZADAS_INTERES.has(brandName)) {
+        continue;
+    }
     for (const [id, newSucursalData] of sucursalesMap.entries()) {
-      const existingSucursalData = finalLocalSucursalesMap.get(id);
+      const existingSucursalData = existingLocalSucursales.get(id);
 
-      // Asegurar que el timestamp de ultima_actualizacion se establece para las nuevas sucursales
-      newSucursalData.ultima_actualizacion = currentTimestamp;
+      // No modificamos ultima_actualizacion aquí, solo para Firestore
+      const sucursalDataForFirestore = { ...newSucursalData, ultima_actualizacion: currentTimestamp };
 
       if (!existingSucursalData) {
-        // Nueva sucursal
-        sucursalesToAdd.push(newSucursalData);
-        finalLocalSucursalesMap.set(id, newSucursalData); // Añadir al mapa final
+        sucursalesToAdd.push(sucursalDataForFirestore);
       } else {
-        // Comparar sucursal existente con la nueva
         const isModified = existingSucursalData.nombre_sucursal !== newSucursalData.nombre_sucursal ||
           existingSucursalData.direccion_sucursal !== newSucursalData.direccion_sucursal ||
           existingSucursalData.latitud !== newSucursalData.latitud ||
@@ -527,68 +501,39 @@ async function compareDataAndPrepareFinalState(
           existingSucursalData.comercio_razon_social !== newSucursalData.comercio_razon_social ||
           existingSucursalData.provincia !== newSucursalData.provincia ||
           existingSucursalData.localidad !== newSucursalData.localidad;
-        // Puedes añadir más campos a comparar aquí
 
         if (isModified) {
-          sucursalesToUpdate.push(newSucursalData); // Para Firestore, se actualiza el documento completo
-          finalLocalSucursalesMap.set(id, newSucursalData); // Actualizar en el mapa final
-        } else {
-          // Si no hay cambios, simplemente mantener el existente o el nuevo (con el timestamp actualizado)
-          // Ya está en finalLocalSucursalesMap si era existente.
-          // Para que el JSON local siempre tenga el timestamp de la última ejecución, actualizamos el existente.
-          finalLocalSucursalesMap.set(id, { ...existingSucursalData, ultima_actualizacion: currentTimestamp });
+          sucursalesToUpdate.push(sucursalDataForFirestore);
         }
       }
     }
   }
-  // NOTA: Para sucursales, no hay `sucursalesToDeactivate` ni `sucursalesToDelete`
-  // Si una sucursal existente no está en el ZIP de hoy, se mantiene en 'finalLocalSucursalesMap'.
 
-  // --- Comparación y preparación para PRODUCTOS ---
   const productsToAdd = [];
   const productsToUpdate = [];
   const productsToDeactivate = [];
-  const finalLocalProductsMap = new Map(); // Map<marca, Map<id_sucursal, Map<id_product, data>>>
 
-  // Iniciar finalLocalProductsMap con los productos existentes locales
-  for (const [brandName, branchesMap] of existingLocalProducts.entries()) {
-    const brandProductsMap = new Map();
-    for (const [branchId, productsMap] of branchesMap.entries()) {
-      const branchProductsMap = new Map();
-      for (const [productId, productData] of productsMap.entries()) {
-        branchProductsMap.set(productId, { ...productData }); // Copia
-      }
-      brandProductsMap.set(branchId, branchProductsMap);
-    }
-    finalLocalProductsMap.set(brandName, brandProductsMap);
-  }
-
-  // Procesar los nuevos productos (del ZIP de hoy)
   for (const [brandName, newBranchesMap] of newProductsByBranch.entries()) {
-    if (!finalLocalProductsMap.has(brandName)) {
-      finalLocalProductsMap.set(brandName, new Map());
+    if (!MARCAS_NORMALIZADAS_INTERES.has(brandName)) {
+        continue;
     }
-    const currentBrandProductsMap = finalLocalProductsMap.get(brandName);
+
+    const existingBrandProductsMap = existingLocalProducts.get(brandName) || new Map();
 
     for (const [branchId, newProductsList] of newBranchesMap.entries()) {
-      if (!currentBrandProductsMap.has(branchId)) {
-        currentBrandProductsMap.set(branchId, new Map());
-      }
-      const currentBranchProductsMap = currentBrandProductsMap.get(branchId);
-
-      const newProductsInBranchMap = new Map(); // Para saber rápidamente qué productos nuevos llegaron en esta sucursal
+      const existingBranchProductsMap = existingBrandProductsMap.get(branchId) || new Map();
+      const newProductsInBranchMap = new Map();
       newProductsList.forEach(p => newProductsInBranchMap.set(p.id, p));
 
       for (const [id, newProductData] of newProductsInBranchMap.entries()) {
-        const existingProductData = currentBranchProductsMap.get(id);
-        newProductData.ultima_actualizacion = currentTimestamp;
+        const existingProductData = existingBranchProductsMap.get(id);
+        
+        // No modificamos ultima_actualizacion aquí, solo para Firestore
+        const productDataForFirestore = { ...newProductData, ultima_actualizacion: currentTimestamp };
 
         if (!existingProductData) {
-          // Nuevo producto
-          productsToAdd.push(newProductData);
-          currentBranchProductsMap.set(id, newProductData); // Añadir al mapa final
+          productsToAdd.push(productDataForFirestore);
         } else {
-          // Producto existente, comparar
           const isModified = existingProductData.precio !== newProductData.precio ||
             existingProductData.stock !== newProductData.stock ||
             existingProductData.nombre !== newProductData.nombre ||
@@ -596,30 +541,23 @@ async function compareDataAndPrepareFinalState(
             existingProductData.marca_producto !== newProductData.marca_producto ||
             existingProductData.cantidad_presentacion !== newProductData.cantidad_presentacion ||
             existingProductData.unidad_medida_presentacion !== newProductData.unidad_medida_presentacion;
-          // Puedes añadir más campos relevantes aquí para la comparación
+          const wasDeactivatedAndNowActive = existingProductData.stock === false && newProductData.stock === true;
 
-          if (isModified) {
-            productsToUpdate.push(newProductData); // Para Firestore
-            currentBranchProductsMap.set(id, newProductData); // Actualizar en el mapa final
-          } else {
-            // Si no hay cambios, simplemente asegurar que el timestamp se actualice en el JSON final
-            currentBranchProductsMap.set(id, { ...existingProductData, ultima_actualizacion: currentTimestamp });
+          if (isModified || wasDeactivatedAndNowActive) {
+            productsToUpdate.push(productDataForFirestore);
           }
         }
       }
 
-      // Detectar productos a desactivar: aquellos que estaban en existingLocalProducts
-      // para esta sucursal, pero no están en newProductsInBranchMap
-      for (const [id, existingProductData] of currentBranchProductsMap.entries()) {
+      for (const [id, existingProductData] of existingBranchProductsMap.entries()) {
         if (!newProductsInBranchMap.has(id)) {
-          if (existingProductData.stock !== false) { // Solo desactivar si no está ya desactivado
+          if (existingProductData.stock !== false) {
             const deactivatedProductData = {
               ...existingProductData,
               stock: false,
               ultima_actualizacion: currentTimestamp
             };
-            productsToDeactivate.push(deactivatedProductData); // Para Firestore
-            currentBranchProductsMap.set(id, deactivatedProductData); // Actualizar en el mapa final
+            productsToDeactivate.push(deactivatedProductData);
           }
         }
       }
@@ -635,71 +573,67 @@ async function compareDataAndPrepareFinalState(
       toAdd: productsToAdd,
       toUpdate: productsToUpdate,
       toDeactivate: productsToDeactivate
-    },
-    finalLocalSucursalesMap,
-    finalLocalProductsMap
+    }
   };
 }
 
+async function writeNewJsons(newSucursalesByBrand, newProductsByBranch) {
+  console.log(`\n--- Escribiendo archivos JSON de sucursales en '${BASE_SUPER_DIR}' (nuevos del ZIP)... ---`);
+  await fsp.mkdir(BASE_SUPER_DIR, { recursive: true });
 
-// Función para escribir los JSONs finales después de la comparación
-async function writeFinalJsons(finalLocalSucursalesMap, finalLocalProductsMap) {
-  const baseSuperDir = path.join(__dirname, '../src/data/super');
-  await fsp.mkdir(baseSuperDir, { recursive: true });
-
-  console.log(`Escribiendo archivos JSON de sucursales (uno por marca) en '${baseSuperDir}'...`);
-  // Limpiar directorios antes de escribir
-  const existingSuperFiles = await fsp.readdir(baseSuperDir);
+  const existingSuperFiles = await fsp.readdir(BASE_SUPER_DIR);
   for (const file of existingSuperFiles) {
     if (file.endsWith('.json')) {
-      await fsp.unlink(path.join(baseSuperDir, file));
+      await fsp.unlink(path.join(BASE_SUPER_DIR, file));
     }
   }
 
+  // Nuevo mapa para consolidar sucursales por marca para la escritura
   const sucursalesByBrandForWriting = new Map();
-  for (const [id, sucursalData] of finalLocalSucursalesMap.entries()) {
-    const brand = sucursalData.marca;
-    if (!sucursalesByBrandForWriting.has(brand)) {
-      sucursalesByBrandForWriting.set(brand, []);
-    }
-    sucursalesByBrandForWriting.get(brand).push(sucursalData);
+  for (const [brandName, sucursalesMap] of newSucursalesByBrand.entries()) {
+      if (MARCAS_NORMALIZADAS_INTERES.has(brandName)) {
+          if (!sucursalesByBrandForWriting.has(brandName)) {
+            sucursalesByBrandForWriting.set(brandName, []);
+          }
+          // Convertir el Map de sucursales de esta marca a un Array y añadirlo
+          Array.from(sucursalesMap.values()).forEach(sucursal => {
+              sucursalesByBrandForWriting.get(brandName).push(sucursal);
+          });
+      }
   }
 
   let totalUniqueSucursalesWritten = 0;
   for (const [brandName, sucursalesList] of sucursalesByBrandForWriting.entries()) {
-    if (MARCAS_NORMALIZADAS_INTERES.has(brandName)) {
       const safeBrandName = brandName.replace(/[^a-z0-9]/gi, '').toLowerCase();
-      const branchFilename = path.join(baseSuperDir, `${safeBrandName}.json`);
+      const branchFilename = path.join(BASE_SUPER_DIR, `${safeBrandName}.json`);
+      // Aquí sucursalesList ya es un Array
       await writeToJson(sucursalesList, branchFilename);
       totalUniqueSucursalesWritten += sucursalesList.length;
-    }
   }
   console.log(`Total de sucursales únicas escritas en JSON: ${totalUniqueSucursalesWritten}`);
 
+  console.log(`\n--- Escribiendo archivos JSON de productos en '${BASE_PRODUCTS_DIR}' (nuevos del ZIP)... ---`);
+  await fsp.mkdir(BASE_PRODUCTS_DIR, { recursive: true });
 
-  const baseProductsDir = path.join(__dirname, '../src/data/products');
-  await fsp.mkdir(baseProductsDir, { recursive: true });
-
-  console.log(`Escribiendo archivos JSON de productos (por marca y sucursal) en '${baseProductsDir}'...`);
-  // Limpiar directorios de productos (marca/archivos.json)
-  const existingProductBrands = await fsp.readdir(baseProductsDir, { withFileTypes: true });
-  for (const brandDirEntry of existingProductBrands) {
+  const existingProductBrandDirs = await fsp.readdir(BASE_PRODUCTS_DIR, { withFileTypes: true });
+  for (const brandDirEntry of existingProductBrandDirs) {
     if (brandDirEntry.isDirectory()) {
-      await fsp.rm(path.join(baseProductsDir, brandDirEntry.name), { recursive: true, force: true });
+      if (MARCAS_NORMALIZADAS_INTERES.has(brandDirEntry.name)) {
+        await fsp.rm(path.join(BASE_PRODUCTS_DIR, brandDirEntry.name), { recursive: true, force: true });
+      }
     }
   }
 
   let totalProductsFilesWritten = 0;
-  for (const [brandName, branchesMap] of finalLocalProductsMap.entries()) {
+  for (const [brandName, branchesMap] of newProductsByBranch.entries()) {
     if (MARCAS_NORMALIZADAS_INTERES.has(brandName)) {
       const safeBrandName = brandName.replace(/[^a-z0-9]/gi, '').toLowerCase();
-      const brandDir = path.join(baseProductsDir, safeBrandName);
+      const brandDir = path.join(BASE_PRODUCTS_DIR, safeBrandName);
       await fsp.mkdir(brandDir, { recursive: true });
-      console.log(`     Creando directorio para marca: ${brandName}`);
 
-      for (const [branchId, productsMap] of branchesMap.entries()) {
+      for (const [branchId, productsList] of branchesMap.entries()) {
         const productFilename = path.join(brandDir, `${branchId}.json`);
-        await writeToJson(Array.from(productsMap.values()), productFilename);
+        await writeToJson(productsList, productFilename);
         totalProductsFilesWritten++;
       }
     }
@@ -707,8 +641,6 @@ async function writeFinalJsons(finalLocalSucursalesMap, finalLocalProductsMap) {
   console.log(`Generación de JSONs finales completada. Total de archivos de productos escritos: ${totalProductsFilesWritten}.`);
 }
 
-
-// uploadBatchToFirestore MODIFICADA: Ahora solo ejecuta la operación pasada, sin lógica de lectura/comparación
 async function uploadBatchToFirestore(collectionName, documents, idField, operationType = 'set') {
   const BATCH_SIZE = 400;
   const COMMIT_TIMEOUT_MS = 60 * 1000;
@@ -719,7 +651,7 @@ async function uploadBatchToFirestore(collectionName, documents, idField, operat
   let failedDocuments = [];
   let uploadStoppedDueToError = false;
 
-  console.log(`Iniciando subida por lotes a la colección '${collectionName}' para operación '${operationType}'. Total de documentos: ${documents.length}`);
+  console.log(`\nIniciando subida por lotes a la colección '${collectionName}' para operación '${operationType}'. Total de documentos: ${documents.length}`);
 
   for (let i = 0; i < documents.length; i++) {
     if (uploadStoppedDueToError) {
@@ -754,10 +686,9 @@ async function uploadBatchToFirestore(collectionName, documents, idField, operat
     } catch (e) {
       console.error(`Error al preparar documento ${docId} para batch (${operationType}):`, e.message);
       failedDocuments.push(docData);
-      uploadStoppedDueToError = true; // Considerar esto un error grave que detiene el batching
-      break; // Salir del loop de preparación del batch
+      uploadStoppedDueToError = true;
+      break;
     }
-
 
     if (batchCount === BATCH_SIZE || i === documents.length - 1) {
       try {
@@ -766,32 +697,31 @@ async function uploadBatchToFirestore(collectionName, documents, idField, operat
           new Promise((_, reject) => setTimeout(() => reject(new Error(`Timeout al commitear batch (${operationType}) a '${collectionName}'`)), COMMIT_TIMEOUT_MS))
         ]);
         uploadedCount += batchCount;
-        console.log(`    Lote de ${batchCount} documentos (${operationType}) subido a '${collectionName}'. Total subidos: ${uploadedCount}`);
+        console.log(`     Lote de ${batchCount} documentos (${operationType}) subido a '${collectionName}'. Total subidos: ${uploadedCount}`);
         batch = db.batch();
         batchCount = 0;
-        await new Promise(resolve => setTimeout(resolve, 200)); // Pequeña pausa
+        await new Promise(resolve => setTimeout(resolve, 200));
       } catch (error) {
         console.error(`ERROR AL SUBIR LOTE (${operationType}) a la colección '${collectionName}'. Deteniendo la subida para esta colección.`, error);
         uploadStoppedDueToError = true;
-        // Añadir los documentos restantes a failedDocuments si no se subieron
-        for (let j = i - batchCount + 1; j < documents.length; j++) {
-          failedDocuments.push(documents[j]);
+        for (let j = i - batchCount + 1; j <= i; j++) {
+            failedDocuments.push(documents[j]);
         }
-        batch = db.batch(); // Limpiar el batch actual
+        batch = db.batch();
         batchCount = 0;
-        break; // Salir del loop principal
+        break;
       }
     }
   }
 
-  if (batchCount > 0 && !uploadStoppedDueToError) { // Intenta commitear cualquier documento restante
+  if (batchCount > 0 && !uploadStoppedDueToError) {
     try {
       await Promise.race([
         batch.commit(),
         new Promise((_, reject) => setTimeout(() => reject(new Error(`Timeout al commitear lote final (${operationType}) en '${collectionName}'`)), COMMIT_TIMEOUT_MS))
       ]);
       uploadedCount += batchCount;
-      console.log(`    Lote final de ${batchCount} documentos (${operationType}) subido a '${collectionName}'. Total subidos: ${uploadedCount}`);
+      console.log(`     Lote final de ${batchCount} documentos (${operationType}) subido a '${collectionName}'. Total subidos: ${uploadedCount}`);
     } catch (error) {
       console.error(`ERROR AL SUBIR LOTE FINAL (${operationType}) a '${collectionName}'.`, error);
       uploadStoppedDueToError = true;
@@ -807,11 +737,7 @@ async function uploadBatchToFirestore(collectionName, documents, idField, operat
   return { successCount: uploadedCount, failedDocuments: failedDocuments, uploadStopped: uploadStoppedDueToError };
 }
 
-
 async function generarJsonFiltradosYSubirAFirestore() {
-  let allSucursalesForBackup = []; // No se usarán para el flujo principal de JSON, solo para backup de emergencia
-  let allProductsForBackup = []; // No se usarán para el flujo principal de JSON, solo para backup de emergencia
-
   try {
     console.log('Iniciando proceso de filtrado, generación de JSONs y subida a Firestore...');
 
@@ -825,7 +751,7 @@ async function generarJsonFiltradosYSubirAFirestore() {
     if (!currentDayZipUrl) {
       throw new Error(`No se encontró URL de descarga para el día de la semana actual (${dayOfWeek}). Por favor, verifica la constante DAILY_URLS.`);
     }
-console.log(`Intentando descargar ZIP a: ${tempZipPath}`);
+    console.log(`Intentando descargar ZIP desde: ${currentDayZipUrl}`);
     const bufferZip = await downloadZipForDay(currentDayZipUrl, tempZipPath);
 
     console.log('Descomprimiendo ZIP principal...');
@@ -856,8 +782,8 @@ console.log(`Intentando descargar ZIP a: ${tempZipPath}`);
     console.log('Listando ZIPs internos que serán procesados:');
     zipsInternos.forEach(zip => console.log(`- ${zip.path}`));
 
-    const allFilteredSucursalesByBrand = new Map(); // Datos NUEVOS del ZIP de hoy
-    const allProductsByBranch = new Map(); // Datos NUEVOS del ZIP de hoy
+    const allFilteredSucursalesByBrand = new Map();
+    const allProductsByBranch = new Map();
 
     for (const zip of zipsInternos) {
       console.log(`Procesando ZIP interno: ${zip.path}`);
@@ -870,46 +796,38 @@ console.log(`Intentando descargar ZIP a: ${tempZipPath}`);
     }
     console.log('\nTodos los ZIPs internos procesados.');
 
-    // ----------------------------------------------------------------------
-    // NUEVA LÓGICA DE COMPARACIÓN LOCAL Y SUBIDA SELECTIVA A FIRESTORE
-    // ----------------------------------------------------------------------
-
-    // 1. Cargar los datos LOCALES EXISTENTES (los del día anterior)
     console.log('\n--- Cargando datos locales existentes para comparación ---');
-    const existingLocalSucursales = await loadLocalJsonData(path.join(__dirname, '../src/data/super'));
-    const existingLocalProducts = await loadLocalJsonData(path.join(__dirname, '../src/data/products'), true);
-    console.log(`Sucursales locales existentes: ${existingLocalSucursales.size}`);
-    console.log(`Marcas de productos locales existentes: ${existingLocalProducts.size}`);
+    // Ajuste aquí para la carga de sucursales locales.
+    // El nombre del archivo local es minúsculas (ej: carrefour.json), pero el `brand` en el código es CamelCase (ej: Carrefour).
+    // La función `loadLocalJsonData` necesita saber cómo mapear el nombre del archivo a la marca.
+    const existingLocalSucursales = await loadLocalJsonData(BASE_SUPER_DIR, false);
+    const existingLocalProducts = await loadLocalJsonData(BASE_PRODUCTS_DIR, true);
+    console.log(`Sucursales locales existentes cargadas: ${existingLocalSucursales.size}`);
+    console.log(`Marcas de productos locales existentes cargadas: ${existingLocalProducts.size}`);
 
-
-    // 2. Comparar los datos del ZIP con los locales y preparar los cambios y el estado final local
-    console.log('\n--- Realizando comparación local y preparando cambios para Firestore ---');
+    console.log('\n--- Realizando comparación para preparar cambios de Firestore ---');
     const {
       sucursalesFirestoreChanges,
-      productsFirestoreChanges,
-      finalLocalSucursalesMap,
-      finalLocalProductsMap
-    } = await compareDataAndPrepareFinalState(
+      productsFirestoreChanges
+    } = await compareDataAndPrepareFirestoreChanges(
       allFilteredSucursalesByBrand, allProductsByBranch,
       existingLocalSucursales, existingLocalProducts
     );
 
-    console.log('Resumen de cambios para Firestore:');
+    console.log('\nResumen de cambios detectados para Firestore:');
     console.log(`  Sucursales: Añadir: ${sucursalesFirestoreChanges.toAdd.length}, Actualizar: ${sucursalesFirestoreChanges.toUpdate.length}`);
     console.log(`  Productos: Añadir: ${productsFirestoreChanges.toAdd.length}, Actualizar: ${productsFirestoreChanges.toUpdate.length}, Desactivar: ${productsFirestoreChanges.toDeactivate.length}`);
 
-    // 3. Escribir los JSONs permanentes (resultado de la fusión y comparación)
-    console.log('\n--- Escribiendo archivos JSON permanentes con el estado final ---');
-    await writeFinalJsons(finalLocalSucursalesMap, finalLocalProductsMap);
-    console.log('Archivos JSON permanentes actualizados.');
+    console.log('\n--- Reemplazando archivos JSON locales con los datos NUEVOS y COMPLETOS del día ---');
+    await writeNewJsons(allFilteredSucursalesByBrand, allProductsByBranch);
+    console.log('Archivos JSON locales actualizados completamente con los datos del día.');
 
 
-    // 4. Subir SOLO los CAMBIOS a Firestore
     let firestoreUploadFailed = false;
 
-    // Subir cambios de SUCURSALES
     console.log('\n--- Subiendo CAMBIOS de sucursales a Firestore ---');
-    const uniqueBrandsForSucursales = new Set([...sucursalesFirestoreChanges.toAdd, ...sucursalesFirestoreChanges.toUpdate].map(s => s.marca));
+    const allSucursalesForFirestore = [...sucursalesFirestoreChanges.toAdd, ...sucursalesFirestoreChanges.toUpdate];
+    const uniqueBrandsForSucursales = new Set(allSucursalesForFirestore.map(s => s.marca));
 
     for (const brandName of uniqueBrandsForSucursales) {
       const safeBrandName = brandName.replace(/[^a-z0-9]/gi, '').toLowerCase();
@@ -931,13 +849,9 @@ console.log(`Intentando descargar ZIP a: ${tempZipPath}`);
     }
     console.log('Subida de sucursales a Firestore finalizada.');
 
-    // Subir cambios de PRODUCTOS
     console.log('\n--- Subiendo CAMBIOS de productos a Firestore ---');
-    // Obtener todas las sucursales únicas de los cambios de productos
-    const uniqueProductBranches = new Set();
-    productsFirestoreChanges.toAdd.forEach(p => uniqueProductBranches.add(`${p.supermercado_marca}_${p.sucursal_id}`));
-    productsFirestoreChanges.toUpdate.forEach(p => uniqueProductBranches.add(`${p.supermercado_marca}_${p.sucursal_id}`));
-    productsFirestoreChanges.toDeactivate.forEach(p => uniqueProductBranches.add(`${p.supermercado_marca}_${p.sucursal_id}`));
+    const allProductsForFirestore = [...productsFirestoreChanges.toAdd, ...productsFirestoreChanges.toUpdate, ...productsFirestoreChanges.toDeactivate];
+    const uniqueProductBranches = new Set(allProductsForFirestore.map(p => `${p.supermercado_marca}_${p.sucursal_id}`));
 
     for (const branchKey of uniqueProductBranches) {
       const [brandName, branchId] = branchKey.split('_');
@@ -960,19 +874,15 @@ console.log(`Intentando descargar ZIP a: ${tempZipPath}`);
       }
       if (productsToDeactivateForBranch.length > 0) {
         console.log(`  > Desactivando ${productsToDeactivateForBranch.length} productos para ${brandName}/${branchId}...`);
-        const { failedDocuments, uploadStopped } = await uploadBatchToFirestore(collectionPath, productsToDeactivateForBranch, 'id', 'update'); // Es un update para cambiar 'stock: false'
+        const { failedDocuments, uploadStopped } = await uploadBatchToFirestore(collectionPath, productsToDeactivateForBranch, 'id', 'update');
         if (failedDocuments.length > 0 || uploadStopped) firestoreUploadFailed = true;
       }
     }
     console.log('Subida de productos a Firestore finalizada.');
 
-    // ----------------------------------------------------------------------
-    // FIN DE LA NUEVA LÓGICA
-    // ----------------------------------------------------------------------
-
     if (firestoreUploadFailed) {
-      console.error('\nEl proceso finalizó con ALGUNOS ERRORES en la subida a Firestore. Revisa los logs anteriores para más detalles. Los datos incompletos se respaldaron localmente.');
-      process.exit(1); // Sale con código de error si alguna subida falló
+      console.error('\nEl proceso finalizó con ALGUNOS ERRORES en la subida a Firestore. Revisa los logs anteriores para más detalles.');
+      process.exit(1);
     } else {
       console.log('\nProceso completado exitosamente. Todos los datos de interés fueron procesados y subidos a Firestore.');
       process.exit(0);
@@ -980,27 +890,11 @@ console.log(`Intentando descargar ZIP a: ${tempZipPath}`);
 
   } catch (error) {
     console.error('\nError crítico en el proceso general:', error);
-    try {
-      console.log('Intentando guardar datos procesados localmente debido a un error crítico (Backup de emergencia)...');
-      const backupDir = path.join(__dirname, '../src/data/emergency_backup');
-      await fsp.mkdir(backupDir, { recursive: true });
-
-      console.log('La lógica de backup manual ya no es necesaria con el nuevo flujo de JSONs persistentes.');
-
-    } catch (backupError) {
-      console.error('Error al intentar guardar datos de backup de emergencia:', backupError);
-    }
     process.exit(1);
   } finally {
-        // Limpiar archivos temporales descargados y de procesamiento
         try {
-            // La siguiente línea se encarga de eliminar el directorio TEMP_DATA_DIR completo
-            // y todo su contenido, incluyendo 'temp_sepa.zip'.
             await cleanTempJsons();
         } catch (cleanupError) {
-            // Si hay un error al limpiar (ej. permiso denegado, o si el directorio ya no existe
-            // por alguna razón externa), lo registramos, excepto si es ENOENT (no existe),
-            // que es normal si ya fue borrado.
             if (cleanupError.code !== 'ENOENT') {
                 console.warn(`No se pudo completar la limpieza de archivos temporales:`, cleanupError);
             }
