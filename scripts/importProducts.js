@@ -428,6 +428,7 @@ async function uploadBatchToFirestore(collectionName, documents, idField, isProd
     let uploadedCount = 0;
     let failedDocuments = [];
     const currentTimestamp = Timestamp.now();
+    let hasErrorInBatch = false; // Flag to indicate if an error occurred during a batch commit
 
     console.log(`Iniciando subida por lotes a la colección '${collectionName}'. Total de documentos: ${documents.length}`);
 
@@ -435,7 +436,14 @@ async function uploadBatchToFirestore(collectionName, documents, idField, isProd
         const newProductsMap = new Map();
         documents.forEach(p => newProductsMap.set(p[idField], p));
 
-        const existingProductsDocs = await db.collection(collectionName).get();
+        let existingProductsDocs;
+        try {
+            existingProductsDocs = await db.collection(collectionName).get();
+        } catch (error) {
+            console.error(`ERROR CRÍTICO: No se pudo obtener la colección '${collectionName}' para la actualización incremental. Esto podría deberse a un error de permisos o cuota. Saltando la subida de productos para esta colección.`, error);
+            return { successCount: 0, failedDocuments: documents, uploadStopped: true }; // Indicate a critical failure
+        }
+        
         const existingProductsMap = new Map();
         existingProductsDocs.forEach(doc => existingProductsMap.set(doc.id, doc.data()));
 
@@ -444,6 +452,11 @@ async function uploadBatchToFirestore(collectionName, documents, idField, isProd
         let deactivatedCount = 0;
 
         for (const [id, newProductData] of newProductsMap.entries()) {
+            if (hasErrorInBatch) { // If an error occurred in a previous batch, stop further processing
+                failedDocuments.push(newProductData);
+                continue;
+            }
+
             const existingProductData = existingProductsMap.get(id);
             newProductData.ultima_actualizacion = currentTimestamp;
 
@@ -475,55 +488,91 @@ async function uploadBatchToFirestore(collectionName, documents, idField, isProd
                     batch = db.batch();
                     batchCount = 0;
                 } catch (error) {
-                    console.error(`Error al subir lote de productos a '${collectionName}'.`, error);
-                    batch = db.batch();
+                    console.error(`ERROR AL SUBIR LOTE de productos a '${collectionName}'. Esto podría deberse a un error de cuota o una falla de red. Deteniendo la subida de productos para esta colección.`, error);
+                    hasErrorInBatch = true; // Set flag to stop further processing for this collection
+                    // Add all remaining documents (including the current batch) to failedDocuments
+                    for (let j = documents.indexOf(newProductData) - batchCount + 1; j <= documents.length -1 ; j++) {
+                        failedDocuments.push(documents[j]);
+                    }
+                    batch = db.batch(); // Clear the current batch
                     batchCount = 0;
+                    break; // Exit the loop
+                }
+            }
+        }
+        
+        if (!hasErrorInBatch) { // Only proceed with deactivation if no errors occurred during additions/updates
+            for (const [id, existingProductData] of existingProductsMap.entries()) {
+                if (hasErrorInBatch) {
+                    failedDocuments.push(existingProductData);
+                    continue;
+                }
+
+                if (!newProductsMap.has(id)) {
+                    if (existingProductData.stock !== false) {
+                        const docRef = db.collection(collectionName).doc(id);
+                        batch.update(docRef, {
+                            stock: false,
+                            ultima_actualizacion: currentTimestamp
+                        });
+                        batchCount++;
+                        deactivatedCount++;
+                    }
+                }
+
+                if (batchCount === BATCH_SIZE) {
+                    try {
+                        await batch.commit();
+                        uploadedCount += batchCount;
+                        batch = db.batch();
+                        batchCount = 0;
+                    } catch (error) {
+                        console.error(`ERROR AL ACTUALIZAR STOCK de productos en '${collectionName}'. Deteniendo la subida de productos para esta colección.`, error);
+                        hasErrorInBatch = true;
+                        // Add remaining existing products to failedDocuments if they were not in newProductsMap
+                        for (const [key, value] of existingProductsMap.entries()) {
+                            if (!newProductsMap.has(key) && value.stock !== false) { // Only consider those that would have been deactivated
+                                failedDocuments.push(value);
+                            }
+                        }
+                        batch = db.batch();
+                        batchCount = 0;
+                        break; // Exit the loop
+                    }
                 }
             }
         }
 
-        for (const [id, existingProductData] of existingProductsMap.entries()) {
-            if (!newProductsMap.has(id)) {
-                if (existingProductData.stock !== false) {
-                    const docRef = db.collection(collectionName).doc(id);
-                    batch.update(docRef, {
-                        stock: false,
-                        ultima_actualizacion: currentTimestamp
-                    });
-                    batchCount++;
-                    deactivatedCount++;
-                }
-            }
-
-            if (batchCount === BATCH_SIZE) {
-                try {
-                    await batch.commit();
-                    uploadedCount += batchCount;
-                    batch = db.batch();
-                    batchCount = 0;
-                } catch (error) {
-                    console.error(`Error al actualizar stock de productos en '${collectionName}'.`, error);
-                    batch = db.batch();
-                    batchCount = 0;
-                }
-            }
-        }
-
-        if (batchCount > 0) {
+        if (batchCount > 0 && !hasErrorInBatch) {
             try {
                 await batch.commit();
                 uploadedCount += batchCount;
             } catch (error) {
-                console.error(`Error al subir lote final de productos a '${collectionName}'.`, error);
+                console.error(`ERROR AL SUBIR LOTE FINAL de productos a '${collectionName}'. Deteniendo la subida de productos para esta colección.`, error);
+                hasErrorInBatch = true;
+                // All remaining documents in the batch are failed
+                // This would be tricky to get exactly right here, as the batch might contain a mix.
+                // For simplicity, we'll assume any unsent documents are effectively failed.
+                // A more robust solution might track documents in the current batch.
+                for (let i = 0; i < documents.length; i++) {
+                    if (!failedDocuments.includes(documents[i]) && !uploadedCount > 0) { // If not already failed and not part of successful uploads
+                        failedDocuments.push(documents[i]);
+                    }
+                }
             }
         }
 
         console.log(`Actualización incremental de productos en '${collectionName}' finalizada.`);
         console.log(`    Añadidos: ${addedCount}, Actualizados: ${updatedCount}, Desactivados: ${deactivatedCount}`);
-        return { successCount: uploadedCount, failedDocuments: [] };
+        return { successCount: uploadedCount, failedDocuments: failedDocuments, uploadStopped: hasErrorInBatch };
 
-    } else {
+    } else { // For non-product updates (branches)
         for (let i = 0; i < documents.length; i++) {
+            if (hasErrorInBatch) {
+                failedDocuments.push(documents[i]);
+                continue;
+            }
+
             const docData = documents[i];
             const docId = String(docData[idField]);
 
@@ -545,17 +594,20 @@ async function uploadBatchToFirestore(collectionName, documents, idField, isProd
                     batch = db.batch();
                     batchCount = 0;
                 } catch (error) {
-                    console.error(`Error al subir lote a la colección '${collectionName}'. Documentos procesados hasta el error: ${i + 1}.`, error);
-                    for (let j = i - batchCount + 1; j <= i; j++) {
+                    console.error(`ERROR AL SUBIR LOTE a la colección '${collectionName}'. Documentos procesados hasta el error: ${i + 1}. Deteniendo la subida para esta colección.`, error);
+                    hasErrorInBatch = true; // Set flag to stop further processing for this collection
+                    // Add all remaining documents (including the current batch) to failedDocuments
+                    for (let j = i - batchCount + 1; j < documents.length; j++) {
                         failedDocuments.push(documents[j]);
                     }
-                    batch = db.batch();
+                    batch = db.batch(); // Clear the current batch
                     batchCount = 0;
+                    break; // Exit the loop
                 }
             }
         }
         console.log(`Subida por lotes a '${collectionName}' finalizada. Documentos subidos: ${uploadedCount}. Documentos fallidos: ${failedDocuments.length}`);
-        return { successCount: uploadedCount, failedDocuments: failedDocuments };
+        return { successCount: uploadedCount, failedDocuments: failedDocuments, uploadStopped: hasErrorInBatch };
     }
 }
 
@@ -657,10 +709,13 @@ async function generarJsonFiltradosYSubirAFirestore() {
                 }
             }
         }
+
         console.log(`Generación de JSONs finalizada. Total de archivos de productos escritos: ${totalProductsFilesWritten}.`);
         console.log('Puedes revisar los archivos JSON en src/data/super/ y src/data/products/.');
 
         console.log('\n--- Subiendo sucursales a Firestore ---');
+        let firestoreUploadFailed = false; // New flag to track if any Firestore upload failed
+
         for (const [brandName, sucursalesMap] of allFilteredSucursalesByBrand.entries()) {
             if (MARCAS_NORMALIZADAS_INTERES.has(brandName)) {
                 const safeBrandName = brandName.replace(/[^a-z0-9]/gi, '').toLowerCase();
@@ -668,17 +723,28 @@ async function generarJsonFiltradosYSubirAFirestore() {
                 const sucursalesList = Array.from(sucursalesMap.values());
 
                 if (sucursalesList.length > 0) {
-                    const { successCount, failedDocuments } = await uploadBatchToFirestore(collectionPath, sucursalesList, 'id_sucursal', false);
+                    const { successCount, failedDocuments, uploadStopped } = await uploadBatchToFirestore(collectionPath, sucursalesList, 'id_sucursal', false);
                     if (failedDocuments.length > 0) {
                         console.warn(`[WARN] ${failedDocuments.length} sucursales fallaron al subir a Firestore para la marca ${brandName}. Estos ya están en el backup local.`);
+                    }
+                    if (uploadStopped) {
+                        console.error(`[CRÍTICO] La subida de sucursales para la marca ${brandName} fue detenida debido a un error grave (ej. cuota excedida). El script intentará continuar con la siguiente etapa, pero esta sección de datos puede estar incompleta en Firestore.`);
+                        firestoreUploadFailed = true; // Mark that an upload issue occurred
                     }
                 }
             }
         }
         console.log('Subida de sucursales a Firestore finalizada.');
 
+        if (firestoreUploadFailed) {
+            console.warn('\n¡ATENCIÓN! Se detectaron problemas críticos durante la subida de sucursales a Firestore. La subida de productos podría verse afectada o ya estar incompleta.');
+        }
+
+
         console.log('\n--- Subiendo productos a Firestore (Actualización Incremental) ---');
         let totalProductsUploaded = 0;
+        let productUploadFailed = false; // Flag to track product upload failures
+
         for (const [brandName, branchesMap] of allProductsByBranch.entries()) {
             if (MARCAS_NORMALIZADAS_INTERES.has(brandName)) {
                 const safeBrandName = brandName.replace(/[^a-z0-9]/gi, '').toLowerCase();
@@ -686,8 +752,15 @@ async function generarJsonFiltradosYSubirAFirestore() {
                 for (const [branchId, productsList] of branchesMap.entries()) {
                     const collectionPath = `supermercados/${safeBrandName}/sucursales/${branchId}/productos`;
                     if (productsList.length > 0) {
-                        const { successCount, failedDocuments } = await uploadBatchToFirestore(collectionPath, productsList, 'id', true);
+                        const { successCount, failedDocuments, uploadStopped } = await uploadBatchToFirestore(collectionPath, productsList, 'id', true);
                         totalProductsUploaded += successCount;
+                        if (failedDocuments.length > 0) {
+                            console.warn(`[WARN] ${failedDocuments.length} productos fallaron al subir/actualizar/desactivar para la sucursal ${branchId} de la marca ${brandName}.`);
+                        }
+                        if (uploadStopped) {
+                            console.error(`[CRÍTICO] La subida de productos para la sucursal ${branchId} de la marca ${brandName} fue detenida debido a un error grave (ej. cuota excedida). El script intentará continuar, pero esta sección de datos puede estar incompleta en Firestore.`);
+                            productUploadFailed = true; // Mark that a product upload issue occurred
+                        }
                     }
                 }
             }
@@ -695,9 +768,20 @@ async function generarJsonFiltradosYSubirAFirestore() {
         console.log(`Total de operaciones de productos realizadas en Firestore (añadidos/actualizados/desactivados): ${totalProductsUploaded}.`);
         console.log('Puedes verificar los datos en tu consola de Firebase Firestore.');
 
-        process.exit(0);
+        if (productUploadFailed) {
+            console.warn('\n¡ADVERTENCIA! La subida de productos a Firestore no se completó para todas las colecciones debido a errores.');
+        }
+
+        if (firestoreUploadFailed || productUploadFailed) {
+            console.error('\nEl proceso finalizó con ALGUNOS ERRORES en la subida a Firestore. Revisa los logs anteriores para más detalles. Los datos incompletos se respaldaron localmente.');
+            process.exit(1); // Exit with error code if any upload failed
+        } else {
+            console.log('\nProceso completado exitosamente. Todos los datos de interés fueron procesados y subidos a Firestore.');
+            process.exit(0);
+        }
+
     } catch (error) {
-        console.error('\nError crítico en el proceso:', error);
+        console.error('\nError crítico en el proceso general:', error);
         try {
             console.log('Intentando guardar datos procesados localmente debido a un error crítico...');
             const backupDir = path.join(__dirname, '../src/data/backup');
