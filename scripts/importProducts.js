@@ -10,9 +10,9 @@ const fsp = require('fs/promises');
 const admin = require('firebase-admin');
 const { getFirestore, Timestamp } = require('firebase-admin/firestore');
 
-const serviceAccountPath = process.env.FIREBASE_SERVICE_ACCOUNT_PATH;
+const serviceAccountPath = process.env.FIREBASE_SERVICE_ACCOUNT_KEY;
 if (!serviceAccountPath) {
-  console.error('Error: FIREBASE_SERVICE_ACCOUNT_PATH no está definido en el archivo .env');
+  console.error('Error: FIREBASE_SERVICE_ACCOUNT_KEY no está definido en el archivo .env');
   process.exit(1);
 }
 
@@ -21,7 +21,7 @@ try {
   serviceAccount = require(path.resolve(process.cwd(), serviceAccountPath));
 } catch (error) {
   console.error(`Error al cargar el archivo de cuenta de servicio de Firebase desde ${serviceAccountPath}:`, error);
-  console.error(`Asegúrate de que la ruta en FIREBASE_SERVICE_ACCOUNT_PATH es correcta y el archivo existe.`);
+  console.error(`Asegúrate de que la ruta en FIREBASE_SERVICE_ACCOUNT_KEY es correcta y el archivo existe.`);
   process.exit(1);
 }
 
@@ -113,6 +113,7 @@ async function writeToJson(data, filename) {
   }
   try {
     await fsp.writeFile(filename, JSON.stringify(data, null, 2), 'utf8');
+    console.log(`Datos guardados en ${filename}`);
   } catch (err) {
     console.error(`Error al escribir en ${filename}:`, err);
     throw err;
@@ -223,23 +224,23 @@ async function procesarCsvStream(streamCsv, filenameForLog = 'CSV desconocido') 
       .on('end', () => {
         if (!delimiterDetected) {
           if (buffer.length > 0) {
-             console.warn(`[WARN] Archivo ${filenameForLog} es muy pequeño. Procesando con delimitador '${detectedDelimiter}'.`);
-             parser = csv({
-               separator: detectedDelimiter,
-               strict: false,
-               mapHeaders: ({ header, index }) => {
-                 const normalizedHeader = header.toLowerCase().trim();
-                 for (const key in commonColumnMaps) {
-                   if (commonColumnMaps[key].includes(normalizedHeader)) {
-                     return key;
-                   }
-                 }
-                 return normalizedHeader || `col_${index}`;
-               },
-               mapValues: ({ header, index, value }) => value.trim()
-             });
-             passthrough.pipe(parser);
-             passthrough.write(buffer);
+              console.warn(`[WARN] Archivo ${filenameForLog} es muy pequeño. Procesando con delimitador '${detectedDelimiter}'.`);
+              parser = csv({
+                separator: detectedDelimiter,
+                strict: false,
+                mapHeaders: ({ header, index }) => {
+                  const normalizedHeader = header.toLowerCase().trim();
+                  for (const key in commonColumnMaps) {
+                    if (commonColumnMaps[key].includes(normalizedHeader)) {
+                      return key;
+                    }
+                  }
+                  return normalizedHeader || `col_${index}`;
+                },
+                mapValues: ({ header, index, value }) => value.trim()
+              });
+              passthrough.pipe(parser);
+              passthrough.write(buffer);
           }
           passthrough.end();
           resolve(docs);
@@ -437,17 +438,15 @@ async function loadLocalJsonData(basePath, isProduct = false) {
         dataMap.set(brandName, productsByBranch);
       }
     }
-  } else { // This block handles supermarkets (sucursales)
+  } else {
     for (const fileEntry of brandDirs) {
       if (fileEntry.isFile() && fileEntry.name.endsWith('.json')) {
         const brandNameFromFile = fileEntry.name.split('.')[0];
-        // Only load if the brand is one of interest
-        if (!MARCAS_NORMALIZADAS_INTERES.has(brandNameFromFile.charAt(0).toUpperCase() + brandNameFromFile.slice(1))) { // Adjust to match normalized brand names
+        if (!MARCAS_NORMALIZADAS_INTERES.has(brandNameFromFile)) {
             continue;
         }
         try {
           const sucursalesList = JSON.parse(await fsp.readFile(path.join(basePath, fileEntry.name), 'utf8'));
-          // Store by sucursal_id for easy lookup
           sucursalesList.forEach(s => dataMap.set(s.id_sucursal, s));
         } catch (error) {
           console.warn(`[WARN] Error al leer sucursales de ${path.join(basePath, fileEntry.name)}:`, error.message);
@@ -488,11 +487,10 @@ async function compareDataAndPrepareFirestoreChanges(
     for (const [id, newSucursalData] of sucursalesMap.entries()) {
       const existingSucursalData = existingLocalSucursales.get(id);
 
-      // No modificamos ultima_actualizacion aquí, solo para Firestore
-      const sucursalDataForFirestore = { ...newSucursalData, ultima_actualizacion: currentTimestamp };
+      newSucursalData.ultima_actualizacion = currentTimestamp;
 
       if (!existingSucursalData) {
-        sucursalesToAdd.push(sucursalDataForFirestore);
+        sucursalesToAdd.push(newSucursalData);
       } else {
         const isModified = existingSucursalData.nombre_sucursal !== newSucursalData.nombre_sucursal ||
           existingSucursalData.direccion_sucursal !== newSucursalData.direccion_sucursal ||
@@ -503,7 +501,7 @@ async function compareDataAndPrepareFirestoreChanges(
           existingSucursalData.localidad !== newSucursalData.localidad;
 
         if (isModified) {
-          sucursalesToUpdate.push(sucursalDataForFirestore);
+          sucursalesToUpdate.push(newSucursalData);
         }
       }
     }
@@ -527,12 +525,10 @@ async function compareDataAndPrepareFirestoreChanges(
 
       for (const [id, newProductData] of newProductsInBranchMap.entries()) {
         const existingProductData = existingBranchProductsMap.get(id);
-        
-        // No modificamos ultima_actualizacion aquí, solo para Firestore
-        const productDataForFirestore = { ...newProductData, ultima_actualizacion: currentTimestamp };
+        newProductData.ultima_actualizacion = currentTimestamp;
 
         if (!existingProductData) {
-          productsToAdd.push(productDataForFirestore);
+          productsToAdd.push(newProductData);
         } else {
           const isModified = existingProductData.precio !== newProductData.precio ||
             existingProductData.stock !== newProductData.stock ||
@@ -544,7 +540,7 @@ async function compareDataAndPrepareFirestoreChanges(
           const wasDeactivatedAndNowActive = existingProductData.stock === false && newProductData.stock === true;
 
           if (isModified || wasDeactivatedAndNowActive) {
-            productsToUpdate.push(productDataForFirestore);
+            productsToUpdate.push(newProductData);
           }
         }
       }
@@ -577,69 +573,80 @@ async function compareDataAndPrepareFirestoreChanges(
   };
 }
 
-async function writeNewJsons(newSucursalesByBrand, newProductsByBranch) {
-  console.log(`\n--- Escribiendo archivos JSON de sucursales en '${BASE_SUPER_DIR}' (nuevos del ZIP)... ---`);
-  await fsp.mkdir(BASE_SUPER_DIR, { recursive: true });
+// writeFinalJsons:
+// - Para sucursales, NO las toca. Asume que ya están creadas manualmente.
+// - Para productos, sobrescribe los JSONs locales con los datos nuevos del ZIP.
+async function writeFinalJsons(allProductsByBranchFromZip) {
+    const baseSuperDir = path.join(__dirname, '../src/data/super');
+    await fsp.mkdir(baseSuperDir, { recursive: true });
 
-  const existingSuperFiles = await fsp.readdir(BASE_SUPER_DIR);
-  for (const file of existingSuperFiles) {
-    if (file.endsWith('.json')) {
-      await fsp.unlink(path.join(BASE_SUPER_DIR, file));
+    console.log(`\nVerificando archivos JSON de sucursales en '${baseSuperDir}'...`);
+    // No hacemos nada con las sucursales aquí.
+    // Si necesitas asegurarte de que los archivos de sucursales existan (aunque sea vacíos)
+    // puedes añadir un bucle para crearlos si no están presentes, pero no los modificaremos.
+    let totalUniqueSucursalesPresent = 0;
+    for (const brandName of MARCAS_NORMALIZADAS_INTERES) {
+        const safeBrandName = brandName.replace(/[^a-z0-9]/gi, '').toLowerCase();
+        const branchFilename = path.join(baseSuperDir, `${safeBrandName}.json`);
+        if (fs.existsSync(branchFilename)) {
+            try {
+                const data = await fsp.readFile(branchFilename, 'utf8');
+                const existingList = JSON.parse(data);
+                totalUniqueSucursalesPresent += existingList.length;
+                console.log(`  Archivo de sucursales para '${brandName}' ya existe con ${existingList.length} entradas.`);
+            } catch (error) {
+                console.warn(`  [WARN] Error al leer archivo de sucursales existente para '${brandName}' (posiblemente corrupto, pero no se modificará):`, error.message);
+            }
+        } else {
+            // Puedes decidir crear un archivo vacío si no existe, o simplemente dejar que no exista.
+            // Para el propósito de "no modificar", lo dejaremos si no existe.
+            // Si quieres que siempre exista, descomenta las siguientes 2 líneas:
+            // await writeToJson([], branchFilename);
+            // console.log(`  [INFO] Archivo de sucursales para '${brandName}' no encontrado, se creó vacío.`);
+            console.log(`  [INFO] Archivo de sucursales para '${brandName}' no encontrado. No se creará ni modificará.`);
+        }
     }
-  }
+    console.log(`Verificación de sucursales locales completada. Total de sucursales en archivos existentes: ${totalUniqueSucursalesPresent}.`);
 
-  // Nuevo mapa para consolidar sucursales por marca para la escritura
-  const sucursalesByBrandForWriting = new Map();
-  for (const [brandName, sucursalesMap] of newSucursalesByBrand.entries()) {
-      if (MARCAS_NORMALIZADAS_INTERES.has(brandName)) {
-          if (!sucursalesByBrandForWriting.has(brandName)) {
-            sucursalesByBrandForWriting.set(brandName, []);
-          }
-          // Convertir el Map de sucursales de esta marca a un Array y añadirlo
-          Array.from(sucursalesMap.values()).forEach(sucursal => {
-              sucursalesByBrandForWriting.get(brandName).push(sucursal);
-          });
-      }
-  }
 
-  let totalUniqueSucursalesWritten = 0;
-  for (const [brandName, sucursalesList] of sucursalesByBrandForWriting.entries()) {
-      const safeBrandName = brandName.replace(/[^a-z0-9]/gi, '').toLowerCase();
-      const branchFilename = path.join(BASE_SUPER_DIR, `${safeBrandName}.json`);
-      // Aquí sucursalesList ya es un Array
-      await writeToJson(sucursalesList, branchFilename);
-      totalUniqueSucursalesWritten += sucursalesList.length;
-  }
-  console.log(`Total de sucursales únicas escritas en JSON: ${totalUniqueSucursalesWritten}`);
+    // SECCIÓN DE PRODUCTOS: sobrescribe completamente con los datos del ZIP del día
+    const baseProductsDir = path.join(__dirname, '../src/data/products');
+    await fsp.mkdir(baseProductsDir, { recursive: true });
 
-  console.log(`\n--- Escribiendo archivos JSON de productos en '${BASE_PRODUCTS_DIR}' (nuevos del ZIP)... ---`);
-  await fsp.mkdir(BASE_PRODUCTS_DIR, { recursive: true });
+    console.log(`\nEscribiendo archivos JSON de productos (por marca y sucursal) en '${baseProductsDir}' (sobrescribiendo y limpiando)...`);
 
-  const existingProductBrandDirs = await fsp.readdir(BASE_PRODUCTS_DIR, { withFileTypes: true });
-  for (const brandDirEntry of existingProductBrandDirs) {
-    if (brandDirEntry.isDirectory()) {
-      if (MARCAS_NORMALIZADAS_INTERES.has(brandDirEntry.name)) {
-        await fsp.rm(path.join(BASE_PRODUCTS_DIR, brandDirEntry.name), { recursive: true, force: true });
-      }
+    // Limpiar directorios de productos (marca/archivos.json)
+    const existingProductBrands = await fsp.readdir(baseProductsDir, { withFileTypes: true });
+    for (const brandDirEntry of existingProductBrands) {
+        if (brandDirEntry.isDirectory()) {
+            const brandPath = path.join(baseProductsDir, brandDirEntry.name);
+            console.log(`  Limpiando directorio de marca de productos existente: ${brandPath}`);
+            await fsp.rm(brandPath, { recursive: true, force: true });
+        }
     }
-  }
 
-  let totalProductsFilesWritten = 0;
-  for (const [brandName, branchesMap] of newProductsByBranch.entries()) {
-    if (MARCAS_NORMALIZADAS_INTERES.has(brandName)) {
-      const safeBrandName = brandName.replace(/[^a-z0-9]/gi, '').toLowerCase();
-      const brandDir = path.join(BASE_PRODUCTS_DIR, safeBrandName);
-      await fsp.mkdir(brandDir, { recursive: true });
+    let totalProductsFilesWritten = 0;
+    for (const [brandName, branchesMap] of allProductsByBranchFromZip.entries()) {
+        if (MARCAS_NORMALIZADAS_INTERES.has(brandName)) {
+            const safeBrandName = brandName.replace(/[^a-z0-9]/gi, '').toLowerCase();
+            const brandDir = path.join(baseProductsDir, safeBrandName);
+            await fsp.mkdir(brandDir, { recursive: true });
+            console.log(`  Creando directorio para marca de productos: ${brandName}`);
 
-      for (const [branchId, productsList] of branchesMap.entries()) {
-        const productFilename = path.join(brandDir, `${branchId}.json`);
-        await writeToJson(productsList, productFilename);
-        totalProductsFilesWritten++;
-      }
+            for (const [branchId, productsList] of branchesMap.entries()) {
+                const productFilename = path.join(brandDir, `${branchId}.json`);
+                // productsList es un array, se escribe directamente
+                await writeToJson(productsList, productFilename);
+                totalProductsFilesWritten++;
+                console.log(`    Escritos ${productsList.length} productos para ${brandName}/${branchId} en '${productFilename}'.`);
+            }
+        } else {
+            console.log(`  Saltando escritura de productos para marca no interesada: '${brandName}'.`);
+        }
     }
-  }
-  console.log(`Generación de JSONs finales completada. Total de archivos de productos escritos: ${totalProductsFilesWritten}.`);
+    console.log(`Generación de JSONs de productos finales completada. Total de archivos de productos escritos/actualizados: ${totalProductsFilesWritten}.`);
 }
+
 
 async function uploadBatchToFirestore(collectionName, documents, idField, operationType = 'set') {
   const BATCH_SIZE = 400;
@@ -797,9 +804,6 @@ async function generarJsonFiltradosYSubirAFirestore() {
     console.log('\nTodos los ZIPs internos procesados.');
 
     console.log('\n--- Cargando datos locales existentes para comparación ---');
-    // Ajuste aquí para la carga de sucursales locales.
-    // El nombre del archivo local es minúsculas (ej: carrefour.json), pero el `brand` en el código es CamelCase (ej: Carrefour).
-    // La función `loadLocalJsonData` necesita saber cómo mapear el nombre del archivo a la marca.
     const existingLocalSucursales = await loadLocalJsonData(BASE_SUPER_DIR, false);
     const existingLocalProducts = await loadLocalJsonData(BASE_PRODUCTS_DIR, true);
     console.log(`Sucursales locales existentes cargadas: ${existingLocalSucursales.size}`);
@@ -818,16 +822,22 @@ async function generarJsonFiltradosYSubirAFirestore() {
     console.log(`  Sucursales: Añadir: ${sucursalesFirestoreChanges.toAdd.length}, Actualizar: ${sucursalesFirestoreChanges.toUpdate.length}`);
     console.log(`  Productos: Añadir: ${productsFirestoreChanges.toAdd.length}, Actualizar: ${productsFirestoreChanges.toUpdate.length}, Desactivar: ${productsFirestoreChanges.toDeactivate.length}`);
 
-    console.log('\n--- Reemplazando archivos JSON locales con los datos NUEVOS y COMPLETOS del día ---');
-    await writeNewJsons(allFilteredSucursalesByBrand, allProductsByBranch);
-    console.log('Archivos JSON locales actualizados completamente con los datos del día.');
+    // --- Escribir los JSONs locales ---
+    console.log('\n--- Escribiendo archivos JSON locales: Productos (sobrescribir), Sucursales (mantener existentes) ---');
+    // Pasamos solo allProductsByBranch para que writeFinalJsons solo sobrescriba productos.
+    // La lógica para sucursales dentro de writeFinalJsons asegurará que no se modifiquen.
+    await writeFinalJsons(allProductsByBranch);
+    console.log('Archivos JSON locales actualizados completamente (productos sobrescritos, sucursales mantenidas).');
 
 
+    // --- Subir SOLO los CAMBIOS a Firestore ---
     let firestoreUploadFailed = false;
 
     console.log('\n--- Subiendo CAMBIOS de sucursales a Firestore ---');
-    const allSucursalesForFirestore = [...sucursalesFirestoreChanges.toAdd, ...sucursalesFirestoreChanges.toUpdate];
-    const uniqueBrandsForSucursales = new Set(allSucursalesForFirestore.map(s => s.marca));
+    const uniqueBrandsForSucursales = new Set([
+        ...sucursalesFirestoreChanges.toAdd.map(s => s.marca),
+        ...sucursalesFirestoreChanges.toUpdate.map(s => s.marca)
+    ]);
 
     for (const brandName of uniqueBrandsForSucursales) {
       const safeBrandName = brandName.replace(/[^a-z0-9]/gi, '').toLowerCase();
