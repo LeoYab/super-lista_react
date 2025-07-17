@@ -3,7 +3,7 @@ run-name: 🔥 Import data into Firebase
 
 on:
   schedule:
-    - cron: '0 14 * * *'
+    - cron: '0 14 * * *' # Se ejecuta a las 14:00 UTC (11:00 AM ART en invierno, 10:00 AM ART en verano)
   workflow_dispatch: 
 
 jobs:
@@ -34,12 +34,23 @@ jobs:
         fi
         node -e "try { JSON.parse(require('fs').readFileSync('./scripts/serviceAccountKey.json', 'utf8')); console.log('JSON válido'); } catch(e) { console.log('JSON inválido:', e.message); process.exit(1); }"
 
-    - name: Configurar variables de entorno (.env para el script)
-      run: |
-        echo "FIREBASE_SERVICE_ACCOUNT_PATH=./scripts/serviceAccountKey.json" >> .env
-
     - name: Ejecutar Script de Importación
       run: node scripts/importProducts.js
+
+    - name: Configurar Git para el commit
+      run: |
+        git config user.name "GitHub Actions Bot"
+        git config user.email "actions@github.com"
+
+    - name: Añadir y commitear cambios de la carpeta 'data'
+      run: |
+        git add src/data
+        git status # Para ver qué archivos se han añadido
+        git diff --staged # Para ver los cambios antes de commitear
+        git commit -m "Actualizar datos JSON de productos y sucursales (Automático por GH Actions)" || echo "No hay cambios para commitear"
+
+    - name: Push de los cambios a la rama main
+      run: git push origin main
 
     - name: Limpiar credenciales
       if: always()
