@@ -24,18 +24,23 @@ jobs:
 
     - name: Configurar Credenciales de Firebase
       run: |
-        echo "${{ secrets.FIREBASE_SERVICE_ACCOUNT_KEY }}" > ./scripts/serviceAccountKey.json
-      env:
-        FIREBASE_SERVICE_ACCOUNT_KEY: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_KEY }}
+        echo '${{ secrets.FIREBASE_SERVICE_ACCOUNT_KEY }}' > ./scripts/serviceAccountKey.json
+
+    - name: Verificar archivo de credenciales
+      run: |
+        if [ ! -f ./scripts/serviceAccountKey.json ]; then
+          echo "Error: El archivo de credenciales no existe"
+          exit 1
+        fi
+        node -e "try { JSON.parse(require('fs').readFileSync('./scripts/serviceAccountKey.json', 'utf8')); console.log('JSON válido'); } catch(e) { console.log('JSON inválido:', e.message); process.exit(1); }"
 
     - name: Configurar variables de entorno (.env para el script)
       run: |
         echo "FIREBASE_SERVICE_ACCOUNT_PATH=./scripts/serviceAccountKey.json" >> .env
-        # Agrega cualquier otra variable de entorno que necesite tu script aquí
 
     - name: Ejecutar Script de Importación
       run: node scripts/importProducts.js
 
-    - name: Limpiar credenciales (opcional, pero buena práctica de seguridad)
+    - name: Limpiar credenciales
       if: always()
-      run: rm ./scripts/serviceAccountKey.json
+      run: rm -f ./scripts/serviceAccountKey.json
