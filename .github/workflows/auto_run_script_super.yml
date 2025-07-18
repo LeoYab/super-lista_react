@@ -4,7 +4,7 @@ run-name: 🔥 Import data into Firebase
 on:
   schedule:
     - cron: '0 14 * * *' # Se ejecuta a las 14:00 UTC (11:00 AM ART en invierno, 10:00 AM ART en verano)
-  workflow_dispatch: 
+  workflow_dispatch:
 
 jobs:
   import-data:
@@ -17,25 +17,15 @@ jobs:
     - name: Configurar Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: '20' 
+        node-version: '20'
 
     - name: Instalar dependencias
       run: npm install
-
-    - name: Configurar Credenciales de Firebase
-      run: |
-        echo '${{ secrets.FIREBASE_SERVICE_ACCOUNT_KEY }}' > ./scripts/serviceAccountKey.json
-
-    - name: Verificar archivo de credenciales
-      run: |
-        if [ ! -f ./scripts/serviceAccountKey.json ]; then
-          echo "Error: El archivo de credenciales no existe"
-          exit 1
-        fi
-        node -e "try { JSON.parse(require('fs').readFileSync('./scripts/serviceAccountKey.json', 'utf8')); console.log('JSON válido'); } catch(e) { console.log('JSON inválido:', e.message); process.exit(1); }"
-
+ 
     - name: Ejecutar Script de Importación
       run: node scripts/importProducts.js
+      env:
+        FIREBASE_SERVICE_ACCOUNT_KEY: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_KEY }}
 
     - name: Configurar Git para el commit
       run: |
@@ -51,7 +41,3 @@ jobs:
 
     - name: Push de los cambios a la rama main
       run: git push origin main
-
-    - name: Limpiar credenciales
-      if: always()
-      run: rm -f ./scripts/serviceAccountKey.json
