@@ -52,7 +52,7 @@ jobs:
         git commit -m "Actualizar datos JSON de productos y sucursales (Automático por GH Actions)" || echo "No hay cambios para commitear"
 
     - name: Push de los cambios a la rama main
-      run: git push origin main
+      run: git push origin dev
 
     - name: Limpiar credenciales
       if: always() # Siempre ejecuta esto para eliminar el archivo temporal

@@ -330,7 +330,7 @@ async function procesarZipInterno(bufferZipInterno, allFilteredSucursalesByBrand
 
   for (const innerFile of innerDirectory.files) {
     if (innerFile.path.toLowerCase().endsWith('.csv')) {
-      console.log(`     Procesando CSV: ${innerFile.path}`);
+      /* console.log(`     Procesando CSV: ${innerFile.path}`); */
       const csvStream = innerFile.stream();
       let docs;
       try {
