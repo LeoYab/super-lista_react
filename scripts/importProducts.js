@@ -11,20 +11,27 @@ const admin = require('firebase-admin');
 const { getFirestore, Timestamp } = require('firebase-admin/firestore');
 
 const serviceAccountPath = process.env.FIREBASE_SERVICE_ACCOUNT_KEY;
+
 if (!serviceAccountPath) {
-  console.error('Error: FIREBASE_SERVICE_ACCOUNT_KEY no está definido en el archivo .env');
+  console.error('Error: La variable de entorno FIREBASE_SERVICE_ACCOUNT_KEY no está definida.');
+  console.error('Para uso local, configúrala en tu archivo .env (ej: FIREBASE_SERVICE_ACCOUNT_KEY=\'./serviceAccountKey.json\').');
+  console.error('Para GitHub Actions, asegúrate de que el workflow la pase como variable de entorno.');
   process.exit(1);
 }
 
 let serviceAccount;
 try {
+  // Carga el archivo JSON desde la ruta proporcionada
+  // path.resolve() es importante para manejar rutas relativas correctamente
   serviceAccount = require(path.resolve(process.cwd(), serviceAccountPath));
+  console.log(`Credenciales de Firebase cargadas desde el archivo: ${serviceAccountPath}`);
 } catch (error) {
   console.error(`Error al cargar el archivo de cuenta de servicio de Firebase desde ${serviceAccountPath}:`, error);
   console.error(`Asegúrate de que la ruta en FIREBASE_SERVICE_ACCOUNT_KEY es correcta y el archivo existe.`);
   process.exit(1);
 }
 
+// Inicializa Firebase Admin SDK con las credenciales cargadas
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount)
 });
