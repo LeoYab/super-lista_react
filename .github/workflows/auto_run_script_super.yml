@@ -21,11 +21,23 @@ jobs:
 
     - name: Instalar dependencias
       run: npm install
- 
+
+    - name: Configurar Credenciales de Firebase (Crea el archivo temporal)
+      run: |
+        echo '${{ secrets.FIREBASE_SERVICE_ACCOUNT_KEY }}' > ./scripts/serviceAccountKey.json
+
+    - name: Verificar archivo de credenciales (Opcional pero recomendado)
+      run: |
+        if [ ! -f ./scripts/serviceAccountKey.json ]; then
+          echo "Error: El archivo de credenciales no existe después de intentar crearlo."
+          exit 1
+        fi
+        node -e "try { JSON.parse(require('fs').readFileSync('./scripts/serviceAccountKey.json', 'utf8')); console.log('JSON válido'); } catch(e) { console.log('JSON inválido o error de lectura:', e.message); process.exit(1); }"
+
     - name: Ejecutar Script de Importación
       run: node scripts/importProducts.js
       env:
-        FIREBASE_SERVICE_ACCOUNT_KEY: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_KEY }}
+        FIREBASE_SERVICE_ACCOUNT_KEY: './scripts/serviceAccountKey.json'
 
     - name: Configurar Git para el commit
       run: |
@@ -41,3 +53,7 @@ jobs:
 
     - name: Push de los cambios a la rama main
       run: git push origin main
+
+    - name: Limpiar credenciales
+      if: always() # Siempre ejecuta esto para eliminar el archivo temporal
+      run: rm -f ./scripts/serviceAccountKey.json
