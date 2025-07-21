@@ -53,7 +53,7 @@ jobs:
         git diff --staged # Para ver los cambios antes de commitear
         git commit -m "Actualizar datos JSON de productos y sucursales (Automático por GH Actions)" || echo "No hay cambios para commitear"
 
-    - name: Push de los cambios a la rama main
+    - name: Push de los cambios a la rama dev
       run: git push origin dev
 
     - name: Limpiar credenciales
