@@ -11,24 +11,22 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout del código
+    - name: Code checkout 
       uses: actions/checkout@v4
-      with:
-        ref: dev
 
-    - name: Configurar Node.js
+    - name: Configure Node.js
       uses: actions/setup-node@v4
       with:
         node-version: '20'
 
-    - name: Instalar dependencias
+    - name: Install dependencies
       run: npm install
 
-    - name: Configurar Credenciales de Firebase (Crea el archivo temporal)
+    - name: Configure Firebase Credentials (Create temporary file)
       run: |
         echo '${{ secrets.FIREBASE_SERVICE_ACCOUNT_KEY }}' > ./scripts/serviceAccountKey.json
 
-    - name: Verificar archivo de credenciales (Opcional pero recomendado)
+    - name: Verify credentials file
       run: |
         if [ ! -f ./scripts/serviceAccountKey.json ]; then
           echo "Error: El archivo de credenciales no existe después de intentar crearlo."
@@ -36,26 +34,26 @@ jobs:
         fi
         node -e "try { JSON.parse(require('fs').readFileSync('./scripts/serviceAccountKey.json', 'utf8')); console.log('JSON válido'); } catch(e) { console.log('JSON inválido o error de lectura:', e.message); process.exit(1); }"
 
-    - name: Ejecutar Script de Importación
+    - name: Run Import Script
       run: node scripts/importProducts.js
       env:
         FIREBASE_SERVICE_ACCOUNT_KEY: './scripts/serviceAccountKey.json'
 
-    - name: Configurar Git para el commit
+    - name: Configure Git for commit
       run: |
         git config user.name "GitHub Actions Bot"
         git config user.email "actions@github.com"
 
-    - name: Añadir y commitear cambios de la carpeta 'data'
+    - name: Add and commit changes in the 'data' folder
       run: |
         git add src/data
-        git status # Para ver qué archivos se han añadido
-        git diff --staged # Para ver los cambios antes de commitear
-        git commit -m "Actualizar datos JSON de productos y sucursales (Automático por GH Actions)" || echo "No hay cambios para commitear"
+        git status
+        git diff --staged
+        git commit -m "Update JSON data for products and branches (Automated by GH Actions)" || echo "No changes to commit"
 
-    - name: Push de los cambios a la rama dev
-      run: git push origin dev
+    - name: Push changes to the main branch
+      run: git push origin main
 
-    - name: Limpiar credenciales
-      if: always() # Siempre ejecuta esto para eliminar el archivo temporal
+    - name: Clean up credentials
+      if: always()
       run: rm -f ./scripts/serviceAccountKey.json
