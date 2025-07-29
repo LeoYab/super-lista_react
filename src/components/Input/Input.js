@@ -2,12 +2,13 @@
 import React from 'react';
 import './Input.css';
 
-const Input = ({ label, id, type = 'text', value, onChange, placeholder, className = '', ...props }) => {
+const Input = ({ label, id, name, type = 'text', value, onChange, placeholder, className = '', ...props }) => {
   return (
     <div className={`input-group ${className}`}>
       {label && <label htmlFor={id}>{label}</label>}
       <input
         id={id}
+        name={name}
         type={type}
         value={value}
         onChange={onChange}

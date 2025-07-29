@@ -4,12 +4,14 @@ import "./TotalSummary.css";
 
 const TotalSummary = ({ total }) => {
   // Format the total with two decimal places and currency formatting
-  const formattedTotal = total.toLocaleString('es-AR', {
-    style: 'currency',
-    currency: 'ARS',
-    minimumFractionDigits: 2, // Ensure at least 2 decimal places
-    maximumFractionDigits: 2  // Ensure at most 2 decimal places
-  });
+const hasDecimals = total % 1 !== 0;
+
+const formattedTotal = total.toLocaleString('es-AR', {
+  style: 'currency',
+  currency: 'ARS',
+  minimumFractionDigits: hasDecimals ? 2 : 0,
+  maximumFractionDigits: hasDecimals ? 2 : 0
+});
 
   return (
     <div className="total-summary">
