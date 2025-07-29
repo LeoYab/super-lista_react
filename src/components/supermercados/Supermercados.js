@@ -325,51 +325,51 @@ const Supermercados = () => {
         console.log(`Cargando productos para ${brandId}/${branchId} desde archivos locales...`);
 
         if (initialLoad || (isSearching && filteredLocalProductsRef.current.length === 0) || (!isSearching && allLocalProductsLoadedRef.current.length === 0)) {
+          try {
+            let productDataModule;
             try {
-                let productDataModule;
-                try {
-                    productDataModule = await import(`../../data/products/${brandId.toLowerCase()}/${branchId}.json`)
-                        .then(module => module.default);
-                } catch (specificFileError) {
-                    console.warn(`No se encontró el archivo específico de productos: ../../data/products/${brandId.toLowerCase()}/${branchId}.json. Intentando con la sucursal por defecto...`);
-                    productDataModule = LOCAL_BRAND_DEFAULT_PRODUCTS_MAP[brandId.toLowerCase()];
-                    if (!productDataModule) {
-                        throw new Error(`No hay datos de productos por defecto para la marca ${brandId}.`);
-                    }
-                }
-                allLocalProductsLoadedRef.current = productDataModule.map(p => ({
-                    id: p.id_producto,
-                    ...p,
-                    supermercado_marca: selectedBrand?.nombre || brandId.charAt(0).toUpperCase() + brandId.slice(1),
-                    sucursal_nombre: selectedBranch?.nombre_sucursal || 'Desconocida'
-                }));
-                console.log(`Local: Se cargaron ${allLocalProductsLoadedRef.current.length} productos TOTALES desde el archivo JSON.`);
-            } catch (localError) {
-                console.error(`Error al cargar productos locales para ${brandId}/${branchId}:`, localError);
-                setError("Error: No se pudieron cargar productos ni de Firestore ni de archivos locales.");
-                allLocalProductsLoadedRef.current = [];
-                setHasMoreProducts(false);
-                isFetchingRef.current = false; // Asegurarse de resetear en caso de error temprano
-                setIsLoadingProducts(false); // Asegurarse de resetear en caso de error temprano
-                return; // Importante para salir si hay error en la carga local
+              productDataModule = await import(`../../data/products/${brandId.toLowerCase()}/${branchId}.json`)
+                .then(module => module.default);
+            } catch (specificFileError) {
+              console.warn(`No se encontró el archivo específico de productos: ../../data/products/${brandId.toLowerCase()}/${branchId}.json. Intentando con la sucursal por defecto...`);
+              productDataModule = LOCAL_BRAND_DEFAULT_PRODUCTS_MAP[brandId.toLowerCase()];
+              if (!productDataModule) {
+                throw new Error(`No hay datos de productos por defecto para la marca ${brandId}.`);
+              }
             }
+            allLocalProductsLoadedRef.current = productDataModule.map(p => ({
+              id: p.id_producto,
+              ...p,
+              supermercado_marca: selectedBrand?.nombre || brandId.charAt(0).toUpperCase() + brandId.slice(1),
+              sucursal_nombre: selectedBranch?.nombre_sucursal || 'Desconocida'
+            }));
+            console.log(`Local: Se cargaron ${allLocalProductsLoadedRef.current.length} productos TOTALES desde el archivo JSON.`);
+          } catch (localError) {
+            console.error(`Error al cargar productos locales para ${brandId}/${branchId}:`, localError);
+            setError("Error: No se pudieron cargar productos ni de Firestore ni de archivos locales.");
+            allLocalProductsLoadedRef.current = [];
+            setHasMoreProducts(false);
+            isFetchingRef.current = false; // Asegurarse de resetear en caso de error temprano
+            setIsLoadingProducts(false); // Asegurarse de resetear en caso de error temprano
+            return; // Importante para salir si hay error en la carga local
+          }
         }
 
         let productsToWorkWith;
         if (searchModeParam && searchTermValueParam) {
-            // Si estamos en modo búsqueda local, siempre aplicamos el filtro al conjunto completo
-            // y reiniciamos el índice de paginación para la nueva búsqueda
-            productsToWorkWith = applySearchFilter(allLocalProductsLoadedRef.current, searchTermValueParam); // Usar searchTermValueParam original
-            filteredLocalProductsRef.current = productsToWorkWith; // Guardar los productos filtrados
-            localPaginationIndexRef.current = 0; // Reiniciar índice de paginación para la búsqueda
-            console.log(`Local: Filtrados ${filteredLocalProductsRef.current.length} productos para búsqueda: "${searchTermValueParam}"`);
+          // Si estamos en modo búsqueda local, siempre aplicamos el filtro al conjunto completo
+          // y reiniciamos el índice de paginación para la nueva búsqueda
+          productsToWorkWith = applySearchFilter(allLocalProductsLoadedRef.current, searchTermValueParam); // Usar searchTermValueParam original
+          filteredLocalProductsRef.current = productsToWorkWith; // Guardar los productos filtrados
+          localPaginationIndexRef.current = 0; // Reiniciar índice de paginación para la búsqueda
+          console.log(`Local: Filtrados ${filteredLocalProductsRef.current.length} productos para búsqueda: "${searchTermValueParam}"`);
         } else {
-            // Si no estamos buscando, trabajamos con todos los productos locales cargados
-            productsToWorkWith = allLocalProductsLoadedRef.current;
-            filteredLocalProductsRef.current = []; // Limpiar los productos filtrados si no estamos buscando
-            if (initialLoad) {
-                localPaginationIndexRef.current = 0; // Reiniciar índice de paginación para carga normal inicial
-            }
+          // Si no estamos buscando, trabajamos con todos los productos locales cargados
+          productsToWorkWith = allLocalProductsLoadedRef.current;
+          filteredLocalProductsRef.current = []; // Limpiar los productos filtrados si no estamos buscando
+          if (initialLoad) {
+            localPaginationIndexRef.current = 0; // Reiniciar índice de paginación para carga normal inicial
+          }
         }
 
         const startIndex = localPaginationIndexRef.current;
@@ -403,7 +403,7 @@ const Supermercados = () => {
       isFetchingRef.current = false; // Restablecer useRef al final
       setIsLoadingProducts(false); // Restablecer estado de la UI al final
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedBrand, selectedBranch, dataSource, applySearchFilter]);
 
   // Este useEffect para selectedBrand solo debería llamar a fetchAndSetBranch
@@ -605,6 +605,8 @@ const Supermercados = () => {
 
               <div className="product-search-bar">
                 <Input
+                  id="busquedaSuper"
+                  name="busquedaSuper"
                   type="text"
                   placeholder="Buscar productos por nombre o marca..."
                   value={searchTerm}

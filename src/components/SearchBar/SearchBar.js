@@ -1,7 +1,7 @@
 // src/components/SearchBar/SearchBar.js
 import React from 'react';
 import './SearchBar.css';
-import Input from '../Input/Input'; 
+import Input from '../Input/Input';
 
 const SearchBar = ({ busqueda, setBusqueda }) => {
 
@@ -12,6 +12,8 @@ const SearchBar = ({ busqueda, setBusqueda }) => {
         <div className="search-input-container">
           <div className="search-icon">🔍</div>
           <Input
+            id="search"
+            name="search"
             type="text"
             placeholder="Buscar productos..."
             value={busqueda}

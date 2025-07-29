@@ -91,7 +91,7 @@ const ProductItem = ({ producto, onEditar, onEliminar, onToggleComplete }) => {
     });
 
     // Los onClick de los botones de desktop/mobile overlays DEBEN llamar a e.stopPropagation()
-    // para evitar que el click se propague al `wrapperProps.onClick` (handleCardClick del hook).
+    // para evitar que el click se propague al wrapperProps.onClick (handleCardClick del hook).
     const handleDesktopEditButtonClick = useCallback((e) => {
         e.stopPropagation(); // Evita que se dispare el handleCardClick del hook
         onEditar(producto);

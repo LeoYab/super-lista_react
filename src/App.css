@@ -119,9 +119,9 @@ body {
  */
 .list-header {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   margin-bottom: 20px;
   /* Mantén el margen para el espacio inicial */
 
@@ -253,7 +253,6 @@ body {
    * El padding horizontal del main-content-area también cambia en móvil.
    */
   .list-header {
-    padding: 60px 5px 0px 5px;
     border-radius: var(--border-radius);
     box-shadow: var(--shadow-light);
   }

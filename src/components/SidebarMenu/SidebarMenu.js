@@ -138,6 +138,8 @@ const SidebarMenu = ({ currentUser, logout, userLists, createList, selectList, c
           <div className="create-list-section">
             {/* Input para el nombre de la nueva lista (ahora un componente Input) */}
             <Input
+              id="newListName"
+              name="newListName"
               type="text"
               placeholder="Nombre de nueva lista..."
               value={newListName}

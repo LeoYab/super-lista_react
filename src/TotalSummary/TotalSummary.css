@@ -4,15 +4,16 @@
     width: 100%;
     justify-content: center;
     gap: 10px;
-    padding: 16px;
-    margin-top: 16px;
     text-align: center;
 }
 
 .total-summary h3 {
-  color: #28a745;
-  margin: 0 0 8px;
-  font-size: 1.5em;
+    color: #fff;
+    background-color: #28a745;
+    border-radius: 50px;
+    padding-inline: 10px;
+    margin: 0 0 8px;
+    font-size: 1.5em;
 }
 
 .total-summary p {
