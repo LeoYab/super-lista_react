@@ -2,7 +2,7 @@
 require('dotenv').config();
 const unzipper = require('unzipper');
 const csv = require('csv-parser');
-const fetch = require('node-fetch');
+const fetch = require('node-fetch'); // Asegúrate de que node-fetch esté instalado (npm install node-fetch@2) si aún no lo está
 const stream = require('stream');
 const { promisify } = require('util');
 const path = require('path');
@@ -120,13 +120,22 @@ const PRODUCT_CSV_TO_TARGET_MAPPING = [
 
 // --- Funciones Auxiliares ---
 
+/**
+ * Función para pausar la ejecución por un tiempo dado.
+ * @param {number} ms - Milisegundos a esperar.
+ */
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 async function downloadZipForDay(url, outputPath) {
     console.log(`Descargando ZIP para el día desde: ${url}`);
     try {
-        const response = await fetch(url);
+        // Aumenta el tiempo de espera a 60 segundos (60000 milisegundos)
+        const response = await fetch(url, { timeout: 60000 }); 
 
         if (!response.ok) {
-            throw new Error(`Error al descargar el archivo ZIP: ${response.statusText}`);
+            throw new Error(`Error HTTP al descargar el ZIP: ${response.statusText} (Status: ${response.status})`);
         }
 
         const arrayBuffer = await response.arrayBuffer();
@@ -136,10 +145,38 @@ async function downloadZipForDay(url, outputPath) {
         console.log(`ZIP del día descargado en ${outputPath}.`);
         return buffer;
     } catch (error) {
-        console.error(`ERROR al descargar el ZIP de ${url}:`, error);
+        console.error(`ERROR al descargar el ZIP de ${url}:`, error.message);
         throw error;
     }
 }
+
+/**
+ * Intenta descargar un archivo ZIP con reintentos.
+ * @param {string} url - URL del archivo ZIP.
+ * @param {string} outputPath - Ruta donde guardar el ZIP.
+ * @param {number} maxRetries - Número máximo de reintentos.
+ * @param {number} retryDelayMs - Retraso en milisegundos entre reintentos.
+ * @returns {Promise<Buffer>} - Buffer del archivo ZIP descargado.
+ * @throws {Error} - Si la descarga falla después de todos los reintentos.
+ */
+async function downloadZipWithRetries(url, outputPath, maxRetries = 3, retryDelayMs = 5000) {
+    for (let i = 0; i < maxRetries; i++) {
+        try {
+            console.log(`Intentando descargar ZIP (Intento ${i + 1}/${maxRetries}) desde: ${url}`);
+            const buffer = await downloadZipForDay(url, outputPath);
+            return buffer; // Si tiene éxito, salimos de la función
+        } catch (error) {
+            console.error(`Error al descargar el ZIP (Intento ${i + 1}/${maxRetries}):`, error.message);
+            if (i < maxRetries - 1) {
+                console.log(`Reintentando en ${retryDelayMs / 1000} segundos...`);
+                await sleep(retryDelayMs); // Espera antes de reintentar
+            } else {
+                throw new Error(`Falla crítica: No se pudo descargar el ZIP de ${url} después de ${maxRetries} intentos.`);
+            }
+        }
+    }
+}
+
 
 async function writeToJson(data, filename) {
     if (!data || (Array.isArray(data) && data.length === 0)) {
@@ -494,7 +531,7 @@ async function procesarZipInterno(bufferZipInterno, allFilteredSucursalesByBrand
                 } else {
                     // Si quieres ver qué productos se están saltando porque no tienen un mapeo explícito o la marca no es de interés, descomenta:
                     // console.log(`[SKIP] Producto del ZIP '${zipFileName}' no mapeado o marca no interesada: `,
-                    //    `id_comercio=${productCsvIdComercio}, id_bandera=${productCsvIdBandera}, id_sucursal=${productCsvIdSucursal}`);
+                    //      `id_comercio=${productCsvIdComercio}, id_bandera=${productCsvIdBandera}, id_sucursal=${productCsvIdSucursal}`);
                 }
             }
         } catch (error) {
@@ -903,8 +940,10 @@ async function generarJsonFiltradosYSubirAFirestore() {
         if (!currentDayZipUrl) {
             throw new Error(`No se encontró URL de descarga para el día de la semana actual (${dayOfWeek}). Por favor, verifica la constante DAILY_URLS.`);
         }
+        
         console.log(`Intentando descargar ZIP desde: ${currentDayZipUrl}`);
-        const bufferZip = await downloadZipForDay(currentDayZipUrl, tempZipPath);
+        // Usa la nueva función con reintentos para la descarga del ZIP principal
+        const bufferZip = await downloadZipWithRetries(currentDayZipUrl, tempZipPath, 3, 5000); // 3 intentos, 5 segundos de retraso
 
         console.log('Descomprimiendo ZIP principal...');
         const directory = await unzipper.Open.buffer(bufferZip);
