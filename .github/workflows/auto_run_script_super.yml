@@ -48,7 +48,7 @@ jobs:
         git config user.name "GitHub Actions Bot"
         git config user.email "actions@github.com"
         git checkout main
-        if git diff --exit-code src/data; then
+        if git diff --quiet src/data; then
           echo "No changes detected in src/data. Branch and commit will not be created."
           echo "::set-output name=has_changes::false"
         else
