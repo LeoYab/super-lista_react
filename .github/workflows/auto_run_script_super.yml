@@ -9,9 +9,12 @@ on:
 jobs:
   import-data:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
 
     steps:
-    - name: Code checkout 
+    - name: Code checkout
       uses: actions/checkout@v4
 
     - name: Configure Node.js
@@ -29,31 +32,40 @@ jobs:
     - name: Verify credentials file
       run: |
         if [ ! -f ./scripts/serviceAccountKey.json ]; then
-          echo "Error: El archivo de credenciales no existe después de intentar crearlo."
+          echo "Error: The credentials file does not exist after attempting to create it."
           exit 1
         fi
-        node -e "try { JSON.parse(require('fs').readFileSync('./scripts/serviceAccountKey.json', 'utf8')); console.log('JSON válido'); } catch(e) { console.log('JSON inválido o error de lectura:', e.message); process.exit(1); }"
+        node -e "try { JSON.parse(require('fs').readFileSync('./scripts/serviceAccountKey.json', 'utf8')); console.log('Valid JSON'); } catch(e) { console.log('Invalid JSON or read error:', e.message); process.exit(1); }"
 
     - name: Run Import Script
       run: node scripts/importProductsToJson.js
       env:
         FIREBASE_SERVICE_ACCOUNT_KEY: './scripts/serviceAccountKey.json'
 
-    - name: Configure Git for commit
+    - name: Configure Git for commit and Create New Branch
+      id: prepare_commit
       run: |
         git config user.name "GitHub Actions Bot"
         git config user.email "actions@github.com"
+        git checkout main
+        if git diff --exit-code src/data; then
+          echo "No changes detected in src/data. Branch and commit will not be created."
+          echo "::set-output name=has_changes::false"
+        else
+          git checkout -b feature/automated-data-update
+          git add src/data
+          git commit -m "Update JSON data for products and branches (Automated by GH Actions)"
+          echo "Changes successfully committed to feature/automated-data-update."
+          echo "::set-output name=has_changes::true"
+        fi
 
-    - name: Add and commit changes in the 'data' folder
+    - name: Push Branch and Create Pull Request
+      if: success() && steps.prepare_commit.outputs.has_changes == 'true'
       run: |
-        git add src/data
-        git status
-        git commit -m "Update JSON data for products and branches (Automated by GH Actions)" || echo "No changes to commit"
-
-    - name: Create Pull Request to main
-      if: success()
-      run: |
+        echo "Pushing feature/automated-data-update branch to remote..."
         git push origin feature/automated-data-update
+
+        echo "Creating Pull Request..."
         curl -L \
           -X POST \
           -H "Accept: application/vnd.github+json" \
@@ -63,7 +75,7 @@ jobs:
           -d '{
             "title": "Automated Data Update PR",
             "body": "This PR contains automated data updates for products and branches.",
-            "head": "feature/automated-data-update", # La rama que acaba de crear y empujar
+            "head": "feature/automated-data-update",
             "base": "main"
           }'
 
