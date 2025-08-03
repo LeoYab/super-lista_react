@@ -35,7 +35,7 @@ jobs:
         node -e "try { JSON.parse(require('fs').readFileSync('./scripts/serviceAccountKey.json', 'utf8')); console.log('JSON válido'); } catch(e) { console.log('JSON inválido o error de lectura:', e.message); process.exit(1); }"
 
     - name: Run Import Script
-      run: node scripts/importProducts.js
+      run: node scripts/importProductsToJson.js
       env:
         FIREBASE_SERVICE_ACCOUNT_KEY: './scripts/serviceAccountKey.json'
 
