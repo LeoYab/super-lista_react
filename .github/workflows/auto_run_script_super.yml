@@ -3,7 +3,7 @@ run-name: 🔥 Import data into Firebase
 
 on:
   schedule:
-    - cron: '0 14 * * *' # Se ejecuta a las 14:00 UTC (11:00 AM ART en invierno, 10:00 AM ART en verano)
+    - cron: '0 14 * * *' # Se ejecuta a las 14:00 UTC (11:00 AM ART)
   workflow_dispatch:
 
 jobs:
