@@ -1,5 +1,5 @@
-name: Import data into Firebase
-run-name: 🔥 Import data into Firebase
+name: Import data into local Json
+run-name: 🔥 Import data into local Json
 
 on:
   schedule:
@@ -47,6 +47,7 @@ jobs:
       run: |
         git config user.name "GitHub Actions Bot"
         git config user.email "actions@github.com"
+
         git checkout main
         git pull origin main
 
@@ -55,14 +56,18 @@ jobs:
           echo "has_changes=false" >> $GITHUB_OUTPUT
         else
           git fetch origin
+
           if git show-ref --quiet refs/remotes/origin/feature/automated-data-update; then
             git checkout feature/automated-data-update
-            git pull --rebase origin feature/automated-data-update
           else
             git checkout -b feature/automated-data-update
           fi
+
           git add src/data
-          git commit -m "Update JSON data for products and branches (Automated by GH Actions)"
+          git commit -m "update: JSON data for products and branches (Automated by GH Actions)" || echo "No changes to commit"
+
+          git pull --rebase origin feature/automated-data-update || echo "Rebase no necesario o ya actualizado"
+
           echo "Changes successfully committed to feature/automated-data-update."
           echo "has_changes=true" >> $GITHUB_OUTPUT
         fi
