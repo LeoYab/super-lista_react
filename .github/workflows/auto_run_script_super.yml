@@ -48,15 +48,23 @@ jobs:
         git config user.name "GitHub Actions Bot"
         git config user.email "actions@github.com"
         git checkout main
+        git pull origin main
+
         if git diff --quiet src/data; then
           echo "No changes detected in src/data. Branch and commit will not be created."
-          echo "::set-output name=has_changes::false"
+          echo "has_changes=false" >> $GITHUB_OUTPUT
         else
-          git checkout -b feature/automated-data-update
+          git fetch origin
+          if git show-ref --quiet refs/remotes/origin/feature/automated-data-update; then
+            git checkout feature/automated-data-update
+            git pull --rebase origin feature/automated-data-update
+          else
+            git checkout -b feature/automated-data-update
+          fi
           git add src/data
           git commit -m "Update JSON data for products and branches (Automated by GH Actions)"
           echo "Changes successfully committed to feature/automated-data-update."
-          echo "::set-output name=has_changes::true"
+          echo "has_changes=true" >> $GITHUB_OUTPUT
         fi
 
     - name: Push Branch and Create Pull Request
