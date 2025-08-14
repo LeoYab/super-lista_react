@@ -94,7 +94,7 @@ function MainAppContent() {
   const totalProductos = filteredProducts.length;
   const totalGeneral = products.reduce((sum, producto) => {
     if (!producto.completed) {
-      return sum + ((producto.valor || 0) * (producto.cantidad || 0));
+      return sum + ((producto.valor || 0) * (producto.cantidad || 0)); 
     }
     return sum;
   }, 0);
