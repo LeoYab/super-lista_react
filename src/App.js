@@ -2,12 +2,11 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth, AuthProvider } from './context/AuthContext';
-import { dbRealtime } from './firebase/config';
-import { ref, onValue } from 'firebase/database';
-
-// Import Custom Hooks
-import { useUserLists } from './hooks/useUserLists';
-import { useProducts } from './hooks/useProducts';
+import { subscribeToCategories } from './services/firebaseService';
+import { UserListsProvider } from './context/UserListsContext';
+import { ProductsProvider } from './context/ProductsContext';
+import { useUserListsContext } from './context/UserListsContext';
+import { useProductsContext } from './context/ProductsContext';
 
 // Importa tus componentes
 import Header from './components/header/Header';
@@ -28,9 +27,6 @@ import './components/Select/Select.css';
 import './TotalSummary/TotalSummary.css';
 import './components/Buttons/Button.css';
 
-import { useUserListsContext } from './context/UserListsContext';
-import { useProductsContext } from './context/ProductsContext';
-
 function MainAppContent() {
   const {
     currentListId,
@@ -43,9 +39,6 @@ function MainAppContent() {
     loadingProducts,
     addProduct,
     editProduct,
-    deleteProduct,
-    toggleComplete,
-    clearAllProducts,
   } = useProductsContext();
 
   // State for categories, form visibility, editing, and search
@@ -55,7 +48,7 @@ function MainAppContent() {
   const [showProductForm, setShowProductForm] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
 
-import { subscribeToCategories } from './services/firebaseService';
+
   // Effect for loading categories
   useEffect(() => {
     const unsubscribe = subscribeToCategories((loadedCategories) => {
@@ -99,7 +92,7 @@ import { subscribeToCategories } from './services/firebaseService';
     producto.nombre.toLowerCase().includes(searchTerm.toLowerCase())
   );
   const totalProductos = filteredProducts.length;
-  const totalGeneral = filteredProducts.reduce((sum, producto) => {
+  const totalGeneral = products.reduce((sum, producto) => {
     if (!producto.completed) {
       return sum + ((producto.valor || 0) * (producto.cantidad || 0));
     }
@@ -212,9 +205,6 @@ function AppRouter() {
     </Routes>
   );
 }
-
-import { UserListsProvider } from './context/UserListsContext';
-import { ProductsProvider } from './context/ProductsContext';
 
 function App() {
   return (

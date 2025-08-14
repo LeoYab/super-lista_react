@@ -6,6 +6,8 @@ import './SidebarMenu.css';
 
 // IMPORT NEW SERVICE: Importa tus funciones de notificación
 import { showConfirmAlert, showSuccessToast, showErrorAlert } from '../../Notifications/NotificationsServices';
+import { useAuth } from '../../context/AuthContext';
+import { useUserListsContext } from '../../context/UserListsContext';
 
 // Importa tus componentes Button e Input
 import Button from '../Buttons/Button';
@@ -31,9 +33,6 @@ const formatDate = (timestamp) => {
     day: 'numeric'
   });
 };
-
-import { useAuth } from '../../context/AuthContext';
-import { useUserListsContext } from '../../context/UserListsContext';
 
 const SidebarMenu = () => {
   const { currentUser, logout } = useAuth();
