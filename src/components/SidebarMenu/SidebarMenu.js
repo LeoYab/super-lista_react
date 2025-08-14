@@ -32,7 +32,12 @@ const formatDate = (timestamp) => {
   });
 };
 
-const SidebarMenu = ({ currentUser, logout, userLists, createList, selectList, currentListId, deleteList }) => {
+import { useAuth } from '../../context/AuthContext';
+import { useUserListsContext } from '../../context/UserListsContext';
+
+const SidebarMenu = () => {
+  const { currentUser, logout } = useAuth();
+  const { userLists, createList, selectList, currentListId, deleteList } = useUserListsContext();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [newListName, setNewListName] = useState('');
   const navigate = useNavigate(); // <--- INICIALIZA useNavigate

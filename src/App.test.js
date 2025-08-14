@@ -1,20 +1,48 @@
-// src/App.test.js
 import { render, screen, waitFor } from '@testing-library/react';
 import App from './App';
+import { AuthContext } from './context/AuthContext';
 
-test('renders the main app content or loading state', async () => {
-  render(<App />);
+// Mocking the context providers
+const mockAuthContext = {
+  currentUser: null,
+  logout: jest.fn(),
+};
 
-  // Espera a que el texto de carga inicial desaparezca o a que el contenido principal aparezca.
-  // Esto también ayudará a que las actualizaciones de estado de AuthProvider se resuelvan.
+test('renders AuthPage when user is not logged in', async () => {
+  render(
+    <AuthContext.Provider value={mockAuthContext}>
+      <App />
+    </AuthContext.Provider>
+  );
+
+  // Since the App component now handles routing, we need to wait for the navigation to the /auth page
   await waitFor(() => {
-    // Si la aplicación redirige al login, busca elementos de la página de AuthPage
-    const loginButton = screen.getByRole('button', { name: /Iniciar Sesión|Registrarse/i });
-    expect(loginButton).toBeInTheDocument();
-  }, { timeout: 5000 }); // Aumenta el timeout si tu app tarda en cargar/redirigir
+    // The AuthPage should be rendered, which contains the login/register buttons
+    expect(screen.getByRole('button', { name: /Iniciar Sesión/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Registrarse/i })).toBeInTheDocument();
+  });
+});
 
-  // Si la app carga directamente la lista (si el usuario está logueado en el test):
-  // await waitFor(() => {
-  //   expect(screen.getByText(/Lista Actual:/i)).toBeInTheDocument();
-  // }, { timeout: 5000 });
+test('renders main app content when user is logged in', async () => {
+    const mockUser = {
+        uid: 'test-uid',
+        email: 'test@example.com',
+    };
+
+    const loggedInAuthContext = {
+        currentUser: mockUser,
+        logout: jest.fn(),
+    };
+
+    render(
+        <AuthContext.Provider value={loggedInAuthContext}>
+            <App />
+        </AuthContext.Provider>
+    );
+
+    // When logged in, the app should show the main content.
+    // We expect to see the "Crea o selecciona una lista" message when there are no lists.
+    await waitFor(() => {
+        expect(screen.getByText(/Crea o selecciona una lista/i)).toBeInTheDocument();
+    });
 });

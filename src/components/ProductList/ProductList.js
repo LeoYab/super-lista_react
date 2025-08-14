@@ -3,7 +3,7 @@ import React from 'react';
 import ProductItem from '../ProductItem/ProductItem';
 import './ProductList.css';
 
-const ProductList = ({ productos, busqueda, onEditar, onEliminar, onToggleComplete }) => {
+const ProductList = ({ productos, busqueda, onEditar }) => {
 
   const filteredProducts = productos.filter(producto =>
     producto.nombre && producto.nombre.toLowerCase().includes(busqueda.toLowerCase())
@@ -25,8 +25,6 @@ const ProductList = ({ productos, busqueda, onEditar, onEliminar, onToggleComple
               key={producto.firebaseId}
               producto={producto}
               onEditar={onEditar}
-              onEliminar={onEliminar}
-              onToggleComplete={onToggleComplete}
             />
           ))}
         </div>
