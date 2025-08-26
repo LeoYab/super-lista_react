@@ -16,6 +16,8 @@ jobs:
     steps:
     - name: Code checkout
       uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
 
     - name: Configure Node.js
       uses: actions/setup-node@v4
@@ -37,43 +39,39 @@ jobs:
         fi
         node -e "try { JSON.parse(require('fs').readFileSync('./scripts/serviceAccountKey.json', 'utf8')); console.log('Valid JSON'); } catch(e) { console.log('Invalid JSON or read error:', e.message); process.exit(1); }"
 
+    - name: Prepare branch
+      run: |
+        git config user.name "GitHub Actions Bot"
+        git config user.email "actions@github.com"
+
+        git fetch origin
+
+        if git show-ref --quiet refs/remotes/origin/feature/automated-data-update; then
+          git checkout feature/automated-data-update
+          git pull --rebase origin feature/automated-data-update
+        else
+          git checkout -b feature/automated-data-update origin/main
+        fi
+
     - name: Run Import Script
       run: node scripts/importProductsToJson.js
       env:
         FIREBASE_SERVICE_ACCOUNT_KEY: './scripts/serviceAccountKey.json'
 
-    - name: Configure Git for commit and Create New Branch
-      id: prepare_commit
+    - name: Commit changes
+      id: commit_changes
       run: |
-        git config user.name "GitHub Actions Bot"
-        git config user.email "actions@github.com"
-
-        git checkout main
-        git pull origin main
-
         if git diff --quiet src/data; then
-          echo "No changes detected in src/data. Branch and commit will not be created."
+          echo "No changes detected in src/data."
           echo "has_changes=false" >> $GITHUB_OUTPUT
         else
-          git fetch origin
-
-          if git show-ref --quiet refs/remotes/origin/feature/automated-data-update; then
-            git checkout feature/automated-data-update
-          else
-            git checkout -b feature/automated-data-update
-          fi
-
           git add src/data
-          git commit -m "update: JSON data for products and branches (Automated by GH Actions)" || echo "No changes to commit"
-
-          git pull --rebase origin feature/automated-data-update || echo "Rebase no necesario o ya actualizado"
-
-          echo "Changes successfully committed to feature/automated-data-update."
+          git commit -m "update: JSON data for products and branches (Automated by GH Actions)"
           echo "has_changes=true" >> $GITHUB_OUTPUT
         fi
 
     - name: Push Branch and Create Pull Request
-      if: success() && steps.prepare_commit.outputs.has_changes == 'true'
+      if: success() && steps.commit_changes.outputs.has_changes == 'true'
       run: |
         echo "Pushing feature/automated-data-update branch to remote..."
         git push origin feature/automated-data-update
