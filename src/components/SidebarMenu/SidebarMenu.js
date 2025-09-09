@@ -6,6 +6,8 @@ import './SidebarMenu.css';
 
 // IMPORT NEW SERVICE: Importa tus funciones de notificación
 import { showConfirmAlert, showSuccessToast, showErrorAlert } from '../../Notifications/NotificationsServices';
+import { useAuth } from '../../context/AuthContext';
+import { useUserListsContext } from '../../context/UserListsContext';
 
 // Importa tus componentes Button e Input
 import Button from '../Buttons/Button';
@@ -32,7 +34,9 @@ const formatDate = (timestamp) => {
   });
 };
 
-const SidebarMenu = ({ currentUser, logout, userLists, createList, selectList, currentListId, deleteList }) => {
+const SidebarMenu = () => {
+  const { currentUser, logout } = useAuth();
+  const { userLists, createList, selectList, currentListId, deleteList } = useUserListsContext();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [newListName, setNewListName] = useState('');
   const navigate = useNavigate(); // <--- INICIALIZA useNavigate

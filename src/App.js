@@ -1,13 +1,12 @@
 // src/App.js
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'; // Agregamos Link
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth, AuthProvider } from './context/AuthContext';
-import { dbRealtime } from './firebase/config';
-import { ref, onValue, push, remove, update, set } from 'firebase/database';
-// REMOVED: import Swal from 'sweetalert2'; // ¡Eliminamos esta importación!
-
-// IMPORT NEW SERVICE: Importa tus funciones de notificación
-import { showSuccessToast, showSuccessAlert, showErrorAlert, showConfirmAlert } from './Notifications/NotificationsServices';
+import { subscribeToCategories } from './services/firebaseService';
+import { UserListsProvider } from './context/UserListsContext';
+import { ProductsProvider } from './context/ProductsContext';
+import { useUserListsContext } from './context/UserListsContext';
+import { useProductsContext } from './context/ProductsContext';
 
 // Importa tus componentes
 import Header from './components/header/Header';
@@ -18,7 +17,7 @@ import SidebarMenu from './components/SidebarMenu/SidebarMenu';
 import SearchBar from './components/SearchBar/SearchBar';
 import TotalSummary from './TotalSummary/TotalSummary';
 import Button from './components/Buttons/Button';
-import Supermercados from './components/supermercados/Supermercados'; 
+import Supermercados from './components/supermercados/Supermercados';
 
 // Importa tus estilos
 import './App.css';
@@ -29,201 +28,37 @@ import './TotalSummary/TotalSummary.css';
 import './components/Buttons/Button.css';
 
 function MainAppContent() {
-  const { currentUser, logout } = useAuth();
-  const [products, setProducts] = useState([]);
+  const {
+    currentListId,
+    currentListName,
+    loading: loadingLists,
+  } = useUserListsContext();
+
+  const {
+    products,
+    loadingProducts,
+    addProduct,
+    editProduct,
+  } = useProductsContext();
+
+  // State for categories, form visibility, editing, and search
   const [categories, setCategories] = useState([]);
-  const [loadingProducts, setLoadingProducts] = useState(true);
   const [loadingCategories, setLoadingCategories] = useState(true);
-
-  const [userLists, setUserLists] = useState([]);
-  const [currentListId, setCurrentListId] = useState(null);
-  const [currentListName, setCurrentListName] = useState('');
-
   const [editingProduct, setEditingProduct] = useState(null);
   const [showProductForm, setShowProductForm] = useState(false);
-
   const [searchTerm, setSearchTerm] = useState('');
 
-  // Firebase Refs
-  const userListsRef = currentUser ? ref(dbRealtime, `Users/${currentUser.uid}/User_Lists`) : null;
-  const categoriesRef = ref(dbRealtime, 'Categories');
 
-  /* eslint-disable react-hooks/exhaustive-deps */
+  // Effect for loading categories
   useEffect(() => {
-    setLoadingCategories(true);
-    const unsubscribe = onValue(categoriesRef, (snapshot) => {
-      const data = snapshot.val();
-      setCategories(data ? Object.values(data) : []);
-      setLoadingCategories(false);
-    }, (error) => {
-      console.error("Error al cargar categorías:", error);
+    const unsubscribe = subscribeToCategories((loadedCategories) => {
+      setCategories(loadedCategories);
       setLoadingCategories(false);
     });
     return () => unsubscribe();
   }, []);
-  /* eslint-enable react-hooks/exhaustive-deps */
 
-  // Load User Lists and Set Default List
-  useEffect(() => {
-    if (!currentUser) {
-      setUserLists([]);
-      setCurrentListId(null);
-      setCurrentListName('');
-      return;
-    }
-
-    const unsubscribe = onValue(userListsRef, (snapshot) => {
-      const data = snapshot.val();
-      const loadedLists = [];
-      if (data) {
-        for (let key in data) {
-          loadedLists.push({
-            id: key,
-            nameList: data[key].nameList || 'Lista sin nombre',
-            createdAt: data[key].createdAt || null
-          });
-        }
-        loadedLists.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
-      }
-      setUserLists(loadedLists);
-
-      if (loadedLists.length > 0) {
-        const selectedList = loadedLists.find(list => list.id === currentListId);
-        if (selectedList) {
-          setCurrentListId(selectedList.id);
-          setCurrentListName(selectedList.nameList);
-        } else {
-          setCurrentListId(loadedLists[0].id);
-          setCurrentListName(loadedLists[0].nameList);
-        }
-      } else {
-        setCurrentListId(null);
-        setCurrentListName('');
-      }
-    }, (error) => {
-      console.error("Error al cargar listas del usuario:", error);
-    });
-
-    return () => unsubscribe();
-  }, [currentUser, userListsRef, currentListId]);
-
-  // Load Products for current list
-  useEffect(() => {
-    if (!currentUser || !currentListId) {
-      setProducts([]);
-      setLoadingProducts(false);
-      return;
-    }
-
-    setLoadingProducts(true);
-    const currentListProductsRef = ref(dbRealtime, `Users/${currentUser.uid}/User_Lists/${currentListId}/products`);
-
-    const unsubscribe = onValue(currentListProductsRef, (snapshot) => {
-      const data = snapshot.val();
-      const loadedProducts = [];
-      if (data) {
-        for (let key in data) {
-          loadedProducts.push({
-            firebaseId: key,
-            nombre: data[key].nameProd,
-            valor: data[key].price,
-            cantidad: data[key].quantity,
-            category: data[key].category,
-            icon: data[key].icon,
-            completed: data[key].completed || false
-          });
-        }
-      }
-      setProducts(loadedProducts);
-      setLoadingProducts(false);
-    }, (error) => {
-      console.error("Error al cargar productos:", error);
-      setLoadingProducts(false);
-    });
-
-    return () => unsubscribe();
-  }, [currentUser, currentListId]);
-
-  // List management functions
-  const createList = async (listName) => {
-    if (!currentUser || !listName.trim()) return;
-    try {
-      const newListRef = push(userListsRef);
-      await set(newListRef, {
-        nameList: listName.trim(),
-        createdAt: Date.now()
-      });
-      showSuccessToast(`¡Lista <strong>"${listName}"</strong> Creada! `); // Replaced Swal.fire
-    } catch (error) {
-      console.error("Error al crear nueva lista:", error);
-      showErrorAlert('Error', 'No se pudo crear la lista.'); // Replaced Swal.fire
-    }
-  };
-
-  const deleteList = async (listIdToDelete) => {
-    if (!currentUser || !listIdToDelete) return;
-    try {
-      const listRefToDelete = ref(dbRealtime, `Users/${currentUser.uid}/User_Lists/${listIdToDelete}`);
-      await remove(listRefToDelete);
-      // Success toast is handled in SidebarMenu's handleDeleteListConfirm
-    } catch (error) {
-      console.error("Error al eliminar lista:", error);
-      throw new Error('Failed to delete list');
-    }
-  };
-
-  const selectList = (listId) => {
-    setCurrentListId(listId);
-    const selected = userLists.find(list => list.id === listId);
-    if (selected) {
-      setCurrentListName(selected.nameList);
-    }
-    setEditingProduct(null);
-    setShowProductForm(false);
-  };
-
-  // Product management functions (Firebase operations)
-  const handleAddProduct = async (productoDataFormulario) => {
-    if (!currentUser || !currentListId) return;
-    try {
-      const productsRef = ref(dbRealtime, `Users/${currentUser.uid}/User_Lists/${currentListId}/products`);
-      await push(productsRef, {
-        nameProd: productoDataFormulario.nombre,
-        price: parseFloat(productoDataFormulario.valor),
-        quantity: parseInt(productoDataFormulario.cantidad),
-        completed: false,
-        category: productoDataFormulario.category,
-        icon: productoDataFormulario.icon,
-      });
-
-      showSuccessToast(`¡Producto <strong>"${productoDataFormulario.nombre}"</strong> Añadido!`); // Replaced Swal.fire
-      setShowProductForm(false);
-    } catch (error) {
-      console.error("Error al añadir producto:", error);
-      showErrorAlert('Error', 'No se pudo añadir el producto.'); // Replaced Swal.fire
-    }
-  };
-
-  const handleEditProduct = async (firebaseId, productoDataFormulario) => {
-    if (!currentUser || !currentListId) return;
-    try {
-      const productRef = ref(dbRealtime, `Users/${currentUser.uid}/User_Lists/${currentListId}/products/${firebaseId}`);
-      await update(productRef, {
-        nameProd: productoDataFormulario.nombre,
-        price: parseFloat(productoDataFormulario.valor),
-        quantity: parseInt(productoDataFormulario.cantidad),
-        category: productoDataFormulario.category,
-        icon: productoDataFormulario.icon,
-      });
-      showSuccessAlert('¡Producto Actualizado!'); // Replaced Swal.fire
-      setEditingProduct(null);
-      setShowProductForm(false);
-    } catch (error) {
-      console.error("Error al actualizar producto:", error);
-      showErrorAlert('Error', 'No se pudo actualizar el producto.'); // Replaced Swal.fire
-    }
-  };
-
+  // Form handling logic
   const handleStartEditing = (product) => {
     setEditingProduct(product);
     setShowProductForm(true);
@@ -234,95 +69,46 @@ function MainAppContent() {
     setShowProductForm(false);
   };
 
-  const handleDeleteProduct = async (firebaseId) => {
-    if (!currentUser || !currentListId) return;
-    try {
-      const productRef = ref(dbRealtime, `Users/${currentUser.uid}/User_Lists/${currentListId}/products/${firebaseId}`);
-      await remove(productRef);
-      // Success toast is handled in ProductItem's confirmDelete
-    } catch (error) {
-      console.error("Error al eliminar producto:", error);
-      showErrorAlert('Error', 'No se pudo eliminar el producto.'); // Replaced Swal.fire
-    }
+  const handleAddProduct = (productData) => {
+    addProduct(productData);
+    setShowProductForm(false);
   };
 
-  const toggleComplete = async (firebaseId) => {
-    if (!currentUser || !currentListId) return;
-    try {
-      const productRef = ref(dbRealtime, `Users/${currentUser.uid}/User_Lists/${currentListId}/products/${firebaseId}`);
-      const productToUpdate = products.find(p => p.firebaseId === firebaseId);
-      if (productToUpdate) {
-        await update(productRef, {
-          completed: !productToUpdate.completed
-        });
-      }
-    } catch (error) {
-      console.error("Error al actualizar estado de completado:", error);
-    }
+  const handleEditProduct = (firebaseId, productData) => {
+    editProduct(firebaseId, productData);
+    setEditingProduct(null);
+    setShowProductForm(false);
   };
 
-  const clearAllProducts = async () => {
-    if (!currentUser || !currentListId) return;
-    const isConfirmed = await showConfirmAlert({ // Replaced Swal.fire
-      title: '¿Estás seguro?',
-      text: `¿Quieres vaciar todos los productos de "${currentListName}"?`,
-      confirmButtonText: 'Sí, vaciar',
-      cancelButtonText: 'Cancelar'
-    });
-
-    if (isConfirmed) {
-      try {
-        const productsRef = ref(dbRealtime, `Users/${currentUser.uid}/User_Lists/${currentListId}/products`);
-        await remove(productsRef);
-        showSuccessAlert('¡Lista Vaciada!', 'Todos los productos han sido eliminados.'); // Replaced Swal.fire
-      } catch (error) {
-        console.error("Error al vaciar la lista:", error);
-        showErrorAlert('Error', 'No se pudo vaciar la lista.'); // Replaced Swal.fire
-      }
+  const handleToggleForm = () => {
+    if (editingProduct) {
+      setEditingProduct(null);
     }
+    setShowProductForm(prev => !prev);
   };
 
+  // Filtering and calculations
   const filteredProducts = products.filter(producto =>
     producto.nombre.toLowerCase().includes(searchTerm.toLowerCase())
   );
-
   const totalProductos = filteredProducts.length;
-
-  const totalGeneral = filteredProducts.reduce((sum, producto) => {
+  const totalGeneral = products.reduce((sum, producto) => {
     if (!producto.completed) {
-      return sum + ((producto.valor || 0) * (producto.cantidad || 0));
+      return sum + ((producto.valor || 0) * (producto.cantidad || 0)); 
     }
     return sum;
   }, 0);
-
-  // Function to handle toggle form button click (now directly in App.js)
-  const handleToggleForm = () => {
-    if (editingProduct) {
-      setEditingProduct(null); // Clear editing state if we're canceling an edit
-    }
-    setShowProductForm(prev => !prev); // Toggle the form visibility
-  };
 
   return (
     <div className="App">
       <Header />
       <div className="container">
-        <SidebarMenu
-          currentUser={currentUser}
-          logout={logout}
-          userLists={userLists}
-          createList={createList}
-          selectList={selectList}
-          currentListId={currentListId}
-          deleteList={deleteList}
-          // Puedes agregar un enlace o botón para "Supermercados" aquí
-          // Por ejemplo:
-          // onGoToSupermercados={() => navigate('/supermercados')}
-        />
+        <SidebarMenu />
 
-        {/* MAIN CONTENT AREA */}
         <div className="main-content-area">
-          {currentListId ? (
+          {loadingLists ? (
+            <p className="loading-message">Cargando tus listas...</p>
+          ) : currentListId ? (
             <>
               <div className="list-header">
                 <h3 className="current-list-title">
@@ -331,20 +117,16 @@ function MainAppContent() {
                 </h3>
                 <h4>
                   Total de Productos:{' '}
-                  <span dangerouslySetInnerHTML={{__html: totalProductos || '<em style="font-weight: lighter;">Sin Productos</em>',}}></span>
+                  <span dangerouslySetInnerHTML={{__html: totalProductos || '<em style="font-weight: lighter;">Sin Productos</em>'}}></span>
                 </h4>
               </div>
-              {/* ProductList always visible */}
               {loadingProducts ? (
-                <p className="loading-message">Cargando lista...</p>
+                <p className="loading-message">Cargando productos...</p>
               ) : (
                 <ProductList
                   productos={filteredProducts}
                   busqueda={searchTerm}
                   onEditar={handleStartEditing}
-                  onEliminar={handleDeleteProduct}
-                  onToggleComplete={toggleComplete}
-                  onClearAllProducts={clearAllProducts}
                 />
               )}
             </>
@@ -355,19 +137,15 @@ function MainAppContent() {
               <p className="empty-description">Usa el botón de menú (☰) en la esquina superior derecha para gestionar tus listas.</p>
             </div>
           )}
-        </div> {/* END OF main-content-area */}
+        </div>
 
-        {/* FIXED BOTTOM SECTION: Controls + Product Form (if visible) */}
         {currentListId && (
           <div className="fixed-bottom-controls">
-            {/* These elements are always visible in the bottom bar */}
             <div className="bottom-controls-header">
               <SearchBar
                 busqueda={searchTerm}
                 setBusqueda={setSearchTerm}
-              // REMOVED: mostrarFormulario, setMostrarFormulario, onCancelar props
               />
-              {/* NEW: Button moved here */}
               <Button
                 onClick={handleToggleForm}
                 variant={showProductForm ? 'secondary' : 'primary'}
@@ -379,10 +157,9 @@ function MainAppContent() {
               <TotalSummary total={totalGeneral} />
             </div>
 
-            {/* Product Form (conditionally rendered below the controls) */}
             {showProductForm && (
               loadingCategories ? (
-                <p className="loading-message">Cargando categorías para formulario...</p>
+                <p className="loading-message">Cargando categorías...</p>
               ) : (
                 <ProductForm
                   editandoId={editingProduct ? editingProduct.firebaseId : null}
@@ -433,7 +210,11 @@ function App() {
   return (
     <Router>
       <AuthProvider>
-        <AppRouter />
+        <UserListsProvider>
+          <ProductsProvider>
+            <AppRouter />
+          </ProductsProvider>
+        </UserListsProvider>
       </AuthProvider>
     </Router>
   );

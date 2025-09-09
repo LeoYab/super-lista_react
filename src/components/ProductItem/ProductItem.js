@@ -5,7 +5,10 @@ import { showConfirmAlert, showSuccessToast } from '../../Notifications/Notifica
 // Asegúrate de que esta ruta sea correcta para tu estructura de archivos
 import { useSwipeable } from '../../hooks/useSwipeable';
 
-const ProductItem = ({ producto, onEditar, onEliminar, onToggleComplete }) => {
+import { useProductsContext } from '../../context/ProductsContext';
+
+const ProductItem = ({ producto, onEditar }) => {
+    const { deleteProduct, toggleComplete } = useProductsContext();
     const itemTotal = (producto.valor || 0) * (producto.cantidad || 0);
 
     const formattedPrice = (producto.valor || 0).toLocaleString('es-AR', {
@@ -56,7 +59,7 @@ const ProductItem = ({ producto, onEditar, onEliminar, onToggleComplete }) => {
             });
 
             if (isConfirmed) {
-                await onEliminar(producto.firebaseId);
+                await deleteProduct(producto.firebaseId);
                 showSuccessToast(`¡Producto <strong>"${producto.nombre}"</strong> Eliminado!`);
             }
             // NO se llama a closeSwipe aquí, el hook se encarga de eso automáticamente
@@ -65,7 +68,7 @@ const ProductItem = ({ producto, onEditar, onEliminar, onToggleComplete }) => {
             console.error('Error al confirmar eliminación:', error);
             // closeSwipe se llamará automáticamente por el hook
         }
-    }, [producto.firebaseId, producto.nombre, onEliminar]);
+    }, [producto.firebaseId, producto.nombre, deleteProduct]);
 
     const handleTriggerEdit = useCallback(() => {
         // NO se llama a closeSwipe aquí, el hook se encarga de eso automáticamente.
@@ -73,10 +76,10 @@ const ProductItem = ({ producto, onEditar, onEliminar, onToggleComplete }) => {
     }, [onEditar, producto]);
 
     const handleToggleComplete = useCallback(() => {
-        if (onToggleComplete) {
-            onToggleComplete(producto.firebaseId);
+        if (toggleComplete) {
+            toggleComplete(producto.firebaseId);
         }
-    }, [onToggleComplete, producto.firebaseId]);
+    }, [toggleComplete, producto.firebaseId]);
 
     // --- Uso del hook useSwipeable ---
     const {
