@@ -70,11 +70,11 @@ jobs:
           echo "has_changes=true" >> $GITHUB_OUTPUT
         fi
 
-    - name: Rebase with main
+    - name: Merge with main preferring local changes
       if: steps.commit_changes.outputs.has_changes == 'true'
       run: |
         git fetch origin main
-        git rebase origin/main || (git rebase --abort && echo "❌ Rebase failed, please resolve manually." && exit 1)
+        git merge origin/main -X ours || (echo "❌ Merge failed" && exit 1)
 
     - name: Push Branch and Create Pull Request
       if: success() && steps.commit_changes.outputs.has_changes == 'true'
