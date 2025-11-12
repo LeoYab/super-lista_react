@@ -139,6 +139,8 @@ async function writeToJson(data, filename) {
         return;
     }
     try {
+        const dir = path.dirname(filename);
+        await fsp.mkdir(dir, { recursive: true });
         await fsp.writeFile(filename, JSON.stringify(data, null, 2), 'utf8');
         console.log(`Datos guardados en ${filename}`);
     } catch (err) {
@@ -303,8 +305,17 @@ function findMatchingBranch(branch, targetLocations) {
 }
 
 function normalizeProductData(product, targetBrand, targetSucursalId) {
-    if (!product.productos_descripcion || !product.productos_precio_lista) {
+    // Validación mejorada de campos requeridos
+    const descripcion = product.productos_descripcion?.trim();
+    if (!descripcion || !product.productos_precio_lista) {
         console.warn('Producto con datos faltantes (descripción o precio), saltando:', product);
+        return null;
+    }
+
+    // Validación y parseo de precio mejorado
+    let precio = parseFloat(String(product.productos_precio_lista).replace(',', '.'));
+    if (isNaN(precio) || precio <= 0) {
+        console.warn(`Precio inválido o cero para producto '${descripcion}' (precio: '${product.productos_precio_lista}'). Saltando.`);
         return null;
     }
 
@@ -316,28 +327,23 @@ function normalizeProductData(product, targetBrand, targetSucursalId) {
     } else if (sanitizedEan && sanitizedEan !== '0') {
         uniqueIdentifier = sanitizedEan;
     } else {
-        const fallbackSource = `${product.productos_descripcion || 'NODESC'}-${product.productos_marca || 'NOMARCA'}-${product.productos_cantidad_presentacion || 'NOQTY'}-${product.productos_unidad_medida_presentacion || 'NOUNIT'}`;
+        // CORREGIDO: Sin timestamp ni random para IDs consistentes
+        const fallbackSource = `${descripcion}-${product.productos_marca || 'NOMARCA'}-${product.productos_cantidad_presentacion || 'NOQTY'}-${product.productos_unidad_medida_presentacion || 'NOUNIT'}`;
         uniqueIdentifier = crypto.createHash('md5')
-            .update(`${fallbackSource}-${Date.now()}-${Math.random()}`)
+            .update(fallbackSource)
             .digest('base64')
             .replace(/[^a-zA-Z0-9]/g, '')
             .substring(0, 16);
 
-        console.warn(`[WARN] id_producto y EAN inválidos o cero para producto '${product.productos_descripcion}' (id_producto original: '${product.id_producto || 'vacío'}', EAN original: '${product.productos_ean || 'vacío'}'). Generando ID de respaldo: ${uniqueIdentifier}`);
+        console.warn(`[WARN] id_producto y EAN inválidos para '${descripcion}' (id_producto: '${product.id_producto || 'vacío'}', EAN: '${product.productos_ean || 'vacío'}'). ID generado: ${uniqueIdentifier}`);
     }
 
     const productId = `${uniqueIdentifier}-${targetSucursalId}`;
 
-    let precio = parseFloat(String(product.productos_precio_lista).replace(',', '.'));
-    if (isNaN(precio)) {
-        console.warn(`Precio inválido para producto '${product.productos_descripcion}' (EAN: '${product.productos_ean || uniqueIdentifier}'):`, product.productos_precio_lista);
-        precio = 0;
-    }
-
     return {
         id: productId,
         ean: sanitizedEan,
-        nombre: product.productos_descripcion.trim(),
+        nombre: descripcion,
         marca_producto: product.productos_marca ? product.productos_marca.trim() : 'Sin Marca',
         precio: precio,
         cantidad_presentacion: product.productos_cantidad_presentacion ? product.productos_cantidad_presentacion.trim() : '1',
@@ -485,24 +491,16 @@ async function writeFinalJsons(allProductsByBranchFromZip, allFilteredSucursales
     const baseProductsDir = BASE_PRODUCTS_DIR;
     await fsp.mkdir(baseProductsDir, { recursive: true });
 
-    console.log(`\nEscribiendo archivos JSON de productos (por marca y sucursal) en '${baseProductsDir}' (sobrescribiendo)...`);
+    console.log(`\nEscribiendo archivos JSON de productos (por marca y sucursal) en '${baseProductsDir}'...`);
 
-    /* const existingProductBrands = await fsp.readdir(baseProductsDir, { withFileTypes: true });
-    for (const brandDirEntry of existingProductBrands) {
-        if (brandDirEntry.isDirectory()) {
-            const brandPath = path.join(baseProductsDir, brandDirEntry.name);
-            console.log(`    Limpiando directorio de marca de productos existente: ${brandPath}`);
-            await fsp.rm(brandPath, { recursive: true, force: true });
-        }
-    } */
-
+    // CORREGIDO: No limpiamos todo el directorio, solo sobrescribimos los archivos que actualizamos
     let totalProductsFilesWritten = 0;
     for (const [brandName, branchesMap] of allProductsByBranchFromZip.entries()) {
         if (MARCAS_NORMALIZADAS_INTERES.has(brandName)) {
             const safeBrandName = brandName.replace(/[^a-z0-9]/gi, '').toLowerCase();
             const brandDir = path.join(baseProductsDir, safeBrandName);
             await fsp.mkdir(brandDir, { recursive: true });
-            console.log(`    Creando directorio para marca de productos: ${brandName}`);
+            console.log(`    Procesando marca de productos: ${brandName}`);
 
             for (const [branchId, productsList] of branchesMap.entries()) {
                 const isTargetBranch = TARGET_SUPERMARKETS_LOCATIONS.some(ts =>
@@ -540,8 +538,13 @@ async function cleanTempJsons() {
 }
 
 async function generarJsonFiltrados() {
+    const downloadDate = new Date();
+    console.log(`\n=== Iniciando proceso de descarga y procesamiento ===`);
+    console.log(`Fecha/Hora: ${downloadDate.toISOString()}`);
+    console.log(`Día de la semana: ${downloadDate.getDay()} (${['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'][downloadDate.getDay()]})`);
+    
     try {
-        console.log('Iniciando proceso de filtrado y generación de JSONs...');
+        console.log('\nIniciando proceso de filtrado y generación de JSONs...');
 
         await fsp.mkdir(TEMP_DATA_DIR, { recursive: true });
         console.log(`Directorio temporal creado/verificado: ${TEMP_DATA_DIR}`);
@@ -585,7 +588,8 @@ async function generarJsonFiltrados() {
             console.error('No se encontraron ZIPs internos con los prefijos especificados para procesar.');
             const allFoundZips = directory.files.filter(f => f.path.toLowerCase().endsWith('.zip')).map(f => path.basename(f.path));
             console.log('ZIPs internos encontrados en el archivo principal (sin filtrar por prefijo):', allFoundZips);
-            process.exit(1);
+            console.warn('[WARN] No hay datos nuevos para procesar en este ZIP. Los archivos existentes se mantendrán sin cambios.');
+            return;
         }
 
         console.log(`Encontrados ${zipsInternos.length} ZIPs internos especificados para procesar.`);
@@ -594,6 +598,7 @@ async function generarJsonFiltrados() {
 
         const allFilteredSucursalesByBrand = new Map();
         const allProductsByBranch = new Map();
+        const processingErrors = [];
 
         for (const zip of zipsInternos) {
             console.log(`Procesando ZIP interno: ${zip.path}`);
@@ -601,20 +606,36 @@ async function generarJsonFiltrados() {
                 const bufferZipInterno = await zip.buffer();
                 await procesarZipInterno(bufferZipInterno, allFilteredSucursalesByBrand, allProductsByBranch, path.basename(zip.path));
             } catch (innerZipError) {
-                console.error(`Error al extraer o procesar el ZIP interno ${zip.path}. Saltando.`, innerZipError);
+                const errorMsg = `Error al extraer o procesar el ZIP interno ${zip.path}: ${innerZipError.message}`;
+                console.error(errorMsg);
+                processingErrors.push(errorMsg);
             }
         }
         console.log('\nTodos los ZIPs internos procesados.');
+
+        if (processingErrors.length > 0) {
+            console.warn(`\n[WARN] Se encontraron ${processingErrors.length} errores durante el procesamiento:`);
+            processingErrors.forEach(err => console.warn(`  - ${err}`));
+        }
 
         console.log('\n--- Escribiendo archivos JSON locales ---');
         await writeFinalJsons(allProductsByBranch, allFilteredSucursalesByBrand);
         console.log('Archivos JSON locales actualizados completamente.');
 
-        console.log('\nProceso completado exitosamente. Todos los datos de interés fueron procesados y guardados en archivos JSON.');
+        console.log('\n=== Proceso completado exitosamente ===');
+        console.log(`Sucursales actualizadas: ${Array.from(allFilteredSucursalesByBrand.values()).reduce((acc, map) => acc + map.size, 0)}`);
+        console.log(`Marcas con productos: ${allProductsByBranch.size}`);
+        for (const [brand, branchesMap] of allProductsByBranch.entries()) {
+            const totalProducts = Array.from(branchesMap.values()).reduce((acc, list) => acc + list.length, 0);
+            console.log(`  - ${brand}: ${totalProducts} productos en ${branchesMap.size} sucursales`);
+        }
+        
         process.exit(0);
 
     } catch (error) {
-        console.error('\nError crítico en el proceso general:', error);
+        console.error('\n=== Error crítico en el proceso general ===');
+        console.error('Mensaje:', error.message);
+        console.error('Stack:', error.stack);
         process.exit(1);
     } finally {
         try {
