@@ -2,7 +2,7 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getDatabase } from 'firebase/database';
-import { getFirestore } from 'firebase/firestore'; // <-- ¡IMPORTANTE: Añade esta línea!
+import { getFirestore } from 'firebase/firestore';
 
 // Accede a las variables de entorno usando process.env
 const firebaseConfig = {
