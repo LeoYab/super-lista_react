@@ -485,16 +485,16 @@ async function writeFinalJsons(allProductsByBranchFromZip, allFilteredSucursales
     const baseProductsDir = BASE_PRODUCTS_DIR;
     await fsp.mkdir(baseProductsDir, { recursive: true });
 
-    console.log(`\nEscribiendo archivos JSON de productos (por marca y sucursal) en '${baseProductsDir}' (sobrescribiendo y limpiando)...`);
+    console.log(`\nEscribiendo archivos JSON de productos (por marca y sucursal) en '${baseProductsDir}' (sobrescribiendo)...`);
 
-    const existingProductBrands = await fsp.readdir(baseProductsDir, { withFileTypes: true });
+    /* const existingProductBrands = await fsp.readdir(baseProductsDir, { withFileTypes: true });
     for (const brandDirEntry of existingProductBrands) {
         if (brandDirEntry.isDirectory()) {
             const brandPath = path.join(baseProductsDir, brandDirEntry.name);
             console.log(`    Limpiando directorio de marca de productos existente: ${brandPath}`);
             await fsp.rm(brandPath, { recursive: true, force: true });
         }
-    }
+    } */
 
     let totalProductsFilesWritten = 0;
     for (const [brandName, branchesMap] of allProductsByBranchFromZip.entries()) {
