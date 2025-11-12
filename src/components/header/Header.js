@@ -10,7 +10,7 @@ const Header = () => {
           <h1 className="header-title">Super Lista</h1>
         </div>
         <div className="header-subtitle">
-          <p>Gestiona tu lista de compras en supermercados</p>
+          <p>¡Gestiona tu lista de compras en supermercados!</p>
         </div>
       </div>
     </header>
