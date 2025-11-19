@@ -117,12 +117,19 @@
     "ultima_actualizacion": "2025-11-19T14:13:19.605Z"
   },
   {
-    "id": "0000077908308-87",
+    "id": "0000077907943-87",
     "ean": "1",
+<<<<<<< HEAD
+    "nombre": "CARAMELO TUTTI FRUTI",
+    "marca_producto": "LENGU",
+    "precio": 350,
+    "cantidad_presentacion": "13.00",
+=======
     "nombre": "ALFAJOR SIMPLE",
     "marca_producto": "TITA",
     "precio": 960,
     "cantidad_presentacion": "36.00",
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "unidad_medida_presentacion": "GR",
     "supermercado_marca": "Dia",
     "sucursal_id": "87",
@@ -134,7 +141,11 @@
     "ean": "1",
     "nombre": "TURRON CARAMELO/MANI",
     "marca_producto": "ARCOR",
+<<<<<<< HEAD
+    "precio": 356,
+=======
     "precio": 360,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "25.00",
     "unidad_medida_presentacion": "GR",
     "supermercado_marca": "Dia",
@@ -160,7 +171,11 @@
     "ean": "1",
     "nombre": "ALFAJOR TRIPLE CHOCO",
     "marca_producto": "SHOT",
+<<<<<<< HEAD
+    "precio": 1267,
+=======
     "precio": 1980,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "60.00",
     "unidad_medida_presentacion": "GR",
     "supermercado_marca": "Dia",
@@ -173,7 +188,11 @@
     "ean": "1",
     "nombre": "CHICLE MENTA FUERTE",
     "marca_producto": "BELDE",
+<<<<<<< HEAD
+    "precio": 633,
+=======
     "precio": 995,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "10.00",
     "unidad_medida_presentacion": "GR",
     "supermercado_marca": "Dia",
@@ -234,9 +253,9 @@
     "ultima_actualizacion": "2025-11-19T14:13:19.605Z"
   },
   {
-    "id": "0000077982353-87",
+    "id": "0000077982377-87",
     "ean": "1",
-    "nombre": "CHICLE TUTTI FRUTTI",
+    "nombre": "CHICLE UVA",
     "marca_producto": "BUBBA",
     "precio": 130,
     "cantidad_presentacion": "5.00",
@@ -2045,7 +2064,11 @@
     "ean": "1",
     "nombre": "MORRON ROJO GRANEL",
     "marca_producto": "Sin Marca",
+<<<<<<< HEAD
+    "precio": 8990,
+=======
     "precio": 4990,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "1.00",
     "unidad_medida_presentacion": "KG",
     "supermercado_marca": "Dia",
@@ -2279,7 +2302,11 @@
     "ean": "1",
     "nombre": "ZAPALLO",
     "marca_producto": "Sin Marca",
+<<<<<<< HEAD
+    "precio": 890,
+=======
     "precio": 1290,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "1.00",
     "unidad_medida_presentacion": "KG",
     "supermercado_marca": "Dia",
@@ -2327,6 +2354,7 @@
     "ultima_actualizacion": "2025-11-19T14:13:19.605Z"
   },
   {
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "id": "4005808257669-87",
     "ean": "1",
     "nombre": "DEO ROLL ON PEAR&BEA",
@@ -4125,7 +4153,11 @@
     "ean": "1",
     "nombre": "SNACK ORIGIN PICANTE",
     "marca_producto": "TAKIS",
+<<<<<<< HEAD
+    "precio": 2895,
+=======
     "precio": 3115,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "85.00",
     "unidad_medida_presentacion": "GR",
     "supermercado_marca": "Dia",
@@ -4138,7 +4170,11 @@
     "ean": "1",
     "nombre": "SNACK INTENSE QUESO",
     "marca_producto": "TAKIS",
+<<<<<<< HEAD
+    "precio": 2895,
+=======
     "precio": 3115,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "85.00",
     "unidad_medida_presentacion": "GR",
     "supermercado_marca": "Dia",
@@ -6205,7 +6241,11 @@
     "ean": "1",
     "nombre": "PEPITOS TRIPACK QJ",
     "marca_producto": "PEPIT",
+<<<<<<< HEAD
+    "precio": 5180,
+=======
     "precio": 5298,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "357.00",
     "unidad_medida_presentacion": "GR",
     "supermercado_marca": "Dia",
@@ -6452,7 +6492,7 @@
     "ean": "1",
     "nombre": "GALLETITAS RELLENAS",
     "marca_producto": "MELBA",
-    "precio": 1265,
+    "precio": 1310,
     "cantidad_presentacion": "120.00",
     "unidad_medida_presentacion": "GR",
     "supermercado_marca": "Dia",
@@ -6723,6 +6763,43 @@
   {
     "id": "7702425632189-87",
     "ean": "1",
+<<<<<<< HEAD
+    "nombre": "CEREAL FROOT LOOPS",
+    "marca_producto": "KELLO",
+    "precio": 4095,
+    "cantidad_presentacion": "195.00",
+    "unidad_medida_presentacion": "GR",
+    "supermercado_marca": "Dia",
+    "sucursal_id": "87",
+    "stock": true,
+    "ultima_actualizacion": "2025-11-19T11:34:42.487Z"
+  },
+  {
+    "id": "7702103799883-87",
+    "ean": "1",
+    "nombre": "CEREA CHOCO KRIS POP",
+    "marca_producto": "KELLO",
+    "precio": 4395,
+    "cantidad_presentacion": "185.00",
+    "unidad_medida_presentacion": "GR",
+    "supermercado_marca": "Dia",
+    "sucursal_id": "87",
+    "stock": true,
+    "ultima_actualizacion": "2025-11-19T11:34:42.487Z"
+  },
+  {
+    "id": "7702425632189-87",
+    "ean": "1",
+    "nombre": "TOALLA HUM LIMP/DIAR",
+    "marca_producto": "HUGGI",
+    "precio": 7940,
+    "cantidad_presentacion": "112.00",
+    "unidad_medida_presentacion": "UD",
+    "supermercado_marca": "Dia",
+    "sucursal_id": "87",
+    "stock": true,
+    "ultima_actualizacion": "2025-11-19T11:34:42.487Z"
+=======
     "nombre": "TOALLA HUM LIMP/DIAR",
     "marca_producto": "HUGGI",
     "precio": 8570,
@@ -8610,7 +8687,11 @@
     "ean": "1",
     "nombre": "FIDEOS TIRABUZON",
     "marca_producto": "MATAR",
+<<<<<<< HEAD
+    "precio": 1676,
+=======
     "precio": 1750,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "500.00",
     "unidad_medida_presentacion": "GR",
     "supermercado_marca": "Dia",
@@ -8792,7 +8873,11 @@
     "ean": "1",
     "nombre": "SNACK OBLEA ESTUCHE",
     "marca_producto": "GALLO",
+<<<<<<< HEAD
+    "precio": 1140,
+=======
     "precio": 1300,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "20.00",
     "unidad_medida_presentacion": "GR",
     "supermercado_marca": "Dia",
@@ -10066,7 +10151,11 @@
     "ean": "1",
     "nombre": "JAMON COCIDO FET BS",
     "marca_producto": "PALAD",
+<<<<<<< HEAD
+    "precio": 3670,
+=======
     "precio": 3989,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "150.00",
     "unidad_medida_presentacion": "GR",
     "supermercado_marca": "Dia",
@@ -10313,6 +10402,48 @@
     "ean": "1",
     "nombre": "MAYONESA ORI S/TACC",
     "marca_producto": "MENOY",
+<<<<<<< HEAD
+    "precio": 890,
+    "cantidad_presentacion": "250.00",
+    "unidad_medida_presentacion": "GR",
+    "supermercado_marca": "Dia",
+    "sucursal_id": "87",
+    "stock": true,
+    "ultima_actualizacion": "2025-11-19T11:34:42.487Z"
+  },
+  {
+    "id": "7790130002762-87",
+    "ean": "1",
+    "nombre": "MAYONESA ORI S/TACC",
+    "marca_producto": "MENOY",
+    "precio": 1650,
+    "cantidad_presentacion": "500.00",
+    "unidad_medida_presentacion": "GR",
+    "supermercado_marca": "Dia",
+    "sucursal_id": "87",
+    "stock": true,
+    "ultima_actualizacion": "2025-11-19T11:34:42.487Z"
+  },
+  {
+    "id": "7790130002779-87",
+    "ean": "1",
+    "nombre": "MAYONESA ORI S/TACC",
+    "marca_producto": "MENOY",
+    "precio": 2800,
+    "cantidad_presentacion": "900.00",
+    "unidad_medida_presentacion": "ML",
+    "supermercado_marca": "Dia",
+    "sucursal_id": "87",
+    "stock": true,
+    "ultima_actualizacion": "2025-11-19T11:34:42.487Z"
+  },
+  {
+    "id": "7790130002786-87",
+    "ean": "1",
+    "nombre": "MAYONESA LIGHT S/TAC",
+    "marca_producto": "MENOY",
+=======
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "precio": 950,
     "cantidad_presentacion": "250.00",
     "unidad_medida_presentacion": "GR",
@@ -10328,6 +10459,22 @@
     "marca_producto": "MENOY",
     "precio": 1790,
     "cantidad_presentacion": "500.00",
+<<<<<<< HEAD
+    "unidad_medida_presentacion": "ML",
+    "supermercado_marca": "Dia",
+    "sucursal_id": "87",
+    "stock": true,
+    "ultima_actualizacion": "2025-11-19T11:34:42.487Z"
+  },
+  {
+    "id": "7790130002823-87",
+    "ean": "1",
+    "nombre": "MOSTAZA SIN TACC",
+    "marca_producto": "MENOY",
+    "precio": 300,
+    "cantidad_presentacion": "60.00",
+=======
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "unidad_medida_presentacion": "GR",
     "supermercado_marca": "Dia",
     "sucursal_id": "87",
@@ -11873,7 +12020,11 @@
     "ean": "1",
     "nombre": "PAÑAL ULTRASOFT G",
     "marca_producto": "BABYS",
+<<<<<<< HEAD
+    "precio": 1494,
+=======
     "precio": 3980,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "8.00",
     "unidad_medida_presentacion": "UD",
     "supermercado_marca": "Dia",
@@ -11886,7 +12037,11 @@
     "ean": "1",
     "nombre": "PAÑAL ULTRASOFT XG",
     "marca_producto": "BABYS",
+<<<<<<< HEAD
+    "precio": 1294,
+=======
     "precio": 3980,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "8.00",
     "unidad_medida_presentacion": "UD",
     "supermercado_marca": "Dia",
@@ -11899,7 +12054,11 @@
     "ean": "1",
     "nombre": "PAÑAL ULTRASOFT XXG",
     "marca_producto": "BABYS",
+<<<<<<< HEAD
+    "precio": 1294.09,
+=======
     "precio": 3980,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "8.00",
     "unidad_medida_presentacion": "UD",
     "supermercado_marca": "Dia",
@@ -13225,7 +13384,11 @@
     "ean": "1",
     "nombre": "HAMBURG CARNE 960GR",
     "marca_producto": "SWIFT",
+<<<<<<< HEAD
+    "precio": 16940,
+=======
     "precio": 16409,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "960.00",
     "unidad_medida_presentacion": "GR",
     "supermercado_marca": "Dia",
@@ -13446,7 +13609,7 @@
     "ean": "1",
     "nombre": "YERBA MATE 4 FLEX",
     "marca_producto": "MAÑAN",
-    "precio": 2219,
+    "precio": 2475,
     "cantidad_presentacion": "500.00",
     "unidad_medida_presentacion": "GR",
     "supermercado_marca": "Dia",
@@ -14200,6 +14363,9 @@
     "ean": "1",
     "nombre": "AEROSOL ORIGINAL",
     "marca_producto": "BLEM",
+<<<<<<< HEAD
+    "precio": 4780,
+=======
     "precio": 5190,
     "cantidad_presentacion": "360.00",
     "unidad_medida_presentacion": "ML",
@@ -14214,6 +14380,7 @@
     "nombre": "LUSTRAMUEBLE LAVANDA",
     "marca_producto": "BLEM",
     "precio": 5190,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "360.00",
     "unidad_medida_presentacion": "ML",
     "supermercado_marca": "Dia",
@@ -14317,7 +14484,11 @@
     "ean": "1",
     "nombre": "LIMP RECARGA CITRUS",
     "marca_producto": "BLEM",
+<<<<<<< HEAD
+    "precio": 2500,
+=======
     "precio": 2720,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "450.00",
     "unidad_medida_presentacion": "ML",
     "supermercado_marca": "Dia",
@@ -14839,6 +15010,7 @@
     "marca_producto": "COFLE",
     "precio": 7910,
     "cantidad_presentacion": "250.00",
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "unidad_medida_presentacion": "GR",
     "supermercado_marca": "Dia",
     "sucursal_id": "87",
@@ -15708,7 +15880,11 @@
     "ean": "1",
     "nombre": "JAMON COCIDO FETEADO",
     "marca_producto": "LARIO",
+<<<<<<< HEAD
+    "precio": 3509,
+=======
     "precio": 3859,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "150.00",
     "unidad_medida_presentacion": "GR",
     "supermercado_marca": "Dia",
@@ -15734,7 +15910,11 @@
     "ean": "1",
     "nombre": "MORTADELA FETEADA",
     "marca_producto": "LARIO",
+<<<<<<< HEAD
+    "precio": 3370,
+=======
     "precio": 3499,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "150.00",
     "unidad_medida_presentacion": "GR",
     "supermercado_marca": "Dia",
@@ -15797,6 +15977,69 @@
   {
     "id": "7790625011040-87",
     "ean": "1",
+<<<<<<< HEAD
+    "nombre": "GASEO COLA",
+    "marca_producto": "CUNNI",
+    "precio": 1999,
+    "cantidad_presentacion": "2.25",
+    "unidad_medida_presentacion": "LT",
+    "supermercado_marca": "Dia",
+    "sucursal_id": "87",
+    "stock": true,
+    "ultima_actualizacion": "2025-11-19T11:34:42.488Z"
+  },
+  {
+    "id": "7790639003444-87",
+    "ean": "1",
+    "nombre": "GASEOSA TONICA",
+    "marca_producto": "CUNNI",
+    "precio": 2020,
+    "cantidad_presentacion": "2.25",
+    "unidad_medida_presentacion": "LT",
+    "supermercado_marca": "Dia",
+    "sucursal_id": "87",
+    "stock": true,
+    "ultima_actualizacion": "2025-11-19T11:34:42.488Z"
+  },
+  {
+    "id": "7790639003451-87",
+    "ean": "1",
+    "nombre": "GASEO POMELO",
+    "marca_producto": "CUNNI",
+    "precio": 2020,
+    "cantidad_presentacion": "2.25",
+    "unidad_medida_presentacion": "LT",
+    "supermercado_marca": "Dia",
+    "sucursal_id": "87",
+    "stock": true,
+    "ultima_actualizacion": "2025-11-19T11:34:42.488Z"
+  },
+  {
+    "id": "7790639003468-87",
+    "ean": "1",
+    "nombre": "GASEOSA LIMA LIMON",
+    "marca_producto": "CUNNI",
+    "precio": 2020,
+    "cantidad_presentacion": "2.25",
+    "unidad_medida_presentacion": "LT",
+    "supermercado_marca": "Dia",
+    "sucursal_id": "87",
+    "stock": true,
+    "ultima_actualizacion": "2025-11-19T11:34:42.488Z"
+  },
+  {
+    "id": "7790639003475-87",
+    "ean": "1",
+    "nombre": "GASEOSA NARANJA",
+    "marca_producto": "CUNNI",
+    "precio": 2020,
+    "cantidad_presentacion": "2.25",
+    "unidad_medida_presentacion": "LT",
+    "supermercado_marca": "Dia",
+    "sucursal_id": "87",
+    "stock": true,
+    "ultima_actualizacion": "2025-11-19T11:34:42.488Z"
+=======
     "nombre": "FIAMBRE DE CERDO",
     "marca_producto": "66",
     "precio": 1990,
@@ -15877,7 +16120,11 @@
     "ean": "1",
     "nombre": "GASEOSA COLA CLASSIC",
     "marca_producto": "CUNNI",
+<<<<<<< HEAD
+    "precio": 2404,
+=======
     "precio": 2845,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "3.00",
     "unidad_medida_presentacion": "LT",
     "supermercado_marca": "Dia",
@@ -15890,7 +16137,11 @@
     "ean": "1",
     "nombre": "AGUA TONICA IND CLAS",
     "marca_producto": "CUNNI",
+<<<<<<< HEAD
+    "precio": 2404,
+=======
     "precio": 2845,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "3.00",
     "unidad_medida_presentacion": "LT",
     "supermercado_marca": "Dia",
@@ -15903,7 +16154,11 @@
     "ean": "1",
     "nombre": "GASEO POMELO CLASSIC",
     "marca_producto": "CUNNI",
+<<<<<<< HEAD
+    "precio": 2404,
+=======
     "precio": 2845,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "3.00",
     "unidad_medida_presentacion": "LT",
     "supermercado_marca": "Dia",
@@ -15916,7 +16171,11 @@
     "ean": "1",
     "nombre": "GASE LIMA LIMON CLAS",
     "marca_producto": "CUNNI",
+<<<<<<< HEAD
+    "precio": 2404,
+=======
     "precio": 2845,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "3.00",
     "unidad_medida_presentacion": "LT",
     "supermercado_marca": "Dia",
@@ -15929,7 +16188,11 @@
     "ean": "1",
     "nombre": "GASEO NARANJA CLASSI",
     "marca_producto": "CUNNI",
+<<<<<<< HEAD
+    "precio": 2404,
+=======
     "precio": 2845,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "3.00",
     "unidad_medida_presentacion": "LT",
     "supermercado_marca": "Dia",
@@ -15942,7 +16205,11 @@
     "ean": "1",
     "nombre": "GASEO COLA",
     "marca_producto": "CUNNI",
+<<<<<<< HEAD
+    "precio": 1596,
+=======
     "precio": 1835,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "1500.00",
     "unidad_medida_presentacion": "ML",
     "supermercado_marca": "Dia",
@@ -16020,7 +16287,11 @@
     "ean": "1",
     "nombre": "GASEO COLA SUAVE",
     "marca_producto": "CUNNI",
+<<<<<<< HEAD
+    "precio": 1596,
+=======
     "precio": 1835,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "1500.00",
     "unidad_medida_presentacion": "ML",
     "supermercado_marca": "Dia",
@@ -16033,7 +16304,11 @@
     "ean": "1",
     "nombre": "GASEOSA TONICA SUAVE",
     "marca_producto": "CUNNI",
+<<<<<<< HEAD
+    "precio": 1596,
+=======
     "precio": 1835,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "1500.00",
     "unidad_medida_presentacion": "ML",
     "supermercado_marca": "Dia",
@@ -16046,7 +16321,11 @@
     "ean": "1",
     "nombre": "GASEOSA POMELO SUAVE",
     "marca_producto": "CUNNI",
+<<<<<<< HEAD
+    "precio": 1596,
+=======
     "precio": 1835,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "1.50",
     "unidad_medida_presentacion": "LT",
     "supermercado_marca": "Dia",
@@ -17138,7 +17417,7 @@
     "ean": "1",
     "nombre": "CREMA DE LECHE",
     "marca_producto": "ILOLA",
-    "precio": 2595,
+    "precio": 2500,
     "cantidad_presentacion": "200.00",
     "unidad_medida_presentacion": "ML",
     "supermercado_marca": "Dia",
@@ -17177,6 +17456,10 @@
     "ean": "1",
     "nombre": "LECHE CHOCOLATADA",
     "marca_producto": "ILOLA",
+<<<<<<< HEAD
+    "precio": 3100,
+    "cantidad_presentacion": "400.00",
+=======
     "precio": 2400,
     "cantidad_presentacion": "1.00",
     "unidad_medida_presentacion": "LT",
@@ -17205,6 +17488,7 @@
     "marca_producto": "ILOLA",
     "precio": 2860,
     "cantidad_presentacion": "900.00",
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "unidad_medida_presentacion": "GR",
     "supermercado_marca": "Dia",
     "sucursal_id": "87",
@@ -17294,7 +17578,11 @@
     "ean": "1",
     "nombre": "LEVADURA INSTANTANEA",
     "marca_producto": "CALSA",
+<<<<<<< HEAD
+    "precio": 505,
+=======
     "precio": 515,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "10.00",
     "unidad_medida_presentacion": "GR",
     "supermercado_marca": "Dia",
@@ -17372,7 +17660,11 @@
     "ean": "1",
     "nombre": "GASEO COLA RET",
     "marca_producto": "COCA",
+<<<<<<< HEAD
+    "precio": 3330,
+=======
     "precio": 3535,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "2.00",
     "unidad_medida_presentacion": "LT",
     "supermercado_marca": "Dia",
@@ -17385,7 +17677,11 @@
     "ean": "1",
     "nombre": "GAS LIMA LIMON RETOR",
     "marca_producto": "SPRIT",
+<<<<<<< HEAD
+    "precio": 3330,
+=======
     "precio": 3535,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "2.00",
     "unidad_medida_presentacion": "LT",
     "supermercado_marca": "Dia",
@@ -17398,7 +17694,11 @@
     "ean": "1",
     "nombre": "GASEO COLA LATA",
     "marca_producto": "COCA",
+<<<<<<< HEAD
+    "precio": 2020,
+=======
     "precio": 2120,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "354.00",
     "unidad_medida_presentacion": "ML",
     "supermercado_marca": "Dia",
@@ -17411,7 +17711,11 @@
     "ean": "1",
     "nombre": "GASEOSA LIMA LIMON",
     "marca_producto": "SPRIT",
+<<<<<<< HEAD
+    "precio": 2020,
+=======
     "precio": 2120,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "354.00",
     "unidad_medida_presentacion": "ML",
     "supermercado_marca": "Dia",
@@ -17424,7 +17728,11 @@
     "ean": "1",
     "nombre": "GASEOSA.NARAN.RETORN",
     "marca_producto": "FANTA",
+<<<<<<< HEAD
+    "precio": 3330,
+=======
     "precio": 3535,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "2.00",
     "unidad_medida_presentacion": "LT",
     "supermercado_marca": "Dia",
@@ -17476,7 +17784,11 @@
     "ean": "1",
     "nombre": "JUGO DE MANZANA",
     "marca_producto": "CEPIT",
+<<<<<<< HEAD
+    "precio": 960,
+=======
     "precio": 1010,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "200.00",
     "unidad_medida_presentacion": "ML",
     "supermercado_marca": "Dia",
@@ -17489,7 +17801,11 @@
     "ean": "1",
     "nombre": "JUGO MULTIFRUTA",
     "marca_producto": "CEPIT",
+<<<<<<< HEAD
+    "precio": 960,
+=======
     "precio": 1010,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "200.00",
     "unidad_medida_presentacion": "ML",
     "supermercado_marca": "Dia",
@@ -17554,7 +17870,11 @@
     "ean": "1",
     "nombre": "SPRITE 2,25L",
     "marca_producto": "SPRIT",
+<<<<<<< HEAD
+    "precio": 4845,
+=======
     "precio": 5100,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "2.25",
     "unidad_medida_presentacion": "LT",
     "supermercado_marca": "Dia",
@@ -17567,7 +17887,11 @@
     "ean": "1",
     "nombre": "FANTA NARANJA",
     "marca_producto": "FANTA",
+<<<<<<< HEAD
+    "precio": 4845,
+=======
     "precio": 5100,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "2.25",
     "unidad_medida_presentacion": "LT",
     "supermercado_marca": "Dia",
@@ -17645,7 +17969,11 @@
     "ean": "1",
     "nombre": "AGUA TONICA",
     "marca_producto": "SCHWE",
+<<<<<<< HEAD
+    "precio": 2020,
+=======
     "precio": 2120,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "310.00",
     "unidad_medida_presentacion": "ML",
     "supermercado_marca": "Dia",
@@ -17723,7 +18051,11 @@
     "ean": "1",
     "nombre": "GASEO COLA LIGHT",
     "marca_producto": "COCA",
+<<<<<<< HEAD
+    "precio": 4845,
+=======
     "precio": 5100,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "2.25",
     "unidad_medida_presentacion": "LT",
     "supermercado_marca": "Dia",
@@ -17827,7 +18159,11 @@
     "ean": "1",
     "nombre": "COMBO COLA+SPRITE",
     "marca_producto": "COCA",
+<<<<<<< HEAD
+    "precio": 9290,
+=======
     "precio": 7650,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "4.50",
     "unidad_medida_presentacion": "LT",
     "supermercado_marca": "Dia",
@@ -17840,7 +18176,11 @@
     "ean": "1",
     "nombre": "GASEO COLA",
     "marca_producto": "COCA",
+<<<<<<< HEAD
+    "precio": 4040,
+=======
     "precio": 4290,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "1.75",
     "unidad_medida_presentacion": "LT",
     "supermercado_marca": "Dia",
@@ -17853,7 +18193,11 @@
     "ean": "1",
     "nombre": "GASEOSA LIMA LIMON",
     "marca_producto": "SPRIT",
+<<<<<<< HEAD
+    "precio": 4040,
+=======
     "precio": 4290,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "1.75",
     "unidad_medida_presentacion": "LT",
     "supermercado_marca": "Dia",
@@ -17866,7 +18210,11 @@
     "ean": "1",
     "nombre": "GASEOSA NARANJA",
     "marca_producto": "FANTA",
+<<<<<<< HEAD
+    "precio": 4040,
+=======
     "precio": 4290,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "1.75",
     "unidad_medida_presentacion": "LT",
     "supermercado_marca": "Dia",
@@ -17957,7 +18305,11 @@
     "ean": "1",
     "nombre": "GASEOSA POMELO ZERO",
     "marca_producto": "SCHWE",
+<<<<<<< HEAD
+    "precio": 4845,
+=======
     "precio": 5100,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "2.25",
     "unidad_medida_presentacion": "LT",
     "supermercado_marca": "Dia",
@@ -17983,7 +18335,11 @@
     "ean": "1",
     "nombre": "GASEO COLA S/AZUCAR",
     "marca_producto": "COCA",
+<<<<<<< HEAD
+    "precio": 4040,
+=======
     "precio": 4290,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "1.75",
     "unidad_medida_presentacion": "LT",
     "supermercado_marca": "Dia",
@@ -17996,7 +18352,11 @@
     "ean": "1",
     "nombre": "GASEO COLA",
     "marca_producto": "COCA",
+<<<<<<< HEAD
+    "precio": 2690,
+=======
     "precio": 2830,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "1.25",
     "unidad_medida_presentacion": "LT",
     "supermercado_marca": "Dia",
@@ -18009,7 +18369,11 @@
     "ean": "1",
     "nombre": "GASEO COLA ZERO",
     "marca_producto": "COCA",
+<<<<<<< HEAD
+    "precio": 2690,
+=======
     "precio": 2830,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "1.25",
     "unidad_medida_presentacion": "LT",
     "supermercado_marca": "Dia",
@@ -18022,7 +18386,11 @@
     "ean": "1",
     "nombre": "GASEOSA LIMA LIMON",
     "marca_producto": "SPRIT",
+<<<<<<< HEAD
+    "precio": 2690,
+=======
     "precio": 2830,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "1.25",
     "unidad_medida_presentacion": "LT",
     "supermercado_marca": "Dia",
@@ -18035,7 +18403,11 @@
     "ean": "1",
     "nombre": "GASEO COLA LIGHT",
     "marca_producto": "COCA",
+<<<<<<< HEAD
+    "precio": 4040,
+=======
     "precio": 4290,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "1.75",
     "unidad_medida_presentacion": "LT",
     "supermercado_marca": "Dia",
@@ -18100,7 +18472,11 @@
     "ean": "1",
     "nombre": "GASEOS.LIGHT L.LIMON",
     "marca_producto": "S.ZER",
+<<<<<<< HEAD
+    "precio": 4845,
+=======
     "precio": 5100,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "2.25",
     "unidad_medida_presentacion": "LT",
     "supermercado_marca": "Dia",
@@ -18165,7 +18541,11 @@
     "ean": "1",
     "nombre": "GASEO COLA S/AZUCAR",
     "marca_producto": "COCA",
+<<<<<<< HEAD
+    "precio": 3330,
+=======
     "precio": 3535,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "2.00",
     "unidad_medida_presentacion": "LT",
     "supermercado_marca": "Dia",
@@ -18347,7 +18727,11 @@
     "ean": "1",
     "nombre": "JUGO SOJ.MAN.ADES 1L",
     "marca_producto": "ADES",
+<<<<<<< HEAD
+    "precio": 2525,
+=======
     "precio": 2725,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "1.00",
     "unidad_medida_presentacion": "LT",
     "supermercado_marca": "Dia",
@@ -18360,7 +18744,11 @@
     "ean": "1",
     "nombre": "JUGO NARANJA",
     "marca_producto": "ADES",
+<<<<<<< HEAD
+    "precio": 2525,
+=======
     "precio": 2725,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "1.00",
     "unidad_medida_presentacion": "LT",
     "supermercado_marca": "Dia",
@@ -18373,7 +18761,11 @@
     "ean": "1",
     "nombre": "JGO B/SOJA FR TROPIC",
     "marca_producto": "ADES",
+<<<<<<< HEAD
+    "precio": 2525,
+=======
     "precio": 2725,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "1.00",
     "unidad_medida_presentacion": "LT",
     "supermercado_marca": "Dia",
@@ -18386,7 +18778,11 @@
     "ean": "1",
     "nombre": "GASEOSA POMELO S/AZU",
     "marca_producto": "SCHWE",
+<<<<<<< HEAD
+    "precio": 2020,
+=======
     "precio": 2120,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "310.00",
     "unidad_medida_presentacion": "ML",
     "supermercado_marca": "Dia",
@@ -18464,7 +18860,11 @@
     "ean": "1",
     "nombre": "JUGO MANZANA ROJA",
     "marca_producto": "CEPIT",
+<<<<<<< HEAD
+    "precio": 2120,
+=======
     "precio": 2320,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "1.00",
     "unidad_medida_presentacion": "LT",
     "supermercado_marca": "Dia",
@@ -18477,7 +18877,11 @@
     "ean": "1",
     "nombre": "JUGO  MULTIFRUTA",
     "marca_producto": "CEPIT",
+<<<<<<< HEAD
+    "precio": 2120,
+=======
     "precio": 2320,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "1.00",
     "unidad_medida_presentacion": "LT",
     "supermercado_marca": "Dia",
@@ -18503,7 +18907,11 @@
     "ean": "1",
     "nombre": "COMBO COLA REG+ZERO",
     "marca_producto": "COCA",
+<<<<<<< HEAD
+    "precio": 9695,
+=======
     "precio": 7650,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "4.50",
     "unidad_medida_presentacion": "LT",
     "supermercado_marca": "Dia",
@@ -18568,7 +18976,11 @@
     "ean": "1",
     "nombre": "JUGO SAB NARAN TENTA",
     "marca_producto": "CEPIT",
+<<<<<<< HEAD
+    "precio": 2120,
+=======
     "precio": 2320,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "1.00",
     "unidad_medida_presentacion": "LT",
     "supermercado_marca": "Dia",
@@ -18581,7 +18993,11 @@
     "ean": "1",
     "nombre": "JUG NARANJ TENTA 20%",
     "marca_producto": "CEPIT",
+<<<<<<< HEAD
+    "precio": 2320,
+=======
     "precio": 2525,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "995.00",
     "unidad_medida_presentacion": "ML",
     "supermercado_marca": "Dia",
@@ -18633,7 +19049,11 @@
     "ean": "1",
     "nombre": "JUGO DE NARANJA 20%",
     "marca_producto": "CEPIT",
+<<<<<<< HEAD
+    "precio": 960,
+=======
     "precio": 1010,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "200.00",
     "unidad_medida_presentacion": "ML",
     "supermercado_marca": "Dia",
@@ -18672,7 +19092,11 @@
     "ean": "1",
     "nombre": "ADES NATURAL",
     "marca_producto": "ADES",
+<<<<<<< HEAD
+    "precio": 2725,
+=======
     "precio": 3030,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "1.00",
     "unidad_medida_presentacion": "LT",
     "supermercado_marca": "Dia",
@@ -18685,7 +19109,11 @@
     "ean": "1",
     "nombre": "GASEO LIMA ICE CERO",
     "marca_producto": "SPRIT",
+<<<<<<< HEAD
+    "precio": 2020,
+=======
     "precio": 2120,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "473.00",
     "unidad_medida_presentacion": "ML",
     "supermercado_marca": "Dia",
@@ -18698,7 +19126,11 @@
     "ean": "1",
     "nombre": "GASEOSA COLA",
     "marca_producto": "COCAC",
+<<<<<<< HEAD
+    "precio": 2020,
+=======
     "precio": 2120,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "600.00",
     "unidad_medida_presentacion": "ML",
     "supermercado_marca": "Dia",
@@ -18711,7 +19143,11 @@
     "ean": "1",
     "nombre": "GASEOSA COLA ZERO",
     "marca_producto": "COCAC",
+<<<<<<< HEAD
+    "precio": 2020,
+=======
     "precio": 2120,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "600.00",
     "unidad_medida_presentacion": "ML",
     "supermercado_marca": "Dia",
@@ -18724,7 +19160,11 @@
     "ean": "1",
     "nombre": "GASEOSA COLA LIGHT",
     "marca_producto": "COCAC",
+<<<<<<< HEAD
+    "precio": 2020,
+=======
     "precio": 2120,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "600.00",
     "unidad_medida_presentacion": "ML",
     "supermercado_marca": "Dia",
@@ -18737,7 +19177,11 @@
     "ean": "1",
     "nombre": "GASEOSA LIMA LIMON",
     "marca_producto": "SPRIT",
+<<<<<<< HEAD
+    "precio": 2020,
+=======
     "precio": 2120,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "600.00",
     "unidad_medida_presentacion": "ML",
     "supermercado_marca": "Dia",
@@ -18750,7 +19194,11 @@
     "ean": "1",
     "nombre": "GASEOSA LIMA LIMON Z",
     "marca_producto": "SPRIT",
+<<<<<<< HEAD
+    "precio": 2020,
+=======
     "precio": 2120,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "600.00",
     "unidad_medida_presentacion": "ML",
     "supermercado_marca": "Dia",
@@ -18763,7 +19211,11 @@
     "ean": "1",
     "nombre": "GASEO FRUTAL MISTERI",
     "marca_producto": "FANTA",
+<<<<<<< HEAD
+    "precio": 2020,
+=======
     "precio": 2120,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "473.00",
     "unidad_medida_presentacion": "ML",
     "supermercado_marca": "Dia",
@@ -19413,7 +19865,11 @@
     "ean": "1",
     "nombre": "DETER ULTRA LIMON",
     "marca_producto": "MAGIS",
+<<<<<<< HEAD
+    "precio": 3710,
+=======
     "precio": 3815,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "500.00",
     "unidad_medida_presentacion": "ML",
     "supermercado_marca": "Dia",
@@ -21207,7 +21663,11 @@
     "ean": "1",
     "nombre": "JAB LIQ LV LIMON",
     "marca_producto": "GRANB",
+<<<<<<< HEAD
+    "precio": 2320,
+=======
     "precio": 2500,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "800.00",
     "unidad_medida_presentacion": "ML",
     "supermercado_marca": "Dia",
@@ -21233,7 +21693,11 @@
     "ean": "1",
     "nombre": "JAB LIQ ROPA ROSAS",
     "marca_producto": "GRANB",
+<<<<<<< HEAD
+    "precio": 2320,
+=======
     "precio": 2500,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "800.00",
     "unidad_medida_presentacion": "ML",
     "supermercado_marca": "Dia",
@@ -21556,6 +22020,12 @@
   {
     "id": "7791290796591-87",
     "ean": "1",
+<<<<<<< HEAD
+    "nombre": "JAB LIQ CONCEN BLANQ",
+    "marca_producto": "ALA",
+    "precio": 9290,
+    "cantidad_presentacion": "500.00",
+=======
     "nombre": "SUAVIZANTE CLAS FLOR",
     "marca_producto": "VIVER",
     "precio": 10290,
@@ -21573,6 +22043,7 @@
     "marca_producto": "VIVER",
     "precio": 3190,
     "cantidad_presentacion": "900.00",
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "unidad_medida_presentacion": "ML",
     "supermercado_marca": "Dia",
     "sucursal_id": "87",
@@ -21805,7 +22276,11 @@
     "ean": "1",
     "nombre": "SHAMPOO CERAMIDAS",
     "marca_producto": "SEDAL",
+<<<<<<< HEAD
+    "precio": 4690,
+=======
     "precio": 4829,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "340.00",
     "unidad_medida_presentacion": "ML",
     "supermercado_marca": "Dia",
@@ -23222,7 +23697,11 @@
     "ean": "1",
     "nombre": "SH LUMINOUS UV12X340",
     "marca_producto": "SEDAL",
+<<<<<<< HEAD
+    "precio": 4890,
+=======
     "precio": 4829,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "340.00",
     "unidad_medida_presentacion": "ML",
     "supermercado_marca": "Dia",
@@ -23248,7 +23727,11 @@
     "ean": "1",
     "nombre": "ACOND LUMINOUS UV",
     "marca_producto": "SEDAL",
+<<<<<<< HEAD
+    "precio": 4890,
+=======
     "precio": 4829,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "340.00",
     "unidad_medida_presentacion": "ML",
     "supermercado_marca": "Dia",
@@ -25692,7 +26175,11 @@
     "ean": "1",
     "nombre": "GASEOSA NARANJA",
     "marca_producto": "MIRIN",
+<<<<<<< HEAD
+    "precio": 1850,
+=======
     "precio": 1900,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "500.00",
     "unidad_medida_presentacion": "ML",
     "supermercado_marca": "Dia",
@@ -25705,7 +26192,11 @@
     "ean": "1",
     "nombre": "GASEOSA POMELO",
     "marca_producto": "PSOTO",
+<<<<<<< HEAD
+    "precio": 1850,
+=======
     "precio": 1900,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "500.00",
     "unidad_medida_presentacion": "ML",
     "supermercado_marca": "Dia",
@@ -25718,7 +26209,11 @@
     "ean": "1",
     "nombre": "GASEOSA C/GAS POMELO",
     "marca_producto": "P.TOR",
+<<<<<<< HEAD
+    "precio": 3190,
+=======
     "precio": 3350,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "1.50",
     "unidad_medida_presentacion": "LT",
     "supermercado_marca": "Dia",
@@ -25731,7 +26226,11 @@
     "ean": "1",
     "nombre": "GASEOSA POMELO",
     "marca_producto": "PASOT",
+<<<<<<< HEAD
+    "precio": 4430,
+=======
     "precio": 4600,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "2.25",
     "unidad_medida_presentacion": "LT",
     "supermercado_marca": "Dia",
@@ -25744,7 +26243,11 @@
     "ean": "1",
     "nombre": "GASEOSA 7UP FREE",
     "marca_producto": "7UP",
+<<<<<<< HEAD
+    "precio": 1490,
+=======
     "precio": 1900,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "500.00",
     "unidad_medida_presentacion": "ML",
     "supermercado_marca": "Dia",
@@ -25757,7 +26260,11 @@
     "ean": "1",
     "nombre": "GASEOSA LIMON FREE",
     "marca_producto": "SEVEN",
+<<<<<<< HEAD
+    "precio": 3190,
+=======
     "precio": 3350,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "1.50",
     "unidad_medida_presentacion": "LT",
     "supermercado_marca": "Dia",
@@ -25783,7 +26290,11 @@
     "ean": "1",
     "nombre": "SEVEN UP REGULAR 0,5",
     "marca_producto": "SEVEN",
+<<<<<<< HEAD
+    "precio": 1850,
+=======
     "precio": 1900,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "0.50",
     "unidad_medida_presentacion": "LT",
     "supermercado_marca": "Dia",
@@ -25796,7 +26307,11 @@
     "ean": "1",
     "nombre": "GASE LIMA LIMON",
     "marca_producto": "7UP",
+<<<<<<< HEAD
+    "precio": 2885,
+=======
     "precio": 3350,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "1.50",
     "unidad_medida_presentacion": "LT",
     "supermercado_marca": "Dia",
@@ -25822,7 +26337,11 @@
     "ean": "1",
     "nombre": "GASEOSA LIMA LIMON",
     "marca_producto": "SEVEN",
+<<<<<<< HEAD
+    "precio": 5190,
+=======
     "precio": 5150,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "3.00",
     "unidad_medida_presentacion": "LT",
     "supermercado_marca": "Dia",
@@ -25835,7 +26354,11 @@
     "ean": "1",
     "nombre": "SEVEN UP LATA",
     "marca_producto": "SEVEN",
+<<<<<<< HEAD
+    "precio": 1850,
+=======
     "precio": 1900,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "0.35",
     "unidad_medida_presentacion": "LT",
     "supermercado_marca": "Dia",
@@ -25848,7 +26371,11 @@
     "ean": "1",
     "nombre": "GASEOSA POMELO LATA",
     "marca_producto": "PASO",
+<<<<<<< HEAD
+    "precio": 1570,
+=======
     "precio": 1830,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "269.00",
     "unidad_medida_presentacion": "ML",
     "supermercado_marca": "Dia",
@@ -25861,7 +26388,11 @@
     "ean": "1",
     "nombre": "GASEOSA TONICA LATA",
     "marca_producto": "PASO",
+<<<<<<< HEAD
+    "precio": 1570,
+=======
     "precio": 1830,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "269.00",
     "unidad_medida_presentacion": "ML",
     "supermercado_marca": "Dia",
@@ -25874,7 +26405,11 @@
     "ean": "1",
     "nombre": "GASEOSA PEPSI BLACK",
     "marca_producto": "PEPSI",
+<<<<<<< HEAD
+    "precio": 1850,
+=======
     "precio": 1900,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "500.00",
     "unidad_medida_presentacion": "ML",
     "supermercado_marca": "Dia",
@@ -25887,7 +26422,11 @@
     "ean": "1",
     "nombre": "GASEOSA PEPSI BLACK",
     "marca_producto": "PEPSI",
+<<<<<<< HEAD
+    "precio": 1880,
+=======
     "precio": 1900,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "354.00",
     "unidad_medida_presentacion": "ML",
     "supermercado_marca": "Dia",
@@ -25900,7 +26439,11 @@
     "ean": "1",
     "nombre": "GASEOSA COLA BLACK",
     "marca_producto": "PEPSI",
+<<<<<<< HEAD
+    "precio": 3190,
+=======
     "precio": 3350,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "1.56",
     "unidad_medida_presentacion": "LT",
     "supermercado_marca": "Dia",
@@ -25926,7 +26469,11 @@
     "ean": "1",
     "nombre": "GASEO COLA LATA",
     "marca_producto": "PEPSI",
+<<<<<<< HEAD
+    "precio": 1850,
+=======
     "precio": 1900,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "0.35",
     "unidad_medida_presentacion": "LT",
     "supermercado_marca": "Dia",
@@ -25939,7 +26486,11 @@
     "ean": "1",
     "nombre": "GASEOSA COLA REGULAR",
     "marca_producto": "PEPSI",
+<<<<<<< HEAD
+    "precio": 1850,
+=======
     "precio": 1900,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "500.00",
     "unidad_medida_presentacion": "ML",
     "supermercado_marca": "Dia",
@@ -25952,7 +26503,11 @@
     "ean": "1",
     "nombre": "GASEO COLA",
     "marca_producto": "PEPSI",
+<<<<<<< HEAD
+    "precio": 3190,
+=======
     "precio": 3350,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "1.50",
     "unidad_medida_presentacion": "LT",
     "supermercado_marca": "Dia",
@@ -25978,7 +26533,7 @@
     "ean": "1",
     "nombre": "GASEO COLA",
     "marca_producto": "PEPSI",
-    "precio": 5360,
+    "precio": 5520,
     "cantidad_presentacion": "3.00",
     "unidad_medida_presentacion": "LT",
     "supermercado_marca": "Dia",
@@ -26862,7 +27417,11 @@
     "ean": "1",
     "nombre": "HARINA INTEG PIZZAS",
     "marca_producto": "PUREZ",
+<<<<<<< HEAD
+    "precio": 2035,
+=======
     "precio": 2115,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "1.00",
     "unidad_medida_presentacion": "KG",
     "supermercado_marca": "Dia",
@@ -28110,7 +28669,11 @@
     "ean": "1",
     "nombre": "AZUCAR SUPERIOR",
     "marca_producto": "LEDES",
+<<<<<<< HEAD
+    "precio": 1299,
+=======
     "precio": 1285,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "1.00",
     "unidad_medida_presentacion": "KG",
     "supermercado_marca": "Dia",
@@ -28487,7 +29050,11 @@
     "ean": "1",
     "nombre": "CERVEZA CRISTAL",
     "marca_producto": "QUILM",
+<<<<<<< HEAD
+    "precio": 3775,
+=======
     "precio": 3849,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "1.00",
     "unidad_medida_presentacion": "LT",
     "supermercado_marca": "Dia",
@@ -29137,7 +29704,11 @@
     "ean": "1",
     "nombre": "CERVEZA",
     "marca_producto": "ISENB",
+<<<<<<< HEAD
+    "precio": 1563,
+=======
     "precio": 1789,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "473.00",
     "unidad_medida_presentacion": "ML",
     "supermercado_marca": "Dia",
@@ -29254,7 +29825,11 @@
     "ean": "1",
     "nombre": "DESINF SUAV DE BEBE",
     "marca_producto": "POETT",
+<<<<<<< HEAD
+    "precio": 2030,
+=======
     "precio": 2210,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "0.90",
     "unidad_medida_presentacion": "LT",
     "supermercado_marca": "Dia",
@@ -29267,7 +29842,11 @@
     "ean": "1",
     "nombre": "DESIN FRESC LAVANDA",
     "marca_producto": "POETT",
+<<<<<<< HEAD
+    "precio": 2030,
+=======
     "precio": 2210,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "900.00",
     "unidad_medida_presentacion": "ML",
     "supermercado_marca": "Dia",
@@ -29293,7 +29872,11 @@
     "ean": "1",
     "nombre": "DESINF FLORES PRIMAV",
     "marca_producto": "POETT",
+<<<<<<< HEAD
+    "precio": 2030,
+=======
     "precio": 2210,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "900.00",
     "unidad_medida_presentacion": "ML",
     "supermercado_marca": "Dia",
@@ -29319,7 +29902,11 @@
     "ean": "1",
     "nombre": "DESINF ALEGR TU DIA",
     "marca_producto": "POETT",
+<<<<<<< HEAD
+    "precio": 2030,
+=======
     "precio": 2210,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "900.00",
     "unidad_medida_presentacion": "ML",
     "supermercado_marca": "Dia",
@@ -31672,7 +32259,11 @@
     "ean": "1",
     "nombre": "CONOS SABOR BARBACOA",
     "marca_producto": "KRACH",
+<<<<<<< HEAD
+    "precio": 1315,
+=======
     "precio": 1395,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "45.00",
     "unidad_medida_presentacion": "GR",
     "supermercado_marca": "Dia",
@@ -32543,7 +33134,11 @@
     "ean": "1",
     "nombre": "QUESO UNT P/SALUT L",
     "marca_producto": "LAPAU",
+<<<<<<< HEAD
+    "precio": 2530,
+=======
     "precio": 2650,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "190.00",
     "unidad_medida_presentacion": "GR",
     "supermercado_marca": "Dia",
@@ -32621,7 +33216,11 @@
     "ean": "1",
     "nombre": "QUESO HEBRAS 4 QUESO",
     "marca_producto": "LAPAU",
+<<<<<<< HEAD
+    "precio": 2390,
+=======
     "precio": 2325,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "80.00",
     "unidad_medida_presentacion": "GR",
     "supermercado_marca": "Dia",
@@ -32634,7 +33233,11 @@
     "ean": "1",
     "nombre": "QUESO UNT FONTINA",
     "marca_producto": "LAPAU",
+<<<<<<< HEAD
+    "precio": 2650,
+=======
     "precio": 2585,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "190.00",
     "unidad_medida_presentacion": "GR",
     "supermercado_marca": "Dia",
@@ -32660,7 +33263,11 @@
     "ean": "1",
     "nombre": "QUESO UNT CLASICO",
     "marca_producto": "LAPAU",
+<<<<<<< HEAD
+    "precio": 2530,
+=======
     "precio": 2585,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "190.00",
     "unidad_medida_presentacion": "GR",
     "supermercado_marca": "Dia",
@@ -32673,7 +33280,11 @@
     "ean": "1",
     "nombre": "QUESO CREMA CLASICO",
     "marca_producto": "LA PA",
+<<<<<<< HEAD
+    "precio": 2869,
+=======
     "precio": 2928,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "290.00",
     "unidad_medida_presentacion": "GR",
     "supermercado_marca": "Dia",
@@ -32686,7 +33297,11 @@
     "ean": "1",
     "nombre": "QUESO CREMA LIGHT",
     "marca_producto": "PAULI",
+<<<<<<< HEAD
+    "precio": 2869,
+=======
     "precio": 2928,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "290.00",
     "unidad_medida_presentacion": "GR",
     "supermercado_marca": "Dia",
@@ -32699,7 +33314,11 @@
     "ean": "1",
     "nombre": "QUESO CREMA DOBLE",
     "marca_producto": "LAPAU",
+<<<<<<< HEAD
+    "precio": 3030,
+=======
     "precio": 3079,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "250.00",
     "unidad_medida_presentacion": "GR",
     "supermercado_marca": "Dia",
@@ -32725,7 +33344,11 @@
     "ean": "1",
     "nombre": "QUESO CREMA CIBOU",
     "marca_producto": "LAPAU",
+<<<<<<< HEAD
+    "precio": 3030,
+=======
     "precio": 3078,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "250.00",
     "unidad_medida_presentacion": "GR",
     "supermercado_marca": "Dia",
@@ -32738,7 +33361,11 @@
     "ean": "1",
     "nombre": "QUESO TYBO FETAS",
     "marca_producto": "L.PAU",
+<<<<<<< HEAD
+    "precio": 4230,
+=======
     "precio": 4370,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "180.00",
     "unidad_medida_presentacion": "GR",
     "supermercado_marca": "Dia",
@@ -33518,7 +34145,11 @@
     "ean": "1",
     "nombre": "JAMON COCIDO",
     "marca_producto": "CAGNO",
+<<<<<<< HEAD
+    "precio": 5930,
+=======
     "precio": 6479,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "200.00",
     "unidad_medida_presentacion": "GR",
     "supermercado_marca": "Dia",
@@ -35690,6 +36321,8 @@
     "nombre": "PARLANT BLUETOOTH 5W",
     "marca_producto": "T&G",
     "precio": 45000,
+<<<<<<< HEAD
+=======
     "cantidad_presentacion": "1.00",
     "unidad_medida_presentacion": "UD",
     "supermercado_marca": "Dia",
@@ -35703,6 +36336,7 @@
     "nombre": "PISTOLA DE AGUA",
     "marca_producto": "SELEC",
     "precio": 30000,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "1.00",
     "unidad_medida_presentacion": "UD",
     "supermercado_marca": "Dia",
@@ -36209,7 +36843,11 @@
     "ean": "1",
     "nombre": "BONDIOLA FETEADA",
     "marca_producto": "ELART",
+<<<<<<< HEAD
+    "precio": 5390,
+=======
     "precio": 5690,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "100.00",
     "unidad_medida_presentacion": "GR",
     "supermercado_marca": "Dia",
@@ -36896,10 +37534,17 @@
   {
     "id": "7798185030594-87",
     "ean": "1",
+<<<<<<< HEAD
+    "nombre": "CARAMELO REGALIZ",
+    "marca_producto": "BULLD",
+    "precio": 500,
+    "cantidad_presentacion": "18.00",
+=======
     "nombre": "PAN LACTEADO FAMILIA",
     "marca_producto": "PANER",
     "precio": 3800,
     "cantidad_presentacion": "600.00",
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "unidad_medida_presentacion": "GR",
     "supermercado_marca": "Dia",
     "sucursal_id": "87",
@@ -37054,7 +37699,11 @@
     "ean": "1",
     "nombre": "SALCHICHAS",
     "marca_producto": "UNION",
+<<<<<<< HEAD
+    "precio": 2205,
+=======
     "precio": 2310,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "190.00",
     "unidad_medida_presentacion": "GR",
     "supermercado_marca": "Dia",
@@ -38352,6 +39001,17 @@
   {
     "id": "7798364400552-87",
     "ean": "1",
+<<<<<<< HEAD
+    "nombre": "CREM CORP REPARA INT",
+    "marca_producto": "CICAT",
+    "precio": 10790,
+    "cantidad_presentacion": "400.00",
+    "unidad_medida_presentacion": "GR",
+    "supermercado_marca": "Dia",
+    "sucursal_id": "87",
+    "stock": true,
+    "ultima_actualizacion": "2025-11-19T11:34:42.492Z"
+=======
     "nombre": "CEPILLO PLAS RECICLA",
     "marca_producto": "MERAK",
     "precio": 5200,
@@ -38757,7 +39417,11 @@
     "ean": "1",
     "nombre": "TOALLA NOCTURNA LARG",
     "marca_producto": "KOTEX",
+<<<<<<< HEAD
+    "precio": 2900,
+=======
     "precio": 2930,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "6.00",
     "unidad_medida_presentacion": "UD",
     "supermercado_marca": "Dia",
@@ -39914,7 +40578,11 @@
     "ean": "1",
     "nombre": "DESODOR AERO ORIGINA",
     "marca_producto": "DOVE",
+<<<<<<< HEAD
+    "precio": 6520,
+=======
     "precio": 6639,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "250.00",
     "unidad_medida_presentacion": "ML",
     "supermercado_marca": "Dia",
@@ -40304,7 +40972,11 @@
     "ean": "1",
     "nombre": "CREMA DENTAL ORIGINA",
     "marca_producto": "SENSO",
+<<<<<<< HEAD
+    "precio": 5245,
+=======
     "precio": 5420,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "90.00",
     "unidad_medida_presentacion": "GR",
     "supermercado_marca": "Dia",
@@ -40356,7 +41028,11 @@
     "ean": "1",
     "nombre": "TOAL HUM LIMPI EFECT",
     "marca_producto": "HUGGI",
+<<<<<<< HEAD
+    "precio": 4490,
+=======
     "precio": 4620,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "48.00",
     "unidad_medida_presentacion": "UD",
     "supermercado_marca": "Dia",
@@ -41461,7 +42137,11 @@
     "ean": "1",
     "nombre": "TAPA PASCUALINA CRIO",
     "marca_producto": "DIA",
+<<<<<<< HEAD
+    "precio": 1650,
+=======
     "precio": 1750,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "400.00",
     "unidad_medida_presentacion": "GR",
     "supermercado_marca": "Dia",
@@ -41721,7 +42401,11 @@
     "ean": "1",
     "nombre": "AGUA TONICA",
     "marca_producto": "DIA",
+<<<<<<< HEAD
+    "precio": 1515,
+=======
     "precio": 1620,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "1.50",
     "unidad_medida_presentacion": "LT",
     "supermercado_marca": "Dia",
@@ -41773,7 +42457,11 @@
     "ean": "1",
     "nombre": "TAPA EMPANADA HOR/FR",
     "marca_producto": "DIA",
+<<<<<<< HEAD
+    "precio": 1790,
+=======
     "precio": 1900,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "450.00",
     "unidad_medida_presentacion": "GR",
     "supermercado_marca": "Dia",
@@ -42293,7 +42981,11 @@
     "ean": "1",
     "nombre": "TAPAS P/EMPAN CRIOLL",
     "marca_producto": "DIA",
+<<<<<<< HEAD
+    "precio": 1790,
+=======
     "precio": 1900,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "450.00",
     "unidad_medida_presentacion": "GR",
     "supermercado_marca": "Dia",
@@ -42410,7 +43102,11 @@
     "ean": "1",
     "nombre": "TAP.EMPANADA CRIOLLA",
     "marca_producto": "CUQUE",
+<<<<<<< HEAD
+    "precio": 960,
+=======
     "precio": 1030,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "280.00",
     "unidad_medida_presentacion": "GR",
     "supermercado_marca": "Dia",
@@ -44620,7 +45316,11 @@
     "ean": "1",
     "nombre": "PAÑUELOS 6X10",
     "marca_producto": "BONTE",
+<<<<<<< HEAD
+    "precio": 2000,
+=======
     "precio": 1500,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "1.00",
     "unidad_medida_presentacion": "UD",
     "supermercado_marca": "Dia",
@@ -45465,7 +46165,11 @@
     "ean": "1",
     "nombre": "HAMB CLASIC 12UD",
     "marca_producto": "DIA",
+<<<<<<< HEAD
+    "precio": 14490,
+=======
     "precio": 15490,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "960.00",
     "unidad_medida_presentacion": "GR",
     "supermercado_marca": "Dia",
@@ -45504,7 +46208,11 @@
     "ean": "1",
     "nombre": "TAPAS DE PASCUALINA",
     "marca_producto": "DIA",
+<<<<<<< HEAD
+    "precio": 1650,
+=======
     "precio": 1750,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "400.00",
     "unidad_medida_presentacion": "GR",
     "supermercado_marca": "Dia",
@@ -45894,7 +46602,11 @@
     "ean": "1",
     "nombre": "GASEO COLA",
     "marca_producto": "DIA",
+<<<<<<< HEAD
+    "precio": 1515,
+=======
     "precio": 1620,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "1.50",
     "unidad_medida_presentacion": "LT",
     "supermercado_marca": "Dia",
@@ -46934,7 +47646,11 @@
     "ean": "1",
     "nombre": "SIFON SODA",
     "marca_producto": "RIOCL",
+<<<<<<< HEAD
+    "precio": 1200,
+=======
     "precio": 1400,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "1.75",
     "unidad_medida_presentacion": "LT",
     "supermercado_marca": "Dia",
@@ -47324,7 +48040,11 @@
     "ean": "1",
     "nombre": "GASEO COLA CERO",
     "marca_producto": "DIA",
+<<<<<<< HEAD
+    "precio": 1515,
+=======
     "precio": 1620,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "1.50",
     "unidad_medida_presentacion": "LT",
     "supermercado_marca": "Dia",
@@ -47896,7 +48616,11 @@
     "ean": "1",
     "nombre": "LECHE ULTRAPAST 2%",
     "marca_producto": "DIA",
+<<<<<<< HEAD
+    "precio": 1490,
+=======
     "precio": 1480,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "1.00",
     "unidad_medida_presentacion": "LT",
     "supermercado_marca": "Dia",
@@ -49196,7 +49920,11 @@
     "ean": "1",
     "nombre": "HAMB PARRI 4UD",
     "marca_producto": "DIA",
+<<<<<<< HEAD
+    "precio": 8990,
+=======
     "precio": 9490,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "480.00",
     "unidad_medida_presentacion": "GR",
     "supermercado_marca": "Dia",
@@ -51367,7 +52095,11 @@
     "ean": "1",
     "nombre": "GASEOSA POMELO",
     "marca_producto": "DIA",
+<<<<<<< HEAD
+    "precio": 1515,
+=======
     "precio": 1620,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "1.50",
     "unidad_medida_presentacion": "LT",
     "supermercado_marca": "Dia",
@@ -51521,7 +52253,11 @@
   {
     "id": "8480017316967-87",
     "ean": "1",
+<<<<<<< HEAD
+    "nombre": "PULPA MIX DE FRUTAS",
+=======
     "nombre": "JUGO PULP MULTIFRUTA",
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "marca_producto": "DIA",
     "precio": 1150,
     "cantidad_presentacion": "90.00",
@@ -51534,7 +52270,11 @@
   {
     "id": "8480017316974-87",
     "ean": "1",
+<<<<<<< HEAD
+    "nombre": "PULPA PERA POUCH",
+=======
     "nombre": "JUGO PULP FRUT PERA",
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "marca_producto": "DIA",
     "precio": 1150,
     "cantidad_presentacion": "90.00",
@@ -51547,7 +52287,11 @@
   {
     "id": "8480017316981-87",
     "ean": "1",
+<<<<<<< HEAD
+    "nombre": "PULPA MANZANA POUCH",
+=======
     "nombre": "JUGO PULP FRUT MANZA",
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "marca_producto": "DIA",
     "precio": 1150,
     "cantidad_presentacion": "90.00",
@@ -51731,7 +52475,11 @@
     "ean": "1",
     "nombre": "MORRON ELEGIDO",
     "marca_producto": "Sin Marca",
+<<<<<<< HEAD
+    "precio": 5590,
+=======
     "precio": 4290,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "50.00",
     "unidad_medida_presentacion": "GR",
     "supermercado_marca": "Dia",
@@ -52186,7 +52934,11 @@
     "ean": "1",
     "nombre": "ALMOHADITA SAB AVELL",
     "marca_producto": "DIA",
+<<<<<<< HEAD
+    "precio": 1800,
+=======
     "precio": 1990,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "180.00",
     "unidad_medida_presentacion": "GR",
     "supermercado_marca": "Dia",
@@ -52719,7 +53471,11 @@
     "ean": "1",
     "nombre": "AGUA S/GAS MINERAL",
     "marca_producto": "DIA",
+<<<<<<< HEAD
+    "precio": 1200,
+=======
     "precio": 1190,
+>>>>>>> 528c4289ae1dd8ca5cb6b98e76e86fd17e59b74b
     "cantidad_presentacion": "2.00",
     "unidad_medida_presentacion": "LT",
     "supermercado_marca": "Dia",
@@ -52953,7 +53709,7 @@
     "ean": "1",
     "nombre": "ATUN LOMITO NATURAL",
     "marca_producto": "DIA",
-    "precio": 2850,
+    "precio": 2650,
     "cantidad_presentacion": "170.00",
     "unidad_medida_presentacion": "GR",
     "supermercado_marca": "Dia",
@@ -52966,7 +53722,7 @@
     "ean": "1",
     "nombre": "ATUN LOMITO ACEITE",
     "marca_producto": "DIA",
-    "precio": 2850,
+    "precio": 2650,
     "cantidad_presentacion": "170.00",
     "unidad_medida_presentacion": "GR",
     "supermercado_marca": "Dia",
