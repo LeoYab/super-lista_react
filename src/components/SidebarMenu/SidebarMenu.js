@@ -77,14 +77,19 @@ const SidebarMenu = () => {
 
   return (
     <>
-      {/* Botón para abrir/cerrar el menú (ahora un componente Button) */}
+      {/* Botón para abrir/cerrar el menú */}
       <Button
-        className="menu-toggle-button round" // Añade 'round' si quieres que sea circular
+        className="menu-toggle-button round"
         onClick={() => setIsMenuOpen(!isMenuOpen)}
-        icon={isMenuOpen ? 'X' : '☰'} // Icono dinámico para abrir/cerrar
-        variant="primary" // O el que mejor se adapte a tu diseño
-        title={isMenuOpen ? 'Cerrar menú' : 'Abrir menú'} // Tooltip
-      />
+        variant="primary"
+        title={isMenuOpen ? 'Cerrar menú' : 'Abrir menú'}
+      >
+        <div className={`hamburger-icon ${isMenuOpen ? 'open' : ''}`}>
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </Button>
 
       {/* Overlay para cerrar el menú al hacer clic fuera de él */}
       {isMenuOpen && <div className="menu-overlay" onClick={() => setIsMenuOpen(false)}></div>}
@@ -167,7 +172,7 @@ const SidebarMenu = () => {
           </ul>
         </div>
 
-      </div>
+      </div >
     </>
   );
 };

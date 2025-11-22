@@ -36,330 +36,222 @@
   /* Para títulos de categoría */
 }
 
-
 .supermercados-container {
-  padding: 20px;
+  padding: var(--spacing-lg);
   background-color: var(--background-color);
-  min-height: calc(100vh - var(--header-height, 60px));
-  /* Ajusta según tu header */
+  min-height: calc(100vh - 60px);
+  /* Adjust based on header height */
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: var(--spacing-lg);
 }
 
 .supermercados-container h2 {
   text-align: center;
   color: var(--primary-color);
-  margin-bottom: 20px;
+  margin-bottom: var(--spacing-lg);
+  font-weight: 700;
+  font-size: 1.75rem;
 }
 
 /* --- Slider de Supermercados --- */
 .supermarket-slider-wrapper {
   background-color: var(--card-bg-color);
-  padding: 15px;
-  border-radius: var(--border-radius);
-  box-shadow: var(--card-shadow);
+  padding: var(--spacing-lg);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-color-light);
 }
 
 .supermarket-slider-wrapper h3 {
   color: var(--text-color-primary);
-  /* Ajustado para ser más estándar */
-  margin-bottom: 15px;
-  font-size: var(--font-size-lg);
-  /* Un poco más grande */
+  margin-bottom: var(--spacing-md);
+  font-size: 1.25rem;
+  font-weight: 600;
 }
 
 .supermarket-slider {
   display: flex;
   justify-content: center;
   overflow-x: auto;
-  /* Permite el scroll horizontal */
   -webkit-overflow-scrolling: touch;
-  /* Suaviza el scroll en iOS */
-  gap: 15px;
-  /* Espacio entre tarjetas */
-  padding-bottom: 10px;
-  /* Para que la barra de scroll no tape contenido */
+  gap: var(--spacing-md);
+  padding-bottom: var(--spacing-sm);
 }
 
 .supermarket-slider::-webkit-scrollbar {
-  height: 8px;
-  /* Altura de la barra de scroll */
+  height: 6px;
 }
 
 .supermarket-slider::-webkit-scrollbar-thumb {
   background-color: var(--primary-light-color);
-  /* Color del "pulgar" del scroll */
-  border-radius: 10px;
+  border-radius: var(--border-radius-full);
 }
 
 .supermarket-slider::-webkit-scrollbar-track {
-  background-color: var(--background-light-color);
-  /* Color del fondo del scroll */
+  background-color: transparent;
 }
-
 
 .supermarket-card {
   flex: 0 0 auto;
-  /* No crecer, no encoger, tamaño basado en contenido */
-  width: 120px;
-  /* Ancho fijo para cada tarjeta */
+  width: 130px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 10px;
+  padding: var(--spacing-md);
   border: 2px solid var(--border-color);
   border-radius: var(--border-radius);
   cursor: pointer;
-  transition: all 0.3s ease;
-  background-color: var(--background-light-color);
-  /* Fondo de tarjeta */
+  transition: all var(--transition-normal);
+  background-color: var(--card-bg-color);
   text-align: center;
 }
 
 .supermarket-card:hover {
   border-color: var(--primary-color);
-  transform: translateY(-3px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
 }
 
 .supermarket-card.active {
   border-color: var(--primary-color);
   background-color: var(--primary-light-color);
-  color: var(--text-color-primary);
-  /* Texto para la tarjeta activa (negro o el que mejor contraste) */
-  box-shadow: 0 0 15px rgba(var(--primary-color-rgb, 0, 123, 255), 0.3);
-  /* Sombra más pronunciada, usa una variable para RGB si la tienes */
+  box-shadow: var(--shadow-lg);
 }
 
 .supermarket-card.active .supermarket-name {
-  color: var(--text-color-primary);
-  /* Asegura que el nombre también sea del color adecuado */
+  color: var(--primary-dark-color);
+  font-weight: 700;
 }
 
 .supermarket-logo {
   width: 80px;
   height: 80px;
   object-fit: contain;
-  /* Para que el logo no se distorsione */
-  margin-bottom: 8px;
-  border-radius: 5px;
-  /* Bordes suaves para logos */
+  margin-bottom: var(--spacing-sm);
+  border-radius: var(--border-radius-sm);
 }
 
 .supermarket-logo-placeholder {
-  /* Para cuando no hay logo, muestra inicial */
   width: 80px;
   height: 80px;
-  background-color: var(--border-color);
-  border-radius: 5px;
+  background-color: var(--input-bg-color);
+  border-radius: var(--border-radius-sm);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 2em;
-  color: var(--text-color-secondary);
-  margin-bottom: 8px;
+  font-size: 2rem;
+  color: var(--text-color-light);
+  margin-bottom: var(--spacing-sm);
+  font-weight: 700;
 }
 
 .supermarket-name {
-  font-size: 0.9em;
-  font-weight: 600;
+  font-size: 0.9rem;
+  font-weight: 500;
   color: var(--text-color-secondary);
-  /* Color predeterminado, más tenue */
   margin: 0;
+  transition: color var(--transition-fast);
 }
 
-
-/* --- Contenido principal (Lista de Productos y Mapa) --- */
+/* --- Contenido principal --- */
 .supermercados-content {
   display: flex;
-  flex-wrap: wrap;
-  /* Permite que los elementos se envuelvan en pantallas pequeñas */
-  gap: 20px;
+  flex-direction: column;
+  gap: var(--spacing-lg);
 }
 
 .supermercados-list {
-  flex: 1;
-  /* Ocupa el espacio restante */
-  min-width: 300px;
-  /* Ancho mínimo para la lista */
   background-color: var(--card-bg-color);
-  padding: 20px;
-  border-radius: var(--border-radius);
-  box-shadow: var(--card-shadow);
-  /* Quitar overflow-y: auto; si la lista principal ya maneja el scroll */
-  /* overflow-y: auto; */
+  padding: var(--spacing-lg);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-color-light);
 }
 
 .supermercados-list h3 {
   color: var(--primary-color);
-  margin-bottom: 15px;
-  font-size: 1.2em;
-  border-bottom: 1px dashed var(--border-color);
-  padding-bottom: 10px;
+  margin-bottom: var(--spacing-lg);
+  font-size: 1.5rem;
+  border-bottom: 1px solid var(--border-color-light);
+  padding-bottom: var(--spacing-md);
 }
 
-/* Barra de búsqueda de productos */
+/* Barra de búsqueda */
 .product-search-bar {
-  margin-bottom: 20px;
+  margin-bottom: var(--spacing-lg);
   display: flex;
-  /* Para alinear input y botón */
-  gap: 10px;
-  /* Espacio entre input y botón */
+  gap: var(--spacing-md);
+  align-items: center;
 }
 
-.product-search-bar input {
+.product-search-bar .input-group {
+  margin-bottom: 0;
   flex-grow: 1;
-  /* El input crece para ocupar el espacio */
-  padding: 10px;
-  border: 1px solid var(--border-color);
-  border-radius: var(--border-radius);
-  font-size: 1em;
-  background-color: var(--input-bg-color);
-  color: var(--text-color-primary);
-  /* Ajustado para consistencia */
 }
 
-/* --- Nuevas clases para la agrupación de productos por marca/categoría --- */
+/* Categorías */
 .product-categories-wrapper {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-lg);
-  /* Espacio entre los grupos de marcas */
+  gap: var(--spacing-xl);
 }
 
-
 .category-title {
-  font-size: var(--font-size-xl);
+  font-size: 1.25rem;
   font-weight: 700;
   color: var(--text-color-primary);
   margin-bottom: var(--spacing-md);
   padding-left: var(--spacing-sm);
-  border-bottom: 2px solid var(--border-color);
-  padding-bottom: var(--spacing-xs);
+  border-left: 4px solid var(--primary-color);
 }
 
 .product-cards-wrapper {
-  /* Reutiliza esta clase para la lista de items dentro de la categoría */
   display: flex;
   flex-direction: column;
   gap: var(--spacing-sm);
-  /* Espacio entre cada SupermarketProductItem */
-  padding: 0;
-  /* Sin padding horizontal extra */
 }
-
-
-/* Eliminar estilos de la lista <ul> y <li> antiguas */
-/* .product-list, .product-item, .product-item span, .product-item .product-price, .product-item .product-stock, .product-item button { display: none; } */
-/* Mejor, simplemente no los uses más en el JS */
-
 
 .no-products-message,
 .select-supermarket-message {
   text-align: center;
   color: var(--text-color-secondary);
-  padding: 30px;
-  font-style: italic;
-}
-
-/* --- Mapa --- */
-.map-wrapper {
-  flex: 2;
-  /* El mapa ocupa el doble de espacio que la lista */
-  min-width: 400px;
-  /* Ancho mínimo para el mapa */
-  height: 500px;
-  /* Altura fija para el mapa */
+  padding: var(--spacing-xl);
+  font-weight: 500;
+  background-color: var(--input-bg-color);
   border-radius: var(--border-radius);
-  overflow: hidden;
-  /* Asegura que el mapa no se desborde */
-  box-shadow: var(--card-shadow);
-}
-
-.leaflet-container {
-  width: 100%;
-  height: 100%;
-}
-
-.select-supermarket-button {
-  /* Este botón ya no lo veo en tu JS, puedes eliminarlo si ya no se usa */
-  background-color: var(--primary-color);
-  color: white;
-  border: none;
-  padding: 5px 10px;
-  border-radius: 5px;
-  cursor: pointer;
-  margin-top: 10px;
-  font-size: 0.8em;
-  transition: background-color 0.2s ease;
-}
-
-.select-supermarket-button:hover {
-  background-color: var(--primary-dark-color);
+  border: 1px dashed var(--border-color);
 }
 
 /* Responsiveness */
 @media (max-width: 768px) {
-  .supermercados-content {
-    flex-direction: column;
-    /* Apila la lista y el mapa en pantallas pequeñas */
-  }
-
-  .supermercados-list,
-  .map-wrapper {
-    min-width: unset;
-    /* Elimina el ancho mínimo para que se ajusten */
-    width: 100%;
-    /* Ocupan todo el ancho disponible */
-  }
-
-  .map-wrapper {
-    height: 350px;
-    /* Reduce la altura del mapa en móviles */
+  .supermercados-container {
+    padding: var(--spacing-md);
   }
 
   .supermarket-slider {
-    justify-content: center;
-    /* Alinea las tarjetas a la izquierda */
+    justify-content: flex-start;
   }
 
   .supermarket-card {
-    width: 100px;
-    /* Un poco más pequeñas en móviles */
+    width: 110px;
+    padding: var(--spacing-sm);
   }
 
-  .supermarket-logo {
-    width: 60px;
-    height: 60px;
-  }
-
+  .supermarket-logo,
   .supermarket-logo-placeholder {
     width: 60px;
     height: 60px;
-    font-size: 1.5em;
+    font-size: 1.5rem;
   }
 
   .product-search-bar {
     flex-direction: column;
-    /* Apila el input y el botón en móvil */
-    gap: 8px;
+    align-items: stretch;
+    gap: var(--spacing-sm);
   }
 
-  .product-categories-wrapper {
-    gap: var(--spacing-md);
-    /* Menos espacio entre grupos en móvil */
-  }
-
-  .category-title {
-    font-size: var(--font-size-lg);
-    /* Menos prominente en móvil */
-    margin-bottom: var(--spacing-sm);
-    padding-left: var(--spacing-xs);
-  }
-
-  .product-cards-wrapper {
-    gap: var(--spacing-xs);
-    /* Más ajustado en móvil */
+  .product-search-bar button {
+    width: 100%;
   }
 }

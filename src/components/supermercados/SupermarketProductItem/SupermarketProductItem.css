@@ -1,168 +1,134 @@
 /* src/components/supermercados/SupermarketProductItem/SupermarketProductItem.css */
 
-/* Reutiliza o define variables si no están globales */
-:root {
-    --border-radius: 8px;
-    --shadow-light: 0 2px 4px rgba(0, 0, 0, 0.1);
-    --shadow-medium: 0 4px 8px rgba(0, 0, 0, 0.15);
-    --border-color: #e0e0e0;
-    --card-bg-color: #ffffff;
-    --text-color-primary: #333333;
-    --text-color-secondary: #666666;
-    --primary-color: #007bff; /* Color principal de tu app */
-    --primary-dark-color: #0056b3; /* Un tono más oscuro del primary */
-    --background-light-color: #f8f9fa;
-
-    --spacing-xs: 4px;
-    --spacing-sm: 8px;
-    --spacing-md: 16px;
-    --spacing-lg: 24px;
-
-    --font-size-xs: 0.75rem;
-    --font-size-sm: 0.875rem;
-    --font-size-md: 1rem;
-    --font-size-lg: 1.125rem;
-
-    --border-radius-small: 4px;
-}
-
 .supermarket-product-item-card {
-    background-color: var(--card-bg-color);
-    border-radius: var(--border-radius);
-    box-shadow: var(--shadow-light);
-    border: 1px solid var(--border-color);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: var(--spacing-md) var(--spacing-lg);
-    margin-bottom: var(--spacing-xs); /* Espacio entre las tarjetas */
-    transition: box-shadow 0.2s ease;
+  background-color: var(--card-bg-color);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-color-light);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-md) var(--spacing-lg);
+  margin-bottom: var(--spacing-sm);
+  transition: all var(--transition-normal);
 }
 
 .supermarket-product-item-card:hover {
-    box-shadow: var(--shadow-medium);
+  box-shadow: var(--shadow-md);
+  border-color: var(--primary-light-color);
+  transform: translateY(-2px);
 }
 
 .product-details-left {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-md);
-    flex-grow: 1;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  flex-grow: 1;
 }
 
 .product-item-image-placeholder {
-    flex-shrink: 0;
-    width: 48px;
-    height: 48px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: var(--border-radius-small);
-    background-color: var(--background-light-color);
-    font-size: 28px; /* Para el emoji */
-    line-height: 1;
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: var(--border-radius-sm);
+  background-color: var(--primary-light-color);
+  font-size: 1.5rem;
+  line-height: 1;
+  color: var(--primary-dark-color);
 }
 
 .product-info-text {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
 
 .product-name {
-    font-size: var(--font-size-lg);
-    font-weight: bold;
-    color: var(--text-color-primary);
-    line-height: 1.2;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-color-primary);
+  line-height: 1.3;
 }
 
 .product-brand {
-    font-size: var(--font-size-sm);
-    color: var(--text-color-secondary);
-    line-height: 1.2;
-    margin-top: 2px;
+  font-size: 0.85rem;
+  color: var(--text-color-secondary);
+  line-height: 1.2;
 }
 
 .product-details-right {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    white-space: nowrap;
-    margin-left: var(--spacing-md);
-    flex-shrink: 0;
-    gap: var(--spacing-xs); /* Espacio entre precio, stock y botón */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  white-space: nowrap;
+  margin-left: var(--spacing-md);
+  flex-shrink: 0;
+  gap: var(--spacing-xs);
 }
 
 .product-price {
-    font-size: var(--font-size-lg);
-    font-weight: bold;
-    color: var(--primary-dark-color); /* O el color de acento que uses para precios */
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--accent-color);
 }
 
 .product-stock {
-    font-size: var(--font-size-xs);
-    padding: 3px 8px;
-    border-radius: 15px;
-    flex-shrink: 0;
-    text-transform: uppercase;
-    font-weight: 600;
+  font-size: 0.75rem;
+  padding: 4px 8px;
+  border-radius: var(--border-radius-full);
+  flex-shrink: 0;
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 0.5px;
 }
 
 .product-stock.in-stock {
-    background-color: #e6ffe6; /* Verde claro */
-    color: #008000; /* Verde oscuro */
+  background-color: rgba(16, 185, 129, 0.1);
+  color: var(--accent-color);
 }
 
 .product-stock.no-stock {
-    background-color: #ffe6e6; /* Rojo claro */
-    color: #cc0000; /* Rojo oscuro */
+  background-color: rgba(239, 68, 68, 0.1);
+  color: var(--danger-color);
 }
 
 /* Media Queries para Responsividad del item */
 @media (max-width: 768px) {
-    .supermarket-product-item-card {
-        padding: var(--spacing-sm);
-        flex-wrap: wrap; /* Permitir que los elementos se envuelvan */
-    }
+  .supermarket-product-item-card {
+    padding: var(--spacing-md);
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+  }
 
-    .product-details-left {
-        width: 100%; /* Ocupa todo el ancho en móvil */
-        justify-content: flex-start;
-        margin-bottom: var(--spacing-xs); /* Espacio antes de la siguiente fila */
-    }
+  .product-details-left {
+    width: 100%;
+    margin-bottom: 0;
+  }
 
-    .product-item-image-placeholder {
-        width: 40px;
-        height: 40px;
-        font-size: 24px;
-    }
+  .product-item-image-placeholder {
+    width: 40px;
+    height: 40px;
+    font-size: 1.25rem;
+  }
 
-    .product-name {
-        font-size: var(--font-size-md);
-    }
+  .product-name {
+    font-size: 0.95rem;
+  }
 
-    .product-brand {
-        font-size: var(--font-size-xs);
-    }
+  .product-details-right {
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    margin-left: 0;
+    padding-top: var(--spacing-xs);
+    border-top: 1px dashed var(--border-color-light);
+  }
 
-    .product-details-right {
-        flex-direction: row; /* Coloca precio, stock, botón en una fila */
-        width: 100%;
-        justify-content: space-between; /* Espacia entre ellos */
-        align-items: center;
-        margin-left: 0;
-        gap: var(--spacing-sm);
-    }
-
-    .product-price {
-        font-size: var(--font-size-md);
-    }
-
-    .product-stock {
-        font-size: var(--font-size-xs);
-        padding: 2px 6px;
-    }
-    .product-details-right button {
-        padding: 5px 10px;
-        font-size: 0.8em;
-    }
+  .product-price {
+    font-size: 1rem;
+  }
 }

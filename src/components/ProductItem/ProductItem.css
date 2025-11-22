@@ -33,95 +33,65 @@
   position: relative;
   overflow: hidden;
   border-radius: var(--border-radius);
-  box-shadow: var(--shadow-light);
-  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-color-light);
   background-color: var(--card-bg-color);
   display: flex;
-  /* Para contener la tarjeta y los overlays */
   align-items: center;
   width: 100%;
-  transform: none;
-  /* El wrapper no se mueve */
   touch-action: pan-y;
-  /* Permite scroll vertical, maneja horizontal para swipe */
   user-select: none;
-  margin-bottom: var(--spacing-xs);
-  /* Espacio entre las tarjetas */
+  margin-bottom: var(--spacing-sm);
+  transition: box-shadow var(--transition-normal);
 }
 
-/* La tarjeta principal que se desliza */
+.product-item-wrapper:hover {
+  box-shadow: var(--shadow-md);
+  border-color: var(--primary-light-color);
+}
+
 .product-item-card {
   flex-grow: 1;
-  /* Ocupa todo el espacio horizontal disponible */
   background-color: var(--card-bg-color);
   padding: var(--spacing-md) var(--spacing-lg);
   display: flex;
-  /* Contenedor flex para sus hijos (left-content, right-content, actions) */
   justify-content: space-between;
-  /* Espacia los elementos a los extremos */
   align-items: center;
-  /* Centra verticalmente los elementos */
   cursor: pointer;
-  /* Añade una transición para la opacidad si en algún momento quieres usarla de nuevo,
-       o para el background-color para una transición suave al completar. */
-  transition: transform 0.2s ease-out, box-shadow 0.2s ease-out, background-color 0.2s ease-out;
+  transition: transform 0.2s ease-out, background-color 0.2s ease;
   width: 100%;
-  /* La tarjeta ocupa el 100% del wrapper inicialmente */
   z-index: 2;
-  /* Asegura que esté por encima de los overlays */
-  box-shadow: none;
-  /* La sombra se maneja en el wrapper o al hover */
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
 }
 
 .product-item-card.dragging {
-  transition: none;
-  /* Deshabilita la transición durante el arrastre */
   cursor: grabbing;
+  transition: none;
 }
 
-/* Efecto de elevación al pasar el mouse en ESCRITORIO */
-.product-item-wrapper:hover .product-item-card.desktop {
-  box-shadow: var(--shadow-medium);
-}
-
-/* Estado de completado */
+/* Completed State */
 .product-item-card.completed {
-  /* IMPORTANTE: La propiedad opacity ha sido eliminada para evitar la transparencia */
-  background-color: var(--background-light-color);
-  /* Esto le dará un fondo ligeramente grisáceo */
+  background-color: var(--background-color);
+  /* Slightly darker/grayer */
 }
 
-/* Estilos específicos para el texto cuando el producto está completado */
 .product-item-card.completed .product-item-name,
 .product-item-card.completed .product-item-quantity-text,
 .product-item-card.completed .product-item-unit-detail {
   text-decoration: line-through;
-  /* Esto aplica el tachado */
-  color: var(--text-color-secondary);
-  /* Esto hace el texto un poco más claro */
+  color: var(--text-color-light);
 }
 
-.product-item-card.completed .product-item-total-price,
-.product-item-card.completed .product-item-actions .button {
-  text-decoration: none;
-  /* Asegura que el precio total y los botones no se tachen */
-  opacity: 1;
-  /* Asegura que los botones y el precio total sean completamente visibles */
+.product-item-card.completed .product-item-total-price {
+  background-color: var(--text-color-light);
 }
 
-/* --- ESTILOS PARA LA DISPOSICIÓN DE CONTENIDO --- */
+/* Left Content */
 .product-item-left-content {
   display: flex;
   align-items: center;
   gap: var(--spacing-md);
   flex-grow: 1;
-  /* Permite que este elemento crezca y empuje el contenido derecho */
   pointer-events: none;
-  /* Permite que los eventos pasen al contenedor padre */
 }
 
 .product-item-image {
@@ -131,184 +101,131 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: var(--border-radius-small);
-  background-color: var(--background-light-color);
-  pointer-events: none;
-}
-
-.emoji-icon {
-  font-size: 28px;
-  line-height: 1;
-  user-select: none;
-  pointer-events: none;
+  border-radius: var(--border-radius-sm);
+  background-color: var(--primary-light-color);
+  color: var(--primary-dark-color);
+  font-size: 1.5rem;
 }
 
 .product-item-details {
   display: flex;
   flex-direction: column;
-  pointer-events: none;
+  gap: 2px;
 }
 
 .product-item-name {
-  font-size: var(--font-size-lg);
-  font-weight: bold;
+  font-size: 1rem;
+  font-weight: 600;
   color: var(--text-color-primary);
-  line-height: 1.2;
-  pointer-events: none;
+  line-height: 1.3;
 }
 
 .product-item-unit-detail {
-  font-size: var(--font-size-sm);
+  font-size: 0.85rem;
   color: var(--text-color-secondary);
-  line-height: 1.2;
-  margin-top: 2px;
-  pointer-events: none;
 }
 
+/* Right Content */
 .product-item-right-content {
   display: flex;
   flex-direction: column;
-  /* Apila los elementos verticalmente */
   align-items: flex-end;
-  /* Alinea el texto a la derecha dentro de esta columna */
-  white-space: nowrap;
-  /* Evita que el texto se rompa en varias líneas */
   margin-left: var(--spacing-md);
-  /* Espacio con el contenido de la izquierda */
   flex-shrink: 0;
-  /* Evita que se encoja */
   pointer-events: none;
 }
 
 .product-item-quantity-text {
-  align-self: center;
-  font-size: var(--font-size-sm);
+  font-size: 0.85rem;
   color: var(--text-color-secondary);
-  margin-bottom: 2px;
-  /* Pequeño espacio entre Cantidad y Total */
-  pointer-events: none;
+  margin-bottom: 4px;
 }
 
 .product-item-total-price {
-  font-size: var(--font-size-lg);
-  font-weight: bold;
-  background: #28a745;
-  border-radius: 50px;
+  font-size: 1rem;
+  font-weight: 700;
+  background-color: var(--accent-color);
+  color: white;
+  padding: 4px 12px;
+  border-radius: var(--border-radius-full);
+  min-width: 80px;
   text-align: center;
-  width: 100%;
-  color: var(--card-bg-color);
-  pointer-events: none;
+  box-shadow: 0 2px 4px rgba(16, 185, 129, 0.2);
 }
 
-.product-item-delete-overlay {
-  position: absolute;
-  top: 0;
-  right: 0;
-  height: 100%;
-  /* Nota: el --swipe-threshold se define en JS, pero si quieres
-       que el overlay tenga un ancho fijo que coincida con el umbral,
-       asegúrate de que este valor coincida con el de JS (ej. 50px). */
-  width: var(--swipe-threshold, 50px);
-  /* Ajustado a 50px si la variable no está definida */
+/* Desktop Actions */
+.product-item-actions-desktop {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: var(--delete-color);
-  border-top-right-radius: var(--border-radius);
-  border-bottom-right-radius: var(--border-radius);
-  z-index: 1;
-  /* pointer-events: none; */
-  /* Permitir clics en el botón de overlay (comentado si se gestiona en el botón directamente) */
+  gap: var(--spacing-sm);
+  margin-left: var(--spacing-lg);
+  opacity: 0;
+  transform: translateX(10px);
+  transition: all var(--transition-fast);
 }
 
-/* Overlay de EDITAR (azul, a la izquierda del contenido) */
+.product-item-wrapper:hover .product-item-actions-desktop {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Mobile Overlays */
+.product-item-delete-overlay,
 .product-item-edit-overlay {
   position: absolute;
   top: 0;
-  left: 0;
   height: 100%;
-  /* Nota: el --swipe-threshold se define en JS, pero si quieres
-       que el overlay tenga un ancho fijo que coincida con el umbral,
-       asegúrate de que este valor coincida con el de JS (ej. 50px). */
-  width: var(--swipe-threshold, 50px);
-  /* Ajustado a 50px si la variable no está definida */
+  width: var(--swipe-threshold, 60px);
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: var(--edit-color);
-  border-top-left-radius: var(--border-radius);
-  border-bottom-left-radius: var(--border-radius);
   z-index: 1;
-  /* pointer-events: none; */
-  /* Permitir clics en el botón de overlay (comentado si se gestiona en el botón directamente) */
 }
 
-/* Estilos para los botones dentro de los overlays de swipe */
+.product-item-delete-overlay {
+  right: 0;
+  background-color: var(--danger-color);
+  border-radius: 0 var(--border-radius) var(--border-radius) 0;
+}
+
+.product-item-edit-overlay {
+  left: 0;
+  background-color: var(--primary-color);
+  border-radius: var(--border-radius) 0 0 var(--border-radius);
+}
+
 .swipe-delete-button,
 .swipe-edit-button {
-  background-color: transparent !important;
+  background: transparent !important;
   border: none !important;
   color: white !important;
-  font-weight: bold;
-  padding: var(--spacing-sm) var(--spacing-md);
-  border-radius: var(--border-radius-small);
-  transition: background-color 0.2s ease;
-  /* Asegúrate de que los botones en los overlays capturen eventos */
+  font-weight: 600;
+  padding: 0;
+  width: 100%;
+  height: 100%;
   pointer-events: auto;
 }
 
-.swipe-delete-button:hover,
-.swipe-edit-button:hover {
-  background-color: rgba(255, 255, 255, 0.1) !important;
-}
-
-
-/* --- Media Queries para Responsividad --- */
+/* Responsive */
 @media (max-width: 768px) {
-
-  /* Ocultar acciones de escritorio en móvil */
   .product-item-actions-desktop {
     display: none;
   }
 
   .product-item-card {
-    flex-wrap: nowrap;
-    padding: var(--spacing-sm);
-    gap: var(--spacing-sm);
-    /* Espacio entre los flex items (left, right, actions) */
+    padding: var(--spacing-md);
   }
 
-  .product-item-left-content {
-    width: 100%;
-    /* Ocupa todo el ancho disponible en la primera fila */
-    justify-content: flex-start;
-  }
-
-  .product-item-details {
-    flex-grow: 1;
+  .product-item-image {
+    width: 40px;
+    height: 40px;
+    font-size: 1.25rem;
   }
 
   .product-item-name {
-    font-size: var(--font-size-md);
-  }
-
-  .product-item-unit-detail {
-    font-size: var(--font-size-xs);
+    font-size: 0.95rem;
   }
 
   .product-item-right-content {
-    width: 30%;
-    flex-direction: column;
-    align-items: flex-start;
-    margin-left: auto;
-    order: unset;
-  }
-
-  .product-item-quantity-text {
-    margin-bottom: 0;
-  }
-
-  .product-item-total-price {
-    font-size: var(--font-size-md);
+    align-items: flex-end;
   }
 }
