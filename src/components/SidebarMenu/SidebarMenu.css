@@ -1,297 +1,309 @@
 /* src/components/SidebarMenu/SidebarMenu.css */
 
-.menu-toggle-button {
-    position: fixed;
-    top: 20px;
-    right: 20px; /* CAMBIO: de 'left: 20px;' a 'right: 20px;' */
-    z-index: 1001;
-    background-color: var(--primary-color);
-    color: white;
-    border: none;
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    font-size: 1.5em;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    transition: background-color 0.3s ease, transform 0.3s ease;
+/* Toggle Button */
+.btn.menu-toggle-button {
+  position: fixed;
+  top: var(--spacing-md);
+  right: var(--spacing-md);
+  z-index: 2000;
+  background-color: var(--card-bg-color);
+  color: var(--text-color-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 50%;
+  width: 38px;
+  height: 38px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  box-shadow: var(--shadow-md);
+  transition: all var(--transition-normal);
+  padding: 0;
+  overflow: visible !important;
 }
 
-.menu-toggle-button:hover {
-    background-color: var(--primary-dark-color);
-    transform: scale(1.05);
+.btn.menu-toggle-button:hover {
+  background-color: var(--primary-color);
+  color: white;
+  box-shadow: var(--shadow-lg);
+  border-color: var(--primary-color);
 }
 
+/* Hamburger Icon Animation */
+.hamburger-icon {
+  width: 24px;
+  height: 18px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  pointer-events: none;
+}
+
+.hamburger-icon span {
+  display: block;
+  width: 100%;
+  height: 2.5px;
+  background-color: currentColor;
+  border-radius: 2px;
+  transition: all 0.3s ease-in-out;
+  transform-origin: center;
+  position: absolute;
+  left: 0;
+}
+
+.hamburger-icon span:nth-child(1) {
+  top: 0;
+}
+
+.hamburger-icon span:nth-child(2) {
+  top: 8px;
+}
+
+.hamburger-icon span:nth-child(3) {
+  top: 16px;
+}
+
+/* Open State (Cross) */
+.hamburger-icon.open span:nth-child(1) {
+  top: 8px;
+  transform: rotate(45deg);
+}
+
+.hamburger-icon.open span:nth-child(2) {
+  opacity: 0;
+  width: 0;
+}
+
+.hamburger-icon.open span:nth-child(3) {
+  top: 8px;
+  transform: rotate(-45deg);
+}
+
+/* Overlay */
 .menu-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 999;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(15, 23, 42, 0.4);
+  /* Slate-900 with opacity */
+  backdrop-filter: blur(4px);
+  z-index: 999;
+  animation: fadeIn 0.3s ease;
 }
 
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+/* Sidebar Drawer */
 .sidebar-menu {
-    position: fixed;
-    top: 0;
-    right: -300px; /* CAMBIO: de 'left: -300px;' a 'right: -300px;' */
-    width: 280px;
-    height: 100%;
-    background-color: white; /* O el color que hayas elegido, por ejemplo: var(--card-bg-color); */
-    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.3); /* CAMBIO: Ajusta la sombra para que se vea bien en el lado derecho */
-    z-index: 1000;
-    transition: right 0.3s ease-in-out; /* CAMBIO: de 'left' a 'right' */
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    overflow-y: auto;
+  position: fixed;
+  top: 0;
+  right: -320px;
+  /* Hidden state */
+  width: 300px;
+  height: 100%;
+  background-color: var(--card-bg-color);
+  box-shadow: var(--shadow-strong);
+  z-index: 1000;
+  transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  /* Smooth ease-out */
+  padding: var(--spacing-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  overflow-y: auto;
 }
 
 .sidebar-menu.open {
-    right: 0; /* CAMBIO: de 'left: 0;' a 'right: 0;' */
+  right: 0;
 }
 
+/* Menu Header */
 .menu-header {
-    border-bottom: 1px solid var(--border-color);
-    padding-bottom: 15px;
-    margin-bottom: 15px;
-    text-align: center;
+  border-bottom: 1px solid var(--border-color-light);
+  padding-bottom: var(--spacing-md);
+  text-align: center;
 }
 
 .user-email-display {
-    font-size: 0.9em;
-    color: var(--text-color-secondary);
-    margin-bottom: 10px;
+  font-size: 0.9rem;
+  color: var(--text-color-secondary);
+  margin-bottom: var(--spacing-md);
 }
 
 .user-email-display strong {
-    color: var(--primary-color);
-    font-size: 1.1em;
-    display: block;
-    margin-top: 5px;
+  color: var(--text-color-primary);
+  font-size: 1.1rem;
+  display: block;
+  margin-top: 4px;
 }
 
 .logout-button-menu {
-    background-color: var(--delete-color);
-    color: white;
-    border: none;
-    padding: 8px 15px;
-    border-radius: var(--border-radius);
-    cursor: pointer;
-    font-size: 0.9em;
-    transition: background-color 0.3s ease;
+  width: 100%;
+  justify-content: center;
 }
 
-.logout-button-menu:hover {
-    background-color: #cc0000;
-    /* Un rojo más oscuro */
-}
-
+/* Menu Sections */
 .menu-section h4 {
-    color: var(--primary-color);
-    margin-bottom: 10px;
-    font-size: 1.1em;
-    border-bottom: 1px dashed var(--border-color);
-    padding-bottom: 5px;
+  color: var(--text-color-secondary);
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  margin-bottom: var(--spacing-md);
+  font-weight: 700;
 }
 
 .list-names {
-    list-style: none;
-    padding: 0;
-    margin: 0;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
 }
 
+/* List Items */
 .list-item {
-    padding: 10px 15px;
-    margin-bottom: 5px;
-    background-color: var(--input-bg-color);
-    border-radius: var(--border-radius);
-    cursor: pointer;
-    transition: background-color 0.2s ease, transform 0.1s ease;
-    color: var(--text-color);
-    font-weight: 500;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    /* Esto ya lo tenías, asegura espacio entre contenido y botón */
-    align-items: center;
-}
-
-.list-names .list-item:nth-child(odd) {
-    background-color: var(--card-bg-color);
-    /* Blanco o tu color de fondo principal de tarjeta */
-}
-
-.list-names .list-item:nth-child(even) {
-    background-color: var(--background-light-color);
-    /* Gris muy claro o color alterno */
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: transparent;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  color: var(--text-color-primary);
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid transparent;
 }
 
 .list-item:hover {
-    background-color: var(--hover-color);
-    transform: translateX(5px);
+  background-color: var(--background-color);
+  color: var(--primary-color);
 }
 
 .list-item.active {
-    background-color: #205185 !important;
-    color: white;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
-}
-
-.list-item.active:hover {
-    background-color: var(--primary-dark-color);
+  background-color: var(--primary-light-color);
+  color: var(--primary-dark-color);
+  border-color: rgba(99, 102, 241, 0.2);
+  /* Primary color with opacity */
 }
 
 .list-item span {
-    flex-grow: 1;
-    /* Para que el nombre ocupe el espacio restante */
-    cursor: pointer;
-    /* Indica que es clickeable */
+  flex-grow: 1;
 }
 
 .list-item .list-date {
-    font-size: 0.8em;
-    /* Tamaño de fuente más pequeño */
-    color: var(--text-color-secondary);
-    /* Color más tenue */
-    margin-top: 3px;
-    /* Pequeño margen superior */
-    display: block;
-    /* Para que aparezca en una nueva línea debajo del nombre */
+  font-size: 0.75rem;
+  color: var(--text-color-light);
+  margin-top: 2px;
+  display: block;
 }
 
-.no-lists-message {
-    font-style: italic;
-    color: var(--text-color-secondary);
-    padding: 10px;
-    text-align: center;
+.list-item.active .list-date {
+  color: var(--primary-color);
+  opacity: 0.8;
 }
 
+/* Create List Section */
 .create-list-section {
-    display: flex;
-    gap: 10px;
-    margin-top: 15px;
-    border-top: 1px dashed var(--border-color);
-    padding-top: 15px;
+  display: flex;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-md);
+  padding-top: var(--spacing-md);
+  border-top: 1px solid var(--border-color-light);
 }
 
 .create-list-section input {
-    flex-grow: 1;
-    padding: 8px 12px;
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius);
-    background-color: var(--input-bg-color);
-    color: var(--text-color);
+  flex-grow: 1;
+  padding: 8px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  background-color: var(--input-bg-color);
+  color: var(--text-color-primary);
+  font-size: 0.9rem;
+  transition: border-color var(--transition-fast);
 }
 
-.create-list-section button {
-    background-color: var(--add-button-color);
-    color: white;
-    border: none;
-    padding: 8px 15px;
-    border-radius: var(--border-radius);
-    cursor: pointer;
-    font-size: 0.9em;
-    transition: background-color 0.3s ease;
+.create-list-section input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px var(--primary-light-color);
 }
 
-.create-list-section button:hover {
-    background-color: #21a14a;
-    /* Un verde más oscuro */
+/* Empty State */
+.no-lists-message {
+  font-style: italic;
+  color: var(--text-color-light);
+  padding: var(--spacing-md);
+  text-align: center;
+  font-size: 0.9rem;
 }
 
-/* Estilos para el mensaje cuando no hay lista seleccionada */
-.empty-state {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 40px 20px;
-    gap: 15px;
-    color: var(--text-color-secondary);
-    border: 2px dashed var(--border-color);
-    border-radius: var(--border-radius);
-    margin-top: 50px;
-    /* Para no chocar con el botón del menú */
-}
-
-.empty-state .empty-icon {
-    font-size: 3em;
-    margin-bottom: 10px;
-}
-
-.empty-state .empty-title {
-    font-size: 1.5em;
-    color: var(--primary-color);
-    margin: 0;
-}
-
-.empty-state .empty-description {
-    font-size: 1em;
-    margin: 0;
-    max-width: 400px;
-}
-
+/* Delete Button */
 .delete-list-button {
-    background-color: rgba(0, 0, 0, 0);
-    /* Usamos el color de eliminar que ya tienes */
-    color: var(--delete-color); /* CAMBIO: Haz el ícono de la papelera rojo */
-    border: none;
-    border-radius: 50%;
-    /* Para que sea redondo */
-    width: 28px;
-    height: 28px;
-    font-size: 0.8em;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    margin-left: 10px;
-    /* Espacio entre el nombre y el botón */
-    flex-shrink: 0;
-    /* Evita que el botón se encoja */
-    transition: background-color 0.2s ease;
+  background-color: transparent;
+  color: var(--text-color-light);
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  margin-left: var(--spacing-sm);
+  transition: all var(--transition-fast);
+  opacity: 0;
+  /* Hidden by default */
+}
+
+.list-item:hover .delete-list-button {
+  opacity: 1;
+  /* Show on hover */
 }
 
 .delete-list-button:hover {
-    background-color: rgba(255, 0, 0, 0.1); /* Un rojo muy suave al pasar el ratón */
-    color: #cc0000; /* Color rojo más oscuro para el ícono al hover */
+  background-color: #fee2e2;
+  /* Red-100 */
+  color: var(--danger-color);
 }
 
-
-/* --- NUEVOS ESTILOS PARA LA SECCIÓN DE ENLACES ADICIONALES --- */
+/* Additional Links */
 .sidebar-menu .additional-links {
-    margin-top: 20px;
-    padding-top: 20px;
-    border-top: 1px solid rgba(0, 0, 0, 0.1); /* Una línea divisoria más visible */
+  margin-top: auto;
+  /* Push to bottom if space allows, or just spacing */
+  padding-top: var(--spacing-md);
+  border-top: 1px solid var(--border-color-light);
 }
 
 .sidebar-menu .additional-links li {
-    padding: 10px 15px;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-    display: flex;
-    align-items: center;
-    gap: 10px; /* Espacio entre ícono y texto */
-    color: var(--text-color); /* Color de texto predeterminado */
-    font-weight: 500;
-    background-color: var(--input-bg-color); /* Fondo similar a otros items */
-    border-radius: var(--border-radius);
-    margin-bottom: 5px; /* Espacio entre ítems de esta sección */
+  padding: var(--spacing-sm) var(--spacing-md);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  color: var(--text-color-secondary);
+  font-weight: 500;
+  border-radius: var(--border-radius);
 }
 
 .sidebar-menu .additional-links li:hover {
-    background-color: var(--hover-color); /* Color al pasar el mouse */
-    transform: translateX(5px); /* Pequeña animación al pasar el mouse */
+  background-color: var(--background-color);
+  color: var(--primary-color);
 }
 
-/* Estilo para el ícono dentro de la lista de enlaces adicionales */
 .sidebar-menu .additional-links li span:first-child {
-    font-size: 1.2em; /* Hace el ícono un poco más grande */
+  font-size: 1.2rem;
 }

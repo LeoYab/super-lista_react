@@ -6,47 +6,42 @@
 .search-controls {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: var(--spacing-md);
   align-items: stretch;
 }
 
 .search-input-container {
   position: relative;
   flex: 1;
-  max-width: 400px;
+  width: 100%;
 }
 
 .search-icon {
   position: absolute;
-  left: 15px;
+  left: 16px;
   top: 50%;
   transform: translateY(-50%);
-  font-size: 18px;
-  color: #6c757d;
+  font-size: 1.2rem;
+  color: var(--text-color-secondary);
   pointer-events: none;
+  z-index: 1;
 }
 
-.search-input {
-  width: 100%;
-  padding: 15px 15px 0px 50px;
-  font-size: 16px;
-  background: rgba(255, 255, 255, 0.9);
-  transition: all 0.3s ease;
+/* Override Input component styles for search specific needs if necessary */
+.search-input .input-field {
+  padding-left: 48px;
+  /* Space for icon */
+  background-color: var(--input-bg-color);
+  border-radius: var(--border-radius-full);
+  /* Pill shape for search */
+  border-color: transparent;
+  box-shadow: var(--shadow-sm);
 }
 
-.search-input:focus {
-  outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
-  background: white;
-}
-
-.search-input::placeholder {
-  color: #adb5bd;
-}
-
-.btn-icon {
-  font-size: 16px;
+.search-input .input-field:focus {
+  background-color: var(--card-bg-color);
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px var(--primary-light-color);
 }
 
 @media (min-width: 768px) {
@@ -55,10 +50,9 @@
     align-items: center;
     justify-content: space-between;
   }
-  
+
   .search-input-container {
-    max-width: none;
-    flex: 1;
-    margin-right: 20px;
+    max-width: 400px;
+    margin-right: auto;
   }
 }

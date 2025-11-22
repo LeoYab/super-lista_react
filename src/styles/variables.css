@@ -1,48 +1,58 @@
 /* src/styles/variables.css */
 
 :root {
-  /* Colores Primarios */
-  --primary-color: #667eea;
-  --primary-light-color: #e0e7ff;
-  --primary-dark-color: #5a67d8;
-  --accent-color: #28a745; /* Verde para totales/éxito */
-  --add-button-color: #28a745;
+  /* --- Modern Indigo/Slate Palette --- */
 
-  /* Colores de Texto */
-  --text-color-primary: #333;
-  --text-color-secondary: #6c757d;
-  --text-color-dark: #212529;
+  /* Primary Colors */
+  --primary-color: #6366f1;       /* Indigo 500 */
+  --primary-hover: #4f46e5;       /* Indigo 600 */
+  --primary-light-color: #e0e7ff; /* Indigo 100 */
+  --primary-dark-color: #4338ca;  /* Indigo 700 */
 
-  /* Colores de Fondo y Bordes */
-  --background-color: #f8f9fa;
-  --background-light-color: #f0f2f5; /* Usado para el fondo del icono */
-  --card-bg-color: #ffffff;
-  --border-color: #e9ecef;
-  --input-bg-color: #fdfefe;
-  --hover-color: #f3f4f6;
-  --hover-color-light: #f9f9fa;
+  /* Accent Colors */
+  --accent-color: #10b981;        /* Emerald 500 (Success) */
+  --accent-hover: #059669;        /* Emerald 600 */
+  --secondary-accent: #f59e0b;    /* Amber 500 (Warning) */
+  --danger-color: #ef4444;        /* Red 500 (Error/Delete) */
+  --danger-hover: #dc2626;        /* Red 600 */
 
-  /* Colores de Estado */
-  --delete-color: #dc3545; /* Rojo para eliminar/peligro */
-  --warning-color: #ffc107;
-  --info-color: #17a2b8;
+  /* Neutral / Backgrounds */
+  --background-color: #f8fafc;    /* Slate 50 */
+  --card-bg-color: #ffffff;       /* White */
+  --input-bg-color: #f1f5f9;      /* Slate 100 */
+  --border-color: #e2e8f0;        /* Slate 200 */
+  --border-color-light: #f1f5f9;  /* Slate 100 */
 
-  /* Sombras */
-  --shadow-light: 0 2px 8px rgba(0, 0, 0, 0.08); /* Sombra para la tarjeta por defecto */
-  --shadow-medium: 0 5px 15px rgba(0, 0, 0, 0.12); /* Sombra para hover */
-  --shadow-heavy: 0 10px 30px rgba(0, 0, 0, 0.15);
+  /* Text Colors */
+  --text-color-primary: #1e293b;  /* Slate 800 */
+  --text-color-secondary: #64748b;/* Slate 500 */
+  --text-color-light: #94a3b8;    /* Slate 400 */
+  --text-color-inverse: #ffffff;  /* White text */
 
-  /* Radios de Borde */
-  --border-radius: 8px; /* Para cards */
-  --border-radius-small: 4px; /* Para el icono */
+  /* Shadows (Soft/Floating) */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-strong: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
 
-  /* Espaciado */
+  /* Border Radius */
+  --border-radius-sm: 6px;
+  --border-radius: 12px;
+  --border-radius-lg: 16px;
+  --border-radius-xl: 24px;
+  --border-radius-full: 9999px;
+
+  /* Spacing */
   --spacing-xs: 4px;
   --spacing-sm: 8px;
   --spacing-md: 16px;
   --spacing-lg: 24px;
   --spacing-xl: 32px;
 
-  /* Nueva variable para el umbral de swipe */
-  --swipe-threshold: 90px; /* Asegúrate de que coincida con el JS */
+  /* Transitions */
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.3s ease;
+
+  /* Swipe Threshold */
+  --swipe-threshold: 90px;
 }

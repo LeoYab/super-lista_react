@@ -1,35 +1,37 @@
 /* src/components/Header/Header.css */
 .header {
   text-align: center;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.8));
-  backdrop-filter: blur(15px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: var(--shadow-sm);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-lg) var(--spacing-md);
+  transition: all var(--transition-normal);
+}
+
+.header:hover {
+  box-shadow: var(--shadow-md);
+  background: rgba(255, 255, 255, 0.9);
 }
 
 .header-content {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 20px;
+  gap: var(--spacing-md);
   flex-wrap: wrap;
 }
 
 .header-icon {
-  font-size: 48px;
-  animation: bounce 2s infinite;
+  font-size: 3rem;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+  transition: transform var(--transition-normal);
 }
 
-@keyframes bounce {
-  0%, 20%, 50%, 80%, 100% {
-    transform: translateY(0);
-  }
-  40% {
-    transform: translateY(-10px);
-  }
-  60% {
-    transform: translateY(-5px);
-  }
+.header:hover .header-icon {
+  transform: scale(1.1) rotate(5deg);
 }
 
 .header-text {
@@ -37,40 +39,49 @@
 }
 
 .header-title {
-  font-size: 2.5rem;
-  font-weight: 700;
-  background: linear-gradient(45deg, #667eea, #764ba2);
+  font-family: 'Outfit', 'Inter', sans-serif;
+  /* Ensure you have a nice heading font or fallback */
+  font-size: 2.25rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-dark-color));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  margin-bottom: 8px;
+  margin-bottom: var(--spacing-xs);
+  letter-spacing: -0.02em;
 }
 
 .header-subtitle {
-  color: #6c757d;
-  font-size: 1.1rem;
-  font-weight: 400;
+  color: var(--text-color-secondary);
+  font-size: 1rem;
+  font-weight: 500;
 }
 
 @media (max-width: 768px) {
+  .header {
+    padding: var(--spacing-md);
+    border-radius: 0 0 var(--border-radius-lg) var(--border-radius-lg);
+  }
+
   .header-content {
     flex-direction: column;
     text-align: center;
+    gap: var(--spacing-sm);
   }
-  
+
   .header-text {
     text-align: center;
   }
-  
+
   .header-title {
-    font-size: 2rem;
+    font-size: 1.75rem;
   }
-  
+
   .header-subtitle {
-    font-size: 1rem;
+    font-size: 0.9rem;
   }
-  
+
   .header-icon {
-    font-size: 36px;
+    font-size: 2.5rem;
   }
 }

@@ -1,31 +1,26 @@
 /* src/components/TotalSummary/TotalSummary.css */
 .total-summary {
-    display: flex;
-    width: 100%;
-    justify-content: center;
-    gap: 10px;
-    text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  background-color: var(--card-bg-color);
+  padding: 8px 16px;
+  border-radius: var(--border-radius-full);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-color-light);
+}
+
+.total-summary h2 {
+  margin: 0;
+  font-size: 1rem;
+  color: var(--text-color-secondary);
+  font-weight: 500;
 }
 
 .total-summary h3 {
-    color: #fff;
-    background-color: #28a745;
-    border-radius: 50px;
-    padding-inline: 10px;
-    margin: 0 0 8px;
-    font-size: 1.5em;
-}
-
-.total-summary p {
   margin: 0;
-  font-size: 1.2em;
-  font-weight: bold;
-}
-.total-summary .total-value {
-  color: #28a745;
-}
-.total-summary .total-value {
-  font-size: 1.2em;
-  font-weight: bold;
-  color: #28a745;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--accent-color);
 }

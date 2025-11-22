@@ -572,14 +572,18 @@ async function generarJsonFiltrados() {
       throw new Error(`No se pudo descomprimir el archivo ZIP. Posiblemente esté corrupto: ${unzipError.message}`);
     }
 
-    const allFoundZips = directory.files.filter(f => f.path.toLowerCase().endsWith('.zip')).map(f => path.basename(f.path));
-    console.log('DEBUG: Todos los ZIPs encontrados:', allFoundZips);
+    const allFoundZips = directory.files.filter(f => f.path.toLowerCase().endsWith('.zip')).map(f => f.path);
+    console.log('DEBUG: Todos los ZIPs encontrados (rutas completas):', allFoundZips);
 
     let zipsInternos = directory.files.filter(f => {
-      const fileName = path.basename(f.path);
+      // Normalizar ruta para manejar tanto / como \
+      const fullPath = f.path;
+      const fileName = fullPath.split(/[/\\]/).pop(); // Obtener el nombre del archivo independientemente del separador
+
       if (!fileName.toLowerCase().endsWith('.zip')) {
         return false;
       }
+
       const fileNameWithoutExt = fileName.substring(0, fileName.lastIndexOf('.'));
       for (const prefix of KNOWN_ZIPS_TO_PROCESS_PREFIXES) {
         if (fileNameWithoutExt.startsWith(prefix)) {
