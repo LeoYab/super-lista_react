@@ -60,6 +60,7 @@ const Supermercados = () => {
   const [showScanner, setShowScanner] = useState(false);
   const [scannedProducts, setScannedProducts] = useState([]);
   const scannerRef = useRef(null);
+  const scannerIsRunningRef = useRef(false);
 
   const handleAddProductToUserList = useCallback((product) => {
     console.log('Agregando producto a la lista del usuario (simulado):', product);
@@ -623,6 +624,7 @@ const Supermercados = () => {
       const timer = setTimeout(() => {
         html5QrCode = new Html5Qrcode("reader");
         scannerRef.current = html5QrCode;
+        scannerIsRunningRef.current = false;
 
         const config = {
           fps: 10,
@@ -644,20 +646,37 @@ const Supermercados = () => {
           (errorMessage) => {
             // No-op to suppress console spam and UI errors
           }
-        ).catch(err => {
-          console.log("Error starting scanner:", err);
-        });
+        )
+          .then(() => {
+            scannerIsRunningRef.current = true;
+          })
+          .catch(err => {
+            console.error("Error starting scanner:", err);
+            alert("No se pudo iniciar la cámara. Por favor, asegúrate de dar permisos y usar HTTPS.");
+            setShowScanner(false);
+          });
       }, 100);
 
       return () => {
         clearTimeout(timer);
         if (html5QrCode) {
-          html5QrCode.stop().then(() => {
-            console.log("Scanner stopped");
-            html5QrCode.clear();
-          }).catch(err => {
-            console.log("Error stopping scanner", err);
-          });
+          const stopScanner = async () => {
+            if (scannerIsRunningRef.current) {
+              try {
+                await html5QrCode.stop();
+                console.log("Scanner stopped");
+              } catch (err) {
+                console.warn("Error stopping scanner (might not be running):", err);
+              }
+            }
+            try {
+              html5QrCode.clear();
+            } catch (e) {
+              console.warn("Error clearing scanner:", e);
+            }
+            scannerIsRunningRef.current = false;
+          };
+          stopScanner();
         }
       };
     }
