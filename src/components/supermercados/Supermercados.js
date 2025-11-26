@@ -639,20 +639,38 @@ const Supermercados = () => {
           ]
         };
 
-        html5QrCode.start(
-          { facingMode: "environment" },
-          config,
-          onScanSuccess,
-          (errorMessage) => {
-            // No-op to suppress console spam and UI errors
+        // Intentar obtener cámaras primero para diagnósticos más precisos
+        Html5Qrcode.getCameras().then(devices => {
+          if (devices && devices.length) {
+            // Si hay cámaras, intentamos iniciar con la configuración preferida
+            return html5QrCode.start(
+              { facingMode: "environment" },
+              config,
+              onScanSuccess,
+              () => { }
+            );
+          } else {
+            throw new Error("No se detectaron cámaras en el dispositivo.");
           }
-        )
+        })
           .then(() => {
             scannerIsRunningRef.current = true;
           })
           .catch(err => {
             console.error("Error starting scanner:", err);
-            alert("No se pudo iniciar la cámara. Por favor, asegúrate de dar permisos y usar HTTPS.");
+            let userMsg = `No se pudo iniciar la cámara.`;
+
+            if (err.name === 'NotReadableError' || err.message?.includes('NotReadableError')) {
+              userMsg = "La cámara parece estar en uso por otra aplicación (Zoom, Meet, etc.) o hay un fallo de hardware. Cierra otras apps y recarga.";
+            } else if (err.name === 'NotAllowedError' || err.message?.includes('Permission denied')) {
+              userMsg = "Permiso denegado. Habilita el acceso a la cámara en el navegador.";
+            } else if (err.name === 'NotFoundError') {
+              userMsg = "No se encontró ninguna cámara.";
+            } else {
+              userMsg += ` Detalles: ${err.message || err}`;
+            }
+
+            alert(`${userMsg} (Asegúrate de usar HTTPS si no es localhost)`);
             setShowScanner(false);
           });
       }, 100);
