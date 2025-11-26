@@ -2,155 +2,176 @@
 import { useState, useRef, useCallback } from 'react';
 
 /**
- * Un hook personalizado para manejar la lógica de "deslizar para acción" en un elemento,
- * replicando el comportamiento de tu implementación original.
- * @param {object} config - Configuración para el hook.
- * @param {number} [config.swipeThreshold=90] - La cantidad de píxeles que se debe deslizar para que la acción se "enganche".
- * @param {function} [config.onSwipeLeftAction] - Callback que se ejecuta cuando se desliza a la izquierda más allá del umbral y se suelta.
- * @param {function} [config.onSwipeRightAction] - Callback que se ejecuta cuando se desliza a la derecha más allá del umbral y se suelta.
- * @param {function} [config.onCardClick] - Callback que se ejecuta cuando se hace clic en la tarjeta sin deslizar.
- * @returns {object} - Propiedades y manejadores para aplicar al componente.
+ * Un hook personalizado para manejar la lógica de "deslizar para acción" en un elemento.
+ * Mejorado para distinguir entre scroll vertical y swipe horizontal.
  */
 export const useSwipeable = ({
-    swipeThreshold = 90,
-    onSwipeLeftAction,
-    onSwipeRightAction,
-    onCardClick, // Nuevo: para manejar el click sin swipe
+  swipeThreshold = 90,
+  onSwipeLeftAction,
+  onSwipeRightAction,
+  onCardClick,
 }) => {
-    const itemRef = useRef(null);
-    const [translateX, setTranslateX] = useState(0);
-    const [isDragging, setIsDragging] = useState(false);
-    const startX = useRef(0);
-    const currentX = useRef(0); // Mantenemos esta ref para replicar tu lógica original
+  const itemRef = useRef(null);
+  const [translateX, setTranslateX] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
 
-    // Replicamos tu función closeSwipe que simplemente pone translateX a 0
-    const closeSwipe = useCallback(() => {
-        setTranslateX(0);
-    }, []);
+  // Refs para el seguimiento del gesto
+  const startX = useRef(0);
+  const startY = useRef(0);
+  const isHorizontalSwipe = useRef(null); // null: indeterminado, true: swipe, false: scroll
 
-    // Replicamos tu getClientX
-    const getClientX = useCallback((e) => {
-        if (e.touches && e.touches.length > 0) {
-            return e.touches[0].clientX;
+  const closeSwipe = useCallback(() => {
+    setTranslateX(0);
+  }, []);
+
+  const getClientX = (e) => {
+    return e.touches && e.touches.length > 0 ? e.touches[0].clientX : e.clientX;
+  };
+
+  const getClientY = (e) => {
+    return e.touches && e.touches.length > 0 ? e.touches[0].clientY : e.clientY;
+  };
+
+  const handlePointerDown = useCallback((e) => {
+    // Ignorar si es clic en botones de acción o clic derecho
+    if (e.target.closest('.product-item-actions') ||
+      e.target.closest('.swipe-edit-button') ||
+      e.target.closest('.swipe-delete-button') ||
+      e.button === 2) {
+      return;
+    }
+
+    // NO llamamos a e.preventDefault() aquí para permitir que el navegador detecte el scroll
+
+    startX.current = getClientX(e);
+    startY.current = getClientY(e);
+    isHorizontalSwipe.current = null; // Resetear detección
+    setIsDragging(false);
+
+    if (itemRef.current && e.pointerId !== undefined) {
+      try {
+        itemRef.current.setPointerCapture(e.pointerId);
+      } catch (err) {
+        // Ignorar errores de captura
+      }
+    }
+  }, []);
+
+  const handlePointerMove = useCallback((e) => {
+    // Si ya determinamos que es scroll vertical, no hacemos nada
+    if (isHorizontalSwipe.current === false) return;
+
+    const currentX = getClientX(e);
+    const currentY = getClientY(e);
+    const deltaX = currentX - startX.current;
+    const deltaY = currentY - startY.current;
+
+    // Si aún no hemos determinado la dirección
+    if (isHorizontalSwipe.current === null) {
+      // Umbral mínimo de movimiento para decidir (ej. 10px)
+      if (Math.abs(deltaX) > 10 || Math.abs(deltaY) > 10) {
+        if (Math.abs(deltaX) > Math.abs(deltaY)) {
+          // Es un swipe horizontal
+          isHorizontalSwipe.current = true;
+          setIsDragging(true);
+        } else {
+          // Es un scroll vertical
+          isHorizontalSwipe.current = false;
+          return; // Dejar que el navegador haga scroll
         }
-        return e.clientX;
-    }, []);
+      } else {
+        // Aún no se ha movido lo suficiente
+        return;
+      }
+    }
 
-    // Replicamos tu handleStart (onPointerDown)
-    const handlePointerDown = useCallback((e) => {
-        // Tu lógica original para ignorar clicks en botones de acción ya está aquí:
-        // '.product-item-actions' (desktop), '.swipe-action-button' (mobile, aunque lo renombraste)
-        // O clic derecho
-        if (e.target.closest('.product-item-actions') || e.target.closest('.swipe-edit-button') || e.target.closest('.swipe-delete-button') || e.button === 2) {
-            // No iniciamos el arrastre si es un botón de acción o clic derecho
-            return;
-        }
-        
-        setIsDragging(true);
-        startX.current = getClientX(e);
-        currentX.current = startX.current; // Inicializa currentX
+    // Si es un swipe horizontal confirmado
+    if (isHorizontalSwipe.current) {
+      e.preventDefault(); // Prevenir scroll vertical ahora que estamos haciendo swipe
 
-        // Captura de puntero, replicando tu try-catch
-        if (itemRef.current && e.pointerId !== undefined) {
-            try {
-                itemRef.current.setPointerCapture(e.pointerId);
-            } catch (err) {
-                console.warn("Swipe: Failed to set pointer capture", err);
-            }
-        }
-        
-        e.preventDefault(); 
-    }, [getClientX]); // Dependencias: getClientX
+      // Aumentamos el límite visual para que se vea todo el texto
+      // Permitimos arrastrar hasta 2 veces el umbral o un fijo generoso
+      const maxDrag = Math.max(swipeThreshold * 2.5, 200);
 
-    // Replicamos tu handleMove (onPointerMove)
-    const handlePointerMove = useCallback((e) => {
-        if (!isDragging) return;
+      // Aplicamos resistencia logarítmica o lineal simple
+      let newTranslateX = deltaX;
 
-        currentX.current = getClientX(e);
-        const deltaX = currentX.current - startX.current;
-        
-        // Replicamos tus límites de deslizamiento originales (SWIPE_THRESHOLD * 1.2)
-        const maxSwipeRight = swipeThreshold * 1.2;
-        const maxSwipeLeft = -swipeThreshold * 1.2;
+      // Limitar el arrastre visual
+      if (newTranslateX > maxDrag) newTranslateX = maxDrag;
+      if (newTranslateX < -maxDrag) newTranslateX = -maxDrag;
 
-        const newTranslateX = Math.max(maxSwipeLeft, Math.min(maxSwipeRight, deltaX));
-        setTranslateX(newTranslateX);
+      setTranslateX(newTranslateX);
+    }
+  }, [swipeThreshold]);
 
-        e.preventDefault(); 
-    }, [isDragging, swipeThreshold, getClientX]);
+  const handlePointerUp = useCallback((e) => {
+    if (isHorizontalSwipe.current === false) {
+      // Fue un scroll, limpiar y salir
+      isHorizontalSwipe.current = null;
+      return;
+    }
 
-    // Replicamos tu handleEnd (onPointerUp)
-    const handlePointerUp = useCallback((e) => {
-        if (!isDragging) return;
-        
-        setIsDragging(false);
+    if (isDragging) {
+      // Lógica de acción
+      if (translateX < -swipeThreshold) {
+        if (onSwipeLeftAction) onSwipeLeftAction();
+      } else if (translateX > swipeThreshold) {
+        if (onSwipeRightAction) onSwipeRightAction();
+      }
+    }
 
-        // Libera la captura de puntero, replicando tu try-catch
-        if (itemRef.current && e.pointerId !== undefined) {
-            try {
-                itemRef.current.releasePointerCapture(e.pointerId);
-            } catch (err) {
-                console.warn("Swipe: Failed to release pointer capture", err);
-            }
-        }
+    // Limpieza final
+    setIsDragging(false);
+    isHorizontalSwipe.current = null;
+    closeSwipe();
 
-        // --- LÓGICA DE ACCIÓN: Disparar y Volver a 0 ---
-        if (translateX < -swipeThreshold) { // Swipe left
-            if (onSwipeLeftAction) onSwipeLeftAction(); 
-        } else if (translateX > swipeThreshold) { // Swipe right
-            if (onSwipeRightAction) onSwipeRightAction();
-        }
-        
-        // Siempre vuelve a 0 después de soltar, independientemente de la acción
-        closeSwipe(); 
-    }, [isDragging, translateX, swipeThreshold, onSwipeLeftAction, onSwipeRightAction, closeSwipe]);
+    if (itemRef.current && e.pointerId !== undefined) {
+      try {
+        itemRef.current.releasePointerCapture(e.pointerId);
+      } catch (err) { }
+    }
+  }, [isDragging, translateX, swipeThreshold, onSwipeLeftAction, onSwipeRightAction, closeSwipe]);
 
-    // Replicamos tu handlePointerLeave
-    const handlePointerLeave = useCallback((e) => {
-        if (isDragging) {
-            setIsDragging(false);
-            closeSwipe(); // Vuelve a 0 si el puntero sale mientras arrastra
-            // Libera captura de puntero si es necesario
-            if (itemRef.current && e.pointerId !== undefined) {
-                try {
-                    itemRef.current.releasePointerCapture(e.pointerId);
-                } catch (err) {
-                    console.warn("Swipe: Failed to release pointer capture on leave", err);
-                }
-            }
-        }
-    }, [isDragging, closeSwipe]);
+  const handlePointerLeave = useCallback((e) => {
+    if (isDragging) {
+      setIsDragging(false);
+      closeSwipe();
+      if (itemRef.current && e.pointerId !== undefined) {
+        try {
+          itemRef.current.releasePointerCapture(e.pointerId);
+        } catch (err) { }
+      }
+    }
+  }, [isDragging, closeSwipe]);
 
-    // Replicamos tu handleCardClick logic
-    const handleCardClick = useCallback((e) => {
-        // Tu lógica original: si hubo algún movimiento de swipe (translateX no es 0),
-        // previene el click y cierra el swipe.
-        if (translateX !== 0) { 
-            e.stopPropagation();
-            e.preventDefault();
-            closeSwipe(); 
-            return;
-        }
-        // Si no hubo swipe, ejecuta el callback onCardClick (tu onToggleComplete)
-        if (onCardClick) {
-            onCardClick();
-        }
-    }, [translateX, closeSwipe, onCardClick]);
+  const handleCardClick = useCallback((e) => {
+    // Si se estaba arrastrando, prevenimos el click
+    if (isDragging || Math.abs(translateX) > 5) {
+      e.stopPropagation();
+      e.preventDefault();
+      closeSwipe();
+      return;
+    }
 
-    // Propiedades para pasar al contenedor del elemento deslizable
-    const wrapperProps = {
-        ref: itemRef,
-        onPointerDown: handlePointerDown,
-        onPointerMove: handlePointerMove,
-        onPointerUp: handlePointerUp,
-        onPointerLeave: handlePointerLeave,
-        onContextMenu: (e) => e.preventDefault(),
-        // Para asegurar compatibilidad táctil si los Pointer Events no son suficientes:
-        onTouchStart: handlePointerDown,
-        onTouchMove: handlePointerMove,
-        onTouchEnd: handlePointerUp,
-        onClick: handleCardClick, // La tarjeta principal ahora tiene el onClick del hook
-    };
+    if (onCardClick) {
+      onCardClick();
+    }
+  }, [isDragging, translateX, closeSwipe, onCardClick]);
 
-    return { wrapperProps, translateX, isDragging }; // isRevealed ya no es tan relevante con este modelo
+  const wrapperProps = {
+    ref: itemRef,
+    onPointerDown: handlePointerDown,
+    onPointerMove: handlePointerMove,
+    onPointerUp: handlePointerUp,
+    onPointerLeave: handlePointerLeave,
+    onContextMenu: (e) => e.preventDefault(),
+    // Eventos táctiles para respaldo
+    onTouchStart: handlePointerDown,
+    onTouchMove: handlePointerMove,
+    onTouchEnd: handlePointerUp,
+    onClick: handleCardClick,
+    style: { touchAction: 'pan-y' } // Importante: permite al navegador manejar el scroll vertical
+  };
+
+  return { wrapperProps, translateX, isDragging };
 };
