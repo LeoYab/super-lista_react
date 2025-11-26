@@ -3,6 +3,7 @@ import './Supermercados.css';
 import Input from '../Input/Input';
 import Button from '../Buttons/Button';
 import SupermarketProductItem from './SupermarketProductItem/SupermarketProductItem';
+import { Html5Qrcode, Html5QrcodeSupportedFormats } from "html5-qrcode";
 
 import { dbFirestore } from '../../firebase/config';
 import { collection, getDocs, query, limit, startAfter, where, orderBy } from 'firebase/firestore';
@@ -54,6 +55,12 @@ const Supermercados = () => {
   const [allBrandsFirebase, setAllBrandsFirebase] = useState([]);
   const [dataSource, setDataSource] = useState('Firestore');
   const [error, setError] = useState(null);
+
+  // Scanner states
+  const [showScanner, setShowScanner] = useState(false);
+  const [scannedProducts, setScannedProducts] = useState([]);
+  const scannerRef = useRef(null);
+  const scannerIsRunningRef = useRef(false);
 
   const handleAddProductToUserList = useCallback((product) => {
     console.log('Agregando producto a la lista del usuario (simulado):', product);
@@ -541,6 +548,163 @@ const Supermercados = () => {
     }
   };
 
+  // --- Barcode Scanner Logic ---
+  const normalizeCode = (code) => {
+    return code.replace(/^0+/, '');
+  };
+
+  const onScanSuccess = (decodedText, decodedResult) => {
+    console.log(`Code scanned = ${decodedText}`, decodedResult);
+
+    // Stop scanning
+    setShowScanner(false);
+
+    const normalizedScannedCode = normalizeCode(decodedText);
+    console.log(`Normalized scanned code: ${normalizedScannedCode}`);
+
+    // Search for the product in all local data
+    const results = [];
+    Object.entries(LOCAL_BRAND_DEFAULT_PRODUCTS_MAP).forEach(([brand, products]) => {
+      // Find product where the ID part (before dash) matches the scanned code (normalized)
+      const found = products.find(p => {
+        // ID format usually: "EAN-BranchID" or "PaddedEAN-BranchID"
+        const idParts = p.id.split('-');
+        if (idParts.length > 0) {
+          const idCodePart = idParts[0]; // Get the EAN part
+          const normalizedIdCode = normalizeCode(idCodePart);
+          return normalizedIdCode === normalizedScannedCode;
+        }
+        return false;
+      });
+
+      if (found) {
+        results.push({
+          ...found,
+          supermercado_marca: brand.charAt(0).toUpperCase() + brand.slice(1),
+          // We don't have branch name here easily without looking it up, but we can use default
+          sucursal_nombre: 'Sucursal Local'
+        });
+      }
+    });
+
+    setScannedProducts(results);
+    if (results.length === 0) {
+      alert(`No se encontraron productos con el código: ${decodedText}`);
+    }
+  };
+
+  const handleFileUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const html5QrCode = scannerRef.current;
+    if (!html5QrCode) return;
+
+    try {
+      // Stop camera if running to free up the UI element for the image
+      try {
+        await html5QrCode.stop();
+        html5QrCode.clear();
+      } catch (err) {
+        console.log("Scanner was not running or failed to stop", err);
+      }
+
+      const decodedText = await html5QrCode.scanFileV2(file, true);
+      onScanSuccess(decodedText.decodedText, decodedText);
+    } catch (err) {
+      console.error("Error scanning file:", err);
+      alert("No se pudo detectar un código de barras en la imagen. Intenta con una imagen más clara.");
+    }
+  };
+
+  useEffect(() => {
+    let html5QrCode;
+    if (showScanner) {
+      // Small timeout to ensure DOM element exists
+      const timer = setTimeout(() => {
+        html5QrCode = new Html5Qrcode("reader");
+        scannerRef.current = html5QrCode;
+        scannerIsRunningRef.current = false;
+
+        const config = {
+          fps: 10,
+          qrbox: { width: 300, height: 150 }, // Rectangular for barcodes
+          aspectRatio: 1.0,
+          formatsToSupport: [
+            Html5QrcodeSupportedFormats.EAN_13,
+            Html5QrcodeSupportedFormats.EAN_8,
+            Html5QrcodeSupportedFormats.UPC_A,
+            Html5QrcodeSupportedFormats.UPC_E,
+            Html5QrcodeSupportedFormats.CODE_128
+          ]
+        };
+
+        // Intentar obtener cámaras primero para diagnósticos más precisos
+        Html5Qrcode.getCameras().then(devices => {
+          if (devices && devices.length) {
+            // Si hay cámaras, intentamos iniciar con la configuración preferida
+            return html5QrCode.start(
+              { facingMode: "environment" },
+              config,
+              onScanSuccess,
+              () => { }
+            );
+          } else {
+            throw new Error("No se detectaron cámaras en el dispositivo.");
+          }
+        })
+          .then(() => {
+            scannerIsRunningRef.current = true;
+          })
+          .catch(err => {
+            console.error("Error starting scanner:", err);
+            let userMsg = `No se pudo iniciar la cámara.`;
+
+            if (err.name === 'NotReadableError' || err.message?.includes('NotReadableError')) {
+              userMsg = "La cámara parece estar en uso por otra aplicación (Zoom, Meet, etc.) o hay un fallo de hardware. Cierra otras apps y recarga.";
+            } else if (err.name === 'NotAllowedError' || err.message?.includes('Permission denied')) {
+              userMsg = "Permiso denegado. Habilita el acceso a la cámara en el navegador.";
+            } else if (err.name === 'NotFoundError') {
+              userMsg = "No se encontró ninguna cámara.";
+            } else {
+              userMsg += ` Detalles: ${err.message || err}`;
+            }
+
+            alert(`${userMsg} (Asegúrate de usar HTTPS si no es localhost)`);
+            setShowScanner(false);
+          });
+      }, 100);
+
+      return () => {
+        clearTimeout(timer);
+        if (html5QrCode) {
+          const stopScanner = async () => {
+            if (scannerIsRunningRef.current) {
+              try {
+                await html5QrCode.stop();
+                console.log("Scanner stopped");
+              } catch (err) {
+                console.warn("Error stopping scanner (might not be running):", err);
+              }
+            }
+            try {
+              html5QrCode.clear();
+            } catch (e) {
+              console.warn("Error clearing scanner:", e);
+            }
+            scannerIsRunningRef.current = false;
+          };
+          stopScanner();
+        }
+      };
+    }
+  }, [showScanner]);
+
+  const handleCloseScanner = () => {
+    setShowScanner(false);
+    setScannedProducts([]);
+  };
+
   const groupedProductsByBrand = useMemo(() => {
     const groups = new Map();
     productsToDisplay.forEach(product => {
@@ -559,6 +723,57 @@ const Supermercados = () => {
       <div className="supermercados-header">
         <h2>Explorar Supermercados y Precios</h2>
       </div>
+
+      {/* Scanner Modal */}
+      {showScanner && (
+        <div className="scanner-modal-overlay">
+          <div className="scanner-modal-content">
+            <h3>Escanear Código de Barras</h3>
+            <div id="reader" width="600px"></div>
+            <div className="scanner-actions" style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
+              <Button onClick={handleCloseScanner} variant="secondary">
+                Cerrar Escáner
+              </Button>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleFileUpload}
+                style={{ display: 'none' }}
+                id="scanner-file-input"
+              />
+              <Button
+                onClick={() => document.getElementById('scanner-file-input').click()}
+                variant="secondary"
+              >
+                Subir imagen
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Scanned Results Modal/Overlay */}
+      {scannedProducts.length > 0 && !showScanner && (
+        <div className="scanner-modal-overlay">
+          <div className="scanner-modal-content results-content">
+            <h3>Productos Encontrados</h3>
+            <div className="scanned-products-list">
+              {scannedProducts.map((product, index) => (
+                <div key={index} className="scanned-product-item">
+                  <h4>{product.supermercado_marca}</h4>
+                  <SupermarketProductItem
+                    product={product}
+                    onAddToList={handleAddProductToUserList}
+                  />
+                </div>
+              ))}
+            </div>
+            <Button onClick={() => setScannedProducts([])} variant="primary" style={{ marginTop: '20px' }}>
+              Cerrar Resultados
+            </Button>
+          </div>
+        </div>
+      )}
 
       <div className="supermarket-slider-wrapper">
         <h3>Selecciona un Supermercado:</h3>
@@ -621,6 +836,14 @@ const Supermercados = () => {
                   disabled={!selectedBranch || isLoadingProducts}
                 >
                   Buscar
+                </Button>
+                <Button
+                  onClick={() => setShowScanner(true)}
+                  size="small"
+                  variant="secondary"
+                  style={{ marginLeft: '10px' }}
+                >
+                  📷 Escanear
                 </Button>
                 {isSearching && (
                   <Button

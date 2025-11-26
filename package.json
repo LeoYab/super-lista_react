@@ -12,6 +12,7 @@
     "dotenv": "^17.2.1",
     "firebase": "^11.9.1",
     "firebase-admin": "^13.4.0",
+    "html5-qrcode": "^2.3.8",
     "lucide-react": "^0.524.0",
     "node-fetch": "^2.7.0",
     "react": "^19.1.0",
@@ -24,6 +25,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
+    "start-https": "set HTTPS=true&&react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
