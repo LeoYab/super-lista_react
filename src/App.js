@@ -17,6 +17,7 @@ import SidebarMenu from './components/SidebarMenu/SidebarMenu';
 import SearchBar from './components/SearchBar/SearchBar';
 import TotalSummary from './TotalSummary/TotalSummary';
 import Button from './components/Buttons/Button';
+import Select from './components/Select/Select';
 import Supermercados from './components/supermercados/Supermercados';
 
 // Importa tus estilos
@@ -47,7 +48,7 @@ function MainAppContent() {
   const [editingProduct, setEditingProduct] = useState(null);
   const [showProductForm, setShowProductForm] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
-
+  const [selectedCategoryId, setSelectedCategoryId] = useState('');
 
   // Effect for loading categories
   useEffect(() => {
@@ -88,13 +89,25 @@ function MainAppContent() {
   };
 
   // Filtering and calculations
-  const filteredProducts = products.filter(producto =>
-    producto.nombre.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredProducts = products
+    .filter(producto => {
+      const matchesSearch = producto.nombre.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesCategory = selectedCategoryId === '' || producto.category === parseInt(selectedCategoryId, 10);
+      return matchesSearch && matchesCategory;
+    })
+    .sort((a, b) => {
+      // Sort by category first
+      if (a.category !== b.category) {
+        return (a.category || 0) - (b.category || 0);
+      }
+      // Then by name
+      return a.nombre.localeCompare(b.nombre);
+    });
+
   const totalProductos = filteredProducts.length;
   const totalGeneral = products.reduce((sum, producto) => {
     if (!producto.completed) {
-      return sum + ((producto.valor || 0) * (producto.cantidad || 0)); 
+      return sum + ((producto.valor || 0) * (producto.cantidad || 0));
     }
     return sum;
   }, 0);
@@ -117,8 +130,23 @@ function MainAppContent() {
                 </h3>
                 <h4>
                   Total de Productos:{' '}
-                  <span dangerouslySetInnerHTML={{__html: totalProductos || '<em style="font-weight: lighter;">Sin Productos</em>'}}></span>
+                  <span dangerouslySetInnerHTML={{ __html: totalProductos || '<em style="font-weight: lighter;">Sin Productos</em>' }}></span>
                 </h4>
+
+                <div style={{ width: '100%', marginTop: '10px' }}>
+                  <Select
+                    id="category-filter"
+                    value={selectedCategoryId}
+                    onChange={(e) => setSelectedCategoryId(e.target.value)}
+                    options={[
+                      { value: '', label: '📂 Todas las Categorías' },
+                      ...categories.map(cat => ({
+                        value: cat.id,
+                        label: `${cat.icon} ${cat.title}`
+                      }))
+                    ]}
+                  />
+                </div>
               </div>
               {loadingProducts ? (
                 <p className="loading-message">Cargando productos...</p>
