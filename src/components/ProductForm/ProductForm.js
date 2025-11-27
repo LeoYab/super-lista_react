@@ -35,7 +35,7 @@ const ProductForm = ({ editandoId, productoAEditar, onAgregar, onEditar, onCance
   const [productData, setProductData] = useState({
     nombre: '',
     valor: '',
-    cantidad: '',
+    cantidad: '1',
     category: initialDefaultCategory.id, // Usamos la categoría inicial para el estado.
     icon: initialDefaultCategory.icon
   });
@@ -66,7 +66,7 @@ const ProductForm = ({ editandoId, productoAEditar, onAgregar, onEditar, onCance
       setProductData({
         nombre: '',
         valor: '',
-        cantidad: '',
+        cantidad: '1',
         category: initialDefaultCategory.id,
         icon: initialDefaultCategory.icon
       });
@@ -297,7 +297,7 @@ const ProductForm = ({ editandoId, productoAEditar, onAgregar, onEditar, onCance
     setProductData({
       nombre: '',
       valor: '',
-      cantidad: '',
+      cantidad: '1',
       category: initialDefaultCategory.id,
       icon: initialDefaultCategory.icon
     });
