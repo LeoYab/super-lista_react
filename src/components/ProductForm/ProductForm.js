@@ -105,18 +105,27 @@ const ProductForm = ({ editandoId, productoAEditar, onAgregar, onEditar, onCance
     }
 
     if (foundProduct) {
-      // Find 'Otros' category or fallback
-      const targetCategory = otrosCategory || categories[0] || fallbackDefaultCategory;
+      if (editandoId) {
+        setProductData(prev => ({
+          ...prev,
+          nombre: foundProduct.nombre,
+          valor: foundProduct.precio ? foundProduct.precio.toString() : prev.valor,
+        }));
+        showSuccessToast(`Producto actualizado: ${foundProduct.nombre}`);
+      } else {
+        // Find 'Otros' category or fallback
+        const targetCategory = otrosCategory || categories[0] || fallbackDefaultCategory;
 
-      setProductData(prev => ({
-        ...prev,
-        nombre: foundProduct.nombre,
-        valor: foundProduct.precio ? foundProduct.precio.toString() : '',
-        cantidad: '1',
-        category: targetCategory.id,
-        icon: targetCategory.icon
-      }));
-      showSuccessToast(`Producto encontrado: ${foundProduct.nombre}`);
+        setProductData(prev => ({
+          ...prev,
+          nombre: foundProduct.nombre,
+          valor: foundProduct.precio ? foundProduct.precio.toString() : '',
+          cantidad: '1',
+          category: targetCategory.id,
+          icon: targetCategory.icon
+        }));
+        showSuccessToast(`Producto encontrado: ${foundProduct.nombre}`);
+      }
     } else {
       showErrorAlert('Producto no encontrado', `No se encontró información para el código: ${decodedText}. Puedes ingresarlo manualmente.`);
       // Optionally fill the name with the code or leave it to the user
@@ -214,6 +223,24 @@ const ProductForm = ({ editandoId, productoAEditar, onAgregar, onEditar, onCance
     }));
   };
 
+  const handleIncrement = () => {
+    setProductData(prev => ({
+      ...prev,
+      cantidad: (parseInt(prev.cantidad || 0, 10) + 1).toString()
+    }));
+  };
+
+  const handleDecrement = () => {
+    setProductData(prev => {
+      const current = parseInt(prev.cantidad || 0, 10);
+      if (current <= 1) return prev;
+      return {
+        ...prev,
+        cantidad: (current - 1).toString()
+      };
+    });
+  };
+
   const handleCategoryChange = (e) => {
     const selectedCategoryId = parseInt(e.target.value, 10);
     // Aseguramos que 'categories' es un array antes de usar 'find'
@@ -288,13 +315,11 @@ const ProductForm = ({ editandoId, productoAEditar, onAgregar, onEditar, onCance
       <h3>{editandoId ? 'Editar Producto' : 'Agregar Nuevo Producto'}</h3>
 
       {/* Scanner Button */}
-      {!editandoId && (
-        <div style={{ marginBottom: '20px', display: 'flex', justifyContent: 'center' }}>
-          <Button type="button" variant="secondary" onClick={() => setShowScanner(true)}>
-            📷 Escanear Producto
-          </Button>
-        </div>
-      )}
+      <div style={{ marginBottom: '20px', display: 'flex', justifyContent: 'center' }}>
+        <Button type="button" variant="secondary" onClick={() => setShowScanner(true)}>
+          📷 Escanear Producto
+        </Button>
+      </div>
 
       {error && <p className="form-error">{error}</p>}
       <form onSubmit={handleSubmit}>
@@ -322,17 +347,24 @@ const ProductForm = ({ editandoId, productoAEditar, onAgregar, onEditar, onCance
           required
         />
 
-        <Input
-          label="Cantidad:"
-          id="cantidad"
-          name="cantidad"
-          type="number"
-          value={productData.cantidad}
-          onChange={handleChange}
-          placeholder="Ej: 1, 2, 5"
-          min="1"
-          required
-        />
+        <div className="input-group">
+          <label htmlFor="cantidad">Cantidad:</label>
+          <div className="quantity-controls">
+            <button type="button" onClick={handleDecrement} className="qty-btn">-</button>
+            <input
+              id="cantidad"
+              name="cantidad"
+              type="number"
+              value={productData.cantidad}
+              onChange={handleChange}
+              placeholder="Ej: 1, 2, 5"
+              min="1"
+              required
+              className="input-field qty-input"
+            />
+            <button type="button" onClick={handleIncrement} className="qty-btn">+</button>
+          </div>
+        </div>
 
         <Select
           label="Categoría:"
