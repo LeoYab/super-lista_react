@@ -88,3 +88,39 @@
   border-radius: var(--border-radius);
   overflow: hidden;
 }
+
+/* Quantity Controls */
+.quantity-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.qty-btn {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: background-color 0.2s;
+}
+
+.qty-btn:hover {
+  background-color: var(--primary-hover);
+}
+
+.qty-btn:active {
+  transform: scale(0.95);
+}
+
+.qty-input {
+  text-align: center;
+  /* Ensure it takes remaining space or fixed width */
+  flex: 1;
+}
