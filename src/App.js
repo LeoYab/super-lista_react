@@ -1,5 +1,5 @@
 // src/App.js
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth, AuthProvider } from './context/AuthContext';
 import { subscribeToCategories } from './services/firebaseService';
@@ -19,6 +19,13 @@ import TotalSummary from './TotalSummary/TotalSummary';
 import Button from './components/Buttons/Button';
 import Select from './components/Select/Select';
 import Supermercados from './components/supermercados/Supermercados';
+import { Html5Qrcode, Html5QrcodeSupportedFormats } from "html5-qrcode";
+import { showErrorAlert, showSuccessToast } from './Notifications/NotificationsServices';
+
+// Import local product data for scanner lookup
+import carrefourDefaultProducts from './data/products/carrefour/1.json';
+import diaDefaultProducts from './data/products/dia/87.json';
+import changomasDefaultProducts from './data/products/changomas/1004.json';
 
 // Importa tus estilos
 import './App.css';
@@ -27,6 +34,12 @@ import './components/Input/Input.css';
 import './components/Select/Select.css';
 import './TotalSummary/TotalSummary.css';
 import './components/Buttons/Button.css';
+
+const LOCAL_BRAND_DEFAULT_PRODUCTS_MAP = {
+  carrefour: carrefourDefaultProducts,
+  dia: diaDefaultProducts,
+  changomas: changomasDefaultProducts,
+};
 
 function MainAppContent() {
   const {
@@ -49,6 +62,11 @@ function MainAppContent() {
   const [showProductForm, setShowProductForm] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategoryId, setSelectedCategoryId] = useState('');
+
+  // Scanner states
+  const [showScanner, setShowScanner] = useState(false);
+  const scannerRef = useRef(null);
+  const scannerIsRunningRef = useRef(false);
 
   // Effect for loading categories
   useEffect(() => {
@@ -87,6 +105,133 @@ function MainAppContent() {
     }
     setShowProductForm(prev => !prev);
   };
+
+  // --- Barcode Scanner Logic ---
+  const normalizeCode = (code) => {
+    return code.replace(/^0+/, '');
+  };
+
+  const onScanSuccess = (decodedText, decodedResult) => {
+    console.log(`Code scanned = ${decodedText}`, decodedResult);
+
+    // Stop scanning
+    setShowScanner(false);
+
+    const normalizedScannedCode = normalizeCode(decodedText);
+    console.log(`Normalized scanned code: ${normalizedScannedCode}`);
+
+    // Search for the product in all local data
+    let foundProduct = null;
+    for (const products of Object.values(LOCAL_BRAND_DEFAULT_PRODUCTS_MAP)) {
+      foundProduct = products.find(p => {
+        // ID format usually: "EAN-BranchID" or "PaddedEAN-BranchID"
+        const idParts = p.id.split('-');
+        if (idParts.length > 0) {
+          const idCodePart = idParts[0]; // Get the EAN part
+          const normalizedIdCode = normalizeCode(idCodePart);
+          return normalizedIdCode === normalizedScannedCode;
+        }
+        return false;
+      });
+      if (foundProduct) break;
+    }
+
+    if (foundProduct) {
+      // Set the found product as the "editing" product (but without firebaseId, so it's treated as new)
+      setEditingProduct({
+        nombre: foundProduct.nombre,
+        valor: foundProduct.precio || '',
+        cantidad: 1,
+        // We don't have category mapping here easily, so we let ProductForm handle default/fallback
+      });
+      setShowProductForm(true);
+      showSuccessToast(`Producto encontrado: ${foundProduct.nombre}`);
+    } else {
+      showErrorAlert('Producto no encontrado', `No se encontró información para el código: ${decodedText}. Puedes ingresarlo manualmente.`);
+    }
+  };
+
+  const handleCloseScanner = () => {
+    setShowScanner(false);
+  };
+
+  useEffect(() => {
+    let html5QrCode;
+    if (showScanner) {
+      // Small timeout to ensure DOM element exists
+      const timer = setTimeout(() => {
+        html5QrCode = new Html5Qrcode("reader");
+        scannerRef.current = html5QrCode;
+        scannerIsRunningRef.current = false;
+
+        const config = {
+          fps: 10,
+          qrbox: { width: 250, height: 250 },
+          aspectRatio: 1.0,
+          formatsToSupport: [
+            Html5QrcodeSupportedFormats.EAN_13,
+            Html5QrcodeSupportedFormats.EAN_8,
+            Html5QrcodeSupportedFormats.UPC_A,
+            Html5QrcodeSupportedFormats.UPC_E,
+            Html5QrcodeSupportedFormats.CODE_128
+          ]
+        };
+
+        Html5Qrcode.getCameras().then(devices => {
+          if (devices && devices.length) {
+            return html5QrCode.start(
+              { facingMode: "environment" },
+              config,
+              onScanSuccess,
+              () => { }
+            );
+          } else {
+            throw new Error("No se detectaron cámaras.");
+          }
+        })
+          .then(() => {
+            scannerIsRunningRef.current = true;
+          })
+          .catch(err => {
+            console.error("Error starting scanner:", err);
+            let userMsg = `No se pudo iniciar la cámara.`;
+
+            if (err.name === 'NotReadableError' || err.message?.includes('NotReadableError')) {
+              userMsg = "La cámara parece estar en uso por otra aplicación o hay un fallo de hardware.";
+            } else if (err.name === 'NotAllowedError' || err.message?.includes('Permission denied')) {
+              userMsg = "Permiso denegado. Habilita el acceso a la cámara.";
+            } else if (err.name === 'NotFoundError') {
+              userMsg = "No se encontró ninguna cámara.";
+            }
+
+            showErrorAlert('Error de Cámara', userMsg);
+            setShowScanner(false);
+          });
+      }, 100);
+
+      return () => {
+        clearTimeout(timer);
+        if (html5QrCode) {
+          const stopScanner = async () => {
+            if (scannerIsRunningRef.current) {
+              try {
+                await html5QrCode.stop();
+              } catch (err) {
+                console.warn("Error stopping scanner:", err);
+              }
+            }
+            try {
+              html5QrCode.clear();
+            } catch (e) {
+              console.warn("Error clearing scanner:", e);
+            }
+            scannerIsRunningRef.current = false;
+          };
+          stopScanner();
+        }
+      };
+    }
+  }, [showScanner]);
 
   // Filtering and calculations
   const filteredProducts = products
@@ -182,6 +327,15 @@ function MainAppContent() {
               >
                 {showProductForm ? 'Cancelar' : 'Agregar Producto'}
               </Button>
+              <Button
+                onClick={() => setShowScanner(true)}
+                variant="secondary"
+                icon="📷"
+                className="scan-product-button"
+                style={{ marginTop: '10px' }}
+              >
+                Escanear Producto
+              </Button>
               <TotalSummary total={totalGeneral} />
             </div>
 
@@ -198,6 +352,21 @@ function MainAppContent() {
                   categories={categories}
                 />
               )
+            )}
+
+            {/* Scanner Modal */}
+            {showScanner && (
+              <div className="scanner-modal-overlay">
+                <div className="scanner-modal-content">
+                  <h3>Escanear Código de Barras</h3>
+                  <div id="reader"></div>
+                  <div className="scanner-actions" style={{ marginTop: '20px' }}>
+                    <Button onClick={handleCloseScanner} variant="secondary">
+                      Cerrar Escáner
+                    </Button>
+                  </div>
+                </div>
+              </div>
             )}
           </div>
         )}

@@ -4,23 +4,11 @@ import './ProductForm.css';
 import Input from '../Input/Input';
 import Select from '../Select/Select';
 import Button from '../Buttons/Button';
-import { Html5Qrcode, Html5QrcodeSupportedFormats } from "html5-qrcode";
 
 // IMPORT NEW SERVICE: Importa tus funciones de notificación
-import { showErrorAlert, showSuccessToast } from '../../Notifications/NotificationsServices';
+import { showErrorAlert } from '../../Notifications/NotificationsServices';
 
-// Import local product data for scanner lookup
-import carrefourDefaultProducts from '../../data/products/carrefour/1.json';
-import diaDefaultProducts from '../../data/products/dia/87.json';
-import changomasDefaultProducts from '../../data/products/changomas/1004.json';
 
-const LOCAL_BRAND_DEFAULT_PRODUCTS_MAP = {
-  carrefour: carrefourDefaultProducts,
-  dia: diaDefaultProducts,
-  changomas: changomasDefaultProducts,
-};
-
-// Nos aseguramos de que 'categories' siempre sea un array, incluso si es vacío.
 const ProductForm = ({ editandoId, productoAEditar, onAgregar, onEditar, onCancelar, categories = [] }) => {
 
   // Definimos una categoría de respaldo por si no hay categorías cargadas.
@@ -41,14 +29,10 @@ const ProductForm = ({ editandoId, productoAEditar, onAgregar, onEditar, onCance
   });
   const [error, setError] = useState('');
 
-  // Scanner states
-  const [showScanner, setShowScanner] = useState(false);
-  const scannerRef = useRef(null);
-  const scannerIsRunningRef = useRef(false);
 
   // Efecto para inicializar o resetear el formulario.
   useEffect(() => {
-    if (editandoId && productoAEditar) {
+    if (productoAEditar) {
       const loadedCategory = typeof productoAEditar.category === 'string'
         ? parseInt(productoAEditar.category, 10)
         : productoAEditar.category;
@@ -73,146 +57,6 @@ const ProductForm = ({ editandoId, productoAEditar, onAgregar, onEditar, onCance
       setError('');
     }
   }, [editandoId, productoAEditar, initialDefaultCategory]); // Dependencia actualizada a initialDefaultCategory
-
-  // --- Barcode Scanner Logic ---
-  const normalizeCode = (code) => {
-    return code.replace(/^0+/, '');
-  };
-
-  const onScanSuccess = (decodedText, decodedResult) => {
-    console.log(`Code scanned = ${decodedText}`, decodedResult);
-
-    // Stop scanning
-    setShowScanner(false);
-
-    const normalizedScannedCode = normalizeCode(decodedText);
-    console.log(`Normalized scanned code: ${normalizedScannedCode}`);
-
-    // Search for the product in all local data
-    let foundProduct = null;
-    for (const products of Object.values(LOCAL_BRAND_DEFAULT_PRODUCTS_MAP)) {
-      foundProduct = products.find(p => {
-        // ID format usually: "EAN-BranchID" or "PaddedEAN-BranchID"
-        const idParts = p.id.split('-');
-        if (idParts.length > 0) {
-          const idCodePart = idParts[0]; // Get the EAN part
-          const normalizedIdCode = normalizeCode(idCodePart);
-          return normalizedIdCode === normalizedScannedCode;
-        }
-        return false;
-      });
-      if (foundProduct) break;
-    }
-
-    if (foundProduct) {
-      if (editandoId) {
-        setProductData(prev => ({
-          ...prev,
-          nombre: foundProduct.nombre,
-          valor: foundProduct.precio ? foundProduct.precio.toString() : prev.valor,
-        }));
-        showSuccessToast(`Producto actualizado: ${foundProduct.nombre}`);
-      } else {
-        // Find 'Otros' category or fallback
-        const targetCategory = otrosCategory || categories[0] || fallbackDefaultCategory;
-
-        setProductData(prev => ({
-          ...prev,
-          nombre: foundProduct.nombre,
-          valor: foundProduct.precio ? foundProduct.precio.toString() : '',
-          cantidad: '1',
-          category: targetCategory.id,
-          icon: targetCategory.icon
-        }));
-        showSuccessToast(`Producto encontrado: ${foundProduct.nombre}`);
-      }
-    } else {
-      showErrorAlert('Producto no encontrado', `No se encontró información para el código: ${decodedText}. Puedes ingresarlo manualmente.`);
-      // Optionally fill the name with the code or leave it to the user
-    }
-  };
-
-  const handleCloseScanner = () => {
-    setShowScanner(false);
-  };
-
-  useEffect(() => {
-    let html5QrCode;
-    if (showScanner) {
-      // Small timeout to ensure DOM element exists
-      const timer = setTimeout(() => {
-        html5QrCode = new Html5Qrcode("reader");
-        scannerRef.current = html5QrCode;
-        scannerIsRunningRef.current = false;
-
-        const config = {
-          fps: 10,
-          qrbox: { width: 250, height: 250 },
-          aspectRatio: 1.0,
-          formatsToSupport: [
-            Html5QrcodeSupportedFormats.EAN_13,
-            Html5QrcodeSupportedFormats.EAN_8,
-            Html5QrcodeSupportedFormats.UPC_A,
-            Html5QrcodeSupportedFormats.UPC_E,
-            Html5QrcodeSupportedFormats.CODE_128
-          ]
-        };
-
-        Html5Qrcode.getCameras().then(devices => {
-          if (devices && devices.length) {
-            return html5QrCode.start(
-              { facingMode: "environment" },
-              config,
-              onScanSuccess,
-              () => { }
-            );
-          } else {
-            throw new Error("No se detectaron cámaras.");
-          }
-        })
-          .then(() => {
-            scannerIsRunningRef.current = true;
-          })
-          .catch(err => {
-            console.error("Error starting scanner:", err);
-            let userMsg = `No se pudo iniciar la cámara.`;
-
-            if (err.name === 'NotReadableError' || err.message?.includes('NotReadableError')) {
-              userMsg = "La cámara parece estar en uso por otra aplicación o hay un fallo de hardware.";
-            } else if (err.name === 'NotAllowedError' || err.message?.includes('Permission denied')) {
-              userMsg = "Permiso denegado. Habilita el acceso a la cámara.";
-            } else if (err.name === 'NotFoundError') {
-              userMsg = "No se encontró ninguna cámara.";
-            }
-
-            showErrorAlert('Error de Cámara', userMsg);
-            setShowScanner(false);
-          });
-      }, 100);
-
-      return () => {
-        clearTimeout(timer);
-        if (html5QrCode) {
-          const stopScanner = async () => {
-            if (scannerIsRunningRef.current) {
-              try {
-                await html5QrCode.stop();
-              } catch (err) {
-                console.warn("Error stopping scanner:", err);
-              }
-            }
-            try {
-              html5QrCode.clear();
-            } catch (e) {
-              console.warn("Error clearing scanner:", e);
-            }
-            scannerIsRunningRef.current = false;
-          };
-          stopScanner();
-        }
-      };
-    }
-  }, [showScanner]);
 
 
   const handleChange = (e) => {
@@ -314,12 +158,6 @@ const ProductForm = ({ editandoId, productoAEditar, onAgregar, onEditar, onCance
     <div className="product-form-container card">
       <h3>{editandoId ? 'Editar Producto' : 'Agregar Nuevo Producto'}</h3>
 
-      {/* Scanner Button */}
-      <div style={{ marginBottom: '20px', display: 'flex', justifyContent: 'center' }}>
-        <Button type="button" variant="secondary" onClick={() => setShowScanner(true)}>
-          📷 Escanear Producto
-        </Button>
-      </div>
 
       {error && <p className="form-error">{error}</p>}
       <form onSubmit={handleSubmit}>
@@ -386,20 +224,7 @@ const ProductForm = ({ editandoId, productoAEditar, onAgregar, onEditar, onCance
         </div>
       </form>
 
-      {/* Scanner Modal */}
-      {showScanner && (
-        <div className="scanner-modal-overlay">
-          <div className="scanner-modal-content">
-            <h3>Escanear Código de Barras</h3>
-            <div id="reader"></div>
-            <div className="scanner-actions" style={{ marginTop: '20px' }}>
-              <Button onClick={handleCloseScanner} variant="secondary">
-                Cerrar Escáner
-              </Button>
-            </div>
-          </div>
-        </div>
-      )}
+
     </div>
   );
 };
