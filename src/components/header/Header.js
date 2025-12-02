@@ -5,7 +5,7 @@ const Header = () => {
   return (
     <header className="header card fade-in">
       <div className="header-content">
-        <span className="header-icon">🛒</span>
+        <img src="/logo512.png" alt="Super Lista Logo" className="header-icon" />
         <div className="header-text">
           <h1 className="header-title">Super Lista</h1>
         </div>

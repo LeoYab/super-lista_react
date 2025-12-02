@@ -24,9 +24,9 @@ const ProductItem = ({ producto, onEditar }) => {
     maximumFractionDigits: 2
   });
 
-  const ProductNameLength = 18;
-  const truncatedProductName = producto.nombre.length > ProductNameLength
-    ? producto.nombre.substring(0, ProductNameLength) + '...'
+  const MAX_NAME_LENGTH = 17;
+  const truncatedProductName = producto.nombre.length > MAX_NAME_LENGTH
+    ? producto.nombre.substring(0, MAX_NAME_LENGTH - 3) + '...'
     : producto.nombre;
 
   const [isMobile, setIsMobile] = useState(false);
@@ -134,7 +134,7 @@ const ProductItem = ({ producto, onEditar }) => {
           </div>
           <div className="product-item-details">
             <span className="product-item-name">{truncatedProductName}</span>
-            <span className="product-item-unit-detail">Precio Unitario: {formattedPrice}</span>
+            <span className="product-item-unit-detail">Unidad: {formattedPrice}</span>
           </div>
         </div>
 
