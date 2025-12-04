@@ -353,21 +353,21 @@ function MainAppContent() {
                 />
               )
             )}
+          </div>
+        )}
 
-            {/* Scanner Modal */}
-            {showScanner && (
-              <div className="scanner-modal-overlay">
-                <div className="scanner-modal-content">
-                  <h3>Escanear Código de Barras</h3>
-                  <div id="reader"></div>
-                  <div className="scanner-actions" style={{ marginTop: '20px' }}>
-                    <Button onClick={handleCloseScanner} variant="secondary">
-                      Cerrar Escáner
-                    </Button>
-                  </div>
-                </div>
+        {/* Scanner Modal - Rendered outside fixed-bottom-controls for proper centering */}
+        {showScanner && (
+          <div className="scanner-modal-overlay">
+            <div className="scanner-modal-content">
+              <h3>Escanear Código de Barras</h3>
+              <div id="reader"></div>
+              <div className="scanner-actions" style={{ marginTop: '20px' }}>
+                <Button onClick={handleCloseScanner} variant="secondary">
+                  Cerrar Escáner
+                </Button>
               </div>
-            )}
+            </div>
           </div>
         )}
       </div>
