@@ -17,7 +17,7 @@ import SidebarMenu from './components/SidebarMenu/SidebarMenu';
 import SearchBar from './components/SearchBar/SearchBar';
 import TotalSummary from './TotalSummary/TotalSummary';
 import Button from './components/Buttons/Button';
-import Select from './components/Select/Select';
+import CategoryFilter from './components/CategoryFilter/CategoryFilter';
 import Supermercados from './components/supermercados/Supermercados';
 import { Html5Qrcode, Html5QrcodeSupportedFormats } from "html5-qrcode";
 import { showErrorAlert, showSuccessToast } from './Notifications/NotificationsServices';
@@ -257,6 +257,14 @@ function MainAppContent() {
     return sum;
   }, 0);
 
+  const hasDecimals = totalGeneral % 1 !== 0;
+  const formattedTotal = totalGeneral.toLocaleString('es-AR', {
+    style: 'currency',
+    currency: 'ARS',
+    minimumFractionDigits: hasDecimals ? 2 : 0,
+    maximumFractionDigits: hasDecimals ? 2 : 0
+  });
+
   return (
     <div className="App">
       <Header />
@@ -270,26 +278,26 @@ function MainAppContent() {
             <>
               <div className="list-header">
                 <h3 className="current-list-title">
-                  <strong>Lista Actual: </strong>
                   {currentListName || 'Cargando...'}
                 </h3>
-                <h4>
-                  Total de Productos:{' '}
-                  <span dangerouslySetInnerHTML={{ __html: totalProductos || '<em style="font-weight: lighter;">Sin Productos</em>' }}></span>
-                </h4>
 
-                <div style={{ width: '100%', marginTop: '10px' }}>
-                  <Select
-                    id="category-filter"
-                    value={selectedCategoryId}
-                    onChange={(e) => setSelectedCategoryId(e.target.value)}
-                    options={[
-                      { value: '', label: '📂 Todas las Categorías' },
-                      ...categories.map(cat => ({
-                        value: cat.id,
-                        label: `${cat.icon} ${cat.title}`
-                      }))
-                    ]}
+                <div className="list-header-stats">
+                  <span className="stat-item">
+                    <span>Productos: </span>
+                    <span dangerouslySetInnerHTML={{ __html: totalProductos || '<em style="font-weight: lighter;">Vacío</em>' }}></span>
+
+                  </span>
+                  <span className="stat-item total-amount">
+                    <span>Total: </span>
+                    {formattedTotal}
+                  </span>
+                </div>
+
+                <div className="category-tabs-wrapper" style={{ width: '100%', overflow: 'hidden' }}>
+                  <CategoryFilter
+                    categories={categories}
+                    selectedCategoryId={selectedCategoryId}
+                    onSelectCategory={setSelectedCategoryId}
                   />
                 </div>
               </div>
@@ -312,32 +320,52 @@ function MainAppContent() {
           )}
         </div>
 
+        {showProductForm && <div className="backdrop-blur" onClick={handleCancelForm}></div>}
+
         {currentListId && (
           <div className="fixed-bottom-controls">
-            <div className="bottom-controls-header">
-              <SearchBar
-                busqueda={searchTerm}
-                setBusqueda={setSearchTerm}
-              />
-              <Button
-                onClick={handleToggleForm}
-                variant={showProductForm ? 'secondary' : 'primary'}
-                icon={showProductForm ? '❌' : '➕'}
-                className="toggle-form-button"
-              >
-                {showProductForm ? 'Cancelar' : 'Agregar Producto'}
-              </Button>
-              <Button
-                onClick={() => setShowScanner(true)}
-                variant="secondary"
-                icon="📷"
-                className="scan-product-button"
-                style={{ marginTop: '10px' }}
-              >
-                Escanear Producto
-              </Button>
-              <TotalSummary total={totalGeneral} />
-            </div>
+            {!showProductForm && (
+              <div className="bottom-controls-header">
+                <SearchBar
+                  busqueda={searchTerm}
+                  setBusqueda={setSearchTerm}
+                />
+                <div className="action-buttons-container">
+                  <Button
+                    onClick={handleToggleForm}
+                    variant="primary"
+                    icon={(
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                      </svg>
+                    )}
+                    className="toggle-form-button btn-square"
+                  >
+                    Agregar
+                  </Button>
+                  <Button
+                    onClick={() => setShowScanner(true)}
+                    variant="secondary"
+                    icon={(
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M3 7V5a2 2 0 0 1 2-2h2" />
+                        <path d="M17 3h2a2 2 0 0 1 2 2v2" />
+                        <path d="M21 17v2a2 2 0 0 1-2 2h-2" />
+                        <path d="M7 21H5a2 2 0 0 1-2-2v-2" />
+                        <path d="M8 7v10" />
+                        <path d="M12 7v10" />
+                        <path d="M16 7v10" />
+                        <line x1="4" y1="12" x2="20" y2="12" />
+                      </svg>
+                    )}
+                    className="scan-product-button btn-square"
+                  >
+                    Escanear
+                  </Button>
+                </div>
+              </div>
+            )}
 
             {showProductForm && (
               loadingCategories ? (
@@ -350,6 +378,7 @@ function MainAppContent() {
                   onEditar={handleEditProduct}
                   onCancelar={handleCancelForm}
                   categories={categories}
+                  onScan={() => setShowScanner(true)}
                 />
               )
             )}

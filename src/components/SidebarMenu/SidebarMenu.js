@@ -150,7 +150,7 @@ const SidebarMenu = () => {
               id="newListName"
               name="newListName"
               type="text"
-              placeholder="Nombre de nueva lista..."
+              placeholder="Nombre de lista..."
               value={newListName}
               onChange={(e) => setNewListName(e.target.value)}
               // Maneja la creación al presionar Enter en el input

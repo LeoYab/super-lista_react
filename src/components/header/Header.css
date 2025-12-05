@@ -68,7 +68,7 @@
   }
 
   .header-content {
-    flex-direction: column;
+    flex-direction: row;
     text-align: center;
     gap: var(--spacing-sm);
   }

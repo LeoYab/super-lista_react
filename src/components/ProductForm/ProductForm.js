@@ -9,7 +9,7 @@ import Button from '../Buttons/Button';
 import { showErrorAlert } from '../../Notifications/NotificationsServices';
 
 
-const ProductForm = ({ editandoId, productoAEditar, onAgregar, onEditar, onCancelar, categories = [] }) => {
+const ProductForm = ({ editandoId, productoAEditar, onAgregar, onEditar, onCancelar, categories = [], onScan }) => {
 
   // Definimos una categoría de respaldo por si no hay categorías cargadas.
   const fallbackDefaultCategory = { id: 0, title: 'Sin Categoría', icon: '🔤', icons: ['🔤'] };
@@ -204,27 +204,58 @@ const ProductForm = ({ editandoId, productoAEditar, onAgregar, onEditar, onCance
           </div>
         </div>
 
-        <Select
-          label="Categoría:"
-          id="category"
-          name="category"
-          value={productData.category}
-          onChange={handleCategoryChange}
-          options={[...categoryOptions]}
-          required
-        />
+        <div className="input-group category-section">
+          <label>Categoría:</label>
+          <div className="category-scroll-list">
+            {categories.map((cat) => (
+              <button
+                key={cat.id}
+                type="button"
+                className={`category-chip ${productData.category === cat.id ? 'active' : ''}`}
+                onClick={() => {
+                  const selectedCat = categories.find(c => c.id === cat.id);
+                  setProductData(prev => ({
+                    ...prev,
+                    category: cat.id,
+                    icon: selectedCat ? (selectedCat.icons && selectedCat.icons[0] ? selectedCat.icons[0] : selectedCat.icon) : fallbackDefaultCategory.icon
+                  }));
+                }}
+              >
+                <span className="category-icon">{cat.icon}</span>
+                <span className="category-title">{cat.title}</span>
+              </button>
+            ))}
+          </div>
+        </div>
 
         <div className="form-actions">
-          <Button type="submit" variant="primary">
-            {editandoId ? 'Guardar Cambios' : 'Agregar Producto'}
+          <Button type="button" variant="secondary" onClick={onScan} className="btn-square" title="Escanear">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M3 7V5a2 2 0 0 1 2-2h2" />
+              <path d="M17 3h2a2 2 0 0 1 2 2v2" />
+              <path d="M21 17v2a2 2 0 0 1-2 2h-2" />
+              <path d="M7 21H5a2 2 0 0 1-2-2v-2" />
+              <path d="M8 7v10" />
+              <path d="M12 7v10" />
+              <path d="M16 7v10" />
+              <line x1="4" y1="12" x2="20" y2="12" />
+            </svg>
           </Button>
-          <Button type="button" variant="secondary" onClick={onCancelar}>
-            Cancelar
+
+          <Button type="button" variant="secondary" onClick={onCancelar} className="btn-square" title="Cancelar">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </Button>
+
+          <Button type="submit" variant="primary" className="btn-square" title={editandoId ? 'Guardar' : 'Agregar'}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
           </Button>
         </div>
       </form>
-
-
     </div>
   );
 };

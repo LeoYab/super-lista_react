@@ -198,12 +198,9 @@
 }
 
 .category-title {
-  font-size: 1.25rem;
+  font-size: 1rem;
   font-weight: 700;
   color: var(--text-color-primary);
-  margin-bottom: var(--spacing-md);
-  padding-left: var(--spacing-sm);
-  border-left: 4px solid var(--primary-color);
 }
 
 .product-cards-wrapper {

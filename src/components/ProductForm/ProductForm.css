@@ -31,9 +31,73 @@
 
 .form-actions {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+  /* Changed to space-between for better button placement */
   gap: var(--spacing-md);
   margin-top: var(--spacing-lg);
+}
+
+/* Category Scroll List Styles */
+.category-section {
+  margin-bottom: var(--spacing-md);
+}
+
+.category-section label {
+  display: block;
+  margin-bottom: var(--spacing-xs);
+  font-weight: 500;
+  color: var(--text-color-primary);
+}
+
+.category-scroll-list {
+  display: flex;
+  overflow-x: auto;
+  gap: var(--spacing-sm);
+  padding-bottom: var(--spacing-xs);
+  /* Space for scrollbar if visible */
+  scrollbar-width: none;
+  /* Firefox */
+  -ms-overflow-style: none;
+  /* IE 10+ */
+  -webkit-overflow-scrolling: touch;
+}
+
+.category-scroll-list::-webkit-scrollbar {
+  display: none;
+  /* Chrome/Safari/Webkit */
+}
+
+.category-chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: var(--border-radius-full);
+  border: 1px solid var(--border-color);
+  background-color: var(--bg-color);
+  color: var(--text-color-secondary);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+  font-size: 0.85rem;
+  flex-shrink: 0;
+  height: 32px;
+  /* Fixed height to prevent stretching */
+}
+
+.category-chip:hover {
+  background-color: var(--hover-color);
+}
+
+.category-chip.active {
+  background-color: var(--primary-light-color);
+  border-color: var(--primary-color);
+  color: var(--primary-dark-color);
+  font-weight: 600;
+}
+
+.category-icon {
+  font-size: 1.1rem;
 }
 
 @media (max-width: 600px) {
@@ -41,12 +105,14 @@
     padding: var(--spacing-md);
   }
 
-  .form-actions {
+  /* .form-actions {
     flex-direction: column-reverse;
-  }
+  } */
+  /* User might prefer side-by-side buttons with icons now */
 
   .form-actions button {
-    width: 100%;
+    flex: 1;
+    /* Make buttons take equal width */
   }
 }
 
