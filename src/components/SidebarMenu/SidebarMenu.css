@@ -226,7 +226,7 @@
 
 .create-list-section input {
   flex-grow: 1;
-  padding: 8px 12px;
+  /* padding: 8px 12px; */
   border: 1px solid var(--border-color);
   border-radius: var(--border-radius);
   background-color: var(--input-bg-color);

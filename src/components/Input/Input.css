@@ -1,6 +1,6 @@
 /* src/components/Input/Input.css */
 .input-group {
-  margin-bottom: var(--spacing-md);
+  /*   margin-bottom: var(--spacing-md); */
   width: 100%;
 }
 
