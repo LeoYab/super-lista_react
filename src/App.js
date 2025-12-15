@@ -398,9 +398,6 @@ function MainAppContent() {
                         style={{ fontSize: '0.75rem', color: '#4caf50', marginBottom: '0px', textAlign: 'right', fontWeight: '500', textDecoration: 'none', cursor: 'pointer' }}
                       >
                         📍 {detectedSupermarket.name}
-                        {detectedSupermarket.branchData.direccion_sucursal
-                          ? ` - ${detectedSupermarket.branchData.direccion_sucursal}`
-                          : (detectedSupermarket.branchData.localidad ? ` - ${detectedSupermarket.branchData.localidad}` : '')}
                         {' '}<span style={{ fontSize: '0.7rem' }}>↗️</span>
                       </a>
                     )}
