@@ -27,6 +27,11 @@ import carrefourDefaultProducts from './data/products/carrefour/1.json';
 import diaDefaultProducts from './data/products/dia/87.json';
 import changomasDefaultProducts from './data/products/changomas/1004.json';
 
+// Import supermarket location data
+import carrefourSuperData from './data/super/carrefour.json';
+import diaSuperData from './data/super/dia.json';
+import changomasSuperData from './data/super/changomas.json';
+
 // Importa tus estilos
 import './App.css';
 import './components/header/Header.css';
@@ -40,6 +45,37 @@ const LOCAL_BRAND_DEFAULT_PRODUCTS_MAP = {
   dia: diaDefaultProducts,
   changomas: changomasDefaultProducts,
 };
+
+const LOCAL_BRANDS_LOCATION_DATA = {
+  carrefour: carrefourSuperData,
+  dia: diaSuperData,
+  changomas: changomasSuperData
+};
+
+const LOCAL_BRAND_DEFAULT_BRANCH_IDS = {
+  carrefour: '1',
+  dia: '87',
+  changomas: '1004',
+};
+
+// Haversine formula to calculate distance between two points in km
+function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
+  var R = 6371; // Radius of the earth in km
+  var dLat = deg2rad(lat2 - lat1);
+  var dLon = deg2rad(lon2 - lon1);
+  var a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
+    Math.sin(dLon / 2) * Math.sin(dLon / 2)
+    ;
+  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  var d = R * c; // Distance in km
+  return d;
+}
+
+function deg2rad(deg) {
+  return deg * (Math.PI / 180)
+}
 
 function MainAppContent() {
   const {
@@ -63,10 +99,54 @@ function MainAppContent() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategoryId, setSelectedCategoryId] = useState('');
 
+  // GPS State
+  const [detectedSupermarket, setDetectedSupermarket] = useState(null);
+
   // Scanner states
   const [showScanner, setShowScanner] = useState(false);
   const scannerRef = useRef(null);
   const scannerIsRunningRef = useRef(false);
+
+  // GPS Effect
+  useEffect(() => {
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(position => {
+        const { latitude, longitude } = position.coords;
+        console.log("Ubicación del usuario:", latitude, longitude);
+
+        let nearestBranch = null;
+        let minDistance = Infinity;
+        const THRESHOLD_KM = 0.5; // 500 meters
+
+        Object.entries(LOCAL_BRANDS_LOCATION_DATA).forEach(([brandKey, branches]) => {
+          const targetBranchId = LOCAL_BRAND_DEFAULT_BRANCH_IDS[brandKey];
+          const branch = branches.find(b => String(b.id_sucursal) === String(targetBranchId));
+
+          if (branch && branch.latitud && branch.longitud) {
+            const distance = getDistanceFromLatLonInKm(latitude, longitude, branch.latitud, branch.longitud);
+            console.log(`Distancia a ${brandKey} (${branch.nombre_sucursal || branch.marca}): ${distance.toFixed(3)} km`);
+
+            if (distance < THRESHOLD_KM && distance < minDistance) {
+              minDistance = distance;
+              nearestBranch = {
+                brandKey: brandKey,
+                name: branch.comercio_bandera_nombre || branch.marca, // Display Name
+                branchData: branch
+              };
+            }
+          }
+        });
+
+        if (nearestBranch) {
+          setDetectedSupermarket(nearestBranch);
+          showSuccessToast(`📍 Estás en ${nearestBranch.name}`);
+        }
+
+      }, (error) => {
+        console.warn("Error obteniendo ubicación:", error);
+      }, { enableHighAccuracy: true });
+    }
+  }, []);
 
   // Effect for loading categories
   useEffect(() => {
@@ -120,9 +200,17 @@ function MainAppContent() {
     const normalizedScannedCode = normalizeCode(decodedText);
     console.log(`Normalized scanned code: ${normalizedScannedCode}`);
 
-    // Search for the product in all local data
+    // Search for the product in local data
     let foundProduct = null;
-    for (const products of Object.values(LOCAL_BRAND_DEFAULT_PRODUCTS_MAP)) {
+    let searchScope = Object.entries(LOCAL_BRAND_DEFAULT_PRODUCTS_MAP);
+
+    // If we detected a supermarket, we ONLY search in that supermarket's list
+    if (detectedSupermarket) {
+      console.log(`Buscando producto SOLO en: ${detectedSupermarket.brandKey}`);
+      searchScope = searchScope.filter(([brandKey]) => brandKey === detectedSupermarket.brandKey);
+    }
+
+    for (const [brandKey, products] of searchScope) {
       foundProduct = products.find(p => {
         // ID format usually: "EAN-BranchID" or "PaddedEAN-BranchID"
         const idParts = p.id.split('-');
@@ -280,6 +368,11 @@ function MainAppContent() {
                 <h3 className="current-list-title">
                   {currentListName || 'Cargando...'}
                 </h3>
+                {detectedSupermarket && (
+                  <div className="detected-supermarket-badge" style={{ fontSize: '0.85rem', color: '#4caf50', marginTop: '4px', fontWeight: '500' }}>
+                    📍 {detectedSupermarket.name}
+                  </div>
+                )}
 
                 <div className="list-header-stats">
                   <span className="stat-item">
