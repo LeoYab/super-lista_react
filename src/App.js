@@ -368,11 +368,7 @@ function MainAppContent() {
                 <h3 className="current-list-title">
                   {currentListName || 'Cargando...'}
                 </h3>
-                {detectedSupermarket && (
-                  <div className="detected-supermarket-badge" style={{ fontSize: '0.85rem', color: '#4caf50', marginTop: '4px', fontWeight: '500' }}>
-                    📍 {detectedSupermarket.name}
-                  </div>
-                )}
+                {/* Detected supermarket moved to header stats */}
 
                 <div className="list-header-stats">
                   <span className="stat-item">
@@ -380,10 +376,20 @@ function MainAppContent() {
                     <span dangerouslySetInnerHTML={{ __html: totalProductos || '<em style="font-weight: lighter;">Vacío</em>' }}></span>
 
                   </span>
-                  <span className="stat-item total-amount">
-                    <span>Total: </span>
-                    {formattedTotal}
-                  </span>
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
+                    {detectedSupermarket && (
+                      <span style={{ fontSize: '0.75rem', color: '#4caf50', marginBottom: '0px', textAlign: 'right', fontWeight: '500' }}>
+                        📍 {detectedSupermarket.name}
+                        {detectedSupermarket.branchData.direccion_sucursal
+                          ? ` - ${detectedSupermarket.branchData.direccion_sucursal}`
+                          : (detectedSupermarket.branchData.localidad ? ` - ${detectedSupermarket.branchData.localidad}` : '')}
+                      </span>
+                    )}
+                    <span className="stat-item total-amount">
+                      <span>Total: </span>
+                      {formattedTotal}
+                    </span>
+                  </div>
                 </div>
 
                 <div className="category-tabs-wrapper" style={{ width: '100%', overflow: 'hidden' }}>
