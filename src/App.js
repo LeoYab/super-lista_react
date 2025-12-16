@@ -116,7 +116,7 @@ function MainAppContent() {
 
         let nearestBranch = null;
         let minDistance = Infinity;
-        const THRESHOLD_KM = 0.5; // 500 meters
+        const THRESHOLD_KM = 2.0; // Increased to 2km for better detection
 
         Object.entries(LOCAL_BRANDS_LOCATION_DATA).forEach(([brandKey, branches]) => {
           const targetBranchId = LOCAL_BRAND_DEFAULT_BRANCH_IDS[brandKey];
@@ -126,25 +126,35 @@ function MainAppContent() {
             const distance = getDistanceFromLatLonInKm(latitude, longitude, branch.latitud, branch.longitud);
             console.log(`Distancia a ${brandKey} (${branch.nombre_sucursal || branch.marca}): ${distance.toFixed(3)} km`);
 
+            // Check if within threshold and if it is the closest so far
             if (distance < THRESHOLD_KM && distance < minDistance) {
               minDistance = distance;
               nearestBranch = {
                 brandKey: brandKey,
-                name: branch.comercio_bandera_nombre || branch.marca, // Display Name
-                branchData: branch
+                name: branch.comercio_bandera_nombre || branch.marca, // Use Display Name from JSON
+                branchData: branch,
+                distance: distance
               };
             }
           }
         });
 
         if (nearestBranch) {
+          console.log("Sucursal más cercana detectada:", nearestBranch);
           setDetectedSupermarket(nearestBranch);
           showSuccessToast(`📍 Estás en ${nearestBranch.name}`);
+        } else {
+          console.log("No se detectó ninguna sucursal cercana (dentro de 2km).");
         }
 
       }, (error) => {
         console.warn("Error obteniendo ubicación:", error);
-      }, { enableHighAccuracy: true });
+        if (error.code === 1) {
+          showErrorAlert("Permiso GPS Denegado", "Por favor habilita el GPS para detectar el supermercado cercano.");
+        }
+      }, { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 });
+    } else {
+      console.warn("Geolocalización no soportada en este navegador.");
     }
   }, []);
 
@@ -206,8 +216,11 @@ function MainAppContent() {
 
     // If we detected a supermarket, we ONLY search in that supermarket's list
     if (detectedSupermarket) {
-      console.log(`Buscando producto SOLO en: ${detectedSupermarket.brandKey}`);
+      console.log(`DETECTED SUPERMARKET ACTIVE: Buscando producto SOLO en: ${detectedSupermarket.brandKey}`);
+      // Filter the search scope so it ONLY contains the detected brand
       searchScope = searchScope.filter(([brandKey]) => brandKey === detectedSupermarket.brandKey);
+    } else {
+      console.log("No detected supermarket. Searching in ALL brands.");
     }
 
     for (const [brandKey, products] of searchScope) {
@@ -378,12 +391,15 @@ function MainAppContent() {
                   </span>
                   <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
                     {detectedSupermarket && (
-                      <span style={{ fontSize: '0.75rem', color: '#4caf50', marginBottom: '0px', textAlign: 'right', fontWeight: '500' }}>
+                      <a
+                        href={`https://www.google.com/maps/search/?api=1&query=${detectedSupermarket.branchData.latitud},${detectedSupermarket.branchData.longitud}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{ fontSize: '0.75rem', color: '#4caf50', marginBottom: '0px', textAlign: 'right', fontWeight: '500', textDecoration: 'none', cursor: 'pointer' }}
+                      >
                         📍 {detectedSupermarket.name}
-                        {detectedSupermarket.branchData.direccion_sucursal
-                          ? ` - ${detectedSupermarket.branchData.direccion_sucursal}`
-                          : (detectedSupermarket.branchData.localidad ? ` - ${detectedSupermarket.branchData.localidad}` : '')}
-                      </span>
+                        {' '}<span style={{ fontSize: '0.7rem' }}>↗️</span>
+                      </a>
                     )}
                     <span className="stat-item total-amount">
                       <span>Total: </span>
