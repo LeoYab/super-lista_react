@@ -355,9 +355,9 @@ function normalizeProductData(product, targetBrand, targetSucursalId) {
   };
 }
 
-function normalizeBranchData(branch, brand, matchedTarget) {
+function normalizeBranchData(branch, brand, branchId) {
   return {
-    id_sucursal: matchedTarget.id_sucursal,
+    id_sucursal: String(branchId),
     comercio_id: String(branch.id_comercio || ''),
     comercio_cuit: String(branch.comercio_cuit || ''),
     comercio_razon_social: branch.comercio_razon_social || '',
@@ -387,20 +387,18 @@ async function procesarZipInterno(bufferZipInterno, allFilteredSucursalesByBrand
     }
   }
 
-  if (!sucursalFile) {
-    console.warn(`[WARN] ZIP interno '${zipFileName}' no contiene archivo de sucursales. Saltando sucursales para este ZIP.`);
-  }
-
-  if (!productFile) {
-    console.warn(`[WARN] ZIP interno '${zipFileName}' no contiene archivo de productos. Saltando productos para este ZIP.`);
-  }
+  // Map to link products to branches within this ZIP
+  // Key: `${id_comercio}_${id_bandera}_${id_sucursal}`
+  const branchesInThisZip = new Map();
 
   if (sucursalFile) {
     try {
       const sucursalStream = sucursalFile.stream();
       const sucursalDocs = await procesarCsvStream(sucursalStream, sucursalFile.path);
       for (const doc of sucursalDocs) {
-        let foundBrand = null;
+        let foundBrand = doc.comercio_razon_social || 'Desconocido';
+
+        // Try to normalize brand name if known
         for (const brand in TARGET_COMERCIO_IDENTIFIERS) {
           const keywords = TARGET_COMERCIO_IDENTIFIERS[brand].razon_social_keywords;
           const cuits = TARGET_COMERCIO_IDENTIFIERS[brand].cuits;
@@ -411,16 +409,27 @@ async function procesarZipInterno(bufferZipInterno, allFilteredSucursalesByBrand
           }
         }
 
-        if (foundBrand) {
-          const matchedTargetBranch = findMatchingBranch(doc, TARGET_SUPERMARKETS_LOCATIONS.filter(t => t.brand === foundBrand));
-          if (matchedTargetBranch) {
-            const normalizedSucursal = normalizeBranchData(doc, foundBrand, matchedTargetBranch);
-            if (!allFilteredSucursalesByBrand.has(foundBrand)) {
-              allFilteredSucursalesByBrand.set(foundBrand, new Map());
-            }
-            allFilteredSucursalesByBrand.get(foundBrand).set(matchedTargetBranch.id_sucursal, normalizedSucursal);
-          }
+        // Use ID from CSV
+        const branchId = doc.id_sucursal;
+
+        // Normalize and store
+        const normalizedSucursal = normalizeBranchData(doc, foundBrand, branchId);
+
+        if (!allFilteredSucursalesByBrand.has(foundBrand)) {
+          allFilteredSucursalesByBrand.set(foundBrand, new Map());
         }
+        allFilteredSucursalesByBrand.get(foundBrand).set(branchId, normalizedSucursal);
+
+        // Map for product linking
+        const parts = [
+          String(doc.id_comercio || '').trim(),
+          String(doc.id_bandera || '').trim(),
+          String(doc.id_sucursal || '').trim()
+        ];
+        // Some CSVs might have different quoting or trimming, ensure we match broadly.
+        // Actually, let's use the raw values but trimmed.
+        const key = parts.join('_');
+        branchesInThisZip.set(key, { brand: foundBrand, branchId: branchId });
       }
     } catch (error) {
       console.error(`Error al procesar archivo de sucursal en '${zipFileName}':`, error.message);
@@ -433,34 +442,26 @@ async function procesarZipInterno(bufferZipInterno, allFilteredSucursalesByBrand
       const productDocs = await procesarCsvStream(productStream, productFile.path);
 
       for (const doc of productDocs) {
-        const productCsvIdComercio = String(doc.id_comercio || '');
-        const productCsvIdBandera = String(doc.id_bandera || '');
-        const productCsvIdSucursal = String(doc.id_sucursal || '');
+        const productCsvIdComercio = String(doc.id_comercio || '').trim();
+        const productCsvIdBandera = String(doc.id_bandera || '').trim();
+        const productCsvIdSucursal = String(doc.id_sucursal || '').trim();
 
-        let targetBrand = null;
-        let targetSucursalId = null;
+        const key = `${productCsvIdComercio}_${productCsvIdBandera}_${productCsvIdSucursal}`;
 
-        const matchedMapping = PRODUCT_CSV_TO_TARGET_MAPPING.find(mapping =>
-          mapping.product_csv_id_comercio === productCsvIdComercio &&
-          mapping.product_csv_id_bandera === productCsvIdBandera &&
-          mapping.product_csv_id_sucursal === productCsvIdSucursal
-        );
+        const branchInfo = branchesInThisZip.get(key);
 
-        if (matchedMapping) {
-          targetBrand = matchedMapping.target_brand;
-          targetSucursalId = matchedMapping.target_sucursal_id;
-        }
+        if (branchInfo) {
+          const { brand, branchId } = branchInfo;
 
-        if (targetBrand && MARCAS_NORMALIZADAS_INTERES.has(targetBrand)) {
-          const normalizedProduct = normalizeProductData(doc, targetBrand, targetSucursalId);
+          const normalizedProduct = normalizeProductData(doc, brand, branchId);
           if (normalizedProduct) {
-            if (!allProductsByBranch.has(targetBrand)) {
-              allProductsByBranch.set(targetBrand, new Map());
+            if (!allProductsByBranch.has(brand)) {
+              allProductsByBranch.set(brand, new Map());
             }
-            if (!allProductsByBranch.get(targetBrand).has(targetSucursalId)) {
-              allProductsByBranch.get(targetBrand).set(targetSucursalId, []);
+            if (!allProductsByBranch.get(brand).has(branchId)) {
+              allProductsByBranch.get(brand).set(branchId, []);
             }
-            allProductsByBranch.get(targetBrand).get(targetSucursalId).push(normalizedProduct);
+            allProductsByBranch.get(brand).get(branchId).push(normalizedProduct);
           }
         }
       }
@@ -477,13 +478,12 @@ async function writeFinalJsons(allProductsByBranchFromZip, allFilteredSucursales
   console.log(`\nEscribiendo archivos JSON de sucursales en '${baseSuperDir}'...`);
   let totalSucursalesWritten = 0;
   for (const [brandName, sucursalesMap] of allFilteredSucursalesByBrand.entries()) {
-    if (MARCAS_NORMALIZADAS_INTERES.has(brandName)) {
-      for (const [branchId, sucursalData] of sucursalesMap.entries()) {
-        const sucursalFilename = path.join(baseSuperDir, `${branchId}.json`);
-        await writeToJson([sucursalData], sucursalFilename);
-        totalSucursalesWritten++;
-        console.log(`    Sucursal ${brandName}/${branchId} escrita en '${sucursalFilename}'.`);
-      }
+    // Escrbir todas las marcas encontradas
+    for (const [branchId, sucursalData] of sucursalesMap.entries()) {
+      const sucursalFilename = path.join(baseSuperDir, `${branchId}.json`);
+      await writeToJson([sucursalData], sucursalFilename);
+      totalSucursalesWritten++;
+      console.log(`    Sucursal ${brandName}/${branchId} escrita en '${sucursalFilename}'.`);
     }
   }
   console.log(`Archivos JSON de sucursales completados. Total escritos: ${totalSucursalesWritten}.`);
@@ -496,28 +496,18 @@ async function writeFinalJsons(allProductsByBranchFromZip, allFilteredSucursales
   // CORREGIDO: No limpiamos todo el directorio, solo sobrescribimos los archivos que actualizamos
   let totalProductsFilesWritten = 0;
   for (const [brandName, branchesMap] of allProductsByBranchFromZip.entries()) {
-    if (MARCAS_NORMALIZADAS_INTERES.has(brandName)) {
-      const safeBrandName = brandName.replace(/[^a-z0-9]/gi, '').toLowerCase();
-      const brandDir = path.join(baseProductsDir, safeBrandName);
-      await fsp.mkdir(brandDir, { recursive: true });
-      console.log(`    Procesando marca de productos: ${brandName}`);
+    // Escribir todas las marcas
+    const safeBrandName = brandName.replace(/[^a-z0-9]/gi, '').toLowerCase();
+    const brandDir = path.join(baseProductsDir, safeBrandName);
+    await fsp.mkdir(brandDir, { recursive: true });
+    console.log(`    Procesando marca de productos: ${brandName}`);
 
-      for (const [branchId, productsList] of branchesMap.entries()) {
-        const isTargetBranch = TARGET_SUPERMARKETS_LOCATIONS.some(ts =>
-          String(ts.id_sucursal) === String(branchId) && ts.brand === brandName
-        );
-
-        if (isTargetBranch) {
-          const productFilename = path.join(brandDir, `${branchId}.json`);
-          await writeToJson(productsList, productFilename);
-          totalProductsFilesWritten++;
-          console.log(`      Escritos ${productsList.length} productos para ${brandName}/${branchId} en '${productFilename}'.`);
-        } else {
-          console.log(`      Saltando escritura de productos para sucursal no objetivo: '${brandName}/${branchId}'.`);
-        }
-      }
-    } else {
-      console.log(`    Saltando escritura de productos para marca no interesada: '${brandName}'.`);
+    for (const [branchId, productsList] of branchesMap.entries()) {
+      // Escribir todas las sucursales
+      const productFilename = path.join(brandDir, `${branchId}.json`);
+      await writeToJson(productsList, productFilename);
+      totalProductsFilesWritten++;
+      console.log(`      Escritos ${productsList.length} productos para ${brandName}/${branchId} en '${productFilename}'.`);
     }
   }
   console.log(`Generación de JSONs de productos finales completada. Total de archivos de productos escritos/actualizados: ${totalProductsFilesWritten}.`);
@@ -575,28 +565,12 @@ async function generarJsonFiltrados() {
     const allFoundZips = directory.files.filter(f => f.path.toLowerCase().endsWith('.zip')).map(f => f.path);
     console.log('DEBUG: Todos los ZIPs encontrados (rutas completas):', allFoundZips);
 
-    let zipsInternos = directory.files.filter(f => {
-      // Normalizar ruta para manejar tanto / como \
-      const fullPath = f.path;
-      const fileName = fullPath.split(/[/\\]/).pop(); // Obtener el nombre del archivo independientemente del separador
-
-      if (!fileName.toLowerCase().endsWith('.zip')) {
-        return false;
-      }
-
-      const fileNameWithoutExt = fileName.substring(0, fileName.lastIndexOf('.'));
-      for (const prefix of KNOWN_ZIPS_TO_PROCESS_PREFIXES) {
-        if (fileNameWithoutExt.startsWith(prefix)) {
-          return true;
-        }
-      }
-      return false;
-    });
+    // Filter deleted: Process all ZIPs found
+    let zipsInternos = directory.files.filter(f => f.path.toLowerCase().endsWith('.zip'));
 
     if (zipsInternos.length === 0) {
-      console.error('No se encontraron ZIPs internos con los prefijos especificados para procesar.');
-      console.log('ZIPs internos encontrados en el archivo principal (sin filtrar por prefijo):', allFoundZips);
-      console.warn('[WARN] No hay datos nuevos para procesar en este ZIP. Los archivos existentes se mantendrán sin cambios.');
+      console.error('No se encontraron ZIPs internos para procesar.');
+      console.log('Archivos encontrados:', allFoundZips);
       return;
     }
 
