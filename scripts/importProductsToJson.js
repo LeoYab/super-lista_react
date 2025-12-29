@@ -80,32 +80,15 @@ async function downloadZipForDay(url, outputPath) {
       throw new Error(`Error HTTP al descargar el ZIP: ${response.statusText} (Status: ${response.status})`);
     }
 
-    const arrayBuffer = await response.arrayBuffer();
-    const buffer = Buffer.from(arrayBuffer);
+    await pipeline(response.body, fs.createWriteStream(outputPath));
 
-    if (buffer.length === 0) {
-      throw new Error('El archivo ZIP descargado está vacío');
+    const stats = await fsp.stat(outputPath);
+    if (stats.size < 22) {
+      throw new Error(`El archivo ZIP es muy pequeño (${stats.size} bytes) - posiblemente corrupto`);
     }
 
-    if (buffer.length < 22) {
-      throw new Error(`El archivo ZIP es muy pequeño (${buffer.length} bytes) - posiblemente corrupto`);
-    }
-
-    const zipSignature = buffer.subarray(0, 4);
-    const validZipSignatures = [
-      Buffer.from([0x50, 0x4B, 0x03, 0x04]),
-      Buffer.from([0x50, 0x4B, 0x05, 0x06]),
-      Buffer.from([0x50, 0x4B, 0x07, 0x08])
-    ];
-
-    const isValidZip = validZipSignatures.some(sig => zipSignature.equals(sig));
-    if (!isValidZip) {
-      throw new Error('El archivo descargado no parece ser un ZIP válido');
-    }
-
-    await fsp.writeFile(outputPath, buffer);
-    console.log(`ZIP del día descargado en ${outputPath} (${buffer.length} bytes).`);
-    return buffer;
+    console.log(`ZIP del día descargado en ${outputPath} (${stats.size} bytes).`);
+    return outputPath;
   } catch (error) {
     console.error(`ERROR al descargar el ZIP de ${url}:`, error.message);
     throw error;
@@ -116,8 +99,8 @@ async function downloadZipWithRetries(url, outputPath, maxRetries = 3, retryDela
   for (let i = 0; i < maxRetries; i++) {
     try {
       console.log(`Intentando descargar ZIP (Intento ${i + 1}/${maxRetries}) desde: ${url}`);
-      const buffer = await downloadZipForDay(url, outputPath);
-      return buffer;
+      await downloadZipForDay(url, outputPath);
+      return outputPath;
     } catch (error) {
       console.error(`Error al descargar el ZIP (Intento ${i + 1}/${maxRetries}):`, error.message);
       if (i < maxRetries - 1) {
@@ -155,14 +138,11 @@ function getDistance(lat1, lon1, lat2, lon2) {
   return Math.sqrt(dx * dx + dy * dy);
 }
 
-async function procesarCsvStream(streamCsv, filenameForLog = 'CSV desconocido') {
+async function procesarCsvStream(streamCsv, callback, filenameForLog = 'CSV desconocido') {
   return new Promise((resolve, reject) => {
-    const docs = [];
-    let buffer = '';
+    let buffer = Buffer.from([]);
     let delimiterDetected = false;
-    let parser;
-    const readBufferLimit = 1024 * 5;
-    const passthrough = new stream.PassThrough();
+    let parser = null;
 
     const commonColumnMaps = {
       'id_comercio': ['id_comercio', 'id'],
@@ -185,101 +165,83 @@ async function procesarCsvStream(streamCsv, filenameForLog = 'CSV desconocido') 
       'id_producto': ['id_producto', 'producto_id']
     };
 
-    streamCsv
-      .on('data', chunk => {
-        if (!delimiterDetected) {
-          buffer += chunk.toString();
-          if (buffer.length < readBufferLimit && !buffer.includes('\n')) {
-            return;
+    const passthrough = new stream.PassThrough();
+
+    streamCsv.on('data', async (chunk) => {
+      if (!delimiterDetected) {
+        streamCsv.pause();
+        buffer = Buffer.concat([buffer, chunk]);
+
+        if (buffer.length < 5120 && !buffer.toString().includes('\n')) {
+          streamCsv.resume();
+          return;
+        }
+
+        const firstLine = buffer.toString().split('\n')[0];
+        let detectedDelimiter = ',';
+        let maxMatches = -1;
+        const potentialDelimiters = [',', ';', '|', '\t'];
+        const lowerCaseFirstLine = firstLine.toLowerCase();
+
+        for (const delim of potentialDelimiters) {
+          const headers = lowerCaseFirstLine.split(delim).map(h => h.trim());
+          let currentMatches = 0;
+          for (const key in commonColumnMaps) {
+            if (commonColumnMaps[key].some(colName => headers.includes(colName))) currentMatches++;
           }
+          if (headers.length > 1 && currentMatches > maxMatches) {
+            maxMatches = currentMatches;
+            detectedDelimiter = delim;
+          }
+        }
 
-          const firstLine = buffer.split('\n')[0];
-          let detectedDelimiter = ',';
-          let maxMatches = -1;
-          const potentialDelimiters = [',', ';', '|', '\t'];
-          const lowerCaseFirstLine = firstLine.toLowerCase();
+        console.log(`[CSV] Delimitador detectado para ${filenameForLog}: '${detectedDelimiter}'`);
 
-          for (const delim of potentialDelimiters) {
-            const headers = lowerCaseFirstLine.split(delim).map(h => h.trim());
-            let currentMatches = 0;
+        parser = csv({
+          separator: detectedDelimiter,
+          strict: false,
+          mapHeaders: ({ header, index }) => {
+            const cleanHeader = header.replace(/^[^a-zA-Z0-9]+/, '');
+            const normalizedHeader = cleanHeader.toLowerCase().trim();
             for (const key in commonColumnMaps) {
-              if (commonColumnMaps[key].some(colName => headers.includes(colName))) {
-                currentMatches++;
-              }
+              if (commonColumnMaps[key].includes(normalizedHeader)) return key;
             }
-            if (headers.length > 1 && currentMatches > maxMatches) {
-              maxMatches = currentMatches;
-              detectedDelimiter = delim;
+            return normalizedHeader || `col_${index}`;
+          },
+          mapValues: ({ header, index, value }) => value.trim()
+        });
+
+        delimiterDetected = true;
+        passthrough.pipe(parser);
+
+        (async () => {
+          try {
+            for await (const row of parser) {
+              await callback(row);
             }
+            resolve();
+          } catch (err) {
+            reject(err);
           }
+        })();
 
-          if (maxMatches <= 0 && firstLine.length > 0) {
-            if (firstLine.includes('|')) detectedDelimiter = '|';
-            else if (firstLine.includes(';')) detectedDelimiter = ';';
-            else if (firstLine.includes('\t')) detectedDelimiter = '\t';
-            else detectedDelimiter = ',';
-            console.warn(`[WARN] Delimitador inferido heurísticamente para ${filenameForLog} como '${detectedDelimiter}'.`);
-          } else if (firstLine.length === 0) {
-            detectedDelimiter = ',';
-          }
-
-          console.log(`[CSV] Delimitador detectado para ${filenameForLog}: '${detectedDelimiter}' (coincidencias de encabezados: ${maxMatches})`);
-
-          parser = csv({
-            separator: detectedDelimiter,
-            strict: false,
-            mapHeaders: ({ header, index }) => {
-              const normalizedHeader = header.toLowerCase().trim();
-              for (const key in commonColumnMaps) {
-                if (commonColumnMaps[key].includes(normalizedHeader)) {
-                  return key;
-                }
-              }
-              return normalizedHeader || `col_${index}`;
-            },
-            mapValues: ({ header, index, value }) => value.trim()
-          });
-
-          parser.on('data', (data) => docs.push(data))
-            .on('end', () => resolve(docs))
-            .on('error', reject);
-
-          passthrough.pipe(parser);
-          passthrough.write(buffer);
-          buffer = '';
-          delimiterDetected = true;
-        } else {
-          passthrough.write(chunk);
+        passthrough.write(buffer);
+        buffer = Buffer.from([]);
+        streamCsv.resume();
+      } else {
+        if (!passthrough.write(chunk)) {
+          streamCsv.pause();
+          passthrough.once('drain', () => streamCsv.resume());
         }
-      })
-      .on('end', () => {
-        if (!delimiterDetected) {
-          if (buffer.length > 0) {
-            console.warn(`[WARN] Archivo ${filenameForLog} es muy pequeño o no tiene saltos de línea. Procesando con delimitador inferido: '${detectedDelimiter}'.`);
-            parser = csv({
-              separator: detectedDelimiter,
-              strict: false,
-              mapHeaders: ({ header, index }) => {
-                const normalizedHeader = header.toLowerCase().trim();
-                for (const key in commonColumnMaps) {
-                  if (commonColumnMaps[key].includes(normalizedHeader)) {
-                    return key;
-                  }
-                }
-                return normalizedHeader || `col_${index}`;
-              },
-              mapValues: ({ header, index, value }) => value.trim()
-            });
-            passthrough.pipe(parser);
-            passthrough.write(buffer);
-          }
-          passthrough.end();
-          resolve(docs);
-        } else {
-          passthrough.end();
-        }
-      })
-      .on('error', reject);
+      }
+    });
+
+    streamCsv.on('end', () => {
+      passthrough.end();
+      if (!delimiterDetected) resolve();
+    });
+
+    streamCsv.on('error', reject);
   });
 }
 
@@ -308,7 +270,6 @@ function normalizeProductData(product, targetBrand, targetSucursalId) {
   // Validación mejorada de campos requeridos
   const descripcion = product.productos_descripcion?.trim();
   if (!descripcion || !product.productos_precio_lista) {
-    console.warn('Producto con datos faltantes (descripción o precio), saltando:', product);
     return null;
   }
 
@@ -334,8 +295,6 @@ function normalizeProductData(product, targetBrand, targetSucursalId) {
       .digest('base64')
       .replace(/[^a-zA-Z0-9]/g, '')
       .substring(0, 16);
-
-    console.warn(`[WARN] id_producto y EAN inválidos para '${descripcion}' (id_producto: '${product.id_producto || 'vacío'}', EAN: '${product.productos_ean || 'vacío'}'). ID generado: ${uniqueIdentifier}`);
   }
 
   const productId = `${uniqueIdentifier}-${targetSucursalId}`;
@@ -372,8 +331,10 @@ function normalizeBranchData(branch, brand, branchId) {
   };
 }
 
-async function procesarZipInterno(bufferZipInterno, allFilteredSucursalesByBrand, allProductsByBranch, zipFileName) {
-  const innerDirectory = await unzipper.Open.buffer(bufferZipInterno);
+const BRANCH_FILES_STARTED = new Set();
+
+async function procesarZipInterno(zipPath, allFilteredSucursalesByBrand, zipFileName) {
+  const innerDirectory = await unzipper.Open.file(zipPath);
 
   let sucursalFile = null;
   let productFile = null;
@@ -394,11 +355,9 @@ async function procesarZipInterno(bufferZipInterno, allFilteredSucursalesByBrand
   if (sucursalFile) {
     try {
       const sucursalStream = sucursalFile.stream();
-      const sucursalDocs = await procesarCsvStream(sucursalStream, sucursalFile.path);
-      for (const doc of sucursalDocs) {
+      await procesarCsvStream(sucursalStream, (doc) => {
         let foundBrand = doc.comercio_razon_social || 'Desconocido';
 
-        // Try to normalize brand name if known
         for (const brand in TARGET_COMERCIO_IDENTIFIERS) {
           const keywords = TARGET_COMERCIO_IDENTIFIERS[brand].razon_social_keywords;
           const cuits = TARGET_COMERCIO_IDENTIFIERS[brand].cuits;
@@ -409,10 +368,7 @@ async function procesarZipInterno(bufferZipInterno, allFilteredSucursalesByBrand
           }
         }
 
-        // Use ID from CSV
         const branchId = doc.id_sucursal;
-
-        // Normalize and store
         const normalizedSucursal = normalizeBranchData(doc, foundBrand, branchId);
 
         if (!allFilteredSucursalesByBrand.has(foundBrand)) {
@@ -420,17 +376,14 @@ async function procesarZipInterno(bufferZipInterno, allFilteredSucursalesByBrand
         }
         allFilteredSucursalesByBrand.get(foundBrand).set(branchId, normalizedSucursal);
 
-        // Map for product linking
         const parts = [
           String(doc.id_comercio || '').trim(),
           String(doc.id_bandera || '').trim(),
           String(doc.id_sucursal || '').trim()
         ];
-        // Some CSVs might have different quoting or trimming, ensure we match broadly.
-        // Actually, let's use the raw values but trimmed.
         const key = parts.join('_');
         branchesInThisZip.set(key, { brand: foundBrand, branchId: branchId });
-      }
+      }, sucursalFile.path);
     } catch (error) {
       console.error(`Error al procesar archivo de sucursal en '${zipFileName}':`, error.message);
     }
@@ -439,78 +392,76 @@ async function procesarZipInterno(bufferZipInterno, allFilteredSucursalesByBrand
   if (productFile) {
     try {
       const productStream = productFile.stream();
-      const productDocs = await procesarCsvStream(productStream, productFile.path);
-
-      for (const doc of productDocs) {
+      await procesarCsvStream(productStream, (doc) => {
         const productCsvIdComercio = String(doc.id_comercio || '').trim();
         const productCsvIdBandera = String(doc.id_bandera || '').trim();
         const productCsvIdSucursal = String(doc.id_sucursal || '').trim();
 
         const key = `${productCsvIdComercio}_${productCsvIdBandera}_${productCsvIdSucursal}`;
-
         const branchInfo = branchesInThisZip.get(key);
 
         if (branchInfo) {
           const { brand, branchId } = branchInfo;
 
+          if (!MARCAS_NORMALIZADAS_INTERES.has(brand)) return;
+
           const normalizedProduct = normalizeProductData(doc, brand, branchId);
           if (normalizedProduct) {
-            if (!allProductsByBranch.has(brand)) {
-              allProductsByBranch.set(brand, new Map());
+            const safeBrandName = brand.replace(/[^a-z0-9]/gi, '').toLowerCase();
+            const brandDir = path.join(BASE_PRODUCTS_DIR, safeBrandName);
+            const productFilename = path.join(brandDir, `${branchId}.jsonl`);
+
+            if (!BRANCH_FILES_STARTED.has(productFilename)) {
+              if (!fs.existsSync(brandDir)) fs.mkdirSync(brandDir, { recursive: true });
+              fs.writeFileSync(productFilename, '', 'utf8');
+              BRANCH_FILES_STARTED.add(productFilename);
             }
-            if (!allProductsByBranch.get(brand).has(branchId)) {
-              allProductsByBranch.get(brand).set(branchId, []);
-            }
-            allProductsByBranch.get(brand).get(branchId).push(normalizedProduct);
+
+            fs.appendFileSync(productFilename, JSON.stringify(normalizedProduct) + '\n', 'utf8');
           }
         }
-      }
+      }, productFile.path);
     } catch (error) {
       console.error(`Error al procesar archivo de productos en '${zipFileName}':`, error.message);
     }
   }
 }
 
-async function writeFinalJsons(allProductsByBranchFromZip, allFilteredSucursalesByBrand) {
+async function writeFinalJsons(allFilteredSucursalesByBrand) {
   const baseSuperDir = BASE_SUPER_DIR;
   await fsp.mkdir(baseSuperDir, { recursive: true });
 
   console.log(`\nEscribiendo archivos JSON de sucursales en '${baseSuperDir}'...`);
   let totalSucursalesWritten = 0;
   for (const [brandName, sucursalesMap] of allFilteredSucursalesByBrand.entries()) {
-    // Escrbir todas las marcas encontradas
+    if (!MARCAS_NORMALIZADAS_INTERES.has(brandName)) continue;
+
     for (const [branchId, sucursalData] of sucursalesMap.entries()) {
       const sucursalFilename = path.join(baseSuperDir, `${branchId}.json`);
       await writeToJson([sucursalData], sucursalFilename);
       totalSucursalesWritten++;
-      console.log(`    Sucursal ${brandName}/${branchId} escrita en '${sucursalFilename}'.`);
     }
   }
   console.log(`Archivos JSON de sucursales completados. Total escritos: ${totalSucursalesWritten}.`);
 
-  const baseProductsDir = BASE_PRODUCTS_DIR;
-  await fsp.mkdir(baseProductsDir, { recursive: true });
-
-  console.log(`\nEscribiendo archivos JSON de productos (por marca y sucursal) en '${baseProductsDir}'...`);
-
-  // CORREGIDO: No limpiamos todo el directorio, solo sobrescribimos los archivos que actualizamos
+  console.log(`\nConvirtiendo archivos JSONL a JSON finales en '${BASE_PRODUCTS_DIR}'...`);
   let totalProductsFilesWritten = 0;
-  for (const [brandName, branchesMap] of allProductsByBranchFromZip.entries()) {
-    // Escribir todas las marcas
-    const safeBrandName = brandName.replace(/[^a-z0-9]/gi, '').toLowerCase();
-    const brandDir = path.join(baseProductsDir, safeBrandName);
-    await fsp.mkdir(brandDir, { recursive: true });
-    console.log(`    Procesando marca de productos: ${brandName}`);
 
-    for (const [branchId, productsList] of branchesMap.entries()) {
-      // Escribir todas las sucursales
-      const productFilename = path.join(brandDir, `${branchId}.json`);
-      await writeToJson(productsList, productFilename);
+  for (const jsonlPath of BRANCH_FILES_STARTED) {
+    try {
+      const jsonPath = jsonlPath.replace(/\.jsonl$/, '.json');
+      const lines = fs.readFileSync(jsonlPath, 'utf8').trim().split('\n');
+      const products = lines.map(line => JSON.parse(line));
+
+      await fsp.writeFile(jsonPath, JSON.stringify(products, null, 2), 'utf8');
+      await fsp.unlink(jsonlPath); // Eliminar el archivo temporal
       totalProductsFilesWritten++;
-      console.log(`      Escritos ${productsList.length} productos para ${brandName}/${branchId} en '${productFilename}'.`);
+    } catch (err) {
+      console.error(`Error al convertir ${jsonlPath}:`, err.message);
     }
   }
-  console.log(`Generación de JSONs de productos finales completada. Total de archivos de productos escritos/actualizados: ${totalProductsFilesWritten}.`);
+
+  console.log(`Generación de JSONs de productos finalizada. Total: ${totalProductsFilesWritten}.`);
 }
 
 async function cleanTempJsons() {
@@ -549,17 +500,16 @@ async function generarJsonFiltrados() {
       throw new Error(`No se encontró URL de descarga para el día de la semana actual (${dayOfWeek}). Por favor, verifica la constante DAILY_URLS.`);
     }
 
-    console.log(`Intentando descargar ZIP desde: ${currentDayZipUrl}`);
-    const bufferZip = await downloadZipWithRetries(currentDayZipUrl, tempZipPath, 3, 5000);
+    console.log(`Intentando descargar y abrir ZIP desde: ${tempZipPath}`);
+    await downloadZipWithRetries(currentDayZipUrl, tempZipPath, 3, 5000);
 
-    console.log('Descomprimiendo ZIP principal...');
+    console.log('Abriendo ZIP principal...');
     let directory;
     try {
-      directory = await unzipper.Open.buffer(bufferZip);
+      directory = await unzipper.Open.file(tempZipPath);
     } catch (unzipError) {
-      console.error('Error al descomprimir el ZIP:', unzipError.message);
-      console.log(`Tamaño del buffer: ${bufferZip ? bufferZip.length : 'undefined'} bytes`);
-      throw new Error(`No se pudo descomprimir el archivo ZIP. Posiblemente esté corrupto: ${unzipError.message}`);
+      console.error('Error al abrir el ZIP:', unzipError.message);
+      throw new Error(`No se pudo abrir el archivo ZIP. Posiblemente esté corrupto: ${unzipError.message}`);
     }
 
     const allFoundZips = directory.files.filter(f => f.path.toLowerCase().endsWith('.zip')).map(f => f.path);
@@ -579,14 +529,25 @@ async function generarJsonFiltrados() {
     zipsInternos.forEach(zip => console.log(`- ${zip.path}`));
 
     const allFilteredSucursalesByBrand = new Map();
-    const allProductsByBranch = new Map();
     const processingErrors = [];
 
     for (const zip of zipsInternos) {
-      console.log(`Procesando ZIP interno: ${zip.path}`);
+      const internalZipFileName = path.basename(zip.path);
+
+      // FILTRO POR PREFIJO: Evitar procesar ZIPs de supermercados no deseados
+      const shouldProcess = Array.from(KNOWN_ZIPS_TO_PROCESS_PREFIXES).some(prefix => internalZipFileName.startsWith(prefix));
+
+      if (!shouldProcess) {
+        // console.log(`[SKIP] Skip ${internalZipFileName} (No coincide con marcas de interés)`);
+        continue;
+      }
+
+      console.log(`Procesando ZIP interno: ${internalZipFileName}`);
       try {
-        const bufferZipInterno = await zip.buffer();
-        await procesarZipInterno(bufferZipInterno, allFilteredSucursalesByBrand, allProductsByBranch, path.basename(zip.path));
+        const tempInnerZipPath = path.join(TEMP_DATA_DIR, `inner_${Math.random().toString(36).substring(7)}.zip`);
+        await pipeline(zip.stream(), fs.createWriteStream(tempInnerZipPath));
+        await procesarZipInterno(tempInnerZipPath, allFilteredSucursalesByBrand, internalZipFileName);
+        await fsp.unlink(tempInnerZipPath);
       } catch (innerZipError) {
         const errorMsg = `Error al extraer o procesar el ZIP interno ${zip.path}: ${innerZipError.message}`;
         console.error(errorMsg);
@@ -601,16 +562,11 @@ async function generarJsonFiltrados() {
     }
 
     console.log('\n--- Escribiendo archivos JSON locales ---');
-    await writeFinalJsons(allProductsByBranch, allFilteredSucursalesByBrand);
+    await writeFinalJsons(allFilteredSucursalesByBrand);
     console.log('Archivos JSON locales actualizados completamente.');
 
     console.log('\n=== Proceso completado exitosamente ===');
     console.log(`Sucursales actualizadas: ${Array.from(allFilteredSucursalesByBrand.values()).reduce((acc, map) => acc + map.size, 0)}`);
-    console.log(`Marcas con productos: ${allProductsByBranch.size}`);
-    for (const [brand, branchesMap] of allProductsByBranch.entries()) {
-      const totalProducts = Array.from(branchesMap.values()).reduce((acc, list) => acc + list.length, 0);
-      console.log(`  - ${brand}: ${totalProducts} productos en ${branchesMap.size} sucursales`);
-    }
 
     process.exit(0);
 

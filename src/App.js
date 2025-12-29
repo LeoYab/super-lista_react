@@ -23,14 +23,7 @@ import { Html5Qrcode, Html5QrcodeSupportedFormats } from "html5-qrcode";
 import { showErrorAlert, showSuccessToast } from './Notifications/NotificationsServices';
 
 // Import local product data for scanner lookup
-import carrefourDefaultProducts from './data/products/carrefour/1.json';
-import diaDefaultProducts from './data/products/dia/87.json';
-import changomasDefaultProducts from './data/products/changomas/1004.json';
-
-// Import supermarket location data
-import carrefourSuperData from './data/super/carrefour.json';
-import diaSuperData from './data/super/dia.json';
-import changomasSuperData from './data/super/changomas.json';
+import { fetchCSV } from './utils/csvParser';
 
 // Importa tus estilos
 import './App.css';
@@ -40,17 +33,7 @@ import './components/Select/Select.css';
 import './TotalSummary/TotalSummary.css';
 import './components/Buttons/Button.css';
 
-const LOCAL_BRAND_DEFAULT_PRODUCTS_MAP = {
-  carrefour: carrefourDefaultProducts,
-  dia: diaDefaultProducts,
-  changomas: changomasDefaultProducts,
-};
-
-const LOCAL_BRANDS_LOCATION_DATA = {
-  carrefour: carrefourSuperData,
-  dia: diaSuperData,
-  changomas: changomasSuperData
-};
+const LOCAL_BRANDS_LOCATION_DATA = {}; // Loaded dynamically
 
 const LOCAL_BRAND_DEFAULT_BRANCH_IDS = {
   carrefour: '1',
@@ -114,38 +97,39 @@ function MainAppContent() {
         const { latitude, longitude } = position.coords;
         console.log("Ubicación del usuario:", latitude, longitude);
 
-        let nearestBranch = null;
-        let minDistance = Infinity;
-        const THRESHOLD_KM = 2.0; // Increased to 2km for better detection
+        const brandIds = ['carrefour', 'dia', 'changomas', 'jumbo', 'vea', 'vital', 'easy'];
+        const THRESHOLD_KM = 2.0;
 
-        Object.entries(LOCAL_BRANDS_LOCATION_DATA).forEach(([brandKey, branches]) => {
-          const targetBranchId = LOCAL_BRAND_DEFAULT_BRANCH_IDS[brandKey];
-          const branch = branches.find(b => String(b.id_sucursal) === String(targetBranchId));
+        Promise.all(brandIds.map(async (brandId) => {
+          try {
+            const response = await fetch(`/data/super/${brandId}.json`);
+            if (!response.ok) return [];
+            const branches = await response.json();
 
-          if (branch && branch.latitud && branch.longitud) {
-            const distance = getDistanceFromLatLonInKm(latitude, longitude, branch.latitud, branch.longitud);
-            console.log(`Distancia a ${brandKey} (${branch.nombre_sucursal || branch.marca}): ${distance.toFixed(3)} km`);
+            const targetBranchId = LOCAL_BRAND_DEFAULT_BRANCH_IDS[brandId];
+            const branch = branches.find(b => String(b.id_sucursal) === String(targetBranchId));
 
-            // Check if within threshold and if it is the closest so far
-            if (distance < THRESHOLD_KM && distance < minDistance) {
-              minDistance = distance;
-              nearestBranch = {
-                brandKey: brandKey,
-                name: branch.comercio_bandera_nombre || branch.marca, // Use Display Name from JSON
-                branchData: branch,
-                distance: distance
-              };
+            if (branch && branch.latitud && branch.longitud) {
+              const distance = getDistanceFromLatLonInKm(latitude, longitude, branch.latitud, branch.longitud);
+              if (distance < THRESHOLD_KM) {
+                return {
+                  brandKey: brandId,
+                  name: branch.marca || branch.comercio_bandera_nombre || brandId,
+                  branchData: branch,
+                  distance: distance
+                };
+              }
             }
+          } catch (e) { }
+          return null;
+        })).then(foundBranches => {
+          const validBranches = foundBranches.filter(b => b !== null).sort((a, b) => a.distance - b.distance);
+          if (validBranches.length > 0) {
+            const nearestBranch = validBranches[0];
+            setDetectedSupermarket(nearestBranch);
+            showSuccessToast(`📍 Estás en ${nearestBranch.name}`);
           }
         });
-
-        if (nearestBranch) {
-          console.log("Sucursal más cercana detectada:", nearestBranch);
-          setDetectedSupermarket(nearestBranch);
-          showSuccessToast(`📍 Estás en ${nearestBranch.name}`);
-        } else {
-          console.log("No se detectó ninguna sucursal cercana (dentro de 2km).");
-        }
 
       }, (error) => {
         console.warn("Error obteniendo ubicación:", error);
@@ -210,46 +194,46 @@ function MainAppContent() {
     const normalizedScannedCode = normalizeCode(decodedText);
     console.log(`Normalized scanned code: ${normalizedScannedCode}`);
 
-    // Search for the product in local data
-    let foundProduct = null;
-    let searchScope = Object.entries(LOCAL_BRAND_DEFAULT_PRODUCTS_MAP);
+    // Search for the product in brand CSVs
+    const brandIds = detectedSupermarket
+      ? [detectedSupermarket.brandKey]
+      : ['carrefour', 'dia', 'changomas', 'jumbo', 'vea', 'vital', 'easy'];
 
-    // If we detected a supermarket, we ONLY search in that supermarket's list
-    if (detectedSupermarket) {
-      console.log(`DETECTED SUPERMARKET ACTIVE: Buscando producto SOLO en: ${detectedSupermarket.brandKey}`);
-      // Filter the search scope so it ONLY contains the detected brand
-      searchScope = searchScope.filter(([brandKey]) => brandKey === detectedSupermarket.brandKey);
-    } else {
-      console.log("No detected supermarket. Searching in ALL brands.");
-    }
+    Promise.all(brandIds.map(async (brandId) => {
+      try {
+        const branchId = (detectedSupermarket && detectedSupermarket.brandKey === brandId)
+          ? detectedSupermarket.branchData.id_sucursal
+          : LOCAL_BRAND_DEFAULT_BRANCH_IDS[brandId];
 
-    for (const [brandKey, products] of searchScope) {
-      foundProduct = products.find(p => {
-        // ID format usually: "EAN-BranchID" or "PaddedEAN-BranchID"
-        const idParts = p.id.split('-');
-        if (idParts.length > 0) {
-          const idCodePart = idParts[0]; // Get the EAN part
-          const normalizedIdCode = normalizeCode(idCodePart);
-          return normalizedIdCode === normalizedScannedCode;
-        }
-        return false;
-      });
-      if (foundProduct) break;
-    }
+        if (!branchId) return null;
 
-    if (foundProduct) {
-      // Set the found product as the "editing" product (but without firebaseId, so it's treated as new)
-      setEditingProduct({
-        nombre: foundProduct.nombre,
-        valor: foundProduct.precio || '',
-        cantidad: 1,
-        // We don't have category mapping here easily, so we let ProductForm handle default/fallback
-      });
-      setShowProductForm(true);
-      showSuccessToast(`Producto encontrado: ${foundProduct.nombre}`);
-    } else {
-      showErrorAlert('Producto no encontrado', `No se encontró información para el código: ${decodedText}. Puedes ingresarlo manualmente.`);
-    }
+        const products = await fetchCSV(`/data/products/${brandId}/${branchId}.csv`);
+        const found = products.find(p => {
+          const idParts = (p.id || '').split('-');
+          if (idParts.length > 0) {
+            const idCodePart = idParts[0];
+            return normalizeCode(idCodePart) === normalizedScannedCode;
+          }
+          return false;
+        });
+        return found;
+      } catch (e) {
+        return null;
+      }
+    })).then(results => {
+      const foundProduct = results.find(r => r !== null);
+      if (foundProduct) {
+        setEditingProduct({
+          nombre: foundProduct.nombre,
+          valor: foundProduct.precio || '',
+          cantidad: 1,
+        });
+        setShowProductForm(true);
+        showSuccessToast(`Producto encontrado: ${foundProduct.nombre}`);
+      } else {
+        showErrorAlert('Producto no encontrado', `No se encontró información para el código: ${decodedText}.`);
+      }
+    });
   };
 
   const handleCloseScanner = () => {

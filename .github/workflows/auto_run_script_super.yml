@@ -54,7 +54,7 @@ jobs:
         fi
 
     - name: Run Import Script
-      run: node scripts/importProductsToJson.js
+      run: node --max-old-space-size=4096 scripts/importProductsToJson.js
       env:
         FIREBASE_SERVICE_ACCOUNT_KEY: './scripts/serviceAccountKey.json'
 
