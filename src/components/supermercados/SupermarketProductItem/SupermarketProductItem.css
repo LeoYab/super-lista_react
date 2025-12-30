@@ -95,7 +95,7 @@
   color: var(--danger-color);
 }
 
-/* Media Queries para Responsividad del item */
+
 @media (max-width: 768px) {
   .supermarket-product-item-card {
     padding: var(--spacing-md);

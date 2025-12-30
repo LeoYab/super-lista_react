@@ -44,6 +44,9 @@
   display: flex;
   flex-direction: column;
   gap: var(--spacing-lg);
+  width: 100%;
+  overflow-x: hidden;
+  /* Prevent page-level horizontal scroll */
 }
 
 .supermercados-container h2 {
@@ -61,6 +64,14 @@
   border-radius: var(--border-radius-lg);
   box-shadow: var(--shadow-md);
   border: 1px solid var(--border-color-light);
+  max-width: 100%;
+  width: 100%;
+  /* Ensure it takes full available width */
+  min-width: 0;
+  /* CRITICAL: Allows flex item to shrink below content size, enabling inner scroll */
+  /* Prevent wrapper from expanding beyond container */
+  overflow: hidden;
+  /* Ensure content stays within borders if needed, though slider handles scroll */
 }
 
 .supermarket-slider-wrapper h3 {
@@ -72,11 +83,20 @@
 
 .supermarket-slider {
   display: flex;
-  justify-content: center;
+  flex-wrap: nowrap;
+  /* Ensure single row */
   overflow-x: auto;
+  /* Enable horizontal scrolling */
   -webkit-overflow-scrolling: touch;
+  /* Smooth scrolling on iOS */
   gap: var(--spacing-md);
   padding-bottom: var(--spacing-sm);
+  width: 100%;
+  /* Ensure it takes full width */
+  justify-content: flex-start;
+  /* Align items to start */
+  scrollbar-width: thin;
+  /* Firefox */
 }
 
 .supermarket-slider::-webkit-scrollbar {
@@ -94,6 +114,7 @@
 
 .supermarket-card {
   flex: 0 0 auto;
+  /* Prevent shrinking and growing */
   width: 130px;
   display: flex;
   flex-direction: column;
@@ -280,11 +301,19 @@
 
   .supermarket-slider {
     justify-content: flex-start;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    padding-bottom: 10px;
+    /* Space for scrollbar if visible */
   }
 
   .supermarket-card {
     width: 110px;
     padding: var(--spacing-sm);
+    flex-shrink: 0;
+    /* Important: prevents shrinking */
+    flex: 0 0 auto;
+    /* Ensures fixed width */
   }
 
   .supermarket-logo,
@@ -299,8 +328,75 @@
     align-items: stretch;
     gap: var(--spacing-sm);
   }
+}
 
-  .product-search-bar button {
-    width: 100%;
-  }
+/* Custom Searchable Dropdown */
+.custom-dropdown-container {
+  position: relative;
+  width: 100%;
+}
+
+.dropdown-trigger {
+  padding: 10px;
+  background-color: var(--input-bg-color);
+  border: 1px solid #ccc;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 42px;
+  user-select: none;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background-color: var(--card-bg-color);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-medium);
+  z-index: 1000;
+  margin-top: 4px;
+  overflow: hidden;
+  animation: fadeIn 0.1s ease-out;
+}
+
+.dropdown-search-container {
+  padding: 8px;
+  background-color: var(--background-light-color);
+  border-bottom: 1px solid var(--border-color-light);
+}
+
+.dropdown-search-input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-sm);
+  outline: none;
+  font-family: inherit;
+}
+
+.dropdown-list {
+  max-height: 250px;
+  overflow-y: auto;
+}
+
+.dropdown-item {
+  padding: 12px 10px;
+  cursor: pointer;
+  border-bottom: 1px solid var(--border-color-light);
+  transition: background-color 0.2s;
+  color: var(--text-color-primary);
+  font-size: 0.9em;
+}
+
+.dropdown-item:last-child {
+  border-bottom: none;
+}
+
+.dropdown-item:hover {
+  background-color: var(--primary-light-color);
 }

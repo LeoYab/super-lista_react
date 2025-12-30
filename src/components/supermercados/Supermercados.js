@@ -5,28 +5,13 @@ import Button from '../Buttons/Button';
 import SupermarketProductItem from './SupermarketProductItem/SupermarketProductItem';
 import { Html5Qrcode, Html5QrcodeSupportedFormats } from "html5-qrcode";
 
-import { dbFirestore } from '../../firebase/config';
-import { collection, getDocs, query, limit, startAfter, where, orderBy } from 'firebase/firestore';
 
-import carrefourSuperData from '../../data/super/carrefour.json';
-import diaSuperData from '../../data/super/dia.json';
-import changomasSuperData from '../../data/super/changomas.json';
 
-import carrefourDefaultProducts from '../../data/products/carrefour/1.json';
-import diaDefaultProducts from '../../data/products/dia/87.json';
-import changomasDefaultProducts from '../../data/products/changomas/1004.json';
+import { fetchCSV } from '../../utils/csvParser';
 
-const LOCAL_BRANDS_BRANCHES_MAP = {
-  carrefour: carrefourSuperData,
-  dia: diaSuperData,
-  changomas: changomasSuperData,
-};
+const LOCAL_BRANDS_BRANCHES_MAP = {}; // Will be filled dynamically
 
-const LOCAL_BRAND_DEFAULT_PRODUCTS_MAP = {
-  carrefour: carrefourDefaultProducts,
-  dia: diaDefaultProducts,
-  changomas: changomasDefaultProducts,
-};
+const LOCAL_BRAND_DEFAULT_PRODUCTS_MAP = {}; // Will be filled dynamically
 
 const LOCAL_BRAND_DEFAULT_BRANCH_IDS = {
   dia: '87',
@@ -53,6 +38,10 @@ const Supermercados = () => {
   const [isLoadingBrands, setIsLoadingBrands] = useState(true);
   const [isLoadingProducts, setIsLoadingProducts] = useState(false); // Estado para la UI
   const [allBrandsFirebase, setAllBrandsFirebase] = useState([]);
+  const [availableBranches, setAvailableBranches] = useState([]);
+  const [branchSearchTerm, setBranchSearchTerm] = useState('');
+  const [isBranchDropdownOpen, setIsBranchDropdownOpen] = useState(false);
+  const [userLocation, setUserLocation] = useState(null);
   const [dataSource, setDataSource] = useState('Firestore');
   const [error, setError] = useState(null);
 
@@ -102,42 +91,72 @@ const Supermercados = () => {
       setIsLoadingBrands(true);
       setError(null);
       try {
-        console.log("Intentando cargar marcas de supermercados desde Firestore...");
-        const querySnapshot = await getDocs(collection(dbFirestore, 'supermercados'));
-        const brands = querySnapshot.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data()
-        }));
-
-        if (brands.length > 0) {
-          setAllBrandsFirebase(brands);
-          setDataSource('Firestore');
-          console.log("Marcas cargadas exitosamente desde Firestore.");
-        } else {
-          console.warn("Firestore no devolvió marcas. Intentando cargar desde archivos locales...");
-          throw new Error("No data from Firestore, attempting local fallback for brands.");
-        }
-
-      } catch (firestoreError) {
-        console.error("Error al cargar las marcas de supermercados desde Firestore. Fallback a datos locales:", firestoreError);
-        setError("Error al cargar marcas de supermercados. Usando datos locales de respaldo.");
+        console.log("Cargando marcas de supermercados desde local...");
+        const response = await fetch('/data/supermarkets_list.json');
+        if (!response.ok) throw new Error("Failed to load local brands");
+        const localBrands = await response.json();
+        setAllBrandsFirebase(localBrands.map(brand => ({
+          ...brand,
+          id: brand.id,
+          logo: `logo_super/logo_${brand.id}.png`,
+        })));
         setDataSource('Local (Marcas)');
-
-        const localBrands = Object.entries(LOCAL_BRANDS_BRANCHES_MAP).map(([brandId, sucursales]) => {
-          const firstSucursal = sucursales[0];
-          return {
-            id: brandId,
-            nombre: firstSucursal?.marca || brandId.charAt(0).toUpperCase() + brandId.slice(1),
-            logo: `logo_super/logo_${brandId}.png`,
-          };
-        });
-        setAllBrandsFirebase(localBrands);
+      } catch (err) {
+        console.error("Error loading brands:", err);
+        setError("Error al cargar las marcas de supermercados.");
       } finally {
         setIsLoadingBrands(false);
       }
     };
     fetchAllBrands();
   }, []);
+
+  const getDistance = (lat1, lon1, lat2, lon2) => {
+    const R = 6371; // Radio de la tierra en km
+    const dLat = (lat2 - lat1) * (Math.PI / 180);
+    const dLon = (lon2 - lon1) * (Math.PI / 180);
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) *
+      Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    const d = R * c; // Distancia en km
+    return d;
+  };
+
+  useEffect(() => {
+    if (availableBranches.length > 0 && selectedBrand) {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition((position) => {
+          const { latitude, longitude } = position.coords;
+          setUserLocation({ latitude, longitude });
+
+          let closestBranch = null;
+          let minDistance = Infinity;
+
+          availableBranches.forEach(branch => {
+            if (branch.latitud && branch.longitud) {
+              const dist = getDistance(latitude, longitude, parseFloat(branch.latitud), parseFloat(branch.longitud));
+              if (dist < minDistance) {
+                minDistance = dist;
+                closestBranch = branch;
+              }
+            }
+          });
+
+          if (closestBranch) {
+            console.log(`GPS: Sucursal más cercana encontrada: ${closestBranch.nombre_sucursal} (${minDistance.toFixed(2)} km)`);
+            // Solo cambiar si es diferente para evitar loops o resets innecesarios, 
+            // aunque 'selectedBranch' no es dependencia, asi que está bien.
+            setSelectedBranch(closestBranch);
+          }
+        }, (err) => {
+          console.warn("GPS error or permission denied:", err);
+        });
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [availableBranches]); // Ejecutar cuando cambian las sucursales disponibles
 
   const fetchAndSetBranch = useCallback(async (brand) => {
     // No setear isLoadingProducts aquí, déjalo para fetchProductsData
@@ -147,68 +166,33 @@ const Supermercados = () => {
     lastVisibleProductRef.current = null;
     setProductsToDisplay([]);
     setSearchTerm('');
+    setBranchSearchTerm(''); // Reset branch search
     setError(null);
     setIsSearching(false);
 
     let branchToSet = null;
-    let currentDataSource = 'Firestore';
 
     try {
-      const sucursalesCollectionRef = collection(dbFirestore, 'supermercados', brand.id, 'sucursales');
-      const sucursalesSnapshot = await getDocs(sucursalesCollectionRef);
-      const availableBranches = sucursalesSnapshot.docs.map(doc => ({
-        id_sucursal: doc.id,
-        ...doc.data()
-      }));
+      const safeBrandId = brand.id.toLowerCase();
+      const response = await fetch(`/data/super/${safeBrandId}.json`);
+      if (!response.ok) throw new Error("Local branch data not found");
+      const localBranchesList = await response.json();
+      setAvailableBranches(localBranchesList);
 
-      if (availableBranches.length === 0) {
-        console.warn(`Firestore no devolvió sucursales para ${brand.nombre}. Intentando carga local.`);
-        throw new Error("No data from Firestore, attempting local fallback for branch.");
-      }
-
-      if (brand.sucursal_id_default) {
-        branchToSet = availableBranches.find(b => String(b.id_sucursal) === String(brand.sucursal_id_default));
-      }
-      if (!branchToSet && availableBranches.length > 0) {
-        branchToSet = availableBranches[0];
-      }
-
-      if (!branchToSet) {
-        console.warn(`No se encontró la sucursal por defecto (${brand.sucursal_id_default || 'primera'}) para ${brand.nombre} en Firestore.`);
-        throw new Error("Default/first branch not found in Firestore. Attempting local fallback.");
-      }
-
-      setDataSource(currentDataSource);
-
-    } catch (firestoreError) {
-      console.error(`Error al cargar sucursal por defecto para ${brand.nombre} desde Firestore. Fallback a datos locales:`, firestoreError);
-      setError(`Error al cargar sucursal de ${brand.nombre}. Usando datos locales de respaldo.`);
-      currentDataSource = 'Local (Sucursales)';
-      setDataSource(currentDataSource);
-
-      const localBranchesList = LOCAL_BRANDS_BRANCHES_MAP[brand.id.toLowerCase()];
-      if (localBranchesList) {
-        const localDefaultBranchId = LOCAL_BRAND_DEFAULT_BRANCH_IDS[brand.id.toLowerCase()];
-        if (localDefaultBranchId) {
-          const matchingLocalBranch = localBranchesList.find(b => String(b.id_sucursal) === String(localDefaultBranchId));
-          if (matchingLocalBranch) {
-            branchToSet = {
-              id_sucursal: String(matchingLocalBranch.id_sucursal),
-              nombre_sucursal: matchingLocalBranch.nombre_sucursal || `${brand.id} Sucursal Local`
-            };
-            console.log(`Local (Sucursales): Sucursal por ID predefinido para ${brand.nombre}: ${branchToSet.nombre_sucursal} (ID: ${branchToSet.id_sucursal})`);
-          } else {
-            console.warn(`No se encontró la sucursal con ID ${localDefaultBranchId} en los datos locales de ${brand.nombre}, usando la primera.`);
-            branchToSet = getLocalBranchInfoFromBranchesList(brand.id, localBranchesList);
-          }
+      const localDefaultBranchId = LOCAL_BRAND_DEFAULT_BRANCH_IDS[safeBrandId];
+      if (localDefaultBranchId) {
+        const matchingLocalBranch = localBranchesList.find(b => String(b.id_sucursal) === String(localDefaultBranchId));
+        if (matchingLocalBranch) {
+          branchToSet = matchingLocalBranch; // Store full object
         } else {
-          console.warn(`No hay ID predefinido para ${brand.nombre}, usando la primera sucursal local.`);
-          branchToSet = getLocalBranchInfoFromBranchesList(brand.id, localBranchesList);
+          branchToSet = localBranchesList[0] || null;
         }
       } else {
-        console.error(`No hay datos de sucursales locales disponibles para la marca ${brand.nombre}.`);
-        branchToSet = null;
+        branchToSet = localBranchesList[0] || null;
       }
+    } catch (err) {
+      console.warn("Error fetching specific branch data:", err);
+      // Fallback or just ignore if strict local?
     } finally {
       console.log("Debug - fetchAndSetBranch: Valor final de branchToSet antes de setSelectedBranch:", branchToSet);
       setSelectedBranch(branchToSet);
@@ -259,140 +243,65 @@ const Supermercados = () => {
     let currentDataSourceUsed = 'Firestore';
 
     try {
-      if (dataSource.startsWith('Firestore')) {
-        const productsCollectionRef = collection(dbFirestore, 'supermercados', brandId, 'sucursales', branchId, 'productos');
-        let productsQuery;
+      currentDataSourceUsed = 'Local (Productos)';
+      console.log(`Cargando productos para ${brandId}/${branchId} desde archivos locales...`);
 
-        const searchField = 'nombre';
-        // CAMBIO: Convertir el término de búsqueda a MAYÚSCULAS para Firestore
-        const firestoreSearchTerm = searchTermValueParam.toUpperCase();
+      if (initialLoad || (isSearching && filteredLocalProductsRef.current.length === 0) || (!isSearching && allLocalProductsLoadedRef.current.length === 0)) {
+        try {
+          const jsonUrl = `/data/products/${brandId.toLowerCase()}/${branchId}.json`;
+          const response = await fetch(jsonUrl);
 
-        if (searchModeParam && firestoreSearchTerm) {
-          productsQuery = query(
-            productsCollectionRef,
-            where(searchField, '>=', firestoreSearchTerm),
-            where(searchField, '<=', firestoreSearchTerm + '\uf8ff'),
-            orderBy(searchField),
-            limit(PRODUCTS_PER_PAGE)
-          );
-          if (!initialLoad && lastVisibleProductRef.current) {
-            productsQuery = query(
-              productsCollectionRef,
-              where(searchField, '>=', firestoreSearchTerm),
-              where(searchField, '<=', firestoreSearchTerm + '\uf8ff'),
-              orderBy(searchField),
-              startAfter(lastVisibleProductRef.current),
-              limit(PRODUCTS_PER_PAGE)
-            );
-            console.log("Firestore Query: Usando startAfter para búsqueda paginada.");
-          } else {
-            console.log("Firestore Query: Búsqueda inicial en Firestore con término:", firestoreSearchTerm);
+          if (!response.ok) {
+            throw new Error(`Failed to fetch ${jsonUrl} (Status: ${response.status})`);
           }
-        } else {
-          // Si no hay modo de búsqueda o término, cargamos sin condiciones de búsqueda
-          productsQuery = query(
-            productsCollectionRef,
-            orderBy(searchField),
-            limit(PRODUCTS_PER_PAGE)
-          );
-          if (!initialLoad && lastVisibleProductRef.current) {
-            productsQuery = query(
-              productsCollectionRef,
-              orderBy(searchField),
-              startAfter(lastVisibleProductRef.current),
-              limit(PRODUCTS_PER_PAGE)
-            );
-            console.log("Firestore Query: Usando startAfter para paginación normal.");
-          } else {
-            console.log("Firestore Query: Paginación normal inicial (sin búsqueda).");
-          }
+
+          const allBranchProducts = await response.json();
+
+          allLocalProductsLoadedRef.current = allBranchProducts.map(p => ({
+            ...p,
+            supermercado_marca: selectedBrand?.nombre || brandId.charAt(0).toUpperCase() + brandId.slice(1),
+            sucursal_nombre: selectedBranch?.nombre_sucursal || 'Desconocida'
+          }));
+
+          console.log(`Local: Se cargaron ${allLocalProductsLoadedRef.current.length} productos para la sucursal ${branchId} desde ${jsonUrl}.`);
+        } catch (localError) {
+          console.error(`Error al cargar productos locales para ${brandId}/${branchId}:`, localError);
+          setError("Error: No se pudieron cargar productos. (Archivo de sucursal no encontrado)");
+          allLocalProductsLoadedRef.current = [];
+          setHasMoreProducts(false);
+          isFetchingRef.current = false;
+          setIsLoadingProducts(false);
+          return;
         }
-
-        console.log(`Cargando productos para ${brandId}/${branchId} desde Firestore...`);
-        const productsSnapshot = await getDocs(productsQuery);
-        loadedProductsChunk = productsSnapshot.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data(),
-          supermercado_marca: selectedBrand?.nombre || brandId.charAt(0).toUpperCase() + brandId.slice(1),
-          sucursal_nombre: selectedBranch?.nombre_sucursal || 'Desconocida'
-        }));
-
-        console.log(`Firestore: Se cargaron ${loadedProductsChunk.length} productos.`);
-        if (productsSnapshot.docs.length > 0) {
-          lastVisibleProductRef.current = productsSnapshot.docs[productsSnapshot.docs.length - 1];
-          console.log(`Firestore: lastVisibleProductRef.current actualizado a: ${lastVisibleProductRef.current.id}`);
-        } else {
-          lastVisibleProductRef.current = null;
-          console.log(`Firestore: No se encontraron documentos, lastVisibleProductRef.current = null.`);
-        }
-        setHasMoreProducts(loadedProductsChunk.length === PRODUCTS_PER_PAGE);
-
-      } else {
-        currentDataSourceUsed = 'Local (Productos)';
-        console.log(`Cargando productos para ${brandId}/${branchId} desde archivos locales...`);
-
-        if (initialLoad || (isSearching && filteredLocalProductsRef.current.length === 0) || (!isSearching && allLocalProductsLoadedRef.current.length === 0)) {
-          try {
-            let productDataModule;
-            try {
-              productDataModule = await import(`../../data/products/${brandId.toLowerCase()}/${branchId}.json`)
-                .then(module => module.default);
-            } catch (specificFileError) {
-              console.warn(`No se encontró el archivo específico de productos: ../../data/products/${brandId.toLowerCase()}/${branchId}.json. Intentando con la sucursal por defecto...`);
-              productDataModule = LOCAL_BRAND_DEFAULT_PRODUCTS_MAP[brandId.toLowerCase()];
-              if (!productDataModule) {
-                throw new Error(`No hay datos de productos por defecto para la marca ${brandId}.`);
-              }
-            }
-            allLocalProductsLoadedRef.current = productDataModule.map(p => ({
-              id: p.id_producto,
-              ...p,
-              supermercado_marca: selectedBrand?.nombre || brandId.charAt(0).toUpperCase() + brandId.slice(1),
-              sucursal_nombre: selectedBranch?.nombre_sucursal || 'Desconocida'
-            }));
-            console.log(`Local: Se cargaron ${allLocalProductsLoadedRef.current.length} productos TOTALES desde el archivo JSON.`);
-          } catch (localError) {
-            console.error(`Error al cargar productos locales para ${brandId}/${branchId}:`, localError);
-            setError("Error: No se pudieron cargar productos ni de Firestore ni de archivos locales.");
-            allLocalProductsLoadedRef.current = [];
-            setHasMoreProducts(false);
-            isFetchingRef.current = false; // Asegurarse de resetear en caso de error temprano
-            setIsLoadingProducts(false); // Asegurarse de resetear en caso de error temprano
-            return; // Importante para salir si hay error en la carga local
-          }
-        }
-
-        let productsToWorkWith;
-        if (searchModeParam && searchTermValueParam) {
-          // Si estamos en modo búsqueda local, siempre aplicamos el filtro al conjunto completo
-          // y reiniciamos el índice de paginación para la nueva búsqueda
-          productsToWorkWith = applySearchFilter(allLocalProductsLoadedRef.current, searchTermValueParam); // Usar searchTermValueParam original
-          filteredLocalProductsRef.current = productsToWorkWith; // Guardar los productos filtrados
-          localPaginationIndexRef.current = 0; // Reiniciar índice de paginación para la búsqueda
-          console.log(`Local: Filtrados ${filteredLocalProductsRef.current.length} productos para búsqueda: "${searchTermValueParam}"`);
-        } else {
-          // Si no estamos buscando, trabajamos con todos los productos locales cargados
-          productsToWorkWith = allLocalProductsLoadedRef.current;
-          filteredLocalProductsRef.current = []; // Limpiar los productos filtrados si no estamos buscando
-          if (initialLoad) {
-            localPaginationIndexRef.current = 0; // Reiniciar índice de paginación para carga normal inicial
-          }
-        }
-
-        const startIndex = localPaginationIndexRef.current;
-        const endIndex = startIndex + PRODUCTS_PER_PAGE;
-        loadedProductsChunk = productsToWorkWith.slice(startIndex, endIndex);
-
-        localPaginationIndexRef.current = endIndex;
-
-        setHasMoreProducts(endIndex < productsToWorkWith.length);
       }
+
+      let productsToWorkWith;
+      if (searchModeParam && searchTermValueParam) {
+        productsToWorkWith = applySearchFilter(allLocalProductsLoadedRef.current, searchTermValueParam);
+        filteredLocalProductsRef.current = productsToWorkWith;
+        localPaginationIndexRef.current = 0;
+        console.log(`Local: Filtrados ${filteredLocalProductsRef.current.length} productos para búsqueda: "${searchTermValueParam}"`);
+      } else {
+        productsToWorkWith = allLocalProductsLoadedRef.current;
+        filteredLocalProductsRef.current = [];
+        if (initialLoad) {
+          localPaginationIndexRef.current = 0;
+        }
+      }
+
+      const startIndex = localPaginationIndexRef.current;
+      const endIndex = startIndex + PRODUCTS_PER_PAGE;
+      loadedProductsChunk = productsToWorkWith.slice(startIndex, endIndex);
+
+      localPaginationIndexRef.current = endIndex;
+
+      setHasMoreProducts(endIndex < productsToWorkWith.length);
 
       setProductsToDisplay(prevProducts => {
         let newProducts;
-        if (initialLoad || searchModeParam) { // Si es carga inicial o modo búsqueda, reemplazar
+        if (initialLoad || searchModeParam) {
           newProducts = loadedProductsChunk;
-        } else { // Si es paginación en modo normal, añadir
+        } else {
           const newProductIds = new Set(loadedProductsChunk.map(p => p.id));
           const filteredPrevProducts = prevProducts.filter(p => !newProductIds.has(p.id));
           newProducts = [...filteredPrevProducts, ...loadedProductsChunk];
@@ -407,8 +316,8 @@ const Supermercados = () => {
       setProductsToDisplay([]);
       setHasMoreProducts(false);
     } finally {
-      isFetchingRef.current = false; // Restablecer useRef al final
-      setIsLoadingProducts(false); // Restablecer estado de la UI al final
+      isFetchingRef.current = false;
+      setIsLoadingProducts(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedBrand, selectedBranch, dataSource, applySearchFilter]);
@@ -562,35 +471,39 @@ const Supermercados = () => {
     const normalizedScannedCode = normalizeCode(decodedText);
     console.log(`Normalized scanned code: ${normalizedScannedCode}`);
 
-    // Search for the product in all local data
-    const results = [];
-    Object.entries(LOCAL_BRAND_DEFAULT_PRODUCTS_MAP).forEach(([brand, products]) => {
-      // Find product where the ID part (before dash) matches the scanned code (normalized)
-      const found = products.find(p => {
-        // ID format usually: "EAN-BranchID" or "PaddedEAN-BranchID"
-        const idParts = p.id.split('-');
-        if (idParts.length > 0) {
-          const idCodePart = idParts[0]; // Get the EAN part
-          const normalizedIdCode = normalizeCode(idCodePart);
-          return normalizedIdCode === normalizedScannedCode;
-        }
-        return false;
-      });
+    // Search for the product in brand CSVs
+    const brandIds = ['carrefour', 'dia', 'changomas', 'jumbo', 'vea', 'vital', 'easy'];
 
-      if (found) {
-        results.push({
-          ...found,
-          supermercado_marca: brand.charAt(0).toUpperCase() + brand.slice(1),
-          // We don't have branch name here easily without looking it up, but we can use default
-          sucursal_nombre: 'Sucursal Local'
+    Promise.all(brandIds.map(async (brandId) => {
+      try {
+        const branchId = LOCAL_BRAND_DEFAULT_BRANCH_IDS[brandId];
+        if (!branchId) return null;
+        const products = await fetchCSV(`/data/products/${brandId}/${branchId}.csv`);
+        const found = products.find(p => {
+          const idParts = (p.id || '').split('-');
+          if (idParts.length > 0) {
+            const idCodePart = idParts[0];
+            return normalizeCode(idCodePart) === normalizedScannedCode;
+          }
+          return false;
         });
+
+        if (found) {
+          return {
+            ...found,
+            supermercado_marca: brandId.charAt(0).toUpperCase() + brandId.slice(1),
+            sucursal_nombre: 'Sucursal Local'
+          };
+        }
+      } catch (e) { }
+      return null;
+    })).then(foundResults => {
+      const results = foundResults.filter(r => r !== null);
+      setScannedProducts(results);
+      if (results.length === 0) {
+        alert(`No se encontraron productos con el código: ${decodedText}`);
       }
     });
-
-    setScannedProducts(results);
-    if (results.length === 0) {
-      alert(`No se encontraron productos con el código: ${decodedText}`);
-    }
   };
 
   const handleFileUpload = async (e) => {
@@ -807,14 +720,90 @@ const Supermercados = () => {
         <div className="supermercados-list">
           {selectedBrand ? (
             <>
-              <h3>
-                Precios en{' '}
-                {selectedBranch ? (
-                  selectedBranch.nombre_sucursal
-                ) : (
-                  selectedBrand.nombre
+              <div className="branch-selector-container" style={{ marginBottom: '15px' }}>
+                <h3>
+                  Precios en{' '}
+                  {selectedBrand.nombre}
+                </h3>
+
+                {availableBranches.length > 0 && (
+                  <div className="branch-selection-controls" style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+
+                    <div className="custom-dropdown-container">
+                      <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>Sucursal:</label>
+                      <div
+                        className="dropdown-trigger"
+                        onClick={() => setIsBranchDropdownOpen(!isBranchDropdownOpen)}
+                      >
+                        <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                          {selectedBranch ? (() => {
+                            let label = selectedBranch.direccion_sucursal || selectedBranch.nombre_sucursal || `Sucursal ${selectedBranch.id_sucursal}`;
+                            const idPrefixPattern = new RegExp(`^${selectedBranch.id_sucursal}\\s*[-–]?\\s*`, 'i');
+                            label = label.replace(idPrefixPattern, '');
+                            return `${selectedBranch.id_sucursal} - ${label.toUpperCase()}`;
+                          })() : 'Seleccione una sucursal...'}
+                        </span>
+                        <span style={{ marginLeft: '10px' }}>▼</span>
+                      </div>
+
+                      {isBranchDropdownOpen && (
+                        <div className="dropdown-menu">
+                          <div className="dropdown-search-container">
+                            <input
+                              autoFocus
+                              className="dropdown-search-input"
+                              placeholder="🔍 Buscar sucursal..."
+                              value={branchSearchTerm}
+                              onChange={(e) => setBranchSearchTerm(e.target.value)}
+                              onClick={(e) => e.stopPropagation()}
+                            />
+                          </div>
+                          <div className="dropdown-list">
+                            {availableBranches
+                              .filter(branch => {
+                                if (!branchSearchTerm) return true;
+                                const search = branchSearchTerm.toLowerCase();
+                                const text = `${branch.id_sucursal} ${branch.direccion_sucursal || ''} ${branch.nombre_sucursal || ''}`.toLowerCase();
+                                return text.includes(search);
+                              })
+                              .map((branch) => {
+                                let label = branch.direccion_sucursal || branch.nombre_sucursal || `Sucursal ${branch.id_sucursal}`;
+                                const idPrefixPattern = new RegExp(`^${branch.id_sucursal}\\s*[-–]?\\s*`, 'i');
+                                label = label.replace(idPrefixPattern, '');
+
+                                return (
+                                  <div
+                                    key={branch.id_sucursal}
+                                    className="dropdown-item"
+                                    onClick={() => {
+                                      setSelectedBranch(branch);
+                                      setIsBranchDropdownOpen(false);
+                                      setBranchSearchTerm('');
+                                    }}
+                                  >
+                                    <strong>{branch.id_sucursal}</strong> - {label.toUpperCase()}
+                                  </div>
+                                );
+                              })}
+                            {availableBranches.filter(branch => {
+                              if (!branchSearchTerm) return true;
+                              const search = branchSearchTerm.toLowerCase();
+                              const text = `${branch.id_sucursal} ${branch.direccion_sucursal || ''} ${branch.nombre_sucursal || ''}`.toLowerCase();
+                              return text.includes(search);
+                            }).length === 0 && (
+                                <div className="dropdown-item" style={{ cursor: 'default', color: '#999' }}>
+                                  No se encontraron resultados
+                                </div>
+                              )}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                  </div>
                 )}
-              </h3>
+              </div>
+
               {error && <p className="error-message">{error}</p>}
               <p className="data-source-info">Datos cargados desde: <strong>{dataSource}</strong></p>
 
