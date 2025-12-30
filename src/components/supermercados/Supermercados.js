@@ -155,7 +155,6 @@ const Supermercados = () => {
         });
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [availableBranches]); // Ejecutar cuando cambian las sucursales disponibles
 
   const fetchAndSetBranch = useCallback(async (brand) => {
