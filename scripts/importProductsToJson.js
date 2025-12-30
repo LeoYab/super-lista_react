@@ -223,7 +223,7 @@ async function procesarCsvStream(streamCsv, callback, filenameForLog = 'CSV desc
           }
         }
 
-        console.log(`[CSV] Delimitador detectado para ${filenameForLog}: '${detectedDelimiter}'`);
+        // console.log(`[CSV] Delimitador detectado para ${filenameForLog}: '${detectedDelimiter}'`);
 
         parser = csv({
           separator: detectedDelimiter,
@@ -304,7 +304,7 @@ function normalizeProductData(product, targetBrand, targetSucursalId) {
   // Validación y parseo de precio mejorado
   let precio = parseFloat(String(product.productos_precio_lista).replace(',', '.'));
   if (isNaN(precio) || precio <= 0) {
-    console.warn(`Precio inválido o cero para producto '${descripcion}' (precio: '${product.productos_precio_lista}'). Saltando.`);
+    // console.warn(`Precio inválido o cero para producto '${descripcion}' (precio: '${product.productos_precio_lista}'). Saltando.`);
     return null;
   }
 
@@ -573,7 +573,7 @@ async function generarJsonFiltrados() {
     }
 
     const allFoundZips = directory.files.filter(f => f.path.toLowerCase().endsWith('.zip')).map(f => f.path);
-    console.log('DEBUG: Todos los ZIPs encontrados (rutas completas):', allFoundZips);
+    // console.log('DEBUG: Todos los ZIPs encontrados (rutas completas):', allFoundZips);
 
     // Filter deleted: Process all ZIPs found
     let zipsInternos = directory.files.filter(f => f.path.toLowerCase().endsWith('.zip'));
@@ -585,13 +585,16 @@ async function generarJsonFiltrados() {
     }
 
     console.log(`Encontrados ${zipsInternos.length} ZIPs internos especificados para procesar.`);
-    console.log('Listando ZIPs internos que serán procesados:');
-    zipsInternos.forEach(zip => console.log(`- ${zip.path}`));
+    // console.log('Listando ZIPs internos que serán procesados:');
+    // zipsInternos.forEach(zip => console.log(`- ${zip.path}`));
 
     const allFilteredSucursalesByBrand = new Map();
     const processingErrors = [];
 
+    let currentZipCount = 0;
+    const totalZipsCount = zipsInternos.length;
     for (const zip of zipsInternos) {
+      currentZipCount++;
       const internalZipFileName = path.basename(zip.path);
 
       const zipIdMatch = internalZipFileName.match(/comercio-sepa-(\d+)/);
@@ -613,7 +616,9 @@ async function generarJsonFiltrados() {
         continue;
       }
 
-      console.log(`Procesando ZIP interno: ${internalZipFileName}`);
+      if (currentZipCount % 5 === 0 || currentZipCount === 1 || currentZipCount === totalZipsCount) {
+        console.log(`Procesando ZIPs: ${currentZipCount}/${totalZipsCount}...`);
+      }
       try {
         const tempInnerZipPath = path.join(TEMP_DATA_DIR, `inner_${Math.random().toString(36).substring(7)}.zip`);
         await pipeline(zip.stream(), fs.createWriteStream(tempInnerZipPath));
