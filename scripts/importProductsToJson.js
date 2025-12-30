@@ -156,8 +156,9 @@ async function writeToJson(data, filename) {
   try {
     const dir = path.dirname(filename);
     await fsp.mkdir(dir, { recursive: true });
-    await fsp.writeFile(filename, JSON.stringify(data, null, 2), 'utf8');
-    console.log(`Datos guardados en ${filename}`);
+    await fsp.writeFile(filename, JSON.stringify(data), 'utf8');
+    // Silenced repetitive log to keep output clean as requested
+    // console.log(`Datos guardados en ${filename}`);
   } catch (err) {
     console.error(`Error al escribir en ${filename}:`, err);
     throw err;
