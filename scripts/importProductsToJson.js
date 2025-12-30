@@ -296,12 +296,6 @@ function findMatchingBranch(branch, targetLocations) {
 
 function normalizeProductData(product, targetBrand, targetSucursalId) {
   // Validación mejorada de campos requeridos
-  // const descripcion = product.productos_descripcion?.trim();
-  // if (!descripcion || !product.productos_precio_lista) {
-  //   // console.warn('Producto con datos faltantes (descripción o precio), saltando:', product);
-  //   return null; 
-  // }
-
   const descripcion = product.productos_descripcion?.trim();
   if (!descripcion || !product.productos_precio_lista) {
     return null;
@@ -315,7 +309,7 @@ function normalizeProductData(product, targetBrand, targetSucursalId) {
   // }
   // Only return null silently
   if (isNaN(precio) || precio <= 0) {
-    console.warn(`Precio inválido o cero para producto '${descripcion}' (precio: '${product.productos_precio_lista}'). Saltando.`);
+    // Silently skip products with invalid/zero price as requested to avoid log flooding
     return null;
   }
 
@@ -521,12 +515,31 @@ async function writeFinalJsons(allFilteredSucursalesByBrand) {
   for (const jsonlPath of BRANCH_FILES_STARTED) {
     try {
       const jsonPath = jsonlPath.replace(/\.jsonl$/, '.json');
-      const lines = fs.readFileSync(jsonlPath, 'utf8').trim().split('\n');
-      const products = lines.map(line => JSON.parse(line));
+      // Optimización: leer línea por línea para evitar cargar todo el archivo en un string gigante
+      const content = fs.readFileSync(jsonlPath, 'utf8').trim();
+      if (!content) {
+        await fsp.writeFile(jsonPath, '[]', 'utf8');
+      } else {
+        const lines = content.split('\n');
+        const products = lines.map(line => {
+          try {
+            return JSON.parse(line);
+          } catch (e) {
+            return null;
+          }
+        }).filter(p => p !== null);
 
-      await fsp.writeFile(jsonPath, JSON.stringify(products, null, 2), 'utf8');
+        // No usar Pretty Print (null, 2) para ahorrar memoria y espacio en disco
+        await fsp.writeFile(jsonPath, JSON.stringify(products), 'utf8');
+      }
+
       await fsp.unlink(jsonlPath); // Eliminar el archivo temporal
       totalProductsFilesWritten++;
+
+      // Intentar sugerir al GC si es posible (aunque en Node.js es limitado)
+      if (totalProductsFilesWritten % 10 === 0) {
+        if (global.gc) global.gc();
+      }
     } catch (err) {
       console.error(`Error al convertir ${jsonlPath}:`, err.message);
     }
