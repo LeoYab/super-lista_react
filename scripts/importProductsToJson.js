@@ -8,6 +8,10 @@ const path = require('path');
 const fs = require('fs');
 const fsp = require('fs/promises');
 const crypto = require('crypto');
+const readline = require('readline');
+
+// Pre-calculate timestamp to avoid excessive Date object creation
+const EXECUTION_TIMESTAMP = new Date().toISOString();
 
 const pipeline = promisify(stream.pipeline);
 
@@ -343,7 +347,7 @@ function normalizeProductData(product, targetBrand, targetSucursalId) {
     supermercado_marca: targetBrand,
     sucursal_id: targetSucursalId,
     stock: true,
-    ultima_actualizacion: new Date().toISOString()
+    ultima_actualizacion: EXECUTION_TIMESTAMP
   };
 }
 
@@ -360,7 +364,7 @@ function normalizeBranchData(branch, brand, branchId) {
     latitud: parseFloat(branch.sucursales_latitud) || 0,
     longitud: parseFloat(branch.sucursales_longitud) || 0,
     marca: brand,
-    ultima_actualizacion: new Date().toISOString()
+    ultima_actualizacion: EXECUTION_TIMESTAMP
   };
 }
 
@@ -515,37 +519,48 @@ async function writeFinalJsons(allFilteredSucursalesByBrand) {
   for (const jsonlPath of BRANCH_FILES_STARTED) {
     try {
       const jsonPath = jsonlPath.replace(/\.jsonl$/, '.json');
-      // Optimización: leer línea por línea para evitar cargar todo el archivo en un string gigante
-      const content = fs.readFileSync(jsonlPath, 'utf8').trim();
-      if (!content) {
-        await fsp.writeFile(jsonPath, '[]', 'utf8');
-      } else {
-        const lines = content.split('\n');
-        const products = lines.map(line => {
-          try {
-            return JSON.parse(line);
-          } catch (e) {
-            return null;
-          }
-        }).filter(p => p !== null);
-
-        // No usar Pretty Print (null, 2) para ahorrar memoria y espacio en disco
-        await fsp.writeFile(jsonPath, JSON.stringify(products), 'utf8');
-      }
-
-      await fsp.unlink(jsonlPath); // Eliminar el archivo temporal
+      await convertJsonlToJsonArray(jsonlPath, jsonPath);
+      await fsp.unlink(jsonlPath).catch(() => { });
       totalProductsFilesWritten++;
-
-      // Intentar sugerir al GC si es posible (aunque en Node.js es limitado)
-      if (totalProductsFilesWritten % 10 === 0) {
-        if (global.gc) global.gc();
-      }
     } catch (err) {
       console.error(`Error al convertir ${jsonlPath}:`, err.message);
     }
   }
 
   console.log(`Generación de JSONs de productos finalizada. Total: ${totalProductsFilesWritten}.`);
+}
+
+/**
+ * Convierte un archivo JSONL (líneas de JSON) a un array JSON []
+ * de forma eficiente usando streams para no saturar la memoria (Heap limit).
+ */
+async function convertJsonlToJsonArray(src, dest) {
+  const writeStream = fs.createWriteStream(dest);
+  const readStream = fs.createReadStream(src, { encoding: 'utf8' });
+  const rl = readline.createInterface({
+    input: readStream,
+    crlfDelay: Infinity
+  });
+
+  writeStream.write('[\n');
+  let firstLine = true;
+
+  for await (const line of rl) {
+    if (!line.trim()) continue;
+    if (!firstLine) {
+      writeStream.write(',\n');
+    }
+    writeStream.write(line);
+    firstLine = false;
+  }
+
+  writeStream.write('\n]');
+  writeStream.end();
+
+  return new Promise((resolve, reject) => {
+    writeStream.on('finish', resolve);
+    writeStream.on('error', reject);
+  });
 }
 
 async function cleanTempJsons() {
