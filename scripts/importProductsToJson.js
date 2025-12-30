@@ -296,6 +296,12 @@ function findMatchingBranch(branch, targetLocations) {
 
 function normalizeProductData(product, targetBrand, targetSucursalId) {
   // Validación mejorada de campos requeridos
+  // const descripcion = product.productos_descripcion?.trim();
+  // if (!descripcion || !product.productos_precio_lista) {
+  //   // console.warn('Producto con datos faltantes (descripción o precio), saltando:', product);
+  //   return null; 
+  // }
+
   const descripcion = product.productos_descripcion?.trim();
   if (!descripcion || !product.productos_precio_lista) {
     return null;
@@ -303,8 +309,12 @@ function normalizeProductData(product, targetBrand, targetSucursalId) {
 
   // Validación y parseo de precio mejorado
   let precio = parseFloat(String(product.productos_precio_lista).replace(',', '.'));
+  // if (isNaN(precio) || precio <= 0) {
+  //   // console.warn(`Precio inválido o cero para producto '${descripcion}' (precio: '${product.productos_precio_lista}'). Saltando.`);
+  //   return null;
+  // }
+  // Only return null silently
   if (isNaN(precio) || precio <= 0) {
-    console.warn(`Precio inválido o cero para producto '${descripcion}' (precio: '${product.productos_precio_lista}'). Saltando.`);
     return null;
   }
 
