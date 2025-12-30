@@ -26,17 +26,7 @@ const tempZipPath = path.join(TEMP_DATA_DIR, 'temp_sepa.zip');
 const BASE_SUPER_DIR = path.join(__dirname, '../src/data/super');
 const BASE_PRODUCTS_DIR = path.join(__dirname, '../src/data/products');
 
-const KNOWN_ZIPS_TO_PROCESS_PREFIXES = new Set([
-  'sepa_2_comercio-sepa-10_', // Carrefour
-  'sepa_2_comercio-sepa-11_', // Changomas
-  'sepa_1_comercio-sepa-15_'  // Dia
-]);
 
-const TARGET_SUPERMARKETS_LOCATIONS = [
-  { name: 'Hipermercado Carrefour San Isidro', lat: -34.491345, lon: -58.589025, brand: 'Carrefour', id_sucursal: '1' },
-  { name: 'DIA Jose Leon Suarez', lat: -34.532479, lon: -58.575497, brand: 'Dia', id_sucursal: '87' },
-  { name: 'HiperChangomas San Fernando', lat: -34.484169, lon: -58.595829, brand: 'ChangoMas', id_sucursal: '1004' }
-];
 
 const TARGET_COMERCIO_IDENTIFIERS = {
   'Carrefour': {
@@ -50,22 +40,60 @@ const TARGET_COMERCIO_IDENTIFIERS = {
   'ChangoMas': {
     razon_social_keywords: ['dorinka srl', 'changomas', 'walmart'],
     cuits: ['30678138300']
+  },
+  'Coto': {
+    razon_social_keywords: ['coto c.i.c.s.a.', 'coto'],
+    cuits: ['30548083153']
+  },
+  'Cencosud': {
+    razon_social_keywords: ['cencosud'],
+    cuits: ['30590360763']
   }
 };
-
-const DISTANCE_THRESHOLD = 0.005;
 
 const MARCAS_NORMALIZADAS_INTERES = new Set([
   'Dia',
   'Carrefour',
-  'ChangoMas'
+  'ChangoMas',
+  'Coto',
+  'Jumbo',
+  'Vea',
+  'Easy'
 ]);
 
-const PRODUCT_CSV_TO_TARGET_MAPPING = [
-  { product_csv_id_comercio: '10', product_csv_id_bandera: '1', product_csv_id_sucursal: '1', target_brand: 'Carrefour', target_sucursal_id: '1' },
-  { product_csv_id_comercio: '15', product_csv_id_bandera: '1', product_csv_id_sucursal: '87', target_brand: 'Dia', target_sucursal_id: '87' },
-  { product_csv_id_comercio: '11', product_csv_id_bandera: '5', product_csv_id_sucursal: '1004', target_brand: 'ChangoMas', target_sucursal_id: '1004' }
-];
+const AMBA_LOCALITIES = new Set([
+  'CAPITAL FEDERAL', 'CIUDAD AUTONOMA BUENOS AIRES', 'ALMIRANTE BROWN', 'AVELLANEDA', 'BERAZATEGUI',
+  'BERISSO', 'CANUELAS', 'ENSENADA', 'ESCOBAR', 'ESTEBAN ECHEVERRIA', 'EZEIZA', 'FLORENCIO VARELA',
+  'GENERAL LAS HERAS', 'GENERAL RODRIGUEZ', 'GENERAL SAN MARTIN', 'HURLINGHAM', 'ITUZAINGO',
+  'JOSE C PAZ', 'LA MATANZA', 'LA PLATA', 'LANUS', 'LOMAS DE ZAMORA', 'LUJAN', 'MALVINAS ARGENTINAS',
+  'MARCOS PAZ', 'MERLO', 'MORENO', 'MORON', 'PILAR', 'PRESIDENTE PERON', 'QUILMES', 'SAN FERNANDO',
+  'SAN ISIDRO', 'SAN MIGUEL', 'SAN VICENTE', 'TIGRE', 'TRES DE FEBRERO', 'VICENTE LOPEZ',
+  'SARANDI', 'WILDE', 'GERLI', 'BECCAR', 'MARTINEZ', 'OLIVOS', 'FLORIDA', 'MUNRO', 'VILLA ADELINA',
+  'BOULOGNE', 'CASEROS', 'SANTOS LUGARES', 'CIUDADELA', 'RAMOS MEJIA', 'HAEDO', 'CASTELAR', 'ITUZAINGO',
+  'LIBERTAD', 'SAN JUSTO', 'TABLADA', 'TAPIALES', 'ALDO BONZI', 'CIUDAD EVITA', 'BANFIELD', 'TEMPERLEY',
+  'TURDERA', 'ADROGUE', 'BURZACO', 'GLEW', 'GUERNICA', 'BERNAL', 'DON BOSCO', 'EZPELETA', 'RANELAGH',
+  'HUDSON', 'CRUCE VARELA', 'FLORENCIO VARELA', 'CLAYPOLE', 'SOLANO', 'ONCE', 'CONSTITUCION', 'RETIRO',
+  'PATERNAL', 'CHACARITA', 'PALERMO', 'BELGRANO', 'NUÑEZ', 'SAAVEDRA', 'COGHLAN', 'VILLA URQUIZA',
+  'VILLA PUEYRREDON', 'VILLA DEL PARQUE', 'VILLA DEVOTO', 'VILLA LURO', 'LINIERS', 'MATADEROS',
+  'FLORESTA', 'FLORES', 'CABALLITO', 'ALMAGRO', 'BOEDO', 'PARQUE PATRICIOS', 'NUEVA POMPEYA',
+  'BARRACAS', 'LA BOCA', 'SAN TELMO', 'MONSERRAT', 'SAN NICOLAS', 'BALVANERA', 'RECOLETA'
+]);
+
+function isAmba(branchDoc) {
+  const provincia = String(branchDoc.sucursales_provincia || branchDoc.provincia || '').toUpperCase().trim();
+  const localidad = String(branchDoc.sucursales_localidad || branchDoc.localidad || '').toUpperCase().trim();
+
+  const isCaba = provincia === 'AR-C' || provincia.includes('CAPITAL FEDERAL') || provincia.includes('CIUDAD AUTONOMA') ||
+    provincia.includes('C.A.B.A') || provincia.includes('CABA') ||
+    localidad.includes('CAPITAL FEDERAL') || localidad.includes('C.A.B.A') || localidad.includes('CABA');
+
+  if (isCaba) return true;
+
+  if (provincia === 'AR-B' || provincia.includes('BUENOS AIRES') || provincia === 'BA' || provincia === 'B.A.' || provincia.includes('BS AS')) {
+    return Array.from(AMBA_LOCALITIES).some(l => localidad.includes(l));
+  }
+  return false;
+}
 
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -158,8 +186,8 @@ async function procesarCsvStream(streamCsv, callback, filenameForLog = 'CSV desc
       'productos_marca': ['productos_marca', 'marca_producto', 'marca'],
       'productos_cantidad_presentacion': ['productos_cantidad_presentacion', 'cantidad_presentacion'],
       'productos_unidad_medida_presentacion': ['productos_unidad_medida_presentacion', 'unidad_medida_presentacion'],
-      'sucursal_nombre': ['sucursal_nombre', 'nombre'],
-      'sucursal_direccion': ['sucursal_direccion', 'direccion'],
+      'sucursal_nombre': ['sucursal_nombre', 'nombre', 'sucursales_nombre'],
+      'sucursal_direccion': ['sucursal_direccion', 'direccion', 'sucursales_calle'],
       'sucursales_provincia': ['sucursales_provincia', 'provincia'],
       'sucursales_localidad': ['sucursales_localidad', 'localidad'],
       'id_producto': ['id_producto', 'producto_id']
@@ -356,17 +384,49 @@ async function procesarZipInterno(zipPath, allFilteredSucursalesByBrand, zipFile
     try {
       const sucursalStream = sucursalFile.stream();
       await procesarCsvStream(sucursalStream, (doc) => {
-        let foundBrand = doc.comercio_razon_social || 'Desconocido';
+        // Filtrar por AMBA
+        if (!isAmba(doc)) return;
 
-        for (const brand in TARGET_COMERCIO_IDENTIFIERS) {
-          const keywords = TARGET_COMERCIO_IDENTIFIERS[brand].razon_social_keywords;
-          const cuits = TARGET_COMERCIO_IDENTIFIERS[brand].cuits;
-          if (keywords.some(kw => (doc.comercio_razon_social || '').toLowerCase().includes(kw.toLowerCase())) ||
-            cuits.includes(String(doc.comercio_cuit))) {
-            foundBrand = brand;
-            break;
+        let foundBrand = 'Desconocido';
+        const rawRazonSocial = (doc.comercio_razon_social || '').toLowerCase();
+        const rawNombreSucursal = (doc.sucursal_nombre || '').toLowerCase();
+        const text = rawRazonSocial + ' ' + rawNombreSucursal;
+
+        // Identificar Marca - Intento 1: Por ID de comercio del ZIP si está disponible
+        const zipIdMatch = zipFileName.match(/comercio-sepa-(\d+)/);
+        const zipCommerceId = zipIdMatch ? zipIdMatch[1] : null;
+
+        if (zipCommerceId === '10') foundBrand = 'Carrefour';
+        else if (zipCommerceId === '15') foundBrand = 'Dia';
+        else if (zipCommerceId === '11') foundBrand = 'ChangoMas';
+        else if (zipCommerceId === '12') foundBrand = 'Coto';
+        else if (zipCommerceId === '9') foundBrand = 'Cencosud';
+        else if (zipCommerceId === '3001') foundBrand = 'Easy';
+
+        // Intento 2: Por palabras clave si el intento 1 falló o es Cencosud
+        if (foundBrand === 'Desconocido' || foundBrand === 'Cencosud') {
+          for (const brand in TARGET_COMERCIO_IDENTIFIERS) {
+            const keywords = TARGET_COMERCIO_IDENTIFIERS[brand].razon_social_keywords;
+            const cuits = TARGET_COMERCIO_IDENTIFIERS[brand].cuits;
+            if (keywords.some(kw => text.includes(kw.toLowerCase())) ||
+              cuits.includes(String(doc.comercio_cuit))) {
+              foundBrand = brand;
+              break;
+            }
           }
         }
+
+        // Lógica especial para Cencosud (Jumbo/Vea/Easy)
+        if (foundBrand === 'Cencosud' || foundBrand === 'Easy') {
+          if (text.includes('jumbo')) foundBrand = 'Jumbo';
+          else if (text.includes('vea')) foundBrand = 'Vea';
+          else if (text.includes('easy')) foundBrand = 'Easy';
+          else if (foundBrand === 'Cencosud') foundBrand = 'Vea'; // Default para Cencosud
+        }
+
+
+
+        if (!MARCAS_NORMALIZADAS_INTERES.has(foundBrand)) return;
 
         const branchId = doc.id_sucursal;
         const normalizedSucursal = normalizeBranchData(doc, foundBrand, branchId);
@@ -534,11 +594,22 @@ async function generarJsonFiltrados() {
     for (const zip of zipsInternos) {
       const internalZipFileName = path.basename(zip.path);
 
-      // FILTRO POR PREFIJO: Evitar procesar ZIPs de supermercados no deseados
-      const shouldProcess = Array.from(KNOWN_ZIPS_TO_PROCESS_PREFIXES).some(prefix => internalZipFileName.startsWith(prefix));
+      const zipIdMatch = internalZipFileName.match(/comercio-sepa-(\d+)/);
+      const zipCommerceId = zipIdMatch ? zipIdMatch[1] : null;
+
+      // IDs de interés:
+      // 9: Cencosud (Jumbo, Vea)
+      // 10: Carrefour
+      // 11: ChangoMas
+      // 12: Coto
+      // 15: Dia
+      // 3001: Easy
+      const WANTED_COMMERCE_IDS = new Set(['9', '10', '11', '12', '15', '3001']);
+
+      const shouldProcess = zipCommerceId && WANTED_COMMERCE_IDS.has(zipCommerceId);
 
       if (!shouldProcess) {
-        // console.log(`[SKIP] Skip ${internalZipFileName} (No coincide con marcas de interés)`);
+        // console.log(`[SKIP] Skip ${internalZipFileName} (ID ${zipCommerceId} no es de interés)`);
         continue;
       }
 
