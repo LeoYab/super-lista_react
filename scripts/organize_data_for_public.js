@@ -34,7 +34,20 @@ const main = () => {
 
   // 1. Aggregate branches
   if (fs.existsSync(SRC_SUPER_DIR)) {
-    const files = fs.readdirSync(SRC_SUPER_DIR).filter(f => f.endsWith('.json'));
+    const getAllJsonFiles = (dir, fileList = []) => {
+      const dirFiles = fs.readdirSync(dir);
+      dirFiles.forEach(file => {
+        const filePath = path.join(dir, file);
+        if (fs.statSync(filePath).isDirectory()) {
+          getAllJsonFiles(filePath, fileList);
+        } else if (file.endsWith('.json')) {
+          fileList.push(filePath);
+        }
+      });
+      return fileList;
+    };
+
+    const files = getAllJsonFiles(SRC_SUPER_DIR);
     const branchesByBrand = {};
     const brandNames = new Set();
 
@@ -50,11 +63,11 @@ const main = () => {
       'easy': 'Easy'
     };
 
-    console.log(`Found ${files.length} branch files in src/data/super`);
+    console.log(`Found ${files.length} branch files in ${SRC_SUPER_DIR}`);
 
-    files.forEach(file => {
+    files.forEach(filePath => {
       try {
-        const content = fs.readFileSync(path.join(SRC_SUPER_DIR, file), 'utf8');
+        const content = fs.readFileSync(filePath, 'utf8');
         // Some files might be array wrapped, some might be single objects
         let data = JSON.parse(content);
         if (Array.isArray(data)) data = data[0];
@@ -76,7 +89,7 @@ const main = () => {
           branchesByBrand[brandKey].push(data);
         }
       } catch (err) {
-        console.error(`Error processing ${file}:`, err.message);
+        console.error(`Error processing ${filePath}:`, err.message);
       }
     });
 
@@ -118,6 +131,15 @@ const main = () => {
     console.log('Products copied.');
   } else {
     console.log('SRC_PRODUCTS_DIR does not exist.');
+  }
+
+  // 3. Copy Super (Individual branch files)
+  if (fs.existsSync(SRC_SUPER_DIR)) {
+    console.log('Copying super directory (individual files)...');
+    copyRecursiveSync(SRC_SUPER_DIR, PUB_SUPER_DIR);
+    console.log('Super individual files copied.');
+  } else {
+    console.log('SRC_SUPER_DIR does not exist.');
   }
 };
 

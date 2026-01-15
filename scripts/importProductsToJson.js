@@ -506,8 +506,11 @@ async function writeFinalJsons(allFilteredSucursalesByBrand) {
   for (const [brandName, sucursalesMap] of allFilteredSucursalesByBrand.entries()) {
     if (!MARCAS_NORMALIZADAS_INTERES.has(brandName)) continue;
 
+    const safeBrandName = brandName.replace(/[^a-z0-9]/gi, '').toLowerCase();
+    const brandSuperDir = path.join(baseSuperDir, safeBrandName);
+
     for (const [branchId, sucursalData] of sucursalesMap.entries()) {
-      const sucursalFilename = path.join(baseSuperDir, `${branchId}.json`);
+      const sucursalFilename = path.join(brandSuperDir, `${branchId}.json`);
       await writeToJson([sucursalData], sucursalFilename);
       totalSucursalesWritten++;
     }
