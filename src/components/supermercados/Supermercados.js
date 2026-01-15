@@ -25,7 +25,11 @@ import { showErrorAlert } from '../../Notifications/NotificationsServices';
 const LOCAL_BRAND_DEFAULT_BRANCH_IDS = {
   dia: '87',
   changomas: '1004',
-  carrefour: '1'
+  carrefour: '1',
+  easy: '101',
+  coto: '101',
+  jumbo: '121',
+  vea: '1'
 }
 
 const PRODUCTS_PER_PAGE = 20;
