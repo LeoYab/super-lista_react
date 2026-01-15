@@ -1,5 +1,19 @@
 [
   {
+    "id_sucursal": "1",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "San Isidro",
+    "direccion_sucursal": "Bernardo de Irigoyen",
+    "provincia": "AR-B",
+    "localidad": "San Isidro",
+    "latitud": -34.491345,
+    "longitud": -58.589025,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
     "id_sucursal": "10",
     "comercio_id": "10",
     "comercio_cuit": "",
@@ -11,7 +25,77 @@
     "latitud": -34.62061,
     "longitud": -58.633769,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.493Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "101",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Avellaneda II",
+    "direccion_sucursal": "Av. Belgrano",
+    "provincia": "AR-B",
+    "localidad": "Avellaneda",
+    "latitud": -34.661465,
+    "longitud": -58.368212,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "109",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "La Plata I",
+    "direccion_sucursal": "Calle 7",
+    "provincia": "AR-B",
+    "localidad": "La Plata",
+    "latitud": -34.913497,
+    "longitud": -57.951821,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "11",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Malvinas Argentinas",
+    "direccion_sucursal": "Av. Arturo Illia",
+    "provincia": "AR-B",
+    "localidad": "Malvinas Argentinas",
+    "latitud": -34.528883,
+    "longitud": -58.701631,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "115",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Flores",
+    "direccion_sucursal": "Av. Rivadavia",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.627423,
+    "longitud": -58.45817,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "116",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Av. Santa Fe 1954",
+    "direccion_sucursal": "Av. Santa Fe",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.595813,
+    "longitud": -58.395425,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "118",
@@ -25,7 +109,7 @@
     "latitud": -34.591951,
     "longitud": -58.389726,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.492Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "12",
@@ -39,7 +123,7 @@
     "latitud": -34.664628,
     "longitud": -58.597356,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.492Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "120",
@@ -53,7 +137,7 @@
     "latitud": -34.558821,
     "longitud": -58.459349,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.498Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "144",
@@ -67,7 +151,7 @@
     "latitud": -34.923011,
     "longitud": -57.949931,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.491Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "148",
@@ -81,7 +165,7 @@
     "latitud": -34.608259,
     "longitud": -58.380533,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.495Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "150",
@@ -95,7 +179,49 @@
     "latitud": -34.587468,
     "longitud": -58.412707,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.493Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "151",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Uriburu",
+    "direccion_sucursal": "Av. Rivadavia",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.609491,
+    "longitud": -58.398323,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "163",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "San Jerónimo 444",
+    "direccion_sucursal": "San Jerónimo",
+    "provincia": "AR-C",
+    "localidad": "Córdoba",
+    "latitud": -31.418749,
+    "longitud": -64.178711,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "164",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Rojas 726",
+    "direccion_sucursal": "Rojas",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.612329,
+    "longitud": -58.445074,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "172",
@@ -109,7 +235,7 @@
     "latitud": -32.890284,
     "longitud": -68.837131,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.490Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "173",
@@ -123,7 +249,49 @@
     "latitud": -31.417325,
     "longitud": -64.188484,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.496Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "174",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Av. Independencia 2054",
+    "direccion_sucursal": "Av. Independencia",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.618281,
+    "longitud": -58.395236,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "182",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Juramento",
+    "direccion_sucursal": "Juramento",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.5651,
+    "longitud": -58.462056,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "189",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Av. Corrientes",
+    "direccion_sucursal": "Av. Corrientes",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.603902,
+    "longitud": -58.383077,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "192",
@@ -137,7 +305,7 @@
     "latitud": -34.592114,
     "longitud": -58.392508,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.493Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "194",
@@ -151,7 +319,7 @@
     "latitud": -31.389307,
     "longitud": -64.134309,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.496Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "195",
@@ -165,7 +333,7 @@
     "latitud": -34.574379,
     "longitud": -58.482128,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.495Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "196",
@@ -179,7 +347,35 @@
     "latitud": -34.603633,
     "longitud": -58.416192,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.500Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "198",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Núñez",
+    "direccion_sucursal": "Av. Cabildo",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.553168,
+    "longitud": -58.46577,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "199",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Av. Córdoba 1439",
+    "direccion_sucursal": "Av. Córdoba",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.599262,
+    "longitud": -58.387552,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "200",
@@ -193,7 +389,7 @@
     "latitud": -34.633706,
     "longitud": -58.482029,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.496Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "202",
@@ -207,7 +403,7 @@
     "latitud": -34.480984,
     "longitud": -58.553074,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.496Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "204",
@@ -221,7 +417,21 @@
     "latitud": -34.516305,
     "longitud": -58.494552,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.496Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "206",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Barrio Norte",
+    "direccion_sucursal": "Beruti",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.59014,
+    "longitud": -58.405533,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "207",
@@ -235,7 +445,21 @@
     "latitud": -34.621921,
     "longitud": -58.373712,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.497Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "21",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Moreno",
+    "direccion_sucursal": "Av. Gaona y Graham Bell",
+    "provincia": "AR-B",
+    "localidad": "Moreno",
+    "latitud": -34.633337,
+    "longitud": -58.764283,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "213",
@@ -249,7 +473,91 @@
     "latitud": -34.597675,
     "longitud": -58.380133,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.490Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "214",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Villa Devoto",
+    "direccion_sucursal": "José Pedro Varela",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.610359,
+    "longitud": -58.516538,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "215",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Palermo Canning",
+    "direccion_sucursal": "Av. Raúl Scalabrini Ortíz",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.58052,
+    "longitud": -58.410332,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "217",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Bella Vista",
+    "direccion_sucursal": "Av. Pdte. J. D. Perón",
+    "provincia": "AR-B",
+    "localidad": "San Miguel",
+    "latitud": -34.553106,
+    "longitud": -58.698256,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "218",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Hurlingham",
+    "direccion_sucursal": "Av. Vergara",
+    "provincia": "AR-B",
+    "localidad": "Hurlingham",
+    "latitud": -34.591972,
+    "longitud": -58.636447,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "219",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Caballito",
+    "direccion_sucursal": "Av. Donato Alvarez",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.611087,
+    "longitud": -58.460584,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "220",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Villa Urquiza",
+    "direccion_sucursal": "Av. Roosevelt",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.577205,
+    "longitud": -58.494765,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "221",
@@ -263,7 +571,7 @@
     "latitud": -34.432954,
     "longitud": -58.565607,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.493Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "222",
@@ -277,7 +585,35 @@
     "latitud": -31.423396,
     "longitud": -64.179534,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.494Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "223",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Octavio Pinto 2665",
+    "direccion_sucursal": "Octavio Pinto",
+    "provincia": "AR-C",
+    "localidad": "Córdoba",
+    "latitud": -31.389247,
+    "longitud": -64.215564,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "224",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Ambrosio Olmos 929",
+    "direccion_sucursal": "Ambrosio Olmos",
+    "provincia": "AR-C",
+    "localidad": "Córdoba",
+    "latitud": -31.431692,
+    "longitud": -64.191582,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "225",
@@ -291,7 +627,7 @@
     "latitud": -31.3801,
     "longitud": -64.245395,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.493Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "227",
@@ -305,7 +641,7 @@
     "latitud": -34.715471,
     "longitud": -58.298863,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.492Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "231",
@@ -319,7 +655,7 @@
     "latitud": -34.768774,
     "longitud": -58.411275,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.494Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "236",
@@ -333,7 +669,7 @@
     "latitud": -34.629513,
     "longitud": -58.465074,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.495Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "237",
@@ -347,7 +683,21 @@
     "latitud": -34.602094,
     "longitud": -58.489299,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.495Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "245",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Avenida San Martín 2999",
+    "direccion_sucursal": "Avenida San Martín",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.601957,
+    "longitud": -58.467059,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "247",
@@ -361,7 +711,21 @@
     "latitud": -34.619772,
     "longitud": -58.428125,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.495Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "25",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "San Fernando",
+    "direccion_sucursal": "Ruta 202",
+    "provincia": "AR-B",
+    "localidad": "San Fernando",
+    "latitud": -34.453587,
+    "longitud": -58.575528,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "251",
@@ -375,7 +739,7 @@
     "latitud": -34.568676,
     "longitud": -58.434871,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.495Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "253",
@@ -389,7 +753,21 @@
     "latitud": -34.504534,
     "longitud": -58.493843,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.499Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "254",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "San Isidro - D. Carman",
+    "direccion_sucursal": "Diego Carman",
+    "provincia": "AR-B",
+    "localidad": "San Isidro",
+    "latitud": -34.495405,
+    "longitud": -58.545723,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "257",
@@ -403,7 +781,7 @@
     "latitud": -34.617882,
     "longitud": -58.387827,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.491Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "258",
@@ -417,7 +795,21 @@
     "latitud": -34.585933,
     "longitud": -58.501809,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.500Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "26",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Warnes",
+    "direccion_sucursal": "Warnes",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.595836,
+    "longitud": -58.473941,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "260",
@@ -431,7 +823,7 @@
     "latitud": -34.586508,
     "longitud": -58.398127,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.499Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "265",
@@ -445,7 +837,7 @@
     "latitud": -34.602404,
     "longitud": -58.432602,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.498Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "270",
@@ -459,7 +851,35 @@
     "latitud": -31.422513,
     "longitud": -64.496978,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.490Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "271",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Belgrano",
+    "direccion_sucursal": "Av. Monroe",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.55398,
+    "longitud": -58.452838,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "272",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "San Fernando II",
+    "direccion_sucursal": "Av. Pdte. Tte. Gral. J. D. Perón",
+    "provincia": "AR-B",
+    "localidad": "San Fernando",
+    "latitud": -34.441795,
+    "longitud": -58.553738,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "273",
@@ -473,7 +893,21 @@
     "latitud": -34.548679,
     "longitud": -58.46861,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.490Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "277",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Palermo Soler",
+    "direccion_sucursal": "Av. Raúl Scalabrini Ortíz",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.589507,
+    "longitud": -58.422997,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "28",
@@ -487,7 +921,7 @@
     "latitud": -34.454933,
     "longitud": -58.894408,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.491Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "280",
@@ -501,7 +935,7 @@
     "latitud": -31.377589,
     "longitud": -64.277557,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.499Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "281",
@@ -515,7 +949,21 @@
     "latitud": -31.386371,
     "longitud": -64.227571,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.496Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "291",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Piedras 383",
+    "direccion_sucursal": "Piedras",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.612572,
+    "longitud": -58.377673,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "298",
@@ -529,7 +977,21 @@
     "latitud": -34.621316,
     "longitud": -58.436261,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.492Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "299",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Arenales 975",
+    "direccion_sucursal": "Arenales",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.594016,
+    "longitud": -58.381012,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "30",
@@ -543,7 +1005,91 @@
     "latitud": -34.663863,
     "longitud": -58.514126,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.495Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "300",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Gral Deheza 2239",
+    "direccion_sucursal": "Gral. Deheza",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.540539,
+    "longitud": -58.472052,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "301",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Av. Pueyrredón 2464",
+    "direccion_sucursal": "Av. Pueyrredón",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.585915,
+    "longitud": -58.394398,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "302",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Esmeralda 823",
+    "direccion_sucursal": "Esmeralda",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.598622,
+    "longitud": -58.378291,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "303",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Talcahuano 841",
+    "direccion_sucursal": "Talcahuano",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.598783,
+    "longitud": -58.385461,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "306",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Fray Justo Santa María de Oro 2709",
+    "direccion_sucursal": "Fray Justo Sta. María de Oro",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.577198,
+    "longitud": -58.422356,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "307",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Av. Gral. Las Heras 1936",
+    "direccion_sucursal": "Av. Gral. Las Heras",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.590737,
+    "longitud": -58.393414,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "308",
@@ -557,7 +1103,7 @@
     "latitud": -34.606155,
     "longitud": -58.376453,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.499Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "309",
@@ -571,7 +1117,7 @@
     "latitud": -34.602612,
     "longitud": -58.49646,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.499Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "310",
@@ -585,7 +1131,7 @@
     "latitud": -34.600568,
     "longitud": -58.511327,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.499Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "311",
@@ -599,7 +1145,7 @@
     "latitud": -34.560168,
     "longitud": -58.46318,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.492Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "312",
@@ -613,7 +1159,7 @@
     "latitud": -34.575307,
     "longitud": -58.422856,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.491Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "313",
@@ -627,7 +1173,7 @@
     "latitud": -34.555966,
     "longitud": -58.450046,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.492Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "314",
@@ -641,7 +1187,7 @@
     "latitud": -34.614787,
     "longitud": -58.505674,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.495Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "315",
@@ -655,7 +1201,35 @@
     "latitud": -34.598396,
     "longitud": -58.497333,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.493Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "316",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Ramon Falcón 2402",
+    "direccion_sucursal": "Ramón Falcón",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.630139,
+    "longitud": -58.462242,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "317",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Anchorena 1253",
+    "direccion_sucursal": "Anchorena",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.594766,
+    "longitud": -58.406363,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "318",
@@ -669,7 +1243,7 @@
     "latitud": -34.591563,
     "longitud": -58.379252,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.500Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "320",
@@ -683,7 +1257,7 @@
     "latitud": -34.564492,
     "longitud": -58.455869,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.497Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "322",
@@ -697,7 +1271,7 @@
     "latitud": -34.593274,
     "longitud": -58.502323,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.498Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "323",
@@ -711,7 +1285,21 @@
     "latitud": -34.632222,
     "longitud": -58.375998,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.499Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "324",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Directorio 1766",
+    "direccion_sucursal": "Directorio",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.631045,
+    "longitud": -58.452608,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "325",
@@ -725,7 +1313,7 @@
     "latitud": -34.561751,
     "longitud": -58.462283,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.491Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "326",
@@ -739,7 +1327,7 @@
     "latitud": -34.620277,
     "longitud": -58.506577,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.496Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "327",
@@ -753,7 +1341,7 @@
     "latitud": -34.584822,
     "longitud": -58.40004,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.495Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "328",
@@ -767,7 +1355,7 @@
     "latitud": -34.577797,
     "longitud": -58.424332,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.491Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "329",
@@ -781,7 +1369,7 @@
     "latitud": -34.603042,
     "longitud": -58.391768,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.491Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "331",
@@ -795,7 +1383,7 @@
     "latitud": -34.592437,
     "longitud": -58.410869,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.493Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "332",
@@ -809,7 +1397,7 @@
     "latitud": -34.593956,
     "longitud": -58.41291,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.495Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "334",
@@ -823,7 +1411,7 @@
     "latitud": -34.597351,
     "longitud": -58.374515,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.492Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "335",
@@ -837,7 +1425,35 @@
     "latitud": -34.554653,
     "longitud": -58.46029,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.492Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "336",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Charcas 3315 II",
+    "direccion_sucursal": "Charcas",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.591312,
+    "longitud": -58.412544,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "337",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Lacroze 2566",
+    "direccion_sucursal": "Av. Federico Lacroze",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.572189,
+    "longitud": -58.446058,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "338",
@@ -851,7 +1467,21 @@
     "latitud": -34.601177,
     "longitud": -58.378613,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.494Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "339",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Los Incas 4466",
+    "direccion_sucursal": "Av. de Los Incas",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.58114,
+    "longitud": -58.473713,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "341",
@@ -865,7 +1495,7 @@
     "latitud": -34.599672,
     "longitud": -58.372053,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.496Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "343",
@@ -879,7 +1509,49 @@
     "latitud": -34.569917,
     "longitud": -58.450469,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.500Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "344",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "M. T. de Alvear 2251",
+    "direccion_sucursal": "Marcelo T. de Alvear",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.596862,
+    "longitud": -58.399571,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "346",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Suárez 1599",
+    "direccion_sucursal": "Suárez",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.63841,
+    "longitud": -58.373366,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "347",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "P. de Melo 2648",
+    "direccion_sucursal": "Josá Andrés Pacheco de Melo",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.586854,
+    "longitud": -58.401466,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "348",
@@ -893,7 +1565,21 @@
     "latitud": -34.610752,
     "longitud": -58.414782,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.494Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "349",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Cabildo 34",
+    "direccion_sucursal": "Av. Cabildo",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.574828,
+    "longitud": -58.436126,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "351",
@@ -907,7 +1593,49 @@
     "latitud": -34.560973,
     "longitud": -58.452616,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.500Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "352",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Rodríguez Peña 1185",
+    "direccion_sucursal": "Rodríguez Peña",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.595055,
+    "longitud": -58.392,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "354",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Paraná 1053",
+    "direccion_sucursal": "Paraná",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.59632,
+    "longitud": -58.388332,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "355",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Pueyrredón 1054",
+    "direccion_sucursal": "Av. Pueyrredón",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.59788,
+    "longitud": -58.403782,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "357",
@@ -921,7 +1649,35 @@
     "latitud": -34.605506,
     "longitud": -58.38923,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.490Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "360",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Los Incas 5174",
+    "direccion_sucursal": "Av. de Los Incas",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.586703,
+    "longitud": -58.481354,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "361",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Moldes 1718",
+    "direccion_sucursal": "Moldes",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.567226,
+    "longitud": -58.456531,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "362",
@@ -935,7 +1691,49 @@
     "latitud": -34.629168,
     "longitud": -58.442438,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.492Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "363",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Independencia 1833",
+    "direccion_sucursal": "Av. Independencia",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.618097,
+    "longitud": -58.392208,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "364",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Ciudad de la Paz 353",
+    "direccion_sucursal": "Ciudad de la Paz",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.573878,
+    "longitud": -58.442051,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "365",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Nazca 1944",
+    "direccion_sucursal": "Nazca",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.612145,
+    "longitud": -58.480997,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "367",
@@ -949,7 +1747,63 @@
     "latitud": -34.597862,
     "longitud": -58.426805,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.497Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "368",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Cuba 2919",
+    "direccion_sucursal": "Cuba",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.553375,
+    "longitud": -58.462109,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "369",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Caseros 2864",
+    "direccion_sucursal": "Av. Caseros",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.636786,
+    "longitud": -58.403169,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "370",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "J. Bautista Alberdi 371",
+    "direccion_sucursal": "Av. Juan Bautista Alberdi",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.622738,
+    "longitud": -58.43315,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "371",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Olazábal 5483",
+    "direccion_sucursal": "Olazábal",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.579005,
+    "longitud": -58.490393,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "373",
@@ -963,7 +1817,7 @@
     "latitud": -34.543233,
     "longitud": -58.463148,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.499Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "374",
@@ -977,7 +1831,21 @@
     "latitud": -34.567331,
     "longitud": -58.47278,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.499Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "375",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Esmeralda 428",
+    "direccion_sucursal": "Esmeralda",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.603219,
+    "longitud": -58.378116,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "376",
@@ -991,7 +1859,21 @@
     "latitud": -34.613367,
     "longitud": -58.493678,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.490Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "378",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Billinghurst 1876",
+    "direccion_sucursal": "Billinghurst",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.588997,
+    "longitud": -58.40905,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "380",
@@ -1005,7 +1887,77 @@
     "latitud": -34.611147,
     "longitud": -58.433683,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.499Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "381",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Recoleta II",
+    "direccion_sucursal": "Av. Córdoba",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.598762,
+    "longitud": -58.403084,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "386",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Monserrat",
+    "direccion_sucursal": "Av. Belgrano",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.613219,
+    "longitud": -58.382776,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "389",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Carranza",
+    "direccion_sucursal": "Av. Santa Fe",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.575946,
+    "longitud": -58.433486,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "390",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Caballito",
+    "direccion_sucursal": "Av. Rivadavia",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.623596,
+    "longitud": -58.449251,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "391",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Cabildo 2865",
+    "direccion_sucursal": "Av. Cabildo",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.555786,
+    "longitud": -58.462146,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "392",
@@ -1019,7 +1971,63 @@
     "latitud": -34.582216,
     "longitud": -58.421027,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.491Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "394",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Santa Fe 4489-91",
+    "direccion_sucursal": "Av. Santa Fe",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.579302,
+    "longitud": -58.424094,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "395",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Federico Lacroze 4106",
+    "direccion_sucursal": "Av. Federico Lacroze",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.585892,
+    "longitud": -58.454272,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "396",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "San Martín 2289",
+    "direccion_sucursal": "Av. San Martín",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.604107,
+    "longitud": -58.459865,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "397",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Corrientes 5980",
+    "direccion_sucursal": "Av. Corrientes",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.593559,
+    "longitud": -58.445668,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "398",
@@ -1033,7 +2041,77 @@
     "latitud": -34.637117,
     "longitud": -58.496795,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.492Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "40",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "AV. EVA PERON 2679",
+    "direccion_sucursal": "AV. EVA PERON",
+    "provincia": "AR-C",
+    "localidad": "Temperley",
+    "latitud": -34.763279,
+    "longitud": -58.364638,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "400",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Centenera 177",
+    "direccion_sucursal": "Av. del Barco Centenera",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.621665,
+    "longitud": -58.441093,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "402",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Av. Corrientes 1974",
+    "direccion_sucursal": "Av. Corrientes",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.604525,
+    "longitud": -58.394643,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "403",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Av. Santa Fe 5052",
+    "direccion_sucursal": "Av. Santa Fe",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.576785,
+    "longitud": -58.430994,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "404",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Medrano 686",
+    "direccion_sucursal": "Av. Medrano",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.602154,
+    "longitud": -58.420866,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "406",
@@ -1047,7 +2125,105 @@
     "latitud": -34.627247,
     "longitud": -58.383,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.493Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "408",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Perú 916",
+    "direccion_sucursal": "Perú",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.618745,
+    "longitud": -58.374322,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "409",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Gaona 3567",
+    "direccion_sucursal": "Av. Gaona",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.620882,
+    "longitud": -58.475217,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "410",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Tucumán 2173",
+    "direccion_sucursal": "Tucumán",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.602117,
+    "longitud": -58.398071,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "411",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Eva Perón 3479",
+    "direccion_sucursal": "Eva Perón",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.644703,
+    "longitud": -58.464687,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "412",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Av. Caseros 3535",
+    "direccion_sucursal": "Av. Caseros",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.638635,
+    "longitud": -58.415077,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "413",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Venezuela 4086",
+    "direccion_sucursal": "Venezuela",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.617797,
+    "longitud": -58.42222,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "415",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Av. San Juan 4351",
+    "direccion_sucursal": "Av. San Juan",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.62676,
+    "longitud": -58.426136,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "416",
@@ -1061,7 +2237,35 @@
     "latitud": -34.648144,
     "longitud": -58.415872,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.498Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "417",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Fray C. Rodríguez 464",
+    "direccion_sucursal": "Fray C. Rodríguez",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.624494,
+    "longitud": -58.464622,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "418",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Carlos Calvo 1826",
+    "direccion_sucursal": "Carlos Calvo",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.620294,
+    "longitud": -58.392204,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "419",
@@ -1075,7 +2279,63 @@
     "latitud": -34.636459,
     "longitud": -58.35943,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.495Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "42",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Merlo",
+    "direccion_sucursal": "Av. Argentina",
+    "provincia": "AR-B",
+    "localidad": "Merlo",
+    "latitud": -34.679311,
+    "longitud": -58.727992,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "420",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Av. Gaona 1384",
+    "direccion_sucursal": "Av. Gaona",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.608803,
+    "longitud": -58.448623,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "421",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Av. Belgrano 3447",
+    "direccion_sucursal": "Av. Belgrano",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.615542,
+    "longitud": -58.415062,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "422",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Murature 2169",
+    "direccion_sucursal": "Murature",
+    "provincia": "AR-B",
+    "localidad": "Lomas de Zamora",
+    "latitud": -34.707006,
+    "longitud": -58.438947,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "423",
@@ -1089,7 +2349,7 @@
     "latitud": -34.667069,
     "longitud": -58.472973,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.490Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "426",
@@ -1103,7 +2363,35 @@
     "latitud": -34.557692,
     "longitud": -58.448568,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.499Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "427",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Av. Rivadavia 16051",
+    "direccion_sucursal": "Av. Rivadavia",
+    "provincia": "AR-B",
+    "localidad": "Haedo",
+    "latitud": -34.645017,
+    "longitud": -58.590601,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "436",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Paraná 6543",
+    "direccion_sucursal": "Paraná",
+    "provincia": "AR-B",
+    "localidad": "Villa Adelina",
+    "latitud": -34.525713,
+    "longitud": -58.548663,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "437",
@@ -1117,7 +2405,35 @@
     "latitud": -34.461333,
     "longitud": -58.527173,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.496Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "439",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Gob. Arias 2420",
+    "direccion_sucursal": "Gob. Arias",
+    "provincia": "AR-B",
+    "localidad": "Castelar",
+    "latitud": -34.651086,
+    "longitud": -58.642884,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "440",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Av. Cazón 1336",
+    "direccion_sucursal": "Av. Cazón",
+    "provincia": "AR-B",
+    "localidad": "Tigre",
+    "latitud": -34.424942,
+    "longitud": -58.57798,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "441",
@@ -1131,7 +2447,7 @@
     "latitud": -34.530695,
     "longitud": -58.524438,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.491Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "443",
@@ -1145,7 +2461,7 @@
     "latitud": -34.69753,
     "longitud": -58.302113,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.493Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "444",
@@ -1159,7 +2475,7 @@
     "latitud": -34.78047,
     "longitud": -58.26313,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.492Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "445",
@@ -1173,7 +2489,21 @@
     "latitud": -34.85116,
     "longitud": -58.07703,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.497Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "448",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Carlos Pellegrini 844",
+    "direccion_sucursal": "Carlos Pellegrini",
+    "provincia": "AR-B",
+    "localidad": "Burzaco",
+    "latitud": -34.82818,
+    "longitud": -58.390159,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "449",
@@ -1187,7 +2517,35 @@
     "latitud": -34.808046,
     "longitud": -58.275429,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.493Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "45",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "25 DE MAYO 1665",
+    "direccion_sucursal": "25 DE MAYO",
+    "provincia": "AR-C",
+    "localidad": "Trelew",
+    "latitud": -43.258515,
+    "longitud": -65.329191,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "451",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Guatambú 12",
+    "direccion_sucursal": "Guatambú",
+    "provincia": "AR-B",
+    "localidad": "Almirante Brown",
+    "latitud": -34.815906,
+    "longitud": -58.427561,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "452",
@@ -1201,7 +2559,7 @@
     "latitud": -34.753173,
     "longitud": -58.238291,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.499Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "453",
@@ -1215,7 +2573,63 @@
     "latitud": -34.735217,
     "longitud": -58.433859,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.495Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "454",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Mitre 573",
+    "direccion_sucursal": "Av. Mitre",
+    "provincia": "AR-B",
+    "localidad": "Quilmes",
+    "latitud": -34.720261,
+    "longitud": -58.254951,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "455",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Av. H.Yrigoyen 2323",
+    "direccion_sucursal": "Av. Hipólito Yrigoyen",
+    "provincia": "AR-B",
+    "localidad": "Gerli",
+    "latitud": -34.684697,
+    "longitud": -58.386613,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "457",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Sarmiento 72",
+    "direccion_sucursal": "Sarmiento",
+    "provincia": "AR-B",
+    "localidad": "Glew",
+    "latitud": -34.889129,
+    "longitud": -58.38527,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "461",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Salta 160",
+    "direccion_sucursal": "Salta",
+    "provincia": "AR-B",
+    "localidad": "Lomas de Zamora",
+    "latitud": -34.810018,
+    "longitud": -58.457241,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "462",
@@ -1229,7 +2643,91 @@
     "latitud": -34.729681,
     "longitud": -58.263922,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.490Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "464",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Av. Perón 5492",
+    "direccion_sucursal": "Av. Eva Perón",
+    "provincia": "AR-B",
+    "localidad": "Lomas de Zamora",
+    "latitud": -34.752493,
+    "longitud": -58.343235,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "465",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Av. Mitre 6328",
+    "direccion_sucursal": "Av. Mitre",
+    "provincia": "AR-B",
+    "localidad": "Wilde",
+    "latitud": -34.704182,
+    "longitud": -58.316933,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "469",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Fraga 1629",
+    "direccion_sucursal": "Fraga",
+    "provincia": "AR-B",
+    "localidad": "San Miguel",
+    "latitud": -34.544189,
+    "longitud": -58.7149,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "472",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Jauretche 1125",
+    "direccion_sucursal": "Jauretche",
+    "provincia": "AR-B",
+    "localidad": "Hurlingham",
+    "latitud": -34.589617,
+    "longitud": -58.6328,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "474",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Echeverri 943-951",
+    "direccion_sucursal": "Echeverri",
+    "provincia": "AR-B",
+    "localidad": "Merlo",
+    "latitud": -34.703558,
+    "longitud": -58.743391,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "477",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "E. Pérez 4566",
+    "direccion_sucursal": "Dr. Enrique Simón Pérez",
+    "provincia": "AR-B",
+    "localidad": "La Matanza",
+    "latitud": -34.773098,
+    "longitud": -58.645218,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "479",
@@ -1243,7 +2741,35 @@
     "latitud": -34.690047,
     "longitud": -58.689142,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.490Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "480",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Av. Crovara 875",
+    "direccion_sucursal": "Av. Crovara",
+    "provincia": "AR-B",
+    "localidad": "La Matanza",
+    "latitud": -34.69683,
+    "longitud": -58.535934,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "481",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Boulogne Sur Mer 1398",
+    "direccion_sucursal": "Boulogne Sur Mer",
+    "provincia": "AR-B",
+    "localidad": "Tapiales",
+    "latitud": -34.697473,
+    "longitud": -58.507265,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "483",
@@ -1257,7 +2783,105 @@
     "latitud": -34.697534,
     "longitud": -58.625616,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.496Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "486",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Av. San Juan 1374",
+    "direccion_sucursal": "Av. San Juan",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.622468,
+    "longitud": -58.385616,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "487",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "La Rioja 2040",
+    "direccion_sucursal": "La Rioja",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.635113,
+    "longitud": -58.405779,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "488",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Av. Belgrano 1562",
+    "direccion_sucursal": "Av. Belgrano",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.61368,
+    "longitud": -58.388254,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "489",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Av. Caseros 2423",
+    "direccion_sucursal": "Av. Caseros",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.635325,
+    "longitud": -58.396301,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "49",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Florencio Varela",
+    "direccion_sucursal": "Av. Gral. José de San Martín",
+    "provincia": "AR-B",
+    "localidad": "Florencio Varela",
+    "latitud": -34.779585,
+    "longitud": -58.279265,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "490",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Recoleta I",
+    "direccion_sucursal": "Av. Córdoba",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.599232,
+    "longitud": -58.390542,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "491",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Barracas",
+    "direccion_sucursal": "Av. Montes de Oca",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.639341,
+    "longitud": -58.374389,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "492",
@@ -1271,7 +2895,21 @@
     "latitud": -34.601074,
     "longitud": -58.494608,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.496Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "493",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Charcas 3940",
+    "direccion_sucursal": "Charcas",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.586626,
+    "longitud": -58.419375,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "495",
@@ -1285,7 +2923,7 @@
     "latitud": -34.760264,
     "longitud": -58.206631,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.493Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "496",
@@ -1299,7 +2937,21 @@
     "latitud": -34.788541,
     "longitud": -58.522473,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.499Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "497",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Perón 25694",
+    "direccion_sucursal": "Av. Juan Domingo Perón",
+    "provincia": "AR-B",
+    "localidad": "Merlo",
+    "latitud": -34.665273,
+    "longitud": -58.728113,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "499",
@@ -1313,7 +2965,35 @@
     "latitud": -34.697531,
     "longitud": -58.601259,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.495Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "5",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Vélez Sarsfield",
+    "direccion_sucursal": "Av. Álvarez Jonte",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.633237,
+    "longitud": -58.521966,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "501",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "MAXI - Virrey del Pino (501)",
+    "direccion_sucursal": "Av. Brig. Gral. Juan M. Rosas 22471",
+    "provincia": "AR-C",
+    "localidad": "Virrey del Pino",
+    "latitud": -34.837127,
+    "longitud": -58.650749,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "503",
@@ -1327,7 +3007,7 @@
     "latitud": -34.999979,
     "longitud": -58.397284,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.490Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "504",
@@ -1341,7 +3021,21 @@
     "latitud": -31.460585,
     "longitud": -64.215363,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.490Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "505",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Maxi Ruta 25 Pilar (505)",
+    "direccion_sucursal": "Ruta 25 6500",
+    "provincia": "AR-B",
+    "localidad": "Pilar",
+    "latitud": -34.395833,
+    "longitud": -58.844735,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "509",
@@ -1355,7 +3049,21 @@
     "latitud": -34.624941,
     "longitud": -58.412615,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.491Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "51",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Rincon de Milberg",
+    "direccion_sucursal": "Santa María de las Conchas",
+    "provincia": "AR-B",
+    "localidad": "Tigre",
+    "latitud": -34.406164,
+    "longitud": -58.619971,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "510",
@@ -1369,7 +3077,21 @@
     "latitud": -34.608489,
     "longitud": -58.421617,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.493Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "511",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Once",
+    "direccion_sucursal": "Av. Rivadavia",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.610492,
+    "longitud": -58.412303,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "512",
@@ -1383,7 +3105,21 @@
     "latitud": -34.454772,
     "longitud": -58.910154,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.499Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "515",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Devoto",
+    "direccion_sucursal": "Av. Fco. Beiró",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.6132,
+    "longitud": -58.523415,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "516",
@@ -1397,7 +3133,7 @@
     "latitud": -34.470353,
     "longitud": -58.514687,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.492Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "519",
@@ -1411,7 +3147,35 @@
     "latitud": -34.577279,
     "longitud": -58.449064,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.491Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "52",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Banfield",
+    "direccion_sucursal": "Las Heras",
+    "provincia": "AR-B",
+    "localidad": "Lomas de Zamora",
+    "latitud": -34.748145,
+    "longitud": -58.411227,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "522",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Arieta 2850",
+    "direccion_sucursal": "Arieta",
+    "provincia": "AR-B",
+    "localidad": "La Matanza",
+    "latitud": -34.676217,
+    "longitud": -58.563547,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "525",
@@ -1425,7 +3189,7 @@
     "latitud": -34.555471,
     "longitud": -58.479994,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.493Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "526",
@@ -1439,7 +3203,91 @@
     "latitud": -34.609566,
     "longitud": -58.443746,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.491Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "527",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Oro 2121",
+    "direccion_sucursal": "Fray Justo Sta. María de Oro",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.583171,
+    "longitud": -58.427612,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "528",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Aguirre 236",
+    "direccion_sucursal": "Aguirre",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.599811,
+    "longitud": -58.433801,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "529",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Viamonte 2296",
+    "direccion_sucursal": "Viamonte",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.601172,
+    "longitud": -58.399768,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "530",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Rivadavia 6074",
+    "direccion_sucursal": "Av. Rivadavia",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.624687,
+    "longitud": -58.451248,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "531",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Arévalo 1736",
+    "direccion_sucursal": "Arévalo",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.580624,
+    "longitud": -58.44015,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "533",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Rosario 85",
+    "direccion_sucursal": "Rosario",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.618327,
+    "longitud": -58.429695,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "534",
@@ -1453,7 +3301,49 @@
     "latitud": -34.653232,
     "longitud": -58.507257,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.492Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "535",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Murguiondo 4324",
+    "direccion_sucursal": "Murguiondo",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.677984,
+    "longitud": -58.474262,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "536",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Ricardo Balbín 4189",
+    "direccion_sucursal": "Ricardo Balbín",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.554987,
+    "longitud": -58.490865,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "537",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Charcas 4389",
+    "direccion_sucursal": "Charcas",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.583109,
+    "longitud": -58.423667,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "538",
@@ -1467,7 +3357,7 @@
     "latitud": -34.612364,
     "longitud": -58.412625,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.498Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "539",
@@ -1481,7 +3371,7 @@
     "latitud": -34.61632,
     "longitud": -58.458185,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.495Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "541",
@@ -1495,7 +3385,7 @@
     "latitud": -34.59728,
     "longitud": -58.376975,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.494Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "542",
@@ -1509,7 +3399,7 @@
     "latitud": -34.631451,
     "longitud": -58.485336,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.498Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "543",
@@ -1523,7 +3413,7 @@
     "latitud": -34.576803,
     "longitud": -58.486598,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.493Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "545",
@@ -1537,7 +3427,7 @@
     "latitud": -34.596288,
     "longitud": -58.384178,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.496Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "546",
@@ -1551,7 +3441,21 @@
     "latitud": -34.612879,
     "longitud": -58.393293,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.499Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "547",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Dorrego 851",
+    "direccion_sucursal": "Av. Dorrego",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.59142,
+    "longitud": -58.446921,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "548",
@@ -1565,7 +3469,7 @@
     "latitud": -34.570618,
     "longitud": -58.491897,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.491Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "550",
@@ -1579,7 +3483,35 @@
     "latitud": -34.605069,
     "longitud": -58.419242,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.497Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "551",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Monroe 3576",
+    "direccion_sucursal": "Monroe",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.56508,
+    "longitud": -58.470704,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "552",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Rivadavia 3751",
+    "direccion_sucursal": "Av. Rivadavia",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.610954,
+    "longitud": -58.419102,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "553",
@@ -1593,7 +3525,7 @@
     "latitud": -34.638023,
     "longitud": -58.527606,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.491Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "554",
@@ -1607,7 +3539,21 @@
     "latitud": -34.685119,
     "longitud": -58.474576,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.492Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "555",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Güemes 4159",
+    "direccion_sucursal": "Güemes",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.584804,
+    "longitud": -58.419019,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "556",
@@ -1621,7 +3567,133 @@
     "latitud": -34.546306,
     "longitud": -58.463162,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.495Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "557",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Arzobispo Espinosa 1187",
+    "direccion_sucursal": "Arzobispo Espinosa",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.6335,
+    "longitud": -58.370104,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "558",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Sarmiento 345",
+    "direccion_sucursal": "Sarmiento",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.604167,
+    "longitud": -58.371478,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "559",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Teodoro García 2310",
+    "direccion_sucursal": "Teodoro García",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.568295,
+    "longitud": -58.444457,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "56",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Glew",
+    "direccion_sucursal": "Av. Hipólito Yrigoyen",
+    "provincia": "AR-B",
+    "localidad": "Glew",
+    "latitud": -34.883091,
+    "longitud": -58.38823,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "560",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "B. Mitre 1751",
+    "direccion_sucursal": "Bartolomé Mitre",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.607887,
+    "longitud": -58.391361,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "561",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Ángel Gallardo 940",
+    "direccion_sucursal": "Av. Ángel Gallardo",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.606964,
+    "longitud": -58.443773,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "562",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "San Martín 620",
+    "direccion_sucursal": "San Martín",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.600814,
+    "longitud": -58.374107,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "563",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Hidalgo 955",
+    "direccion_sucursal": "Hidalgo",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.608199,
+    "longitud": -58.441521,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "565",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Ecuador 932",
+    "direccion_sucursal": "Ecuador",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.599281,
+    "longitud": -58.406195,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "566",
@@ -1635,7 +3707,21 @@
     "latitud": -34.578743,
     "longitud": -58.469274,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.496Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "568",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Olazábal 1898",
+    "direccion_sucursal": "Olazábal",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.557442,
+    "longitud": -58.453504,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "569",
@@ -1649,7 +3735,21 @@
     "latitud": -34.585727,
     "longitud": -58.388055,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.491Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "570",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Defensa 1400",
+    "direccion_sucursal": "Defensa",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.624098,
+    "longitud": -58.371153,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "571",
@@ -1663,7 +3763,49 @@
     "latitud": -34.609305,
     "longitud": -58.379243,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.495Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "572",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Centenera 1282",
+    "direccion_sucursal": "Centenera",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.634333,
+    "longitud": -58.435797,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "573",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Córdoba 3721",
+    "direccion_sucursal": "Av. Córdoba",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.597579,
+    "longitud": -58.419235,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "574",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "García del Río 3166",
+    "direccion_sucursal": "García del Río",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.550187,
+    "longitud": -58.4766,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "575",
@@ -1677,7 +3819,21 @@
     "latitud": -34.627914,
     "longitud": -58.433365,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.491Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "576",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Núñez 1563",
+    "direccion_sucursal": "Núñez",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.545639,
+    "longitud": -58.459569,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "577",
@@ -1691,7 +3847,21 @@
     "latitud": -34.599869,
     "longitud": -58.396275,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.496Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "579",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Av. Alte. Brown 795",
+    "direccion_sucursal": "Av. Almirante Brown",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.631998,
+    "longitud": -58.3613,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "580",
@@ -1705,7 +3875,21 @@
     "latitud": -34.602928,
     "longitud": -58.423044,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.499Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "581",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "J. M. Gutiérrez 3759",
+    "direccion_sucursal": "Juan María Gutiérrez",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.580779,
+    "longitud": -58.413292,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "582",
@@ -1719,7 +3903,7 @@
     "latitud": -34.567588,
     "longitud": -58.486436,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.500Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "583",
@@ -1733,7 +3917,7 @@
     "latitud": -34.609241,
     "longitud": -58.384045,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.492Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "585",
@@ -1747,7 +3931,49 @@
     "latitud": -34.619056,
     "longitud": -58.381498,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.500Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "586",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "San Martín 5930",
+    "direccion_sucursal": "Av. San Martín",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.59579,
+    "longitud": -58.500059,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "587",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Rojas 16",
+    "direccion_sucursal": "Rojas",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.620215,
+    "longitud": -58.441631,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "588",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Av. San Martín 4685",
+    "direccion_sucursal": "Av. San Martín",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.597497,
+    "longitud": -58.484575,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "589",
@@ -1761,7 +3987,7 @@
     "latitud": -34.613625,
     "longitud": -58.374702,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.494Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "590",
@@ -1775,7 +4001,35 @@
     "latitud": -34.588803,
     "longitud": -58.400575,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.494Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "591",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Tte. Gral. J. D. Perón 4177",
+    "direccion_sucursal": "Tte. Gral. J. D. Perón",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.605878,
+    "longitud": -58.425651,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "592",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Echeverría 1420",
+    "direccion_sucursal": "Echeverría",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.557057,
+    "longitud": -58.445842,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "593",
@@ -1789,7 +4043,7 @@
     "latitud": -34.622603,
     "longitud": -58.391341,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.500Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "594",
@@ -1803,7 +4057,7 @@
     "latitud": -34.629844,
     "longitud": -58.399654,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.491Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "595",
@@ -1817,7 +4071,7 @@
     "latitud": -34.639899,
     "longitud": -58.523585,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.494Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "596",
@@ -1831,7 +4085,21 @@
     "latitud": -34.582298,
     "longitud": -58.45184,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.497Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "597",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Sanabria 2733",
+    "direccion_sucursal": "Sanabria",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.611069,
+    "longitud": -58.506326,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "598",
@@ -1845,7 +4113,7 @@
     "latitud": -34.605721,
     "longitud": -58.392703,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.496Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "599",
@@ -1859,7 +4127,21 @@
     "latitud": -34.571795,
     "longitud": -58.47995,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.490Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "6",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Salguero",
+    "direccion_sucursal": "Jerónimo Salguero",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.574635,
+    "longitud": -58.403801,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "600",
@@ -1873,7 +4155,7 @@
     "latitud": -34.640941,
     "longitud": -58.479166,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.493Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "6001",
@@ -1887,7 +4169,7 @@
     "latitud": -31.406959,
     "longitud": -64.22427,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.497Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "6002",
@@ -1901,7 +4183,7 @@
     "latitud": -34.628752,
     "longitud": -58.461083,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.495Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "604",
@@ -1915,7 +4197,7 @@
     "latitud": -34.600614,
     "longitud": -58.4308,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.495Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "605",
@@ -1929,7 +4211,21 @@
     "latitud": -34.659228,
     "longitud": -58.512962,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.490Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "608",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Serrano 280",
+    "direccion_sucursal": "Serrano",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.598185,
+    "longitud": -58.444983,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "609",
@@ -1943,7 +4239,7 @@
     "latitud": -34.566538,
     "longitud": -58.431944,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.499Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "613",
@@ -1957,7 +4253,35 @@
     "latitud": -34.557292,
     "longitud": -58.465851,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.492Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "614",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Murguiondo 4054",
+    "direccion_sucursal": "Murguiondo",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.675977,
+    "longitud": -58.477049,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "615",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Rivadavia 4702",
+    "direccion_sucursal": "Av. Rivadavia",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.616267,
+    "longitud": -58.431839,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "616",
@@ -1971,7 +4295,7 @@
     "latitud": -34.614357,
     "longitud": -58.42997,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.500Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "617",
@@ -1985,7 +4309,35 @@
     "latitud": -34.562325,
     "longitud": -58.466949,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.500Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "618",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Bulnes 2751",
+    "direccion_sucursal": "Bulnes",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.580526,
+    "longitud": -58.405894,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "619",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Ramos Mejía 1019",
+    "direccion_sucursal": "Ramos Mejía",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.603848,
+    "longitud": -58.433412,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "62",
@@ -1999,7 +4351,7 @@
     "latitud": -34.449813,
     "longitud": -58.916319,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.490Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "621",
@@ -2013,7 +4365,7 @@
     "latitud": -34.617216,
     "longitud": -58.44524,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.490Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "622",
@@ -2027,7 +4379,7 @@
     "latitud": -34.616074,
     "longitud": -58.464286,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.499Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "623",
@@ -2041,7 +4393,7 @@
     "latitud": -34.610019,
     "longitud": -58.402456,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.490Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "624",
@@ -2055,7 +4407,7 @@
     "latitud": -34.598928,
     "longitud": -58.491826,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.490Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "625",
@@ -2069,7 +4421,7 @@
     "latitud": -34.650917,
     "longitud": -58.52574,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.498Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "626",
@@ -2083,7 +4435,63 @@
     "latitud": -34.639022,
     "longitud": -58.504957,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.499Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "627",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Paseo Colón 1179",
+    "direccion_sucursal": "Av. Paseo Colón",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.621333,
+    "longitud": -58.368478,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "628",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Rivadavia 4119",
+    "direccion_sucursal": "Av. Rivadavia",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.612645,
+    "longitud": -58.423957,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "630",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Aráoz 2148",
+    "direccion_sucursal": "Aráoz",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.588209,
+    "longitud": -58.419052,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "631",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Lavalle 368",
+    "direccion_sucursal": "Lavalle",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.601987,
+    "longitud": -58.371949,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "632",
@@ -2097,7 +4505,35 @@
     "latitud": -34.557913,
     "longitud": -58.463202,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.494Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "633",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Bolívar 270",
+    "direccion_sucursal": "Bolívar",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.611219,
+    "longitud": -58.37334,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "634",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Moreno 1401",
+    "direccion_sucursal": "Moreno",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.612239,
+    "longitud": -58.386223,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "636",
@@ -2111,7 +4547,7 @@
     "latitud": -34.592701,
     "longitud": -58.394831,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.499Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "637",
@@ -2125,7 +4561,21 @@
     "latitud": -34.602301,
     "longitud": -58.56193,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.491Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "639",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Pedro Goyena 188",
+    "direccion_sucursal": "Pedro Goyena",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.62547,
+    "longitud": -58.42993,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "640",
@@ -2139,7 +4589,7 @@
     "latitud": -34.60498,
     "longitud": -58.406744,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.491Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "643",
@@ -2153,7 +4603,7 @@
     "latitud": -34.622723,
     "longitud": -58.4964,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.491Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "645",
@@ -2167,7 +4617,7 @@
     "latitud": -34.60151,
     "longitud": -58.437085,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.496Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "646",
@@ -2181,7 +4631,21 @@
     "latitud": -34.572841,
     "longitud": -58.489511,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.493Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "649",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Emilio Castro 6817",
+    "direccion_sucursal": "Av. Emilio Castro",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.651978,
+    "longitud": -58.515854,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "652",
@@ -2195,7 +4659,7 @@
     "latitud": -34.58354,
     "longitud": -58.403812,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.495Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "654",
@@ -2209,7 +4673,7 @@
     "latitud": -34.610358,
     "longitud": -58.391532,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.498Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "656",
@@ -2223,7 +4687,35 @@
     "latitud": -34.599509,
     "longitud": -58.369906,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.490Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "657",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Montiel 1718",
+    "direccion_sucursal": "Montiel",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.657114,
+    "longitud": -58.51818,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "658",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Larrazábal 265",
+    "direccion_sucursal": "Av. Larrazábal",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.641982,
+    "longitud": -58.514266,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "659",
@@ -2237,7 +4729,7 @@
     "latitud": -34.573102,
     "longitud": -58.451281,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.499Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "660",
@@ -2251,7 +4743,21 @@
     "latitud": -34.574055,
     "longitud": -58.420475,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.491Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "661",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Aráoz 1140",
+    "direccion_sucursal": "Aráoz",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.594504,
+    "longitud": -58.428737,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "662",
@@ -2265,7 +4771,7 @@
     "latitud": -34.615032,
     "longitud": -58.409057,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.492Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "664",
@@ -2279,7 +4785,7 @@
     "latitud": -34.606446,
     "longitud": -58.497733,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.499Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "667",
@@ -2293,7 +4799,63 @@
     "latitud": -34.650719,
     "longitud": -58.490753,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.493Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "670",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Hidalgo 92",
+    "direccion_sucursal": "Hidalgo",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.617774,
+    "longitud": -58.438367,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "671",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Sucre 2774",
+    "direccion_sucursal": "Sucre",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.565978,
+    "longitud": -58.45841,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "672",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Av. Chilavert 6901",
+    "direccion_sucursal": "Av. Chilavert",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.68944,
+    "longitud": -58.479593,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "673",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Carrasco 421",
+    "direccion_sucursal": "Carrasco",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.632213,
+    "longitud": -58.491184,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "674",
@@ -2307,7 +4869,7 @@
     "latitud": -34.567072,
     "longitud": -58.454065,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.498Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "676",
@@ -2321,7 +4883,7 @@
     "latitud": -34.616166,
     "longitud": -58.376096,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.491Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "677",
@@ -2335,7 +4897,35 @@
     "latitud": -34.609409,
     "longitud": -58.486038,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.494Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "678",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Arregui 6369",
+    "direccion_sucursal": "Arregui",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.628317,
+    "longitud": -58.524049,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "679",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Scalabrini Ortiz 1396",
+    "direccion_sucursal": "Av. Raúl Scalabrini Ortiz",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.592171,
+    "longitud": -58.427222,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "680",
@@ -2349,7 +4939,21 @@
     "latitud": -34.653948,
     "longitud": -58.51897,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.491Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "682",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Viamonte 702",
+    "direccion_sucursal": "Viamonte",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.599933,
+    "longitud": -58.376924,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "683",
@@ -2363,7 +4967,147 @@
     "latitud": -34.561264,
     "longitud": -58.464248,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.499Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "684",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "México 1530",
+    "direccion_sucursal": "México",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.615549,
+    "longitud": -58.387978,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "685",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Pareja 4890",
+    "direccion_sucursal": "Pareja",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.605415,
+    "longitud": -58.523705,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "686",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Juan Agustín García 3202",
+    "direccion_sucursal": "Juan Agustín García",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.61257,
+    "longitud": -58.486073,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "687",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Álvarez Jonte 1938",
+    "direccion_sucursal": "Álvarez Jonte",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.603522,
+    "longitud": -58.471445,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "688",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Lope de Vega 19",
+    "direccion_sucursal": "Av. Lope de Vega",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.63691,
+    "longitud": -58.499466,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "689",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Av. Independencia 2716",
+    "direccion_sucursal": "Av. Independencia",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.619005,
+    "longitud": -58.403897,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "691",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Av. La Plata 716",
+    "direccion_sucursal": "Av. La Plata",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.623822,
+    "longitud": -58.4273,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "692",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Proxi Neuquen 520",
+    "direccion_sucursal": "Neuquen",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.615701,
+    "longitud": -58.438275,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "693",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Pedro Goyena 1680",
+    "direccion_sucursal": "Pedro Goyena",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.628516,
+    "longitud": -58.4521,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "694",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Tucumán 1541",
+    "direccion_sucursal": "Tucumán",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.601674,
+    "longitud": -58.388729,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "695",
@@ -2377,7 +5121,77 @@
     "latitud": -34.628636,
     "longitud": -58.366311,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.495Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "697",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Caboto 420",
+    "direccion_sucursal": "Caboto",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.62779,
+    "longitud": -58.360295,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "698",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Beláustegui 2748",
+    "direccion_sucursal": "Beláustegui",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.615452,
+    "longitud": -58.475326,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "699",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Dorrego 2145",
+    "direccion_sucursal": "Av. Dorrego",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.578078,
+    "longitud": -58.439338,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "7",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Quilmes",
+    "direccion_sucursal": "Av. La Plata",
+    "provincia": "AR-B",
+    "localidad": "Quilmes",
+    "latitud": -34.735911,
+    "longitud": -58.277988,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "70",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Maxi San Luis (70)",
+    "direccion_sucursal": "Ruta 3 km 1",
+    "provincia": "AR-C",
+    "localidad": "San Luis",
+    "latitud": -33.319163,
+    "longitud": -66.326925,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "701",
@@ -2391,7 +5205,77 @@
     "latitud": -34.754617,
     "longitud": -58.61294,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.493Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "702",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "CLAYPOLE",
+    "direccion_sucursal": "AVENIDA MONTEVERDE",
+    "provincia": "AR-C",
+    "localidad": "Claypole",
+    "latitud": -34.822169,
+    "longitud": -58.366915,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "703",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "MORENO",
+    "direccion_sucursal": "AVENIDA DEL LIBERTADOR",
+    "provincia": "AR-B",
+    "localidad": "Moreno",
+    "latitud": -34.589827,
+    "longitud": -58.75151,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "704",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "704  MAXI - EZPELETA (704)",
+    "direccion_sucursal": "Avenida Mitre",
+    "provincia": "AR-B",
+    "localidad": "Ezpeleta",
+    "latitud": -34.748715,
+    "longitud": -58.223592,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "706",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "LOMAS",
+    "direccion_sucursal": "AV GRAL MARTIN RODRIGUEZ",
+    "provincia": "AR-B",
+    "localidad": "Lomas de Zamora",
+    "latitud": -34.737009,
+    "longitud": -58.43522,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "707",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "AVDA JUAN B.JUSTO 4775 (5000)",
+    "direccion_sucursal": "AVDA JUAN B.JUSTO",
+    "provincia": "AR-C",
+    "localidad": "Córdoba",
+    "latitud": -31.367973,
+    "longitud": -64.177617,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "71",
@@ -2405,7 +5289,49 @@
     "latitud": -35.03737,
     "longitud": -58.75824,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.495Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "710",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Nahuel Huapi 5038",
+    "direccion_sucursal": "Nahuel Huapi",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.571129,
+    "longitud": -58.48838,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "711",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Álvarez Thomas 372",
+    "direccion_sucursal": "Av. Álvarez Thomas",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.58128,
+    "longitud": -58.44905,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "714",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Proxi Sucre 4230",
+    "direccion_sucursal": "Sucre",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.574478,
+    "longitud": -58.473047,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "715",
@@ -2419,7 +5345,35 @@
     "latitud": -34.591615,
     "longitud": -58.4339,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.499Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "716",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Castañeda 1836",
+    "direccion_sucursal": "Castañeda",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.553982,
+    "longitud": -58.436642,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "717",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Junin 1460",
+    "direccion_sucursal": "Junin",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.591204,
+    "longitud": -58.395574,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "719",
@@ -2433,7 +5387,7 @@
     "latitud": -34.628547,
     "longitud": -58.466674,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.490Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "72",
@@ -2447,7 +5401,21 @@
     "latitud": -34.919834,
     "longitud": -59.98827,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.498Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "723",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Alem 198",
+    "direccion_sucursal": "Av. Leandro N. Alem",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.60537,
+    "longitud": -58.370312,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "724",
@@ -2461,7 +5429,7 @@
     "latitud": -34.602748,
     "longitud": -58.395363,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.498Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "725",
@@ -2475,7 +5443,7 @@
     "latitud": -34.633156,
     "longitud": -58.459408,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.497Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "726",
@@ -2489,7 +5457,21 @@
     "latitud": -34.641224,
     "longitud": -58.521055,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.490Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "727",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Montiel 168",
+    "direccion_sucursal": "Montiel",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.641073,
+    "longitud": -58.526236,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "729",
@@ -2503,7 +5485,21 @@
     "latitud": -34.614164,
     "longitud": -58.396894,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.500Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "731",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Sarmiento 4551",
+    "direccion_sucursal": "Sarmiento",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.604003,
+    "longitud": -58.429635,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "732",
@@ -2517,7 +5513,105 @@
     "latitud": -34.609696,
     "longitud": -58.438723,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.496Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "733",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Lisandro de Latorre 790",
+    "direccion_sucursal": "Av. Lisandro de Latorre",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.647473,
+    "longitud": -58.519847,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "734",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Urquiza 1015",
+    "direccion_sucursal": "Urquiza",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.622701,
+    "longitud": -58.409197,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "735",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Pueyrredón 2120",
+    "direccion_sucursal": "Av. Pueyrredón",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.587782,
+    "longitud": -58.3979,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "739",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Franklin D Roosevelt 3002",
+    "direccion_sucursal": "Franklin D Roosevelt",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.560829,
+    "longitud": -58.466181,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "740",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Varela 888",
+    "direccion_sucursal": "Av. Varela",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.639449,
+    "longitud": -58.458543,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "741",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Proxi Av. Triunvirato 4210",
+    "direccion_sucursal": "Av. Triunvirato",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.578122,
+    "longitud": -58.480707,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "742",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Juan B. Alberdi 5494",
+    "direccion_sucursal": "Av. Juan Bautista Alberdi",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.649025,
+    "longitud": -58.499531,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "744",
@@ -2531,7 +5625,147 @@
     "latitud": -34.617396,
     "longitud": -58.378826,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.496Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "745",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Proxi Serrano 1458",
+    "direccion_sucursal": "Serrano",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.589702,
+    "longitud": -58.431666,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "747",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Proxi Cabrera 4106",
+    "direccion_sucursal": "Cabrera",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.595999,
+    "longitud": -58.424252,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "748",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Proxi Malabia 468",
+    "direccion_sucursal": "Malabia",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.598161,
+    "longitud": -58.438436,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "751",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Proxi Esmeralda 1040",
+    "direccion_sucursal": "Esmeralda",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.595929,
+    "longitud": -58.378526,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "752",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Proxi Balcarce 379",
+    "direccion_sucursal": "Balcarce",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.611868,
+    "longitud": -58.370576,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "754",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Proxi Gral Las Heras 3315",
+    "direccion_sucursal": "Av. Las Heras",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.58282,
+    "longitud": -58.407416,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "755",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "C.Tribulato 1279 (San Miguel)",
+    "direccion_sucursal": "C Tribulato",
+    "provincia": "AR-B",
+    "localidad": "San Miguel",
+    "latitud": -34.541507,
+    "longitud": -58.713798,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "756",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Paraguay 3079",
+    "direccion_sucursal": "Paraguay",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.594897,
+    "longitud": -58.410419,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "757",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Av. Santa Fe 2429",
+    "direccion_sucursal": "Av, Santa Fe",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.594558,
+    "longitud": -58.401673,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "758",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Avenida Corrientes 3401",
+    "direccion_sucursal": "Avenida Corrientes",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.603792,
+    "longitud": -58.413315,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "759",
@@ -2545,7 +5779,49 @@
     "latitud": -34.595877,
     "longitud": -58.438598,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.497Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "761",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Av. Corriente 919",
+    "direccion_sucursal": "Av. Corrientes",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.603636,
+    "longitud": -58.379641,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "773",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "MANUEL QUINTANA 570",
+    "direccion_sucursal": "Pres. Manuel Quintana",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.587997,
+    "longitud": -58.390467,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "774",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "SAENZ 1050",
+    "direccion_sucursal": "Av. Saenz",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.652803,
+    "longitud": -58.416088,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "775",
@@ -2559,7 +5835,21 @@
     "latitud": -34.604698,
     "longitud": -58.437856,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.490Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "777",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Bucarelli 1980",
+    "direccion_sucursal": "Bucarelli",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.579672,
+    "longitud": -58.484629,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "778",
@@ -2573,7 +5863,7 @@
     "latitud": -34.602747,
     "longitud": -58.417969,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.495Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "779",
@@ -2587,7 +5877,7 @@
     "latitud": -34.630075,
     "longitud": -58.45554,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.494Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "780",
@@ -2601,7 +5891,7 @@
     "latitud": -34.596671,
     "longitud": -58.442255,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.498Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "781",
@@ -2615,7 +5905,63 @@
     "latitud": -34.589234,
     "longitud": -58.504504,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.490Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "782",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Zapiola 2215",
+    "direccion_sucursal": "Zapiola",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.564601,
+    "longitud": -58.46426,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "783",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Cabildo 1287",
+    "direccion_sucursal": "Cabildo",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.567927,
+    "longitud": -58.448671,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "788",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "MANSILLA 3620",
+    "direccion_sucursal": "MANSILLA",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.591204,
+    "longitud": -58.414512,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "791",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "BEIRO 3342",
+    "direccion_sucursal": "BEIRO",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.598084,
+    "longitud": -58.500119,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "792",
@@ -2629,7 +5975,49 @@
     "latitud": -34.621351,
     "longitud": -58.418891,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.498Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "795",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "GUATEMALA 4540",
+    "direccion_sucursal": "GUATEMALA",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.587264,
+    "longitud": -58.423108,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "796",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Av. Chiclana 3002",
+    "direccion_sucursal": "Av. Chiclana",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.630648,
+    "longitud": -58.406589,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "797",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "Nogoyá 2744",
+    "direccion_sucursal": "Nogoyá",
+    "provincia": "AR-C",
+    "localidad": "Ciudad Autónoma de Buenos Aires",
+    "latitud": -34.600654,
+    "longitud": -58.488135,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "798",
@@ -2643,7 +6031,7 @@
     "latitud": -34.556574,
     "longitud": -58.459214,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.496Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "799",
@@ -2657,7 +6045,21 @@
     "latitud": -34.579708,
     "longitud": -58.434125,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.492Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "8",
+    "comercio_id": "10",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "La Plata",
+    "direccion_sucursal": "Camino Gral. Belgrano",
+    "provincia": "AR-B",
+    "localidad": "La Plata",
+    "latitud": -34.893655,
+    "longitud": -57.996156,
+    "marca": "Carrefour",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "805",
@@ -2671,7 +6073,7 @@
     "latitud": -34.605593,
     "longitud": -58.42155,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.490Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "808",
@@ -2685,7 +6087,7 @@
     "latitud": -34.584938,
     "longitud": -58.488307,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.491Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "809",
@@ -2699,7 +6101,7 @@
     "latitud": -34.596712,
     "longitud": -58.412794,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.491Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "811",
@@ -2713,7 +6115,7 @@
     "latitud": -34.57904,
     "longitud": -58.456242,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.499Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "812",
@@ -2727,7 +6129,7 @@
     "latitud": -34.643004,
     "longitud": -58.439194,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.491Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "815",
@@ -2741,7 +6143,7 @@
     "latitud": -34.643054,
     "longitud": -58.454334,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.492Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "816",
@@ -2755,7 +6157,7 @@
     "latitud": -34.570336,
     "longitud": -58.507788,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.498Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "819",
@@ -2769,7 +6171,7 @@
     "latitud": -34.54687,
     "longitud": -58.469493,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.492Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "823",
@@ -2783,7 +6185,7 @@
     "latitud": -34.594168,
     "longitud": -58.374179,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.490Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "826",
@@ -2797,7 +6199,7 @@
     "latitud": -34.615015,
     "longitud": -58.526426,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.493Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "827",
@@ -2811,7 +6213,7 @@
     "latitud": -34.602362,
     "longitud": -58.456076,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.498Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "828",
@@ -2825,7 +6227,7 @@
     "latitud": -34.563762,
     "longitud": -58.439291,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.496Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "829",
@@ -2839,7 +6241,7 @@
     "latitud": -34.550989,
     "longitud": -58.456098,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.492Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "830",
@@ -2853,7 +6255,7 @@
     "latitud": -34.530213,
     "longitud": -58.497297,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.494Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "837",
@@ -2867,7 +6269,7 @@
     "latitud": -34.556942,
     "longitud": -58.479745,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.493Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "838",
@@ -2881,7 +6283,7 @@
     "latitud": -34.590924,
     "longitud": -58.418685,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.491Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "839",
@@ -2895,7 +6297,7 @@
     "latitud": -34.603474,
     "longitud": -58.389449,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.498Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "840",
@@ -2909,7 +6311,7 @@
     "latitud": -34.623511,
     "longitud": -58.455101,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.496Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "845",
@@ -2923,7 +6325,7 @@
     "latitud": -34.567049,
     "longitud": -58.49061,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.500Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "848",
@@ -2937,7 +6339,7 @@
     "latitud": -34.580554,
     "longitud": -58.460541,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.494Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "849",
@@ -2951,7 +6353,7 @@
     "latitud": -34.5785,
     "longitud": -58.494348,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.495Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "850",
@@ -2965,7 +6367,7 @@
     "latitud": -34.54227,
     "longitud": -58.477905,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.493Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "854",
@@ -2979,7 +6381,7 @@
     "latitud": -34.64742,
     "longitud": 58.794224,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.499Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "855",
@@ -2993,7 +6395,7 @@
     "latitud": -34.610277,
     "longitud": -58.426126,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.498Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "856",
@@ -3007,7 +6409,7 @@
     "latitud": -34.607898,
     "longitud": -58.418902,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.495Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "858",
@@ -3021,7 +6423,7 @@
     "latitud": -34.605456,
     "longitud": -58.431181,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.495Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "859",
@@ -3035,7 +6437,7 @@
     "latitud": -34.594278,
     "longitud": -58.441357,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.490Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "860",
@@ -3049,7 +6451,7 @@
     "latitud": -30.982034,
     "longitud": -64.491897,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.493Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "861",
@@ -3063,7 +6465,7 @@
     "latitud": -31.656728,
     "longitud": -64.428594,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.494Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "864",
@@ -3077,7 +6479,7 @@
     "latitud": -34.622539,
     "longitud": -58.465381,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.492Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "865",
@@ -3091,7 +6493,7 @@
     "latitud": -31.239049,
     "longitud": -64.464619,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.494Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "866",
@@ -3105,7 +6507,7 @@
     "latitud": -34.646531,
     "longitud": -58.372726,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.500Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "867",
@@ -3119,7 +6521,7 @@
     "latitud": -31.090725,
     "longitud": -64.48531,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.490Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "868",
@@ -3133,7 +6535,7 @@
     "latitud": -34.598826,
     "longitud": -58.412055,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.499Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "869",
@@ -3147,7 +6549,7 @@
     "latitud": -31.657556,
     "longitud": -64.432327,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.495Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "870",
@@ -3161,7 +6563,7 @@
     "latitud": -34.578913,
     "longitud": -58.425513,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.493Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "871",
@@ -3175,7 +6577,7 @@
     "latitud": -30.980625,
     "longitud": -64.098345,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.494Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "872",
@@ -3189,7 +6591,7 @@
     "latitud": -31.167561,
     "longitud": -64.31945,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.498Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "873",
@@ -3203,7 +6605,7 @@
     "latitud": -31.425366,
     "longitud": -64.187647,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.499Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "874",
@@ -3217,7 +6619,7 @@
     "latitud": -31.387152,
     "longitud": -64.21515,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.498Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "876",
@@ -3231,7 +6633,7 @@
     "latitud": -31.426419,
     "longitud": -64.215643,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.492Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "877",
@@ -3245,6 +6647,6 @@
     "latitud": -34.544638,
     "longitud": -58.471794,
     "marca": "Carrefour",
-    "ultima_actualizacion": "2025-12-29T19:14:57.492Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   }
 ]

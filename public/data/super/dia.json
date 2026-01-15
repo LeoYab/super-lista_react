@@ -11,7 +11,7 @@
     "latitud": -34.5971373,
     "longitud": -58.4976429,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.228Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "1066",
@@ -25,7 +25,7 @@
     "latitud": -34.6783452,
     "longitud": -58.4873173,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.232Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "1072",
@@ -39,7 +39,7 @@
     "latitud": -34.6308932,
     "longitud": -58.3984397,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.232Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "1074",
@@ -53,7 +53,21 @@
     "latitud": -34.618411,
     "longitud": -58.398396,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.236Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "108",
+    "comercio_id": "15",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "108 - VILLA URQUIZA",
+    "direccion_sucursal": "AV MONROE",
+    "provincia": "AR-C",
+    "localidad": "CAPITAL FEDERAL",
+    "latitud": -34.5694121,
+    "longitud": -58.477915,
+    "marca": "Dia",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "1080",
@@ -67,7 +81,7 @@
     "latitud": -34.616082,
     "longitud": -58.442562,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.236Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "1086",
@@ -81,7 +95,7 @@
     "latitud": -34.6534717,
     "longitud": -58.3887202,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.236Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "109",
@@ -95,7 +109,7 @@
     "latitud": -34.5500853,
     "longitud": -58.463929,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.229Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "1090",
@@ -109,7 +123,7 @@
     "latitud": -34.6552826,
     "longitud": -58.4759022,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.236Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "1091",
@@ -123,7 +137,7 @@
     "latitud": -34.579057,
     "longitud": -58.4249155,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.236Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "1097",
@@ -137,7 +151,7 @@
     "latitud": -34.565357,
     "longitud": -58.461343,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.232Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "1098",
@@ -151,7 +165,7 @@
     "latitud": -34.626092,
     "longitud": -58.450539,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.236Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "1099",
@@ -165,7 +179,7 @@
     "latitud": -34.630227,
     "longitud": -58.462879,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.236Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "11",
@@ -179,7 +193,7 @@
     "latitud": -34.6298527,
     "longitud": -58.3628499,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.228Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "1100",
@@ -193,7 +207,7 @@
     "latitud": -34.551453,
     "longitud": -58.466766,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.236Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "1101",
@@ -207,7 +221,7 @@
     "latitud": -34.612561,
     "longitud": -58.442266,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.236Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "1102",
@@ -221,7 +235,7 @@
     "latitud": -34.60445,
     "longitud": -58.493794,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.236Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "111",
@@ -235,7 +249,7 @@
     "latitud": -34.542076,
     "longitud": -58.4733624,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.229Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "115",
@@ -249,7 +263,7 @@
     "latitud": -34.5918835,
     "longitud": -58.4474593,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.229Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "117",
@@ -263,7 +277,21 @@
     "latitud": -34.5685513,
     "longitud": -58.4928642,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.229Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "124",
+    "comercio_id": "15",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "124 - BOEDO",
+    "direccion_sucursal": "AV SAN JUAN",
+    "provincia": "AR-C",
+    "localidad": "CAPITAL FEDERAL",
+    "latitud": -34.6247055,
+    "longitud": -58.4097384,
+    "marca": "Dia",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "13",
@@ -277,7 +305,7 @@
     "latitud": -34.6243386,
     "longitud": -58.4725229,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.228Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "133",
@@ -291,7 +319,21 @@
     "latitud": -34.6463432,
     "longitud": -58.4673468,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.229Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "136",
+    "comercio_id": "15",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "136 - VILLA LURO",
+    "direccion_sucursal": "AV DIRECTORIO",
+    "provincia": "AR-C",
+    "localidad": "CAPITAL FEDERAL",
+    "latitud": -34.6486865,
+    "longitud": -58.4884177,
+    "marca": "Dia",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "142",
@@ -305,7 +347,7 @@
     "latitud": -34.6344047,
     "longitud": -58.3914525,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.229Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "1520",
@@ -319,7 +361,7 @@
     "latitud": -34.6554344,
     "longitud": -58.4141552,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.232Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "1521",
@@ -333,7 +375,7 @@
     "latitud": -34.6810082,
     "longitud": -58.4679551,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.232Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "1523",
@@ -347,7 +389,7 @@
     "latitud": -34.6432221,
     "longitud": -58.4418066,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.236Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "1524",
@@ -361,7 +403,7 @@
     "latitud": -34.5881385,
     "longitud": -58.4856644,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.232Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "1526",
@@ -375,7 +417,7 @@
     "latitud": -34.6728176,
     "longitud": -58.4994401,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.237Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "1527",
@@ -389,7 +431,7 @@
     "latitud": -34.6462384,
     "longitud": -58.4588908,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.232Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "1531",
@@ -403,7 +445,7 @@
     "latitud": -34.6326213,
     "longitud": -58.4061362,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.237Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "1532",
@@ -417,7 +459,7 @@
     "latitud": -34.6479782,
     "longitud": -58.5063272,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.237Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "1533",
@@ -431,7 +473,7 @@
     "latitud": -34.6651686,
     "longitud": -58.5033475,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.237Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "1538",
@@ -445,7 +487,7 @@
     "latitud": -34.6278546,
     "longitud": -58.5156425,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.237Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "1542",
@@ -459,7 +501,7 @@
     "latitud": -34.645778,
     "longitud": -58.420358,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.232Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "1543",
@@ -473,7 +515,7 @@
     "latitud": -34.646222,
     "longitud": -58.414442,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.237Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "16",
@@ -487,7 +529,7 @@
     "latitud": -34.621573,
     "longitud": -58.4278588,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.228Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "164",
@@ -501,7 +543,35 @@
     "latitud": -34.604513,
     "longitud": -58.3949583,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.229Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "168",
+    "comercio_id": "15",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "168 - VILLA CRESPO",
+    "direccion_sucursal": "AV MEDRANO",
+    "provincia": "AR-C",
+    "localidad": "CAPITAL FEDERAL",
+    "latitud": -34.594997,
+    "longitud": -58.4196875,
+    "marca": "Dia",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "189",
+    "comercio_id": "15",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "189 - ALMAGRO",
+    "direccion_sucursal": "AV RIVADAVIA",
+    "provincia": "AR-C",
+    "localidad": "CAPITAL FEDERAL",
+    "latitud": -34.6109309,
+    "longitud": -58.4168101,
+    "marca": "Dia",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "197",
@@ -515,7 +585,7 @@
     "latitud": -34.5660554,
     "longitud": -58.4541372,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.230Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "198",
@@ -529,7 +599,21 @@
     "latitud": -34.6190759,
     "longitud": -58.3729926,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.230Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "20",
+    "comercio_id": "15",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "20 - VERSALLES",
+    "direccion_sucursal": "CL ALVAREZ JONTE",
+    "provincia": "AR-C",
+    "localidad": "CAPITAL FEDERAL",
+    "latitud": -34.6235495,
+    "longitud": -58.5107956,
+    "marca": "Dia",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "205",
@@ -543,7 +627,7 @@
     "latitud": -34.6423398,
     "longitud": -58.4555196,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.230Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "206",
@@ -557,7 +641,7 @@
     "latitud": -34.5855958,
     "longitud": -58.4535529,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.230Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "208",
@@ -571,7 +655,7 @@
     "latitud": -34.6273661,
     "longitud": -58.4466235,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.230Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "209",
@@ -585,7 +669,7 @@
     "latitud": -34.6373762,
     "longitud": -58.3697099,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.230Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "21",
@@ -599,7 +683,7 @@
     "latitud": -34.6395755,
     "longitud": -58.5276851,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.228Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "214",
@@ -613,7 +697,7 @@
     "latitud": -34.6218749,
     "longitud": -58.4407532,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.230Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "217",
@@ -627,7 +711,7 @@
     "latitud": -34.6300176,
     "longitud": -58.4873541,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.230Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "218",
@@ -641,7 +725,21 @@
     "latitud": -34.6064336,
     "longitud": -58.4855976,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.230Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "219",
+    "comercio_id": "15",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "219 - VILLA GENERAL MITRE",
+    "direccion_sucursal": "AV ALVAREZ JONTE",
+    "provincia": "AR-C",
+    "localidad": "CAPITAL FEDERAL",
+    "latitud": -34.6052957,
+    "longitud": -58.4740289,
+    "marca": "Dia",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "223",
@@ -655,7 +753,7 @@
     "latitud": -34.6096892,
     "longitud": -58.5076977,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.230Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "224",
@@ -669,7 +767,7 @@
     "latitud": -34.6230067,
     "longitud": -58.4612086,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.230Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "239",
@@ -683,7 +781,21 @@
     "latitud": -34.5907998,
     "longitud": -58.4353056,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.230Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "24",
+    "comercio_id": "15",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "24 - VILLA CRESPO",
+    "direccion_sucursal": "CL AV.SAN MARTIN",
+    "provincia": "AR-C",
+    "localidad": "CAPITAL FEDERAL",
+    "latitud": -34.6031233,
+    "longitud": -58.4637523,
+    "marca": "Dia",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "241",
@@ -697,7 +809,7 @@
     "latitud": -34.6178375,
     "longitud": -58.4425506,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.230Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "242",
@@ -711,7 +823,7 @@
     "latitud": -34.5872269,
     "longitud": -58.4821776,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.230Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "245",
@@ -725,7 +837,7 @@
     "latitud": -34.5773372,
     "longitud": -58.5032059,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.230Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "252",
@@ -739,7 +851,7 @@
     "latitud": -34.5816907,
     "longitud": -58.4223268,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.230Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "254",
@@ -753,7 +865,7 @@
     "latitud": -34.6266864,
     "longitud": -58.4245818,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.230Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "261",
@@ -767,7 +879,7 @@
     "latitud": -34.6051859,
     "longitud": -58.3847811,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.230Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "262",
@@ -781,7 +893,7 @@
     "latitud": -34.6355448,
     "longitud": -58.4483758,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.230Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "263",
@@ -795,7 +907,7 @@
     "latitud": -34.6401732,
     "longitud": -58.4813056,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.230Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "266",
@@ -809,7 +921,7 @@
     "latitud": -34.6298211,
     "longitud": -58.3980513,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.230Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "268",
@@ -823,7 +935,7 @@
     "latitud": -34.5971041,
     "longitud": -58.3947861,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.230Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "269",
@@ -837,7 +949,7 @@
     "latitud": -34.5594987,
     "longitud": -58.4545906,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.230Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "27",
@@ -851,7 +963,7 @@
     "latitud": -34.6322172,
     "longitud": -58.4751124,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.228Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "271",
@@ -865,7 +977,7 @@
     "latitud": -34.6228846,
     "longitud": -58.3931835,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.230Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "272",
@@ -879,7 +991,7 @@
     "latitud": -34.5880694,
     "longitud": -58.4205839,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.230Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "274",
@@ -893,7 +1005,7 @@
     "latitud": -34.5555822,
     "longitud": -58.4554028,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.230Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "277",
@@ -907,7 +1019,7 @@
     "latitud": -34.5479546,
     "longitud": -58.4689903,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.230Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "284",
@@ -921,7 +1033,7 @@
     "latitud": -34.5863049,
     "longitud": -58.4109701,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.230Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "286",
@@ -935,7 +1047,7 @@
     "latitud": -34.5667734,
     "longitud": -58.4335617,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.230Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "288",
@@ -949,7 +1061,7 @@
     "latitud": -34.6154894,
     "longitud": -58.4376446,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.230Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "29",
@@ -963,7 +1075,7 @@
     "latitud": -34.6351629,
     "longitud": -58.4383403,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.228Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "290",
@@ -977,7 +1089,7 @@
     "latitud": -34.5861813,
     "longitud": -58.4015054,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.230Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "291",
@@ -991,7 +1103,7 @@
     "latitud": -34.578467,
     "longitud": -58.4634818,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.230Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "293",
@@ -1005,7 +1117,7 @@
     "latitud": -34.6251504,
     "longitud": -58.3726168,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.230Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "299",
@@ -1019,7 +1131,7 @@
     "latitud": -34.6572416,
     "longitud": -58.5095764,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.230Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "3",
@@ -1033,7 +1145,7 @@
     "latitud": -34.6173202,
     "longitud": -58.3916913,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.228Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "300",
@@ -1047,7 +1159,7 @@
     "latitud": -34.5766733,
     "longitud": -58.4315629,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.230Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "301",
@@ -1061,7 +1173,7 @@
     "latitud": -34.5970782,
     "longitud": -58.3877718,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.230Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "302",
@@ -1075,7 +1187,7 @@
     "latitud": -34.6144399,
     "longitud": -58.4608499,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.230Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "303",
@@ -1089,7 +1201,7 @@
     "latitud": -34.6123916,
     "longitud": -58.3947104,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.230Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "304",
@@ -1103,7 +1215,7 @@
     "latitud": -34.5919508,
     "longitud": -58.3983517,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.230Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "306",
@@ -1117,7 +1229,7 @@
     "latitud": -34.6552174,
     "longitud": -58.5223907,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.230Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "307",
@@ -1131,7 +1243,21 @@
     "latitud": -34.5920824,
     "longitud": -58.4118526,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.230Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "308",
+    "comercio_id": "15",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "308 - VILLA GENERAL MITRE",
+    "direccion_sucursal": "AV GAONA",
+    "provincia": "AR-C",
+    "localidad": "CAPITAL FEDERAL",
+    "latitud": -34.6182412,
+    "longitud": -58.4699422,
+    "marca": "Dia",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "31",
@@ -1145,7 +1271,7 @@
     "latitud": -34.5831225,
     "longitud": -58.4980504,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.228Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "316",
@@ -1159,7 +1285,7 @@
     "latitud": -34.5911227,
     "longitud": -58.4978318,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.230Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "317",
@@ -1173,7 +1299,7 @@
     "latitud": -34.5520142,
     "longitud": -58.4736585,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.230Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "32",
@@ -1187,7 +1313,7 @@
     "latitud": -34.6871711,
     "longitud": -58.4769857,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.228Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "321",
@@ -1201,7 +1327,7 @@
     "latitud": -34.5945934,
     "longitud": -58.4053499,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.230Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "324",
@@ -1215,7 +1341,7 @@
     "latitud": -34.5606253,
     "longitud": -58.4607081,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.230Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "33",
@@ -1229,7 +1355,7 @@
     "latitud": -34.6358731,
     "longitud": -58.3603133,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.228Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "336",
@@ -1243,7 +1369,7 @@
     "latitud": -34.651709,
     "longitud": -58.41803,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.230Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "337",
@@ -1257,7 +1383,7 @@
     "latitud": -34.5600965,
     "longitud": -58.4714163,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.230Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "339",
@@ -1271,7 +1397,7 @@
     "latitud": -34.6253767,
     "longitud": -58.3823011,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.230Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "344",
@@ -1285,7 +1411,7 @@
     "latitud": -34.6039858,
     "longitud": -58.414885,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.230Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "346",
@@ -1299,7 +1425,7 @@
     "latitud": -34.5962353,
     "longitud": -58.4115956,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.230Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "347",
@@ -1313,7 +1439,7 @@
     "latitud": -34.6632563,
     "longitud": -58.4887387,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.230Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "349",
@@ -1327,7 +1453,21 @@
     "latitud": -34.6214599,
     "longitud": -58.3899576,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.230Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "35",
+    "comercio_id": "15",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "35 - BOEDO",
+    "direccion_sucursal": "CL BOEDO",
+    "provincia": "AR-C",
+    "localidad": "CAPITAL FEDERAL",
+    "latitud": -34.6235872,
+    "longitud": -58.4162756,
+    "marca": "Dia",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "350",
@@ -1341,7 +1481,7 @@
     "latitud": -34.5794505,
     "longitud": -58.4541889,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.230Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "352",
@@ -1355,7 +1495,7 @@
     "latitud": -34.6263387,
     "longitud": -58.3789187,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.230Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "354",
@@ -1369,7 +1509,7 @@
     "latitud": -34.580357,
     "longitud": -58.472993,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.231Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "355",
@@ -1383,7 +1523,7 @@
     "latitud": -34.610235,
     "longitud": -58.409618,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.231Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "356",
@@ -1397,7 +1537,7 @@
     "latitud": -34.6643978,
     "longitud": -58.4489591,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.231Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "358",
@@ -1411,7 +1551,7 @@
     "latitud": -34.651054,
     "longitud": -58.4712834,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.231Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "359",
@@ -1425,7 +1565,7 @@
     "latitud": -34.5971577,
     "longitud": -58.4246163,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.233Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "36",
@@ -1439,7 +1579,7 @@
     "latitud": -34.627766,
     "longitud": -58.4338966,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.228Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "360",
@@ -1453,7 +1593,7 @@
     "latitud": -34.6412489,
     "longitud": -58.3690741,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.233Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "361",
@@ -1467,7 +1607,7 @@
     "latitud": -34.6320434,
     "longitud": -58.3608448,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.233Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "363",
@@ -1481,7 +1621,7 @@
     "latitud": -34.630166,
     "longitud": -58.3855908,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.233Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "364",
@@ -1495,7 +1635,7 @@
     "latitud": -34.5718154,
     "longitud": -58.5059748,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.233Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "365",
@@ -1509,7 +1649,7 @@
     "latitud": -34.5873745,
     "longitud": -58.4927966,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.233Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "366",
@@ -1523,7 +1663,7 @@
     "latitud": -34.5750195,
     "longitud": -58.4833173,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.233Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "368",
@@ -1537,7 +1677,7 @@
     "latitud": -34.6424371,
     "longitud": -58.4358917,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.233Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "369",
@@ -1551,7 +1691,7 @@
     "latitud": -34.6226946,
     "longitud": -58.4315565,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.233Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "370",
@@ -1565,7 +1705,7 @@
     "latitud": -34.6377738,
     "longitud": -58.4241346,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.233Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "371",
@@ -1579,7 +1719,7 @@
     "latitud": -34.6091824,
     "longitud": -58.4618177,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.233Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "375",
@@ -1593,7 +1733,7 @@
     "latitud": -34.5532062,
     "longitud": -58.4647421,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.233Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "377",
@@ -1607,7 +1747,7 @@
     "latitud": -34.6594782,
     "longitud": -58.4286401,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.233Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "378",
@@ -1621,7 +1761,7 @@
     "latitud": -34.5698385,
     "longitud": -58.4322732,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.233Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "379",
@@ -1635,7 +1775,7 @@
     "latitud": -34.6286214,
     "longitud": -58.5058549,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.233Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "381",
@@ -1649,7 +1789,7 @@
     "latitud": -34.6325699,
     "longitud": -58.4627288,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.233Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "382",
@@ -1663,7 +1803,7 @@
     "latitud": -34.6199615,
     "longitud": -58.4323637,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.234Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "383",
@@ -1677,7 +1817,7 @@
     "latitud": -34.6337695,
     "longitud": -58.4816573,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.234Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "384",
@@ -1691,7 +1831,7 @@
     "latitud": -34.6036515,
     "longitud": -58.405234,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.234Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "386",
@@ -1705,7 +1845,7 @@
     "latitud": -34.6764626,
     "longitud": -58.4933966,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.234Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "387",
@@ -1719,7 +1859,7 @@
     "latitud": -34.6530744,
     "longitud": -58.4814134,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.234Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "389",
@@ -1733,7 +1873,7 @@
     "latitud": -34.6262843,
     "longitud": -58.4569877,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.234Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "390",
@@ -1747,7 +1887,7 @@
     "latitud": -34.6306283,
     "longitud": -58.4692321,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.234Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "391",
@@ -1761,7 +1901,7 @@
     "latitud": -34.6182691,
     "longitud": -58.476016,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.231Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "393",
@@ -1775,7 +1915,7 @@
     "latitud": -34.5580778,
     "longitud": -58.4669991,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.234Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "394",
@@ -1789,7 +1929,7 @@
     "latitud": -34.6273133,
     "longitud": -58.4286401,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.234Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "395",
@@ -1803,7 +1943,7 @@
     "latitud": -34.5795405,
     "longitud": -58.4310392,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.234Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "396",
@@ -1817,7 +1957,7 @@
     "latitud": -34.5978334,
     "longitud": -58.442373,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.234Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "397",
@@ -1831,7 +1971,7 @@
     "latitud": -34.6034002,
     "longitud": -58.4100788,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.234Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "4",
@@ -1845,7 +1985,7 @@
     "latitud": -34.6369605,
     "longitud": -58.4045551,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.228Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "400",
@@ -1859,7 +1999,7 @@
     "latitud": -34.6021724,
     "longitud": -58.3767232,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.234Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "402",
@@ -1873,7 +2013,7 @@
     "latitud": -34.5733048,
     "longitud": -58.4220692,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.234Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "403",
@@ -1887,7 +2027,7 @@
     "latitud": -34.6372315,
     "longitud": -58.4157757,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.234Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "404",
@@ -1901,7 +2041,7 @@
     "latitud": -34.668423,
     "longitud": -58.486858,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.234Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "407",
@@ -1915,7 +2055,7 @@
     "latitud": -34.5637332,
     "longitud": -58.4567305,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.234Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "408",
@@ -1929,7 +2069,7 @@
     "latitud": -34.5905692,
     "longitud": -58.4244299,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.234Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "409",
@@ -1943,7 +2083,7 @@
     "latitud": -34.6299045,
     "longitud": -58.3891921,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.234Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "410",
@@ -1957,7 +2097,7 @@
     "latitud": -34.6119685,
     "longitud": -58.5279779,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.234Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "411",
@@ -1971,7 +2111,7 @@
     "latitud": -34.6467684,
     "longitud": -58.5140065,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.234Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "412",
@@ -1985,7 +2125,7 @@
     "latitud": -34.5727565,
     "longitud": -58.4883282,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.234Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "413",
@@ -1999,7 +2139,7 @@
     "latitud": -34.5585404,
     "longitud": -58.4603022,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.234Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "414",
@@ -2013,7 +2153,7 @@
     "latitud": -34.577198,
     "longitud": -58.4599651,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.234Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "415",
@@ -2027,7 +2167,7 @@
     "latitud": -34.5976686,
     "longitud": -58.3781834,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.234Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "417",
@@ -2041,7 +2181,7 @@
     "latitud": -34.5672438,
     "longitud": -58.4502161,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.234Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "418",
@@ -2055,7 +2195,21 @@
     "latitud": -34.5830372,
     "longitud": -58.476676,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.234Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "42",
+    "comercio_id": "15",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "42 - VERSALLES",
+    "direccion_sucursal": "CL ALVAREZ JONTE",
+    "provincia": "AR-C",
+    "localidad": "CAPITAL FEDERAL",
+    "latitud": -34.6178053,
+    "longitud": -58.5020885,
+    "marca": "Dia",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "420",
@@ -2069,7 +2223,7 @@
     "latitud": -34.583693,
     "longitud": -58.4675266,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.234Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "421",
@@ -2083,7 +2237,7 @@
     "latitud": -34.6136307,
     "longitud": -58.3746625,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.234Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "422",
@@ -2097,7 +2251,7 @@
     "latitud": -34.6298967,
     "longitud": -58.4954224,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.234Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "424",
@@ -2111,7 +2265,7 @@
     "latitud": -34.5861248,
     "longitud": -58.442219,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.234Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "427",
@@ -2125,7 +2279,7 @@
     "latitud": -34.5827139,
     "longitud": -58.4360493,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.234Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "428",
@@ -2139,7 +2293,7 @@
     "latitud": -34.56768,
     "longitud": -58.4428269,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.234Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "429",
@@ -2153,7 +2307,7 @@
     "latitud": -34.659422,
     "longitud": -58.476611,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.234Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "430",
@@ -2167,7 +2321,7 @@
     "latitud": -34.55308,
     "longitud": -58.48897,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.234Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "431",
@@ -2181,7 +2335,7 @@
     "latitud": -34.600968,
     "longitud": -58.435513,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.234Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "435",
@@ -2195,7 +2349,7 @@
     "latitud": -34.5716404,
     "longitud": -58.4831992,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.234Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "436",
@@ -2209,7 +2363,7 @@
     "latitud": -34.612793,
     "longitud": -58.42542,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.234Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "439",
@@ -2223,7 +2377,7 @@
     "latitud": -34.609441,
     "longitud": -58.386606,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.234Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "440",
@@ -2237,7 +2391,7 @@
     "latitud": -34.603357,
     "longitud": -58.418825,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.234Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "446",
@@ -2251,7 +2405,7 @@
     "latitud": -34.6117242,
     "longitud": -58.4332766,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.234Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "447",
@@ -2265,7 +2419,7 @@
     "latitud": -34.6510531,
     "longitud": -58.4911522,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.234Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "448",
@@ -2279,7 +2433,21 @@
     "latitud": -34.6333148,
     "longitud": -58.4273412,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.234Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "45",
+    "comercio_id": "15",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "45 - MATADEROS",
+    "direccion_sucursal": "CL LISANDRO DE LA TORRE",
+    "provincia": "AR-C",
+    "localidad": "CAPITAL FEDERAL",
+    "latitud": -34.650879,
+    "longitud": -58.5153128,
+    "marca": "Dia",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "451",
@@ -2293,7 +2461,7 @@
     "latitud": -34.5643568,
     "longitud": -58.4399389,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.234Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "454",
@@ -2307,7 +2475,7 @@
     "latitud": -34.6047958,
     "longitud": -58.3783133,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.234Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "455",
@@ -2321,7 +2489,7 @@
     "latitud": -34.6016761,
     "longitud": -58.3971054,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.234Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "456",
@@ -2335,7 +2503,7 @@
     "latitud": -34.6416461,
     "longitud": -58.4887571,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.234Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "457",
@@ -2349,7 +2517,7 @@
     "latitud": -34.6550838,
     "longitud": -58.4959797,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.234Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "459",
@@ -2363,7 +2531,21 @@
     "latitud": -34.575674,
     "longitud": -58.4519034,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.234Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "46",
+    "comercio_id": "15",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "46 - MATADEROS",
+    "direccion_sucursal": "CL JUAN BAUTISTA ALBERDI",
+    "provincia": "AR-C",
+    "localidad": "CAPITAL FEDERAL",
+    "latitud": -34.6524097,
+    "longitud": -58.5033599,
+    "marca": "Dia",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "461",
@@ -2377,7 +2559,7 @@
     "latitud": -34.6227658,
     "longitud": -58.4965228,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.234Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "463",
@@ -2391,7 +2573,7 @@
     "latitud": -34.6175785,
     "longitud": -58.3779568,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.234Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "464",
@@ -2405,7 +2587,7 @@
     "latitud": -34.5998484,
     "longitud": -58.3796545,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.234Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "465",
@@ -2419,7 +2601,7 @@
     "latitud": -34.6008689,
     "longitud": -58.3731891,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.234Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "466",
@@ -2433,7 +2615,7 @@
     "latitud": -34.5878485,
     "longitud": -58.4270195,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.234Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "467",
@@ -2447,7 +2629,7 @@
     "latitud": -34.5701559,
     "longitud": -58.4501603,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.234Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "468",
@@ -2461,7 +2643,7 @@
     "latitud": -34.5814348,
     "longitud": -58.4429618,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.234Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "469",
@@ -2475,7 +2657,21 @@
     "latitud": -34.668003,
     "longitud": -58.5068737,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.234Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "47",
+    "comercio_id": "15",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "47 - VILLA LUGANO",
+    "direccion_sucursal": "CL SOMELLERA",
+    "provincia": "AR-C",
+    "localidad": "CAPITAL FEDERAL",
+    "latitud": -34.6760405,
+    "longitud": -58.47618,
+    "marca": "Dia",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "470",
@@ -2489,7 +2685,7 @@
     "latitud": -34.6081269,
     "longitud": -58.3760198,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.234Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "472",
@@ -2503,7 +2699,7 @@
     "latitud": -34.6112838,
     "longitud": -58.4743521,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.234Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "474",
@@ -2517,7 +2713,7 @@
     "latitud": -34.6006324,
     "longitud": -58.3886005,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.234Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "475",
@@ -2531,7 +2727,7 @@
     "latitud": -34.6071505,
     "longitud": -58.4484476,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.234Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "476",
@@ -2545,7 +2741,7 @@
     "latitud": -34.6100864,
     "longitud": -58.3878399,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.234Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "477",
@@ -2559,7 +2755,7 @@
     "latitud": -34.606897,
     "longitud": -58.3937157,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.234Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "478",
@@ -2573,7 +2769,7 @@
     "latitud": -34.5893691,
     "longitud": -58.4462919,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.234Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "480",
@@ -2587,7 +2783,7 @@
     "latitud": -34.5521177,
     "longitud": -58.4984145,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.234Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "481",
@@ -2601,7 +2797,7 @@
     "latitud": -34.6094575,
     "longitud": -58.3961317,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.234Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "484",
@@ -2615,7 +2811,7 @@
     "latitud": -34.6034242,
     "longitud": -58.3634962,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.234Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "485",
@@ -2629,7 +2825,7 @@
     "latitud": -34.6177626,
     "longitud": -58.416892,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.234Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "486",
@@ -2643,7 +2839,7 @@
     "latitud": -34.5482475,
     "longitud": -58.4669121,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.234Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "487",
@@ -2657,7 +2853,7 @@
     "latitud": -34.5608571,
     "longitud": -58.4631715,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "488",
@@ -2671,7 +2867,7 @@
     "latitud": -34.5653623,
     "longitud": -58.4832909,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "489",
@@ -2685,7 +2881,7 @@
     "latitud": -34.6158804,
     "longitud": -58.4833332,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "49",
@@ -2699,7 +2895,7 @@
     "latitud": -34.6140308,
     "longitud": -58.4929315,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.228Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "490",
@@ -2713,7 +2909,7 @@
     "latitud": -34.6121897,
     "longitud": -58.4693123,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "491",
@@ -2727,7 +2923,7 @@
     "latitud": -34.6244356,
     "longitud": -58.4349162,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "493",
@@ -2741,7 +2937,7 @@
     "latitud": -34.6116871,
     "longitud": -58.381835,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "497",
@@ -2755,7 +2951,7 @@
     "latitud": -34.5951915,
     "longitud": -58.3804858,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "498",
@@ -2769,7 +2965,7 @@
     "latitud": -34.5512734,
     "longitud": -58.4871771,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "5",
@@ -2783,7 +2979,7 @@
     "latitud": -34.6236734,
     "longitud": -58.4014697,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.228Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "50",
@@ -2797,7 +2993,7 @@
     "latitud": -34.6147863,
     "longitud": -58.4787121,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.228Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "500",
@@ -2811,7 +3007,7 @@
     "latitud": -34.5892217,
     "longitud": -58.3834012,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "501",
@@ -2825,7 +3021,7 @@
     "latitud": -34.5823064,
     "longitud": -58.4716114,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "502",
@@ -2839,7 +3035,7 @@
     "latitud": -34.5838928,
     "longitud": -58.445996,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "505",
@@ -2853,7 +3049,7 @@
     "latitud": -34.639328,
     "longitud": -58.512082,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "507",
@@ -2867,7 +3063,7 @@
     "latitud": -34.5726011,
     "longitud": -58.43033184,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "508",
@@ -2881,7 +3077,7 @@
     "latitud": -34.6366914,
     "longitud": -58.4617314,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "511",
@@ -2895,7 +3091,7 @@
     "latitud": -34.603977,
     "longitud": -58.4403471,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "513",
@@ -2909,7 +3105,7 @@
     "latitud": -34.6384109,
     "longitud": -58.5053285,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "515",
@@ -2923,7 +3119,21 @@
     "latitud": -34.6441987,
     "longitud": -58.4986633,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "52",
+    "comercio_id": "15",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "52 - VILLA CRESPO",
+    "direccion_sucursal": "CL SAN MARTIN",
+    "provincia": "AR-C",
+    "localidad": "CAPITAL FEDERAL",
+    "latitud": -34.6058424,
+    "longitud": -58.4533825,
+    "marca": "Dia",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "520",
@@ -2937,7 +3147,7 @@
     "latitud": -34.6474444,
     "longitud": -58.3763218,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "521",
@@ -2951,7 +3161,7 @@
     "latitud": -34.6610183,
     "longitud": -58.4835747,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "522",
@@ -2965,7 +3175,7 @@
     "latitud": -34.5568173,
     "longitud": -58.4789878,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "523",
@@ -2979,7 +3189,7 @@
     "latitud": -34.5802113,
     "longitud": -58.4100975,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "5267",
@@ -2993,7 +3203,7 @@
     "latitud": -34.6085744,
     "longitud": -58.4836744,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.233Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "527",
@@ -3007,7 +3217,7 @@
     "latitud": -34.593583,
     "longitud": -58.430572,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "528",
@@ -3021,7 +3231,7 @@
     "latitud": -34.601174,
     "longitud": -58.412809,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "529",
@@ -3035,7 +3245,7 @@
     "latitud": -34.625231,
     "longitud": -58.526688,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "530",
@@ -3049,7 +3259,7 @@
     "latitud": -34.674477,
     "longitud": -58.47189,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "531",
@@ -3063,7 +3273,7 @@
     "latitud": -34.680607,
     "longitud": -58.478597,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "532",
@@ -3077,7 +3287,7 @@
     "latitud": -34.622075,
     "longitud": -58.383908,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "533",
@@ -3091,7 +3301,7 @@
     "latitud": -34.6433297,
     "longitud": -58.485646,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "535",
@@ -3105,7 +3315,7 @@
     "latitud": -34.572029,
     "longitud": -58.477695,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "536",
@@ -3119,7 +3329,7 @@
     "latitud": -34.63899,
     "longitud": -58.362526,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "537",
@@ -3133,7 +3343,7 @@
     "latitud": -34.577265,
     "longitud": -58.405981,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "540",
@@ -3147,7 +3357,7 @@
     "latitud": -34.598418,
     "longitud": -58.446234,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "544",
@@ -3161,7 +3371,7 @@
     "latitud": -34.60315,
     "longitud": -58.385229,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "547",
@@ -3175,7 +3385,7 @@
     "latitud": -34.629103,
     "longitud": -58.439518,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "551",
@@ -3189,7 +3399,7 @@
     "latitud": -34.674371,
     "longitud": -58.479934,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "552",
@@ -3203,7 +3413,7 @@
     "latitud": -34.633533,
     "longitud": -58.410081,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "555",
@@ -3217,7 +3427,7 @@
     "latitud": -34.639891,
     "longitud": -58.3899128,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "557",
@@ -3231,7 +3441,7 @@
     "latitud": -34.621097,
     "longitud": -58.4074379,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "558",
@@ -3245,7 +3455,7 @@
     "latitud": -34.5760437,
     "longitud": -58.5072986,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "559",
@@ -3259,7 +3469,21 @@
     "latitud": -34.6423533,
     "longitud": -58.5262156,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "56",
+    "comercio_id": "15",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "56 - VILLA LURO",
+    "direccion_sucursal": "CL JUAN B. ALBERDI",
+    "provincia": "AR-C",
+    "localidad": "CAPITAL FEDERAL",
+    "latitud": -34.6436537,
+    "longitud": -58.4927124,
+    "marca": "Dia",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "560",
@@ -3273,7 +3497,7 @@
     "latitud": -34.599332,
     "longitud": -58.480486,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "561",
@@ -3287,7 +3511,7 @@
     "latitud": -34.6203243,
     "longitud": -58.4997255,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "562",
@@ -3301,7 +3525,7 @@
     "latitud": -34.5822652,
     "longitud": -58.4202581,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "563",
@@ -3315,7 +3539,7 @@
     "latitud": -34.5977771,
     "longitud": -58.4205029,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "565",
@@ -3329,7 +3553,7 @@
     "latitud": -34.6317276,
     "longitud": -58.39064151,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "567",
@@ -3343,7 +3567,7 @@
     "latitud": -34.581169,
     "longitud": -58.493252,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "568",
@@ -3357,7 +3581,7 @@
     "latitud": -34.5738067,
     "longitud": -58.4978846,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "570",
@@ -3371,7 +3595,7 @@
     "latitud": -34.5899574,
     "longitud": -58.5167149,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "572",
@@ -3385,7 +3609,7 @@
     "latitud": -34.64101227,
     "longitud": -58.42899124,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "573",
@@ -3399,7 +3623,7 @@
     "latitud": -34.5548663,
     "longitud": -58.4700335,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "574",
@@ -3413,7 +3637,7 @@
     "latitud": -34.5631748,
     "longitud": -58.490732,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "576",
@@ -3427,7 +3651,7 @@
     "latitud": -34.5448639,
     "longitud": -58.47637506,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "578",
@@ -3441,7 +3665,7 @@
     "latitud": -34.620408,
     "longitud": -58.52621,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "579",
@@ -3455,7 +3679,21 @@
     "latitud": -34.6338144,
     "longitud": -58.4361472,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "58",
+    "comercio_id": "15",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "58 - BALVANERA",
+    "direccion_sucursal": "CL LA RIOJA",
+    "provincia": "AR-C",
+    "localidad": "CAPITAL FEDERAL",
+    "latitud": -34.615999,
+    "longitud": -58.408296,
+    "marca": "Dia",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "581",
@@ -3469,7 +3707,7 @@
     "latitud": -34.601131,
     "longitud": -58.406988,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "586",
@@ -3483,7 +3721,7 @@
     "latitud": -34.612999,
     "longitud": -58.368742,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "587",
@@ -3497,7 +3735,7 @@
     "latitud": -34.616311,
     "longitud": -58.422577,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "588",
@@ -3511,7 +3749,7 @@
     "latitud": -34.608186,
     "longitud": -58.444456,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "591",
@@ -3525,7 +3763,7 @@
     "latitud": -34.61647,
     "longitud": -58.371491,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "592",
@@ -3539,7 +3777,7 @@
     "latitud": -34.629614,
     "longitud": -58.425882,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "597",
@@ -3553,7 +3791,35 @@
     "latitud": -34.579757,
     "longitud": -58.482059,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.231Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "6",
+    "comercio_id": "15",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "6 - FLORES",
+    "direccion_sucursal": "CL ARTIGAS",
+    "provincia": "AR-C",
+    "localidad": "CAPITAL FEDERAL",
+    "latitud": -34.6289482,
+    "longitud": -58.4642662,
+    "marca": "Dia",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "60",
+    "comercio_id": "15",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "60 - FLORESTA",
+    "direccion_sucursal": "CL SEGUROLA",
+    "provincia": "AR-C",
+    "localidad": "CAPITAL FEDERAL",
+    "latitud": -34.6248959,
+    "longitud": -58.4938555,
+    "marca": "Dia",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "607",
@@ -3567,7 +3833,7 @@
     "latitud": -34.63136,
     "longitud": -58.524818,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.231Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "608",
@@ -3581,7 +3847,7 @@
     "latitud": -34.647987,
     "longitud": -58.521936,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.231Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "611",
@@ -3595,7 +3861,7 @@
     "latitud": -34.5619,
     "longitud": -58.4688,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.231Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "612",
@@ -3609,7 +3875,7 @@
     "latitud": -34.651921,
     "longitud": -58.414822,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.231Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "614",
@@ -3623,7 +3889,7 @@
     "latitud": -34.626499,
     "longitud": -58.391304,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.231Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "615",
@@ -3637,7 +3903,7 @@
     "latitud": -34.67331,
     "longitud": -58.485941,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.231Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "618",
@@ -3651,7 +3917,7 @@
     "latitud": -34.639505,
     "longitud": -58.421513,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.231Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "619",
@@ -3665,7 +3931,7 @@
     "latitud": -34.629762,
     "longitud": -58.457285,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.231Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "620",
@@ -3679,7 +3945,7 @@
     "latitud": -34.6376,
     "longitud": -58.484265,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.231Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "627",
@@ -3693,7 +3959,7 @@
     "latitud": -34.603358,
     "longitud": -58.444862,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "628",
@@ -3707,7 +3973,7 @@
     "latitud": -34.638538,
     "longitud": -58.46603,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.231Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "629",
@@ -3721,7 +3987,7 @@
     "latitud": -34.617898,
     "longitud": -58.465272,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.231Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "630",
@@ -3735,7 +4001,7 @@
     "latitud": -34.631579,
     "longitud": -58.491985,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.231Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "631",
@@ -3749,7 +4015,7 @@
     "latitud": -34.612132,
     "longitud": -58.380073,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.231Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "633",
@@ -3763,7 +4029,7 @@
     "latitud": -34.693683,
     "longitud": -58.466428,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.231Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "634",
@@ -3777,7 +4043,7 @@
     "latitud": -34.617358,
     "longitud": -58.520218,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.231Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "638",
@@ -3791,7 +4057,7 @@
     "latitud": -34.621669,
     "longitud": -58.42257,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "639",
@@ -3805,7 +4071,7 @@
     "latitud": -34.585139,
     "longitud": -58.503143,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.231Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "641",
@@ -3819,7 +4085,7 @@
     "latitud": -34.559629,
     "longitud": -58.485879,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.231Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "642",
@@ -3833,7 +4099,7 @@
     "latitud": -34.647574,
     "longitud": -58.42847,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.231Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "644",
@@ -3847,7 +4113,7 @@
     "latitud": -34.61403,
     "longitud": -58.404993,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.231Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "647",
@@ -3861,7 +4127,7 @@
     "latitud": -34.632718,
     "longitud": -58.432586,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.231Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "649",
@@ -3875,7 +4141,21 @@
     "latitud": -34.640836,
     "longitud": -58.446681,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.231Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "65",
+    "comercio_id": "15",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "65 - VILLA URQUIZA",
+    "direccion_sucursal": "CL TRIUNVIRATO",
+    "provincia": "AR-C",
+    "localidad": "CAPITAL FEDERAL",
+    "latitud": -34.5795557,
+    "longitud": -58.4770438,
+    "marca": "Dia",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "657",
@@ -3889,7 +4169,7 @@
     "latitud": -34.635218,
     "longitud": -58.371168,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.231Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "658",
@@ -3903,7 +4183,7 @@
     "latitud": -34.589813,
     "longitud": -58.388666,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.231Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "661",
@@ -3917,7 +4197,7 @@
     "latitud": -34.578149,
     "longitud": -58.46802,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.231Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "663",
@@ -3931,7 +4211,7 @@
     "latitud": -34.628733,
     "longitud": -58.405357,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.231Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "668",
@@ -3945,7 +4225,7 @@
     "latitud": -34.593456,
     "longitud": -58.392671,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.231Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "669",
@@ -3959,7 +4239,7 @@
     "latitud": -34.56613,
     "longitud": -58.479529,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.231Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "670",
@@ -3973,7 +4253,7 @@
     "latitud": -34.593364,
     "longitud": -58.384229,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.231Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "671",
@@ -3987,7 +4267,7 @@
     "latitud": -34.5991221,
     "longitud": -58.491221,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.231Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "672",
@@ -4001,7 +4281,7 @@
     "latitud": -34.599153,
     "longitud": -58.491221,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.231Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "673",
@@ -4015,7 +4295,7 @@
     "latitud": -34.618786,
     "longitud": -58.381768,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.231Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "678",
@@ -4029,7 +4309,7 @@
     "latitud": -34.615627,
     "longitud": -58.497314,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.231Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "679",
@@ -4043,7 +4323,7 @@
     "latitud": -34.594348,
     "longitud": -58.396203,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "682",
@@ -4057,7 +4337,7 @@
     "latitud": -34.645374,
     "longitud": -58.465164,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.231Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "684",
@@ -4071,7 +4351,7 @@
     "latitud": -34.64076,
     "longitud": -58.456776,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.231Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "685",
@@ -4085,7 +4365,7 @@
     "latitud": -34.685415,
     "longitud": -58.474362,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.231Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "686",
@@ -4099,7 +4379,7 @@
     "latitud": -34.636747,
     "longitud": -58.492625,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.231Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "687",
@@ -4113,7 +4393,7 @@
     "latitud": -34.60596,
     "longitud": -58.491073,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "688",
@@ -4127,7 +4407,7 @@
     "latitud": -34.685028,
     "longitud": -58.472714,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "689",
@@ -4141,7 +4421,7 @@
     "latitud": -34.6084278,
     "longitud": -58.4246824,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "69",
@@ -4155,7 +4435,7 @@
     "latitud": -34.6049604,
     "longitud": -58.4208375,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.228Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "690",
@@ -4169,7 +4449,7 @@
     "latitud": -34.585471,
     "longitud": -58.436601,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "691",
@@ -4183,7 +4463,7 @@
     "latitud": -34.57782883,
     "longitud": -58.44904154,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.231Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "692",
@@ -4197,7 +4477,7 @@
     "latitud": -34.620567,
     "longitud": -58.412729,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "693",
@@ -4211,7 +4491,7 @@
     "latitud": -34.6375623,
     "longitud": -58.4319886,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.231Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "694",
@@ -4225,7 +4505,7 @@
     "latitud": -34.6107613,
     "longitud": -58.4818952,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.231Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "696",
@@ -4239,7 +4519,7 @@
     "latitud": -34.5773569,
     "longitud": -58.5102555,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "697",
@@ -4253,7 +4533,7 @@
     "latitud": -34.653559,
     "longitud": -58.404483,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.231Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "698",
@@ -4267,7 +4547,7 @@
     "latitud": -34.6207181,
     "longitud": -58.4563112,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "699",
@@ -4281,7 +4561,21 @@
     "latitud": -34.606617,
     "longitud": -58.431069,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "7",
+    "comercio_id": "15",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "7 - ALMAGRO",
+    "direccion_sucursal": "AV CORRIENTES",
+    "provincia": "AR-C",
+    "localidad": "CAPITAL FEDERAL",
+    "latitud": -34.6024774,
+    "longitud": -58.4281829,
+    "marca": "Dia",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "700",
@@ -4295,7 +4589,7 @@
     "latitud": -34.6205421,
     "longitud": -58.5165333,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.231Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "702",
@@ -4309,7 +4603,7 @@
     "latitud": -34.661318,
     "longitud": -58.516303,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "703",
@@ -4323,7 +4617,7 @@
     "latitud": -34.6310944,
     "longitud": -58.3704685,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.231Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "704",
@@ -4337,7 +4631,7 @@
     "latitud": -34.599351,
     "longitud": -58.392017,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "705",
@@ -4351,7 +4645,7 @@
     "latitud": -34.611208,
     "longitud": -58.420392,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "706",
@@ -4365,7 +4659,7 @@
     "latitud": -34.5876628,
     "longitud": -58.5045122,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "707",
@@ -4379,7 +4673,7 @@
     "latitud": -34.6106075,
     "longitud": -58.5195352,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "708",
@@ -4393,7 +4687,7 @@
     "latitud": -34.627803,
     "longitud": -58.366911,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "709",
@@ -4407,7 +4701,7 @@
     "latitud": -34.639292,
     "longitud": -58.520689,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "710",
@@ -4421,7 +4715,7 @@
     "latitud": -34.555493,
     "longitud": -58.492611,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "711",
@@ -4435,7 +4729,7 @@
     "latitud": -34.556725,
     "longitud": -58.461953,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "712",
@@ -4449,7 +4743,7 @@
     "latitud": -34.585425,
     "longitud": -58.500137,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "713",
@@ -4463,7 +4757,7 @@
     "latitud": -34.611889,
     "longitud": -58.385285,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "714",
@@ -4477,7 +4771,7 @@
     "latitud": -34.613414,
     "longitud": -58.503961,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "716",
@@ -4491,7 +4785,7 @@
     "latitud": -34.598955,
     "longitud": -58.386435,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "717",
@@ -4505,7 +4799,7 @@
     "latitud": -34.622774,
     "longitud": -58.481018,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "718",
@@ -4519,7 +4813,7 @@
     "latitud": -34.6166572,
     "longitud": -58.3851356,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "720",
@@ -4533,7 +4827,7 @@
     "latitud": -34.659133,
     "longitud": -58.44238,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "721",
@@ -4547,7 +4841,7 @@
     "latitud": -34.649887,
     "longitud": -58.501269,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "723",
@@ -4561,7 +4855,7 @@
     "latitud": -34.625428,
     "longitud": -58.509474,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "727",
@@ -4575,7 +4869,7 @@
     "latitud": -34.677663,
     "longitud": -58.475306,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "728",
@@ -4589,7 +4883,7 @@
     "latitud": -34.628366,
     "longitud": -58.38357,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "730",
@@ -4603,7 +4897,7 @@
     "latitud": -34.620804,
     "longitud": -58.418927,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "731",
@@ -4617,7 +4911,7 @@
     "latitud": -34.579531,
     "longitud": -58.500624,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "733",
@@ -4631,7 +4925,7 @@
     "latitud": -34.621764,
     "longitud": -58.39885,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "734",
@@ -4645,7 +4939,7 @@
     "latitud": -34.572871,
     "longitud": -58.483722,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "735",
@@ -4659,7 +4953,7 @@
     "latitud": -34.577149,
     "longitud": -58.438975,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "736",
@@ -4673,7 +4967,7 @@
     "latitud": -34.614959,
     "longitud": -58.416725,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "737",
@@ -4687,7 +4981,7 @@
     "latitud": -34.637993,
     "longitud": -58.451847,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "738",
@@ -4701,7 +4995,7 @@
     "latitud": -34.6056819,
     "longitud": -58.4634946,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.231Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "739",
@@ -4715,7 +5009,7 @@
     "latitud": -34.6041648,
     "longitud": -58.4586699,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.231Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "740",
@@ -4729,7 +5023,7 @@
     "latitud": -34.662714,
     "longitud": -58.506603,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.231Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "741",
@@ -4743,7 +5037,7 @@
     "latitud": -34.6362515,
     "longitud": -58.4767987,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "742",
@@ -4757,7 +5051,7 @@
     "latitud": -34.630292,
     "longitud": -58.4170172,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.231Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "743",
@@ -4771,7 +5065,7 @@
     "latitud": -34.591693,
     "longitud": -58.512055,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "745",
@@ -4785,7 +5079,7 @@
     "latitud": -34.64908,
     "longitud": -58.379245,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "746",
@@ -4799,7 +5093,7 @@
     "latitud": -34.6156758,
     "longitud": -58.4486061,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "747",
@@ -4813,7 +5107,7 @@
     "latitud": -34.587717,
     "longitud": -58.453012,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "748",
@@ -4827,7 +5121,7 @@
     "latitud": -34.642918,
     "longitud": -58.397827,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "749",
@@ -4841,7 +5135,21 @@
     "latitud": -34.642957,
     "longitud": -58.423543,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "75",
+    "comercio_id": "15",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "75 - VILLA SOLDATI",
+    "direccion_sucursal": "CL MARIANO ACOSTA",
+    "provincia": "AR-C",
+    "localidad": "CAPITAL FEDERAL",
+    "latitud": -34.6653764,
+    "longitud": -58.4427103,
+    "marca": "Dia",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "751",
@@ -4855,7 +5163,7 @@
     "latitud": -34.6170364,
     "longitud": -58.529055,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "752",
@@ -4869,7 +5177,7 @@
     "latitud": -34.615095,
     "longitud": -58.473401,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "753",
@@ -4883,7 +5191,7 @@
     "latitud": -34.6196191,
     "longitud": -58.5093585,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.231Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "754",
@@ -4897,7 +5205,7 @@
     "latitud": -34.628376,
     "longitud": -58.399276,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "755",
@@ -4911,7 +5219,7 @@
     "latitud": -34.60759,
     "longitud": -58.391787,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "756",
@@ -4925,7 +5233,7 @@
     "latitud": -34.57209,
     "longitud": -58.446493,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "757",
@@ -4939,7 +5247,7 @@
     "latitud": -34.589085,
     "longitud": -58.43724,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "758",
@@ -4953,7 +5261,7 @@
     "latitud": -34.587438,
     "longitud": -58.395142,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "760",
@@ -4967,7 +5275,7 @@
     "latitud": -34.630962,
     "longitud": -58.471583,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.235Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "761",
@@ -4981,7 +5289,7 @@
     "latitud": -34.600201,
     "longitud": -58.439866,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.236Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "763",
@@ -4995,7 +5303,7 @@
     "latitud": -34.539986,
     "longitud": -58.475788,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.236Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "764",
@@ -5009,7 +5317,7 @@
     "latitud": -34.628691,
     "longitud": -58.38888,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.236Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "766",
@@ -5023,7 +5331,7 @@
     "latitud": -34.62228,
     "longitud": -58.410955,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.236Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "767",
@@ -5037,7 +5345,7 @@
     "latitud": -34.60401,
     "longitud": -58.407322,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.236Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "768",
@@ -5051,7 +5359,7 @@
     "latitud": -34.605676,
     "longitud": -58.423342,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.236Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "769",
@@ -5065,7 +5373,7 @@
     "latitud": -34.609831,
     "longitud": -58.422462,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.236Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "771",
@@ -5079,7 +5387,7 @@
     "latitud": -34.555101,
     "longitud": -58.479894,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.236Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "772",
@@ -5093,7 +5401,7 @@
     "latitud": -34.642459,
     "longitud": -58.438805,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.236Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "773",
@@ -5107,7 +5415,7 @@
     "latitud": -34.615795,
     "longitud": -58.522317,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.236Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "774",
@@ -5121,7 +5429,7 @@
     "latitud": -34.626773,
     "longitud": -58.468922,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.236Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "776",
@@ -5135,7 +5443,7 @@
     "latitud": -34.07254,
     "longitud": -58.478249,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.236Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "777",
@@ -5149,7 +5457,7 @@
     "latitud": -34.592594,
     "longitud": -58.41377,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.236Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "782",
@@ -5163,7 +5471,7 @@
     "latitud": -34.6113,
     "longitud": -58.411751,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.236Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "783",
@@ -5177,7 +5485,7 @@
     "latitud": -34.578032,
     "longitud": -58.473224,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.236Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "784",
@@ -5191,7 +5499,7 @@
     "latitud": -34.568867,
     "longitud": -58.44801,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.236Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "785",
@@ -5205,7 +5513,7 @@
     "latitud": -34.582513,
     "longitud": -58.4515,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.236Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "786",
@@ -5219,7 +5527,7 @@
     "latitud": -34.590036,
     "longitud": -58.495792,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.236Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "787",
@@ -5233,7 +5541,7 @@
     "latitud": -34.597268,
     "longitud": -58.403003,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.236Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "788",
@@ -5247,7 +5555,7 @@
     "latitud": -34.579954,
     "longitud": -58.450937,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.236Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "789",
@@ -5261,7 +5569,7 @@
     "latitud": -34.602603,
     "longitud": -58.37069,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.236Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "790",
@@ -5275,7 +5583,7 @@
     "latitud": -34.606746,
     "longitud": -58.499851,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.236Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "791",
@@ -5289,7 +5597,7 @@
     "latitud": -34.610146,
     "longitud": -58.470524,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.236Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "793",
@@ -5303,7 +5611,7 @@
     "latitud": -34.67669,
     "longitud": -58.454442,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.236Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "794",
@@ -5317,7 +5625,7 @@
     "latitud": -34.574847,
     "longitud": -58.4348,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.236Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "795",
@@ -5331,7 +5639,7 @@
     "latitud": -34.597459,
     "longitud": -58.426759,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.236Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "796",
@@ -5345,7 +5653,7 @@
     "latitud": -34.545927,
     "longitud": -58.462718,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.236Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "797",
@@ -5359,7 +5667,7 @@
     "latitud": -34.61156,
     "longitud": -58.373341,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.236Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "8",
@@ -5373,7 +5681,35 @@
     "latitud": -34.6355238,
     "longitud": -58.4889911,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.228Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "85",
+    "comercio_id": "15",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "85 - VILLA SOLDATI",
+    "direccion_sucursal": "CL CASTAÑARES",
+    "provincia": "AR-C",
+    "localidad": "CAPITAL FEDERAL",
+    "latitud": -34.6674682,
+    "longitud": -58.4734538,
+    "marca": "Dia",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "90",
+    "comercio_id": "15",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "90 - VILLA CRESPO",
+    "direccion_sucursal": "CL HIDALGO",
+    "provincia": "AR-C",
+    "localidad": "CAPITAL FEDERAL",
+    "latitud": -34.6089665,
+    "longitud": -58.4414318,
+    "marca": "Dia",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "900",
@@ -5387,7 +5723,7 @@
     "latitud": -34.624834,
     "longitud": -58.367568,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.236Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "90000",
@@ -5401,7 +5737,7 @@
     "latitud": -34.5736049,
     "longitud": -58.4232349,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.238Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "901",
@@ -5415,7 +5751,7 @@
     "latitud": -34.607527,
     "longitud": -58.417039,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.236Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "904",
@@ -5429,7 +5765,7 @@
     "latitud": -34.596806,
     "longitud": -58.385504,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.236Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "905",
@@ -5443,7 +5779,7 @@
     "latitud": -34.604591,
     "longitud": -58.472275,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.236Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "907",
@@ -5457,7 +5793,7 @@
     "latitud": -34.640826,
     "longitud": -58.425664,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.236Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "908",
@@ -5471,7 +5807,7 @@
     "latitud": -34.611207,
     "longitud": -58.451102,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.236Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "909",
@@ -5485,7 +5821,21 @@
     "latitud": -34.613032,
     "longitud": -58.38934,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.236Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
+  },
+  {
+    "id_sucursal": "91",
+    "comercio_id": "15",
+    "comercio_cuit": "",
+    "comercio_razon_social": "",
+    "nombre_sucursal": "91 - VILLA LURO",
+    "direccion_sucursal": "CL RIVADAVIA",
+    "provincia": "AR-C",
+    "localidad": "CAPITAL FEDERAL",
+    "latitud": -34.6375385,
+    "longitud": -58.5001704,
+    "marca": "Dia",
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "910",
@@ -5499,7 +5849,7 @@
     "latitud": -34.63327,
     "longitud": -58.477987,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.236Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "911",
@@ -5513,7 +5863,7 @@
     "latitud": -34.621721,
     "longitud": -58.386035,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.236Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "912",
@@ -5527,7 +5877,7 @@
     "latitud": -34.628497,
     "longitud": -58.401939,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.236Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "915",
@@ -5541,7 +5891,7 @@
     "latitud": -34.594326,
     "longitud": -58.445911,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.236Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "916",
@@ -5555,7 +5905,7 @@
     "latitud": -34.598729,
     "longitud": -58.438697,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.236Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "919",
@@ -5569,7 +5919,7 @@
     "latitud": -34.608,
     "longitud": -58.446237,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.236Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "920",
@@ -5583,7 +5933,7 @@
     "latitud": -34.586529,
     "longitud": -58.471107,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.236Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "921",
@@ -5597,7 +5947,7 @@
     "latitud": -34.617935,
     "longitud": -58.409058,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.236Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "923",
@@ -5611,7 +5961,7 @@
     "latitud": -34.602728,
     "longitud": -58.494948,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.236Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "929",
@@ -5625,7 +5975,7 @@
     "latitud": -34.624058,
     "longitud": -58.405666,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.236Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "930",
@@ -5639,7 +5989,7 @@
     "latitud": -34.639506,
     "longitud": -58.412139,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.236Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "931",
@@ -5653,7 +6003,7 @@
     "latitud": -34.57511,
     "longitud": -58.490427,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.236Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "934",
@@ -5667,7 +6017,7 @@
     "latitud": -34.584696,
     "longitud": -58.44113,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.236Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "935",
@@ -5681,7 +6031,7 @@
     "latitud": -34.615713,
     "longitud": -58.412566,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.236Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "936",
@@ -5695,7 +6045,7 @@
     "latitud": -34.564958,
     "longitud": -58.440431,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.236Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "938",
@@ -5709,7 +6059,7 @@
     "latitud": -34.642728,
     "longitud": -58.391368,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.236Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "939",
@@ -5723,7 +6073,7 @@
     "latitud": -34.618675,
     "longitud": -58.404268,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.236Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "942",
@@ -5737,7 +6087,7 @@
     "latitud": -34.584795,
     "longitud": -58.462928,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.236Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "943",
@@ -5751,7 +6101,7 @@
     "latitud": -34.597022,
     "longitud": -58.433648,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.236Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "944",
@@ -5765,7 +6115,7 @@
     "latitud": -34.61268,
     "longitud": -58.391306,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.231Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "952",
@@ -5779,7 +6129,7 @@
     "latitud": -34.662236,
     "longitud": -58.439789,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.236Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "953",
@@ -5793,7 +6143,7 @@
     "latitud": -34.639442,
     "longitud": -58.51702,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.236Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   },
   {
     "id_sucursal": "956",
@@ -5807,6 +6157,6 @@
     "latitud": -34.586927,
     "longitud": -58.511108,
     "marca": "Dia",
-    "ultima_actualizacion": "2025-12-29T19:40:58.236Z"
+    "ultima_actualizacion": "2026-01-15T13:46:37.844Z"
   }
 ]

@@ -26,6 +26,7 @@ export const createList = async (userId, listName) => {
     nameList: listName.trim(),
     createdAt: Date.now(),
   });
+  return newListRef.key;
 };
 
 export const deleteList = (userId, listId) => {
@@ -96,13 +97,13 @@ export const clearAllProducts = (userId, listId) => {
 // --- Category Management ---
 
 export const subscribeToCategories = (callback) => {
-    const categoriesRef = ref(dbRealtime, 'Categories');
-    return onValue(categoriesRef, (snapshot) => {
-        const data = snapshot.val();
-        const loadedCategories = data ? Object.values(data) : [];
-        callback(loadedCategories);
-    }, (error) => {
-        console.error("Error al cargar categorías:", error);
-        callback([]);
-    });
+  const categoriesRef = ref(dbRealtime, 'Categories');
+  return onValue(categoriesRef, (snapshot) => {
+    const data = snapshot.val();
+    const loadedCategories = data ? Object.values(data) : [];
+    callback(loadedCategories);
+  }, (error) => {
+    console.error("Error al cargar categorías:", error);
+    callback([]);
+  });
 };

@@ -1,13 +1,22 @@
 import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 import './Supermercados.css';
 import Input from '../Input/Input';
 import Button from '../Buttons/Button';
 import SupermarketProductItem from './SupermarketProductItem/SupermarketProductItem';
 import { Html5Qrcode, Html5QrcodeSupportedFormats } from "html5-qrcode";
+import { useProductsContext } from '../../context/ProductsContext';
+import { useUserListsContext } from '../../context/UserListsContext';
+import { subscribeToCategories } from '../../services/firebaseService';
+import { showSuccessToast, showErrorAlert } from '../../Notifications/NotificationsServices';
 
 
 
-import { fetchCSV } from '../../utils/csvParser';
+
+
+// Removed unused fetchCSV import
+
 
 const LOCAL_BRANDS_BRANCHES_MAP = {}; // Will be filled dynamically
 
@@ -22,7 +31,9 @@ const LOCAL_BRAND_DEFAULT_BRANCH_IDS = {
 const PRODUCTS_PER_PAGE = 20;
 
 const Supermercados = () => {
+  const navigate = useNavigate();
   const [selectedBrand, setSelectedBrand] = useState(null);
+
   const [selectedBranch, setSelectedBranch] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [productsToDisplay, setProductsToDisplay] = useState([]);
@@ -51,10 +62,39 @@ const Supermercados = () => {
   const scannerRef = useRef(null);
   const scannerIsRunningRef = useRef(false);
 
-  const handleAddProductToUserList = useCallback((product) => {
-    console.log('Agregando producto a la lista del usuario (simulado):', product);
-    alert(`"${product.nombre}" de ${product.marca_producto} agregado a tu lista (simulado).`);
+  const { addProduct } = useProductsContext();
+  const { currentListId } = useUserListsContext();
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    const unsubscribe = subscribeToCategories((loadedCategories) => {
+      setCategories(loadedCategories);
+    });
+    return () => unsubscribe();
   }, []);
+
+  const handleAddProductToUserList = useCallback((product) => {
+    if (!currentListId) {
+      showErrorAlert('No hay lista seleccionada', 'Por favor, selecciona o crea una lista primero.');
+      return;
+    }
+
+    // Buscar categoría "Otros" o usar fallback
+    const defaultCategory = categories.find(cat => cat.title.toLowerCase() === 'otros') ||
+      categories[0] ||
+      { id: 'otros', icon: '🛒' };
+
+    const productData = {
+      nombre: product.nombre,
+      valor: product.precio,
+      cantidad: 1,
+      category: defaultCategory.id,
+      icon: defaultCategory.icon
+    };
+
+    addProduct(productData);
+  }, [addProduct, categories, currentListId]);
+
 
   const getLocalBranchInfoFromBranchesList = (brandId, branchesList) => {
     if (!branchesList || branchesList.length === 0) {
@@ -173,9 +213,15 @@ const Supermercados = () => {
 
     try {
       const safeBrandId = brand.id.toLowerCase();
-      const response = await fetch(`/data/super/${safeBrandId}.json`);
-      if (!response.ok) throw new Error("Local branch data not found");
+      const url = `/data/super/${safeBrandId}.json`;
+      console.log(`Intentando cargar sucursales desde: ${url}`);
+      const response = await fetch(url);
+      if (!response.ok) {
+        console.error(`Error al cargar ${url}: ${response.status} ${response.statusText}`);
+        throw new Error("Local branch data not found");
+      }
       const localBranchesList = await response.json();
+      console.log(`Sucursales cargadas para ${brand.id}: ${localBranchesList.length}`);
       setAvailableBranches(localBranchesList);
 
       const localDefaultBranchId = LOCAL_BRAND_DEFAULT_BRANCH_IDS[safeBrandId];
@@ -476,8 +522,9 @@ const Supermercados = () => {
     Promise.all(brandIds.map(async (brandId) => {
       try {
         const branchId = LOCAL_BRAND_DEFAULT_BRANCH_IDS[brandId];
-        if (!branchId) return null;
-        const products = await fetchCSV(`/data/products/${brandId}/${branchId}.csv`);
+        const response = await fetch(`/data/products/${brandId}/${branchId}.json`);
+        if (!response.ok) return null;
+        const products = await response.json();
         const found = products.find(p => {
           const idParts = (p.id || '').split('-');
           if (idParts.length > 0) {
@@ -632,8 +679,20 @@ const Supermercados = () => {
 
   return (
     <div className="supermercados-container">
-      <div className="supermercados-header">
+      <div className="supermercados-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <h2>Explorar Supermercados y Precios</h2>
+        <Button
+          onClick={() => navigate('/')}
+          size="small"
+          variant="secondary"
+          style={{ display: 'flex', alignItems: 'center', gap: '5px' }}
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+            <polyline points="9 22 9 12 15 12 15 22"></polyline>
+          </svg>
+          Mi Lista
+        </Button>
       </div>
 
       {/* Scanner Modal */}

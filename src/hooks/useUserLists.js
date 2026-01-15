@@ -39,7 +39,11 @@ export function useUserLists(currentUser) {
   const createList = async (listName) => {
     if (!currentUser || !listName.trim()) return;
     try {
-      await firebaseService.createList(currentUser.uid, listName);
+      const newListId = await firebaseService.createList(currentUser.uid, listName);
+      if (newListId) {
+        setCurrentListId(newListId);
+        setCurrentListName(listName.trim());
+      }
       showSuccessToast(`¡Lista <strong>"${listName}"</strong> Creada!`);
     } catch (error) {
       console.error("Error al crear nueva lista:", error);

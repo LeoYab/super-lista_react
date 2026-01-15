@@ -110,6 +110,20 @@ const SidebarMenu = () => {
         </div>
 
         <div className="menu-section">
+          <h4>Crear Nueva Lista</h4>
+          <div className="create-list-section" style={{ marginBottom: '20px' }}>
+            <Input
+              id="newListName"
+              name="newListName"
+              type="text"
+              placeholder="Nombre de lista..."
+              value={newListName}
+              onChange={(e) => setNewListName(e.target.value)}
+              onKeyPress={(e) => { if (e.key === 'Enter') handleCreateList(); }}
+            />
+            <Button onClick={handleCreateList} variant="success">Crear</Button>
+          </div>
+
           <h4>Tus Listas</h4>
           <ul className="list-names">
             {userLists.length === 0 ? (
@@ -128,37 +142,21 @@ const SidebarMenu = () => {
                     <br />
                     <span className="list-date">Creada: {formatDate(list.createdAt)}</span>
                   </span>
-                  {/* Botón de eliminar lista (ahora un componente Button) */}
                   <Button
-                    className="delete-list-button round" // Clase para estilos y 'round' para circular
+                    className="delete-list-button round"
                     onClick={(e) => {
-                      e.stopPropagation(); // Evita que el clic en el botón active el selectList de la <li>
-                      handleDeleteListConfirm(list.id, list.nameList); // Llama a la confirmación de SweetAlert2
+                      e.stopPropagation();
+                      handleDeleteListConfirm(list.id, list.nameList);
                     }}
                     title={`Eliminar lista "${list.nameList}"`}
-                    icon="🗑️" // Ícono de papelera
-                    variant="danger" // Estilo rojo para peligro
-                    size="small" // Tamaño pequeño
+                    icon="🗑️"
+                    variant="danger"
+                    size="small"
                   />
                 </li>
               ))
             )}
           </ul>
-          <div className="create-list-section">
-            {/* Input para el nombre de la nueva lista (ahora un componente Input) */}
-            <Input
-              id="newListName"
-              name="newListName"
-              type="text"
-              placeholder="Nombre de lista..."
-              value={newListName}
-              onChange={(e) => setNewListName(e.target.value)}
-              // Maneja la creación al presionar Enter en el input
-              onKeyPress={(e) => { if (e.key === 'Enter') handleCreateList(); }}
-            />
-            {/* Botón para crear lista (ahora un componente Button) */}
-            <Button onClick={handleCreateList} variant="success">Crear</Button>
-          </div>
         </div>
 
         {/* NUEVA SECCIÓN: Enlaces adicionales */}

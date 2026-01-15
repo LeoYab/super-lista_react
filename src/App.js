@@ -1,6 +1,7 @@
 // src/App.js
 import React, { useState, useEffect, useRef } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
+
 import { useAuth, AuthProvider } from './context/AuthContext';
 import { subscribeToCategories } from './services/firebaseService';
 import { UserListsProvider } from './context/UserListsContext';
@@ -23,7 +24,8 @@ import { Html5Qrcode, Html5QrcodeSupportedFormats } from "html5-qrcode";
 import { showErrorAlert, showSuccessToast } from './Notifications/NotificationsServices';
 
 // Import local product data for scanner lookup
-import { fetchCSV } from './utils/csvParser';
+// Unused import removed
+
 
 // Importa tus estilos
 import './App.css';
@@ -61,7 +63,9 @@ function deg2rad(deg) {
 }
 
 function MainAppContent() {
+  const navigate = useNavigate();
   const {
+
     currentListId,
     currentListName,
     loading: loadingLists,
@@ -207,7 +211,9 @@ function MainAppContent() {
 
         if (!branchId) return null;
 
-        const products = await fetchCSV(`/data/products/${brandId}/${branchId}.csv`);
+        const response = await fetch(`/data/products/${brandId}/${branchId}.json`);
+        if (!response.ok) return null;
+        const products = await response.json();
         const found = products.find(p => {
           const idParts = (p.id || '').split('-');
           if (idParts.length > 0) {
@@ -430,6 +436,20 @@ function MainAppContent() {
                   setBusqueda={setSearchTerm}
                 />
                 <div className="action-buttons-container">
+                  <Button
+                    onClick={() => navigate('/supermercados')}
+                    variant="secondary"
+                    icon={(
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                        <circle cx="12" cy="10" r="3"></circle>
+                      </svg>
+                    )}
+                    className="explore-super-button btn-square"
+                    title="Explorar Precios"
+                  >
+                    Precios
+                  </Button>
                   <Button
                     onClick={handleToggleForm}
                     variant="primary"
