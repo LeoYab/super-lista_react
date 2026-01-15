@@ -1,5 +1,5 @@
 // src/App.js
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 
 import { useAuth, AuthProvider } from './context/AuthContext';
@@ -16,7 +16,8 @@ import ProductList from './components/ProductList/ProductList';
 import AuthPage from './pages/AuthPage/AuthPage';
 import SidebarMenu from './components/SidebarMenu/SidebarMenu';
 import SearchBar from './components/SearchBar/SearchBar';
-import TotalSummary from './TotalSummary/TotalSummary';
+// Redundant import removed
+
 import Button from './components/Buttons/Button';
 import CategoryFilter from './components/CategoryFilter/CategoryFilter';
 import Supermercados from './components/supermercados/Supermercados';
@@ -35,7 +36,8 @@ import './components/Select/Select.css';
 import './TotalSummary/TotalSummary.css';
 import './components/Buttons/Button.css';
 
-const LOCAL_BRANDS_LOCATION_DATA = {}; // Loaded dynamically
+// Unused constant removed
+
 
 const LOCAL_BRAND_DEFAULT_BRANCH_IDS = {
   carrefour: '1',
@@ -189,7 +191,7 @@ function MainAppContent() {
     return code.replace(/^0+/, '');
   };
 
-  const onScanSuccess = (decodedText, decodedResult) => {
+  const onScanSuccess = useCallback((decodedText, decodedResult) => {
     console.log(`Code scanned = ${decodedText}`, decodedResult);
 
     // Stop scanning
@@ -240,7 +242,7 @@ function MainAppContent() {
         showErrorAlert('Producto no encontrado', `No se encontró información para el código: ${decodedText}.`);
       }
     });
-  };
+  }, [detectedSupermarket]);
 
   const handleCloseScanner = () => {
     setShowScanner(false);
@@ -322,7 +324,7 @@ function MainAppContent() {
         }
       };
     }
-  }, [showScanner]);
+  }, [showScanner, onScanSuccess]);
 
   // Filtering and calculations
   const filteredProducts = products

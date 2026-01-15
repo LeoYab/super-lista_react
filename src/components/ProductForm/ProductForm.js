@@ -1,8 +1,10 @@
 // src/components/ProductForm/ProductForm.js
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
+
 import './ProductForm.css';
 import Input from '../Input/Input';
-import Select from '../Select/Select';
+// Unused import removed
+
 import Button from '../Buttons/Button';
 
 // IMPORT NEW SERVICE: Importa tus funciones de notificación
@@ -85,19 +87,8 @@ const ProductForm = ({ editandoId, productoAEditar, onAgregar, onEditar, onCance
     });
   };
 
-  const handleCategoryChange = (e) => {
-    const selectedCategoryId = parseInt(e.target.value, 10);
-    // Aseguramos que 'categories' es un array antes de usar 'find'
-    const selectedCat = categories.find(cat => cat.id === selectedCategoryId);
+  // Unused handler removed
 
-    setProductData(prev => ({
-      ...prev,
-      category: selectedCategoryId,
-      // Si la categoría seleccionada tiene íconos, usa el primero. Si no, usa el ícono de la categoría misma.
-      // Si 'selectedCat' es undefined (lo cual no debería pasar con el 'required' en el Select), usa el fallback.
-      icon: selectedCat ? (selectedCat.icons && selectedCat.icons[0] ? selectedCat.icons[0] : selectedCat.icon) : fallbackDefaultCategory.icon
-    }));
-  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -149,10 +140,8 @@ const ProductForm = ({ editandoId, productoAEditar, onAgregar, onEditar, onCance
 
   // Prepara las opciones para el componente Select de Categoría
   // Garantizamos que 'categories' es un array antes de mapear.
-  const categoryOptions = categories.map(cat => ({
-    value: cat.id,
-    label: `${cat.icon} ${cat.title}`
-  }));
+  // Unused helper removed
+
 
   return (
     <div className="product-form-container card">

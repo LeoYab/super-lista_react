@@ -9,7 +9,8 @@ import { Html5Qrcode, Html5QrcodeSupportedFormats } from "html5-qrcode";
 import { useProductsContext } from '../../context/ProductsContext';
 import { useUserListsContext } from '../../context/UserListsContext';
 import { subscribeToCategories } from '../../services/firebaseService';
-import { showSuccessToast, showErrorAlert } from '../../Notifications/NotificationsServices';
+import { showErrorAlert } from '../../Notifications/NotificationsServices';
+
 
 
 
@@ -18,9 +19,8 @@ import { showSuccessToast, showErrorAlert } from '../../Notifications/Notificati
 // Removed unused fetchCSV import
 
 
-const LOCAL_BRANDS_BRANCHES_MAP = {}; // Will be filled dynamically
+// Unused maps removed
 
-const LOCAL_BRAND_DEFAULT_PRODUCTS_MAP = {}; // Will be filled dynamically
 
 const LOCAL_BRAND_DEFAULT_BRANCH_IDS = {
   dia: '87',
@@ -52,7 +52,8 @@ const Supermercados = () => {
   const [availableBranches, setAvailableBranches] = useState([]);
   const [branchSearchTerm, setBranchSearchTerm] = useState('');
   const [isBranchDropdownOpen, setIsBranchDropdownOpen] = useState(false);
-  const [userLocation, setUserLocation] = useState(null);
+  // Unused state removed
+
   const [dataSource, setDataSource] = useState('Firestore');
   const [error, setError] = useState(null);
 
@@ -96,35 +97,8 @@ const Supermercados = () => {
   }, [addProduct, categories, currentListId]);
 
 
-  const getLocalBranchInfoFromBranchesList = (brandId, branchesList) => {
-    if (!branchesList || branchesList.length === 0) {
-      console.warn(`getLocalBranchInfoFromBranchesList: No hay sucursales en la lista local para ${brandId}.`);
-      return null;
-    }
+  // Unused helper removed
 
-    const defaultBranchId = LOCAL_BRAND_DEFAULT_BRANCH_IDS[brandId.toLowerCase()];
-
-    if (defaultBranchId) {
-      const matchingBranch = branchesList.find(
-        b => String(b.id_sucursal) === String(defaultBranchId)
-      );
-      if (matchingBranch) {
-        return {
-          id_sucursal: String(matchingBranch.id_sucursal),
-          nombre_sucursal: matchingBranch.nombre_sucursal || `${brandId.charAt(0).toUpperCase() + brandId.slice(1)} Sucursal Local`
-        };
-      } else {
-        console.warn(`No se encontró la sucursal con ID ${defaultBranchId} para ${brandId} en datos locales.`);
-      }
-    }
-
-    // Si no hay un ID predefinido o no se encontró la sucursal, usamos la primera
-    const defaultBranch = branchesList[0];
-    return {
-      id_sucursal: String(defaultBranch.id_sucursal),
-      nombre_sucursal: defaultBranch.nombre_sucursal || `${brandId.charAt(0).toUpperCase() + brandId.slice(1)} Sucursal Local`
-    };
-  };
 
   useEffect(() => {
     const fetchAllBrands = async () => {
@@ -168,8 +142,9 @@ const Supermercados = () => {
     if (availableBranches.length > 0 && selectedBrand) {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition((position) => {
+          // eslint-disable-next-line no-unused-vars
           const { latitude, longitude } = position.coords;
-          setUserLocation({ latitude, longitude });
+
 
           let closestBranch = null;
           let minDistance = Infinity;
@@ -195,7 +170,7 @@ const Supermercados = () => {
         });
       }
     }
-  }, [availableBranches]); // Ejecutar cuando cambian las sucursales disponibles
+  }, [availableBranches, selectedBrand]); // Ejecutar cuando cambian las sucursales disponibles
 
   const fetchAndSetBranch = useCallback(async (brand) => {
     // No setear isLoadingProducts aquí, déjalo para fetchProductsData
@@ -507,7 +482,7 @@ const Supermercados = () => {
     return code.replace(/^0+/, '');
   };
 
-  const onScanSuccess = (decodedText, decodedResult) => {
+  const onScanSuccess = useCallback((decodedText, decodedResult) => {
     console.log(`Code scanned = ${decodedText}`, decodedResult);
 
     // Stop scanning
@@ -550,7 +525,7 @@ const Supermercados = () => {
         alert(`No se encontraron productos con el código: ${decodedText}`);
       }
     });
-  };
+  }, []);
 
   const handleFileUpload = async (e) => {
     const file = e.target.files[0];
@@ -657,7 +632,7 @@ const Supermercados = () => {
         }
       };
     }
-  }, [showScanner]);
+  }, [showScanner, onScanSuccess]);
 
   const handleCloseScanner = () => {
     setShowScanner(false);
