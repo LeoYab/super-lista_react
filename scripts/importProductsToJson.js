@@ -455,7 +455,7 @@ async function procesarZipInterno(zipPath, allFilteredSucursalesByBrand, zipFile
         branchesInThisZip.set(key, { brand: foundBrand, branchId: branchId });
       }, sucursalFile.path);
     } catch (error) {
-      console.error(`Error al procesar archivo de sucursal en '${zipFileName}':`, error.message);
+      // console.error(`Error al procesar archivo de sucursal en '${zipFileName}':`, error.message);
     }
   }
 
@@ -492,7 +492,7 @@ async function procesarZipInterno(zipPath, allFilteredSucursalesByBrand, zipFile
         }
       }, productFile.path);
     } catch (error) {
-      console.error(`Error al procesar archivo de productos en '${zipFileName}':`, error.message);
+      // console.error(`Error al procesar archivo de productos en '${zipFileName}':`, error.message);
     }
   }
 }
@@ -527,7 +527,7 @@ async function writeFinalJsons(allFilteredSucursalesByBrand) {
       await fsp.unlink(jsonlPath).catch(() => { });
       totalProductsFilesWritten++;
     } catch (err) {
-      console.error(`Error al convertir ${jsonlPath}:`, err.message);
+      // console.error(`Error al convertir ${jsonlPath}:`, err.message);
     }
   }
 
@@ -675,10 +675,10 @@ async function generarJsonFiltrados() {
     }
     console.log('\nTodos los ZIPs internos procesados.');
 
-    if (processingErrors.length > 0) {
-      console.warn(`\n[WARN] Se encontraron ${processingErrors.length} errores durante el procesamiento:`);
-      processingErrors.forEach(err => console.warn(`  - ${err}`));
-    }
+    // if (processingErrors.length > 0) {
+    //   console.warn(`\n[WARN] Se encontraron ${processingErrors.length} errores durante el procesamiento:`);
+    //   processingErrors.forEach(err => console.warn(`  - ${err}`));
+    // }
 
     console.log('\n--- Escribiendo archivos JSON locales ---');
     await writeFinalJsons(allFilteredSucursalesByBrand);
