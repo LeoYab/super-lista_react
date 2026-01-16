@@ -306,15 +306,10 @@ function normalizeProductData(product, targetBrand, targetSucursalId) {
     return null;
   }
 
-  // Validación y parseo de precio mejorado
+  // Validación y parseo de precio simple
   let precio = parseFloat(String(product.productos_precio_lista).replace(',', '.'));
-  // if (isNaN(precio) || precio <= 0) {
-  //   // console.warn(`Precio inválido o cero para producto '${descripcion}' (precio: '${product.productos_precio_lista}'). Saltando.`);
-  //   return null;
-  // }
-  // Only return null silently
+
   if (isNaN(precio) || precio <= 0) {
-    // Silently skip products with invalid/zero price as requested to avoid log flooding
     return null;
   }
 
@@ -632,7 +627,7 @@ async function generarJsonFiltrados() {
     // zipsInternos.forEach(zip => console.log(`- ${zip.path}`));
 
     const allFilteredSucursalesByBrand = new Map();
-    const processingErrors = [];
+    // const processingErrors = [];
 
     let currentZipCount = 0;
     const totalZipsCount = zipsInternos.length;
@@ -670,15 +665,11 @@ async function generarJsonFiltrados() {
       } catch (innerZipError) {
         const errorMsg = `Error al extraer o procesar el ZIP interno ${zip.path}: ${innerZipError.message}`;
         console.error(errorMsg);
-        processingErrors.push(errorMsg);
+        // processingErrors.push(errorMsg);
       }
     }
+    // processingErrors section removed
     console.log('\nTodos los ZIPs internos procesados.');
-
-    // if (processingErrors.length > 0) {
-    //   console.warn(`\n[WARN] Se encontraron ${processingErrors.length} errores durante el procesamiento:`);
-    //   processingErrors.forEach(err => console.warn(`  - ${err}`));
-    // }
 
     console.log('\n--- Escribiendo archivos JSON locales ---');
     await writeFinalJsons(allFilteredSucursalesByBrand);
