@@ -3,7 +3,7 @@ run-name: 🔥 Import data into local Json
 
 on:
   schedule:
-    - cron: "0 14 * * *" # Se ejecuta a las 14:00 UTC (11:00 AM ART)
+    - cron: "0 14 * * *" # 14:00 UTC = 11:00 AM ART
   workflow_dispatch:
 
 jobs:
@@ -52,6 +52,14 @@ jobs:
           else
             git checkout -b feature/automated-data-update origin/main
           fi
+
+          # ✅ Traer los últimos cambios de main a la rama feature (incluye cambios del script)
+          git fetch origin main
+          git merge origin/main --no-edit || (echo "❌ Merge main into feature failed" && exit 1)
+
+          echo "✅ Current branch: $(git branch --show-current)"
+          echo "✅ Current commit: $(git rev-parse HEAD)"
+          git log -1 --oneline -- scripts/importProductsToJson.js || true
 
       - name: Run Import Script
         run: node --max-old-space-size=4096 scripts/importProductsToJson.js

@@ -25,10 +25,10 @@ const DAILY_URLS = {
   6: 'https://datos.produccion.gob.ar/dataset/6f47ec76-d1ce-4e34-a7e1-621fe9b1d0b5/resource/b3c3da5d-213d-41e7-8d74-f23fda0a3c30/download/sepa_sabado.zip',
 };
 
-const TEMP_DATA_DIR = path.join(__dirname, '../src/data/temp_processing');
+const TEMP_DATA_DIR = path.join(__dirname, '../public/data/temp_processing');
 const tempZipPath = path.join(TEMP_DATA_DIR, 'temp_sepa.zip');
-const BASE_SUPER_DIR = path.join(__dirname, '../src/data/super');
-const BASE_PRODUCTS_DIR = path.join(__dirname, '../src/data/products');
+const BASE_SUPER_DIR = path.join(__dirname, '../public/data/super');
+const BASE_PRODUCTS_DIR = path.join(__dirname, '../public/data/products');
 
 
 
