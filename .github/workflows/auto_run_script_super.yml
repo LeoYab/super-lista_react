@@ -3,7 +3,7 @@ run-name: 🔥 Import data into local Json
 
 on:
   schedule:
-    - cron: '0 14 * * *' # Se ejecuta a las 14:00 UTC (11:00 AM ART)
+    - cron: "40 15 * * *" # Se ejecuta a las 14:00 UTC (11:00 AM ART)
   workflow_dispatch:
 
 jobs:
@@ -14,88 +14,88 @@ jobs:
       pull-requests: write
 
     steps:
-    - name: Code checkout
-      uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
+      - name: Code checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-    - name: Configure Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '20'
+      - name: Configure Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
 
-    - name: Install dependencies
-      run: npm install
+      - name: Install dependencies
+        run: npm install
 
-    - name: Configure Firebase Credentials (Create temporary file)
-      run: |
-        echo '${{ secrets.FIREBASE_SERVICE_ACCOUNT_KEY }}' > ./scripts/serviceAccountKey.json
+      - name: Configure Firebase Credentials (Create temporary file)
+        run: |
+          echo '${{ secrets.FIREBASE_SERVICE_ACCOUNT_KEY }}' > ./scripts/serviceAccountKey.json
 
-    - name: Verify credentials file
-      run: |
-        if [ ! -f ./scripts/serviceAccountKey.json ]; then
-          echo "Error: The credentials file does not exist after attempting to create it."
-          exit 1
-        fi
-        node -e "try { JSON.parse(require('fs').readFileSync('./scripts/serviceAccountKey.json', 'utf8')); console.log('Valid JSON'); } catch(e) { console.log('Invalid JSON or read error:', e.message); process.exit(1); }"
+      - name: Verify credentials file
+        run: |
+          if [ ! -f ./scripts/serviceAccountKey.json ]; then
+            echo "Error: The credentials file does not exist after attempting to create it."
+            exit 1
+          fi
+          node -e "try { JSON.parse(require('fs').readFileSync('./scripts/serviceAccountKey.json', 'utf8')); console.log('Valid JSON'); } catch(e) { console.log('Invalid JSON or read error:', e.message); process.exit(1); }"
 
-    - name: Prepare branch
-      run: |
-        git config user.name "GitHub Actions Bot"
-        git config user.email "actions@github.com"
+      - name: Prepare branch
+        run: |
+          git config user.name "GitHub Actions Bot"
+          git config user.email "actions@github.com"
 
-        git fetch origin
+          git fetch origin
 
-        if git show-ref --quiet refs/remotes/origin/feature/automated-data-update; then
-          git checkout feature/automated-data-update
-          git pull --rebase origin feature/automated-data-update
-        else
-          git checkout -b feature/automated-data-update origin/main
-        fi
+          if git show-ref --quiet refs/remotes/origin/feature/automated-data-update; then
+            git checkout feature/automated-data-update
+            git pull --rebase origin feature/automated-data-update
+          else
+            git checkout -b feature/automated-data-update origin/main
+          fi
 
-    - name: Run Import Script
-      run: node --max-old-space-size=4096 scripts/importProductsToJson.js
-      env:
-        FIREBASE_SERVICE_ACCOUNT_KEY: './scripts/serviceAccountKey.json'
+      - name: Run Import Script
+        run: node --max-old-space-size=4096 scripts/importProductsToJson.js
+        env:
+          FIREBASE_SERVICE_ACCOUNT_KEY: "./scripts/serviceAccountKey.json"
 
-    - name: Commit changes
-      id: commit_changes
-      run: |
-        if git diff --quiet src/data; then
-          echo "No changes detected in src/data."
-          echo "has_changes=false" >> $GITHUB_OUTPUT
-        else
-          git add src/data
-          git commit -m "update: JSON data for products and branches (Automated by GH Actions)"
-          echo "has_changes=true" >> $GITHUB_OUTPUT
-        fi
+      - name: Commit changes
+        id: commit_changes
+        run: |
+          if git diff --quiet src/data; then
+            echo "No changes detected in src/data."
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+          else
+            git add src/data
+            git commit -m "update: JSON data for products and branches (Automated by GH Actions)"
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+          fi
 
-    - name: Merge with main preferring local changes
-      if: steps.commit_changes.outputs.has_changes == 'true'
-      run: |
-        git fetch origin main
-        git merge origin/main -X ours || (echo "❌ Merge failed" && exit 1)
+      - name: Merge with main preferring local changes
+        if: steps.commit_changes.outputs.has_changes == 'true'
+        run: |
+          git fetch origin main
+          git merge origin/main -X ours || (echo "❌ Merge failed" && exit 1)
 
-    - name: Push Branch and Create Pull Request
-      if: success() && steps.commit_changes.outputs.has_changes == 'true'
-      run: |
-        echo "Pushing feature/automated-data-update branch to remote..."
-        git push origin feature/automated-data-update
+      - name: Push Branch and Create Pull Request
+        if: success() && steps.commit_changes.outputs.has_changes == 'true'
+        run: |
+          echo "Pushing feature/automated-data-update branch to remote..."
+          git push origin feature/automated-data-update
 
-        echo "Creating Pull Request..."
-        curl -L \
-          -X POST \
-          -H "Accept: application/vnd.github+json" \
-          -H "Authorization: Bearer ${{ secrets.SUPER_LISTA_TOKEN }}" \
-          -H "X-GitHub-Api-Version: 2022-11-28" \
-          https://api.github.com/repos/${{ github.repository }}/pulls \
-          -d '{
-            "title": "Automated Data Update PR",
-            "body": "This PR contains automated data updates for products and branches.",
-            "head": "feature/automated-data-update",
-            "base": "main"
-          }'
+          echo "Creating Pull Request..."
+          curl -L \
+            -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${{ secrets.SUPER_LISTA_TOKEN }}" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            https://api.github.com/repos/${{ github.repository }}/pulls \
+            -d '{
+              "title": "Automated Data Update PR",
+              "body": "This PR contains automated data updates for products and branches.",
+              "head": "feature/automated-data-update",
+              "base": "main"
+            }'
 
-    - name: Clean up credentials
-      if: always()
-      run: rm -f ./scripts/serviceAccountKey.json
+      - name: Clean up credentials
+        if: always()
+        run: rm -f ./scripts/serviceAccountKey.json
