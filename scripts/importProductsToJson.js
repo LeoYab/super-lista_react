@@ -502,15 +502,34 @@ async function writeFinalJsons(allFilteredSucursalesByBrand) {
     if (!MARCAS_NORMALIZADAS_INTERES.has(brandName)) continue;
 
     const safeBrandName = brandName.replace(/[^a-z0-9]/gi, '').toLowerCase();
-    const brandSuperDir = path.join(baseSuperDir, safeBrandName);
 
-    for (const [branchId, sucursalData] of sucursalesMap.entries()) {
-      const sucursalFilename = path.join(brandSuperDir, `${branchId}.json`);
-      await writeToJson([sucursalData], sucursalFilename);
-      totalSucursalesWritten++;
-    }
+    // CAMBIO: Ahora escribimos TODAS las sucursales de la marca en UN SOLO archivo .json
+    const sucursalFilename = path.join(baseSuperDir, `${safeBrandName}.json`);
+
+    // Convertimos el Map de sucursales a un array
+    const branchesArray = Array.from(sucursalesMap.values());
+
+    await writeToJson(branchesArray, sucursalFilename);
+    totalSucursalesWritten += branchesArray.length;
+    console.log(`Escritas ${branchesArray.length} sucursales en ${sucursalFilename}`);
   }
-  console.log(`Archivos JSON de sucursales completados. Total escritos: ${totalSucursalesWritten}.`);
+  console.log(`Archivos JSON de sucursales completados. Total sucursales procesadas: ${totalSucursalesWritten}.`);
+
+  // --- NUEVA LÓGICA: Generar supermarkets_list.json ---
+  console.log('Generando supermarkets_list.json...');
+  const supermarketsList = [];
+  for (const brandName of allFilteredSucursalesByBrand.keys()) {
+    if (!MARCAS_NORMALIZADAS_INTERES.has(brandName)) continue;
+    const safeBrandName = brandName.replace(/[^a-z0-9]/gi, '').toLowerCase();
+    supermarketsList.push({
+      id: safeBrandName,
+      nombre: brandName
+    });
+  }
+  const supermarketsListPath = path.join(path.dirname(BASE_SUPER_DIR), 'supermarkets_list.json');
+  await writeToJson(supermarketsList, supermarketsListPath);
+  console.log(`supermarkets_list.json generado en ${supermarketsListPath}`);
+  // ----------------------------------------------------
 
   console.log(`\nConvirtiendo archivos JSONL a JSON finales en '${BASE_PRODUCTS_DIR}'...`);
   let totalProductsFilesWritten = 0;
