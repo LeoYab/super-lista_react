@@ -422,11 +422,13 @@ async function procesarZipInterno(zipPath, allFilteredSucursalesByBrand, zipFile
         }
 
         // Lógica especial para Cencosud (Jumbo/Vea/Easy)
-        if (foundBrand === 'Cencosud' || foundBrand === 'Easy') {
+        // CAMBIO: Solo desambiguar si es 'Cencosud' genérico. Si ya sabemos que es Easy (por ZIP 3001) o Jumbo, lo respetamos.
+        if (foundBrand === 'Cencosud') {
           if (text.includes('jumbo')) foundBrand = 'Jumbo';
           else if (text.includes('vea')) foundBrand = 'Vea';
           else if (text.includes('easy')) foundBrand = 'Easy';
-          else if (foundBrand === 'Cencosud') foundBrand = 'Vea'; // Default para Cencosud
+          // Si es Cencosud y no dice nada, asumimos Vea por defecto (común en minimercados)
+          else foundBrand = 'Vea';
         }
 
 
