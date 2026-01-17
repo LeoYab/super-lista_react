@@ -25,6 +25,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
+    "data:copy": "node scripts/organize_data_for_public.js",
     "start-https": "set HTTPS=true&&react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",

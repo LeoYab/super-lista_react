@@ -69,11 +69,11 @@ jobs:
       - name: Commit changes
         id: commit_changes
         run: |
-          if git diff --quiet src/data; then
-            echo "No changes detected in src/data."
+          if git diff --quiet public/data; then
+            echo "No changes detected in public/data."
             echo "has_changes=false" >> $GITHUB_OUTPUT
           else
-            git add src/data
+            git add public/data
             git commit -m "update: JSON data for products and branches (Automated by GH Actions)"
             echo "has_changes=true" >> $GITHUB_OUTPUT
           fi

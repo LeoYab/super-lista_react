@@ -109,16 +109,21 @@ const Supermercados = () => {
       setIsLoadingBrands(true);
       setError(null);
       try {
-        console.log("Cargando marcas de supermercados desde local...");
+        console.log("Cargando marcas de supermercados desde public/data...");
         const response = await fetch('/data/supermarkets_list.json');
-        if (!response.ok) throw new Error("Failed to load local brands");
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
         const localBrands = await response.json();
+
         setAllBrandsFirebase(localBrands.map(brand => ({
           ...brand,
           id: brand.id,
           logo: `logo_super/logo_${brand.id}.png`,
         })));
-        setDataSource('Local (Marcas)');
+        setDataSource('Local (Marcas - Public)');
       } catch (err) {
         console.error("Error loading brands:", err);
         setError("Error al cargar las marcas de supermercados.");
@@ -142,39 +147,7 @@ const Supermercados = () => {
     return d;
   };
 
-  useEffect(() => {
-    if (availableBranches.length > 0 && selectedBrand) {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition((position) => {
-          // eslint-disable-next-line no-unused-vars
-          const { latitude, longitude } = position.coords;
-
-
-          let closestBranch = null;
-          let minDistance = Infinity;
-
-          availableBranches.forEach(branch => {
-            if (branch.latitud && branch.longitud) {
-              const dist = getDistance(latitude, longitude, parseFloat(branch.latitud), parseFloat(branch.longitud));
-              if (dist < minDistance) {
-                minDistance = dist;
-                closestBranch = branch;
-              }
-            }
-          });
-
-          if (closestBranch) {
-            console.log(`GPS: Sucursal más cercana encontrada: ${closestBranch.nombre_sucursal} (${minDistance.toFixed(2)} km)`);
-            // Solo cambiar si es diferente para evitar loops o resets innecesarios, 
-            // aunque 'selectedBranch' no es dependencia, asi que está bien.
-            setSelectedBranch(closestBranch);
-          }
-        }, (err) => {
-          console.warn("GPS error or permission denied:", err);
-        });
-      }
-    }
-  }, [availableBranches, selectedBrand]); // Ejecutar cuando cambian las sucursales disponibles
+  // GPS logic integrated into fetchAndSetBranch
 
   const fetchAndSetBranch = useCallback(async (brand) => {
     // No setear isLoadingProducts aquí, déjalo para fetchProductsData
@@ -194,31 +167,64 @@ const Supermercados = () => {
       const safeBrandId = brand.id.toLowerCase();
       const url = `/data/super/${safeBrandId}.json`;
       console.log(`Intentando cargar sucursales desde: ${url}`);
+
       const response = await fetch(url);
+
       if (!response.ok) {
         console.error(`Error al cargar ${url}: ${response.status} ${response.statusText}`);
         throw new Error("Local branch data not found");
       }
-      const localBranchesList = await response.json();
+
+      let localBranchesList = await response.json();
       console.log(`Sucursales cargadas para ${brand.id}: ${localBranchesList.length}`);
+
+      // INTEGRACIÓN GPS: Obtener ubicación y calcular distancias
+      try {
+        if (navigator.geolocation) {
+          console.log("Solicitando ubicación del usuario para ordenar sucursales...");
+          const position = await new Promise((resolve, reject) => {
+            navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 10000 });
+          });
+
+          const { latitude, longitude } = position.coords;
+          console.log(`Ubicación obtenida: ${latitude}, ${longitude}`);
+
+          // Calcular distancia para cada sucursal y añadirla al objeto
+          localBranchesList = localBranchesList.map(branch => {
+            let dist = Infinity;
+            if (branch.latitud && branch.longitud) {
+              dist = getDistance(latitude, longitude, parseFloat(branch.latitud), parseFloat(branch.longitud));
+            }
+            return { ...branch, distance: dist }; // Añadir propiedad distance
+          });
+
+          // ORDENAR sucursales por distancia (menor a mayor)
+          localBranchesList.sort((a, b) => a.distance - b.distance);
+          console.log("Sucursales ordenadas por proximidad.");
+
+        } else {
+          console.log("Geolocalización no soportada por el navegador.");
+        }
+      } catch (gpsError) {
+        console.warn("No se pudo obtener la ubicación o el usuario denegó el permiso. Se usará el orden por defecto.", gpsError);
+        // Si falla el GPS, iteramos sin ordenar o mantener el orden original, 
+        // pero aseguramos que la propiedad distance exista aunque sea null/Infinity para evitar errores UI
+        localBranchesList = localBranchesList.map(b => ({ ...b, distance: null }));
+      }
+
       setAvailableBranches(localBranchesList);
 
-      const localDefaultBranchId = LOCAL_BRAND_DEFAULT_BRANCH_IDS[safeBrandId];
-      if (localDefaultBranchId) {
-        const matchingLocalBranch = localBranchesList.find(b => String(b.id_sucursal) === String(localDefaultBranchId));
-        if (matchingLocalBranch) {
-          branchToSet = matchingLocalBranch; // Store full object
-        } else {
-          branchToSet = localBranchesList[0] || null;
-        }
+      // SELECCIÓN AUTOMÁTICA: Elegir la primera (la más cercana tras ordenar)
+      if (localBranchesList.length > 0) {
+        branchToSet = localBranchesList[0];
+        console.log(`Sucursal seleccionada automáticamente (la más cercana): ${branchToSet.nombre_sucursal} (${branchToSet.distance ? branchToSet.distance.toFixed(1) + ' km' : 'distancia desc.'})`);
       } else {
-        branchToSet = localBranchesList[0] || null;
+        branchToSet = null;
       }
+
     } catch (err) {
       console.warn("Error fetching specific branch data:", err);
-      // Fallback or just ignore if strict local?
     } finally {
-      console.log("Debug - fetchAndSetBranch: Valor final de branchToSet antes de setSelectedBranch:", branchToSet);
       setSelectedBranch(branchToSet);
     }
   }, []);
@@ -243,7 +249,7 @@ const Supermercados = () => {
   }, []);
 
   const fetchProductsData = useCallback(async (brandId, branchId, initialLoad = true, searchModeParam = false, searchTermValueParam = '') => {
-    console.log(`--- Iniciando fetchProductsData ---`);
+    console.log(`--- Iniciando fetchProductsData (SRC Method) ---`);
     console.log(`Debug - isLoadingProducts (antes de la guardia): ${isLoadingProducts}`);
     console.log(`Debug - isFetchingRef.current (antes de la guardia): ${isFetchingRef.current}`);
     console.log(`Brand ID: ${brandId}, Branch ID: ${branchId}, Initial Load: ${initialLoad}, Search Mode Param: ${searchModeParam}, Search Term Param: "${searchTermValueParam}"`);
@@ -267,12 +273,13 @@ const Supermercados = () => {
     let currentDataSourceUsed = 'Firestore';
 
     try {
-      currentDataSourceUsed = 'Local (Productos)';
-      console.log(`Cargando productos para ${brandId}/${branchId} desde archivos locales...`);
+      currentDataSourceUsed = 'Local (Productos - Public)';
+      console.log(`Cargando productos para ${brandId}/${branchId} desde archivos locales (public)...`);
 
       if (initialLoad || (isSearching && filteredLocalProductsRef.current.length === 0) || (!isSearching && allLocalProductsLoadedRef.current.length === 0)) {
         try {
           const jsonUrl = `/data/products/${brandId.toLowerCase()}/${branchId}.json`;
+
           const response = await fetch(jsonUrl);
 
           if (!response.ok) {
@@ -777,7 +784,10 @@ const Supermercados = () => {
                             let label = selectedBranch.direccion_sucursal || selectedBranch.nombre_sucursal || `Sucursal ${selectedBranch.id_sucursal}`;
                             const idPrefixPattern = new RegExp(`^${selectedBranch.id_sucursal}\\s*[-–]?\\s*`, 'i');
                             label = label.replace(idPrefixPattern, '');
-                            return `${selectedBranch.id_sucursal} - ${label.toUpperCase()}`;
+                            const distStr = (selectedBranch.distance !== undefined && selectedBranch.distance !== null && selectedBranch.distance !== Infinity)
+                              ? ` (${selectedBranch.distance.toFixed(1)} km)`
+                              : '';
+                            return `${selectedBranch.id_sucursal} - ${label.toUpperCase()}${distStr}`;
                           })() : 'Seleccione una sucursal...'}
                         </span>
                         <span style={{ marginLeft: '10px' }}>▼</span>
@@ -819,6 +829,11 @@ const Supermercados = () => {
                                     }}
                                   >
                                     <strong>{branch.id_sucursal}</strong> - {label.toUpperCase()}
+                                    {branch.distance !== undefined && branch.distance !== null && branch.distance !== Infinity && (
+                                      <span style={{ marginLeft: '8px', color: '#28a745', fontSize: '0.9em' }}>
+                                        ({branch.distance.toFixed(1)} km)
+                                      </span>
+                                    )}
                                   </div>
                                 );
                               })}
@@ -944,7 +959,7 @@ const Supermercados = () => {
           )}
         </div>
       </div>
-    </div>
+    </div >
   );
 };
 
