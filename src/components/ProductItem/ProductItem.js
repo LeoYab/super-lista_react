@@ -134,7 +134,23 @@ const ProductItem = ({ producto, onEditar }) => {
           </div>
           <div className="product-item-details">
             <span className="product-item-name">{truncatedProductName}</span>
-            <span className="product-item-unit-detail">Unidad: {formattedPrice}</span>
+            <div className="price-info-container">
+              {Number(producto.precio_original) > Number(producto.valor) ? (
+                <div className="discount-price-stack">
+                  <span className="original-price-strikethrough">
+                    Unidad: {Number(producto.precio_original).toLocaleString('es-AR', { style: 'currency', currency: 'ARS' })}
+                  </span>
+                  <span className="product-item-promo-price">
+                    Promoción: {formattedPrice}
+                  </span>
+                </div>
+              ) : (
+                <span className="product-item-unit-detail">Unidad: {formattedPrice}</span>
+              )}
+            </div>
+            {producto.promo_leyenda && (
+              <span className="product-item-promo-legend">📅 {producto.promo_leyenda}</span>
+            )}
           </div>
         </div>
 

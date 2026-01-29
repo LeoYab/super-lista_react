@@ -4,7 +4,17 @@ import Button from '../../Buttons/Button';
 import './SupermarketProductItem.css';
 
 const SupermarketProductItem = ({ product, onAddToList }) => {
-  const formattedPrice = product.precio.toLocaleString('es-AR', {
+  const hasOffer = product.precio_oferta && product.precio_oferta < product.precio;
+  const displayPrice = hasOffer ? product.precio_oferta : product.precio;
+
+  const formattedPrice = displayPrice.toLocaleString('es-AR', {
+    style: 'currency',
+    currency: 'ARS',
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  });
+
+  const formattedOriginalPrice = product.precio.toLocaleString('es-AR', {
     style: 'currency',
     currency: 'ARS',
     minimumFractionDigits: 2,
@@ -20,7 +30,7 @@ const SupermarketProductItem = ({ product, onAddToList }) => {
   };
 
   return (
-    <div className="supermarket-product-item-card">
+    <div className={`supermarket-product-item-card ${hasOffer ? 'has-offer' : ''}`}>
       <div className="product-details-left">
         <div className="product-item-image-placeholder">
           🛒
@@ -30,17 +40,27 @@ const SupermarketProductItem = ({ product, onAddToList }) => {
           {product.marca_producto && (
             <span className="product-brand">{product.marca_producto}</span>
           )}
+          {hasOffer && product.promo1_leyenda && (
+            <span className="product-promo-legend">
+              📅 {product.promo1_leyenda}
+            </span>
+          )}
         </div>
       </div>
       <div className="product-details-right">
-        <span className="product-price">{formattedPrice}</span>
+        <div className="price-container">
+          {hasOffer && (
+            <span className="original-price">{formattedOriginalPrice}</span>
+          )}
+          <span className="product-price">{formattedPrice}</span>
+        </div>
         <span className={`product-stock ${getStockStatusClass(product.stock)}`}>
           {getStockStatusText(product.stock)}
         </span>
         <Button
           size="small"
           variant="primary"
-          onClick={() => onAddToList(product)}
+          onClick={() => onAddToList({ ...product, valor: displayPrice })}
           disabled={!product.stock}>
           Agregar
         </Button>

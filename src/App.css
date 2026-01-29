@@ -9,8 +9,12 @@
 }
 
 body {
-  font-family: 'Inter', sans-serif;
-  background-color: var(--background-color);
+  font-family: 'Outfit', sans-serif;
+  background:
+    radial-gradient(at 0% 0%, rgba(124, 58, 237, 0.1) 0px, transparent 50%),
+    radial-gradient(at 50% 0%, rgba(236, 72, 153, 0.1) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(59, 130, 246, 0.1) 0px, transparent 50%),
+    #f8fafc;
   color: var(--text-color-primary);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;

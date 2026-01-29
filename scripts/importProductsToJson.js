@@ -83,7 +83,7 @@ const AMBA_LOCALITIES = new Set([
   'BARRACAS', 'LA BOCA', 'SAN TELMO', 'MONSERRAT', 'SAN NICOLAS', 'BALVANERA', 'RECOLETA'
 ]);
 
-function isAmba(branchDoc) {
+function isTargetLocation(branchDoc) {
   const provincia = String(branchDoc.sucursales_provincia || branchDoc.provincia || '').toUpperCase().trim();
   const localidad = String(branchDoc.sucursales_localidad || branchDoc.localidad || '').toUpperCase().trim();
 
@@ -94,7 +94,8 @@ function isAmba(branchDoc) {
   if (isCaba) return true;
 
   if (provincia === 'AR-B' || provincia.includes('BUENOS AIRES') || provincia === 'BA' || provincia === 'B.A.' || provincia.includes('BS AS')) {
-    return Array.from(AMBA_LOCALITIES).some(l => localidad.includes(l));
+    // Si la provincia es Buenos Aires (AR-B), la aceptamos completa como pidió el usuario
+    return true;
   }
   return false;
 }
@@ -195,7 +196,11 @@ async function procesarCsvStream(streamCsv, callback, filenameForLog = 'CSV desc
       'sucursal_direccion': ['sucursal_direccion', 'direccion', 'sucursales_calle'],
       'sucursales_provincia': ['sucursales_provincia', 'provincia'],
       'sucursales_localidad': ['sucursales_localidad', 'localidad'],
-      'id_producto': ['id_producto', 'producto_id']
+      'id_producto': ['id_producto', 'producto_id'],
+      'productos_precio_unitario_promo1': ['productos_precio_unitario_promo1', 'promo1_precio', 'promo1'],
+      'productos_promo1_leyenda': ['productos_promo1_leyenda', 'promo1_leyenda'],
+      'productos_precio_unitario_promo2': ['productos_precio_unitario_promo2', 'promo2_precio', 'promo2'],
+      'productos_promo2_leyenda': ['productos_promo2_leyenda', 'promo2_leyenda']
     };
 
     const passthrough = new stream.PassThrough();
@@ -332,12 +337,31 @@ function normalizeProductData(product, targetBrand, targetSucursalId) {
 
   const productId = `${uniqueIdentifier}-${targetSucursalId}`;
 
+  // Procesar precios de promociones
+  let promo1_precio = parseFloat(String(product.productos_precio_unitario_promo1 || '').replace(',', '.'));
+  let promo2_precio = parseFloat(String(product.productos_precio_unitario_promo2 || '').replace(',', '.'));
+
+  const p1 = isNaN(promo1_precio) || promo1_precio <= 0 ? null : promo1_precio;
+  const p2 = isNaN(promo2_precio) || promo2_precio <= 0 ? null : promo2_precio;
+
+  // El "mejor precio" es el mínimo entre el precio de lista y las promociones disponibles
+  const mejoresPrecios = [precio];
+  if (p1 !== null) mejoresPrecios.push(p1);
+  if (p2 !== null) mejoresPrecios.push(p2);
+  const mejorPrecio = Math.min(...mejoresPrecios);
+
   return {
     id: productId,
     ean: sanitizedEan,
     nombre: descripcion,
     marca_producto: product.productos_marca ? product.productos_marca.trim() : 'Sin Marca',
     precio: precio,
+    precio_oferta: mejorPrecio < precio ? mejorPrecio : null,
+    mejor_precio: mejorPrecio,
+    promo1_precio: p1,
+    promo1_leyenda: product.productos_promo1_leyenda?.trim() || null,
+    promo2_precio: p2,
+    promo2_leyenda: product.productos_promo2_leyenda?.trim() || null,
     cantidad_presentacion: product.productos_cantidad_presentacion ? product.productos_cantidad_presentacion.trim() : '1',
     unidad_medida_presentacion: product.productos_unidad_medida_presentacion ? product.productos_unidad_medida_presentacion.trim() : 'unidad',
     supermercado_marca: targetBrand,
@@ -389,8 +413,8 @@ async function procesarZipInterno(zipPath, allFilteredSucursalesByBrand, zipFile
     try {
       const sucursalStream = sucursalFile.stream();
       await procesarCsvStream(sucursalStream, (doc) => {
-        // Filtrar por AMBA
-        if (!isAmba(doc)) return;
+        // Filtrar por Provincia de Buenos Aires y CABA
+        if (!isTargetLocation(doc)) return;
 
         let foundBrand = 'Desconocido';
         const rawRazonSocial = (doc.comercio_razon_social || '').toLowerCase();
