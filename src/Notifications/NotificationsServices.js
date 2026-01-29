@@ -68,8 +68,8 @@ export const showConfirmAlert = async ({
     text: text,
     icon: 'warning',
     showCancelButton: true,
-    confirmButtonColor: '#d33',
-    cancelButtonColor: '#3085d6',
+    confirmButtonColor: '#ef4444', // Danger color
+    cancelButtonColor: '#7c3aed',  // Primary color
     confirmButtonText: confirmButtonText,
     cancelButtonText: cancelButtonText
   });

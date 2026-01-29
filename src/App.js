@@ -40,9 +40,13 @@ import './components/Buttons/Button.css';
 
 
 const LOCAL_BRAND_DEFAULT_BRANCH_IDS = {
-  carrefour: '1',
   dia: '87',
   changomas: '1004',
+  carrefour: '1',
+  easy: '101',
+  coto: '101',
+  jumbo: '121',
+  vea: '1'
 };
 
 // Haversine formula to calculate distance between two points in km
@@ -233,7 +237,7 @@ function MainAppContent() {
       if (foundProduct) {
         setEditingProduct({
           nombre: foundProduct.nombre,
-          valor: foundProduct.precio || '',
+          valor: foundProduct.mejor_precio || foundProduct.precio || '',
           cantidad: 1,
         });
         setShowProductForm(true);
@@ -350,6 +354,16 @@ function MainAppContent() {
     return sum;
   }, 0);
 
+  const totalAhorro = products.reduce((sum, producto) => {
+    const precioOriginal = Number(producto.precio_original || 0);
+    const precioActual = Number(producto.valor || 0);
+
+    if (!producto.completed && precioOriginal > 0 && precioOriginal > precioActual) {
+      return sum + ((precioOriginal - precioActual) * (producto.cantidad || 0));
+    }
+    return sum;
+  }, 0);
+
   const hasDecimals = totalGeneral % 1 !== 0;
   const formattedTotal = totalGeneral.toLocaleString('es-AR', {
     style: 'currency',
@@ -397,6 +411,11 @@ function MainAppContent() {
                       <span>Total: </span>
                       {formattedTotal}
                     </span>
+                    {totalAhorro > 0 && (
+                      <span className="stat-item total-savings" style={{ fontSize: '0.8rem', color: '#2f855a', fontWeight: '600', marginTop: '-2px' }}>
+                        Ahorrás: {totalAhorro.toLocaleString('es-AR', { style: 'currency', currency: 'ARS' })}
+                      </span>
+                    )}
                   </div>
                 </div>
 

@@ -91,7 +91,10 @@ const Supermercados = () => {
 
     const productData = {
       nombre: product.nombre,
-      valor: product.precio,
+      valor: product.valor || product.mejor_precio || product.precio,
+      precio_original: product.precio,
+      promo_leyenda: product.promo1_leyenda,
+      supermercado: product.supermercado_marca,
       cantidad: 1,
       category: defaultCategory.id,
       icon: defaultCategory.icon

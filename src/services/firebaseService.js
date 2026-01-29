@@ -48,6 +48,9 @@ export const subscribeToProducts = (userId, listId, callback) => {
       category: value.category,
       icon: value.icon,
       completed: value.completed || false,
+      precio_original: value.originalPrice || null,
+      promo_leyenda: value.promoLegend || null,
+      supermercado: value.supermarket || null,
     })) : [];
     callback(loadedProducts);
   }, (error) => {
@@ -65,6 +68,9 @@ export const addProduct = (userId, listId, productData) => {
     completed: false,
     category: productData.category,
     icon: productData.icon,
+    originalPrice: productData.precio_original || null,
+    promoLegend: productData.promo_leyenda || null,
+    supermarket: productData.supermercado || null,
   });
 };
 
@@ -76,6 +82,8 @@ export const editProduct = (userId, listId, productId, productData) => {
     quantity: parseInt(productData.cantidad),
     category: productData.category,
     icon: productData.icon,
+    originalPrice: productData.precio_original || null,
+    promoLegend: productData.promo_leyenda || null,
   });
 };
 

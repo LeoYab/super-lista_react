@@ -27,7 +27,9 @@ const ProductForm = ({ editandoId, productoAEditar, onAgregar, onEditar, onCance
     valor: '',
     cantidad: '1',
     category: initialDefaultCategory.id, // Usamos la categoría inicial para el estado.
-    icon: initialDefaultCategory.icon
+    icon: initialDefaultCategory.icon,
+    precio_original: null,
+    promo_leyenda: null
   });
   const [error, setError] = useState('');
 
@@ -44,7 +46,9 @@ const ProductForm = ({ editandoId, productoAEditar, onAgregar, onEditar, onCance
         valor: productoAEditar.valor.toString(),
         cantidad: productoAEditar.cantidad.toString(),
         category: loadedCategory || initialDefaultCategory.id,
-        icon: productoAEditar.icon || initialDefaultCategory.icon
+        icon: productoAEditar.icon || initialDefaultCategory.icon,
+        precio_original: productoAEditar.precio_original || null,
+        promo_leyenda: productoAEditar.promo_leyenda || null
       });
     } else {
       // Si no estamos editando, reiniciamos el formulario a sus valores por defecto
@@ -54,7 +58,9 @@ const ProductForm = ({ editandoId, productoAEditar, onAgregar, onEditar, onCance
         valor: '',
         cantidad: '1',
         category: initialDefaultCategory.id,
-        icon: initialDefaultCategory.icon
+        icon: initialDefaultCategory.icon,
+        precio_original: null,
+        promo_leyenda: null
       });
       setError('');
     }
@@ -120,6 +126,8 @@ const ProductForm = ({ editandoId, productoAEditar, onAgregar, onEditar, onCance
       cantidad: parsedCantidad,
       category: productData.category,
       icon: productData.icon,
+      precio_original: productData.precio_original,
+      promo_leyenda: productData.promo_leyenda,
     };
 
     if (editandoId) {
@@ -134,7 +142,9 @@ const ProductForm = ({ editandoId, productoAEditar, onAgregar, onEditar, onCance
       valor: '',
       cantidad: '1',
       category: initialDefaultCategory.id,
-      icon: initialDefaultCategory.icon
+      icon: initialDefaultCategory.icon,
+      precio_original: null,
+      promo_leyenda: null
     });
   };
 
