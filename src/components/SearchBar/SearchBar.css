@@ -34,7 +34,7 @@
 .clear-search-button {
   position: absolute;
   right: 12px;
-  top: 40%;
+  top: 50%;
   transform: translateY(-50%);
   background: none;
   border: none;

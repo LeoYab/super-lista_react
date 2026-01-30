@@ -395,13 +395,13 @@ function MainAppContent() {
                     <span dangerouslySetInnerHTML={{ __html: totalProductos || '<em style="font-weight: lighter;">Vacío</em>' }}></span>
 
                   </span>
-                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px' }}>
                     {detectedSupermarket && (
                       <a
                         href={`https://www.google.com/maps/search/?api=1&query=${detectedSupermarket.branchData.latitud},${detectedSupermarket.branchData.longitud}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        style={{ fontSize: '0.75rem', color: '#4caf50', marginBottom: '0px', textAlign: 'right', fontWeight: '500', textDecoration: 'none', cursor: 'pointer' }}
+                        style={{ fontSize: '0.75rem', color: 'var(--primary-dark-color)', marginBottom: '0px', textAlign: 'right', fontWeight: '600', textDecoration: 'none', cursor: 'pointer' }}
                       >
                         📍 {detectedSupermarket.name}
                         {' '}<span style={{ fontSize: '0.7rem' }}>↗️</span>
