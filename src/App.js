@@ -235,11 +235,14 @@ function MainAppContent() {
     })).then(results => {
       const foundProduct = results.find(r => r !== null);
       if (foundProduct) {
-        setEditingProduct({
+        setEditingProduct(prev => ({
+          ...(prev || {}),
           nombre: foundProduct.nombre,
           valor: foundProduct.mejor_precio || foundProduct.precio || '',
-          cantidad: 1,
-        });
+          precio_original: foundProduct.precio || null,
+          promo_leyenda: foundProduct.promo_leyenda || null,
+          cantidad: prev ? prev.cantidad : 1,
+        }));
         setShowProductForm(true);
         showSuccessToast(`Producto encontrado: ${foundProduct.nombre}`);
       } else {
