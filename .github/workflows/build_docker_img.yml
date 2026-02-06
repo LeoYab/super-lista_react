@@ -79,7 +79,7 @@ jobs:
               -H "Content-Type: application/json" \
               -d '{"source":"github-actions","repo":"${{ github.repository }}","tag":"${{ steps.calculate_tag.outputs.NEW_TAG }}","lts":"true"}' && break || {
               if [ $i -lt 3 ]; then
-                echo "Failed to trigger Jenkins, retrying in 10 sec."
+                echo "Failed to trigger Jenkins, retrying in 10 seconds..."
                 sleep 10
               else
                 echo "Failed after $i attempts."
