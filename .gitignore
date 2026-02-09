@@ -23,5 +23,6 @@ yarn-debug.log*
 yarn-error.log*
 
 /scripts/serviceAccountKey.json
+/public/data
 /src/data/temp_processing
-public/data/temp_processing/
+/public/data/temp_processing/
