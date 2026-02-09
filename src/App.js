@@ -39,15 +39,7 @@ import './components/Buttons/Button.css';
 // Unused constant removed
 
 
-const LOCAL_BRAND_DEFAULT_BRANCH_IDS = {
-  dia: '87',
-  changomas: '1004',
-  carrefour: '1',
-  easy: '101',
-  coto: '101',
-  jumbo: '121',
-  vea: '1'
-};
+// Unused constant removed
 
 // Haversine formula to calculate distance between two points in km
 function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
@@ -113,31 +105,39 @@ function MainAppContent() {
         Promise.all(brandIds.map(async (brandId) => {
           try {
             const response = await fetch(`/data/super/${brandId}.json`);
-            if (!response.ok) return [];
+            if (!response.ok) return null;
             const branches = await response.json();
 
-            const targetBranchId = LOCAL_BRAND_DEFAULT_BRANCH_IDS[brandId];
-            const branch = branches.find(b => String(b.id_sucursal) === String(targetBranchId));
+            // Find nearest branch for this brand
+            let nearestForBrand = null;
+            let minDistance = Infinity;
 
-            if (branch && branch.latitud && branch.longitud) {
-              const distance = getDistanceFromLatLonInKm(latitude, longitude, branch.latitud, branch.longitud);
-              if (distance < THRESHOLD_KM) {
-                return {
-                  brandKey: brandId,
-                  name: branch.marca || branch.comercio_bandera_nombre || brandId,
-                  branchData: branch,
-                  distance: distance
-                };
+            branches.forEach(branch => {
+              if (branch.latitud && branch.longitud) {
+                const dist = getDistanceFromLatLonInKm(latitude, longitude, parseFloat(branch.latitud), parseFloat(branch.longitud));
+                if (dist < minDistance) {
+                  minDistance = dist;
+                  nearestForBrand = {
+                    brandKey: brandId,
+                    name: branch.comercio_bandera_nombre || branch.marca || brandId,
+                    branchData: branch,
+                    distance: dist
+                  };
+                }
               }
+            });
+
+            if (nearestForBrand && nearestForBrand.distance < THRESHOLD_KM) {
+              return nearestForBrand;
             }
           } catch (e) { }
           return null;
         })).then(foundBranches => {
           const validBranches = foundBranches.filter(b => b !== null).sort((a, b) => a.distance - b.distance);
           if (validBranches.length > 0) {
-            const nearestBranch = validBranches[0];
-            setDetectedSupermarket(nearestBranch);
-            showSuccessToast(`📍 Estás en ${nearestBranch.name}`);
+            const nearestStore = validBranches[0];
+            setDetectedSupermarket(nearestStore);
+            showSuccessToast(`📍 Estás en ${nearestStore.name} (${nearestStore.branchData.nombre_sucursal || nearestStore.branchData.id_sucursal})`);
           }
         });
 
@@ -207,15 +207,16 @@ function MainAppContent() {
     // Search for the product in brand CSVs
     const brandIds = detectedSupermarket
       ? [detectedSupermarket.brandKey]
-      : ['carrefour', 'dia', 'changomas', 'jumbo', 'vea', 'vital', 'easy'];
+      : [];
+
+    if (brandIds.length === 0) {
+      showErrorAlert('Supermercado no detectado', 'No estás cerca de ningún supermercado conocido o el GPS está desactivado. Selecciona uno manualmente en el buscador de precios.');
+      return;
+    }
 
     Promise.all(brandIds.map(async (brandId) => {
       try {
-        const branchId = (detectedSupermarket && detectedSupermarket.brandKey === brandId)
-          ? detectedSupermarket.branchData.id_sucursal
-          : LOCAL_BRAND_DEFAULT_BRANCH_IDS[brandId];
-
-        if (!branchId) return null;
+        const branchId = detectedSupermarket.branchData.id_sucursal || detectedSupermarket.branchData.id;
 
         const response = await fetch(`/data/products/${brandId}/${branchId}.json`);
         if (!response.ok) return null;
@@ -246,7 +247,7 @@ function MainAppContent() {
         setShowProductForm(true);
         showSuccessToast(`Producto encontrado: ${foundProduct.nombre}`);
       } else {
-        showErrorAlert('Producto no encontrado', `No se encontró información para el código: ${decodedText}.`);
+        showErrorAlert('Producto no encontrado', `No se encontró información para el código: ${decodedText} en esta sucursal.`);
       }
     });
   }, [detectedSupermarket]);
