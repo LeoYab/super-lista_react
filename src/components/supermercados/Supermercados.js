@@ -12,16 +12,6 @@ import { subscribeToCategories } from '../../services/firebaseService';
 import { showErrorAlert } from '../../Notifications/NotificationsServices';
 
 
-const LOCAL_BRAND_DEFAULT_BRANCH_IDS = {
-  dia: '87',
-  changomas: '1004',
-  carrefour: '1',
-  easy: '101',
-  coto: '101',
-  jumbo: '121',
-  vea: '1'
-}
-
 const PRODUCTS_PER_PAGE = 20;
 
 const Supermercados = () => {
@@ -498,14 +488,22 @@ const Supermercados = () => {
     const normalizedScannedCode = normalizeCode(decodedText);
     console.log(`Normalized scanned code: ${normalizedScannedCode}`);
 
-    // Search for the product in brand CSVs
-    const brandIds = ['carrefour', 'dia', 'changomas', 'jumbo', 'vea', 'vital', 'easy'];
+    if (!selectedBrand || !selectedBranch) {
+      alert("Por favor, selecciona un supermercado y sucursal primero.");
+      return;
+    }
 
-    Promise.all(brandIds.map(async (brandId) => {
+    const brandId = selectedBrand.id.toLowerCase();
+    const branchId = selectedBranch.id_sucursal || selectedBranch.id; // Manejar diferentes estructuras si acaso
+
+    console.log(`Buscando producto en: ${brandId}, Sucursal: ${branchId}`);
+
+    const searchProduct = async () => {
       try {
-        const branchId = LOCAL_BRAND_DEFAULT_BRANCH_IDS[brandId];
         const response = await fetch(`/data/products/${brandId}/${branchId}.json`);
-        if (!response.ok) return null;
+        if (!response.ok) {
+          throw new Error('No se encontró el archivo de la sucursal');
+        }
         const products = await response.json();
         const found = products.find(p => {
           const idParts = (p.id || '').split('-');
@@ -517,22 +515,25 @@ const Supermercados = () => {
         });
 
         if (found) {
-          return {
+          const result = {
             ...found,
-            supermercado_marca: brandId.charAt(0).toUpperCase() + brandId.slice(1),
-            sucursal_nombre: 'Sucursal Local'
+            supermercado_marca: selectedBrand.nombre || brandId.charAt(0).toUpperCase() + brandId.slice(1),
+            sucursal_nombre: selectedBranch.nombre_sucursal || 'Sucursal Actual'
           };
+          setScannedProducts([result]);
+        } else {
+          alert(`No se encontró el producto en esta sucursal: ${decodedText}`);
+          setScannedProducts([]);
         }
-      } catch (e) { }
-      return null;
-    })).then(foundResults => {
-      const results = foundResults.filter(r => r !== null);
-      setScannedProducts(results);
-      if (results.length === 0) {
-        alert(`No se encontraron productos con el código: ${decodedText}`);
+      } catch (e) {
+        console.error("Error buscando producto escaneado:", e);
+        alert(`Error al buscar el producto: ${e.message}`);
+        setScannedProducts([]);
       }
-    });
-  }, []);
+    };
+
+    searchProduct();
+  }, [selectedBrand, selectedBranch]);
 
   const handleFileUpload = async (e) => {
     const file = e.target.files[0];
