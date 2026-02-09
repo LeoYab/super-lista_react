@@ -12,16 +12,6 @@ import { subscribeToCategories } from '../../services/firebaseService';
 import { showErrorAlert } from '../../Notifications/NotificationsServices';
 
 
-
-
-
-
-// Removed unused fetchCSV import
-
-
-// Unused maps removed
-
-
 const LOCAL_BRAND_DEFAULT_BRANCH_IDS = {
   dia: '87',
   changomas: '1004',
