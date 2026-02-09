@@ -233,23 +233,22 @@ const Supermercados = () => {
   }, []);
 
   const applySearchFilter = useCallback((products, term) => {
-    console.log("Aplicando filtro. Productos recibidos:", products.length, "Término:", term);
-    if (!term.trim()) {
-      console.log("Término vacío, no se aplica filtro.");
-      return [];
-    }
-    // CAMBIO: Para búsqueda local, el término se mantiene como está para la RegExp.
-    // La conversión a mayúsculas es solo para Firestore.
-    const escapedSearchTerm = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    const searchRegExp = new RegExp(escapedSearchTerm, 'i'); // 'i' para case-insensitive
+    console.log(`[DEBUG] applySearchFilter: Filtrando ${products.length} productos con término: "${term}"`);
+    if (!term.trim()) return [];
 
-    const filtered = products.filter(p =>
-      searchRegExp.test(p.nombre) ||
-      (p.marca_producto && searchRegExp.test(p.marca_producto))
-    );
-    console.log("Productos filtrados:", filtered.length);
-    return filtered;
+    const searchWords = term.toLowerCase().trim().split(/\s+/);
+
+    return products.filter(p => {
+      const nombre = (p.nombre || "").toLowerCase();
+      const marca = (p.marca_producto || "").toLowerCase();
+      const ean = (p.id || "").toLowerCase();
+
+      return searchWords.every(word =>
+        nombre.includes(word) || marca.includes(word) || ean.includes(word)
+      );
+    });
   }, []);
+
 
   const fetchProductsData = useCallback(async (brandId, branchId, initialLoad = true, searchModeParam = false, searchTermValueParam = '') => {
     console.log(`--- Iniciando fetchProductsData (SRC Method) ---`);
@@ -311,10 +310,14 @@ const Supermercados = () => {
 
       let productsToWorkWith;
       if (searchModeParam && searchTermValueParam) {
-        productsToWorkWith = applySearchFilter(allLocalProductsLoadedRef.current, searchTermValueParam);
-        filteredLocalProductsRef.current = productsToWorkWith;
-        localPaginationIndexRef.current = 0;
-        console.log(`Local: Filtrados ${filteredLocalProductsRef.current.length} productos para búsqueda: "${searchTermValueParam}"`);
+        if (initialLoad) {
+          productsToWorkWith = applySearchFilter(allLocalProductsLoadedRef.current, searchTermValueParam);
+          filteredLocalProductsRef.current = productsToWorkWith;
+          localPaginationIndexRef.current = 0;
+          console.log(`Local: Filtrados ${filteredLocalProductsRef.current.length} productos para búsqueda: "${searchTermValueParam}"`);
+        } else {
+          productsToWorkWith = filteredLocalProductsRef.current;
+        }
       } else {
         productsToWorkWith = allLocalProductsLoadedRef.current;
         filteredLocalProductsRef.current = [];
@@ -333,7 +336,7 @@ const Supermercados = () => {
 
       setProductsToDisplay(prevProducts => {
         let newProducts;
-        if (initialLoad || searchModeParam) {
+        if (initialLoad) {
           newProducts = loadedProductsChunk;
         } else {
           const newProductIds = new Set(loadedProductsChunk.map(p => p.id));
@@ -950,7 +953,7 @@ const Supermercados = () => {
                   variant="secondary"
                   style={{ marginTop: '20px' }}
                 >
-                  {isLoadingProducts ? 'Cargando...' : 'Cargar más productos'}
+                  {isLoadingProducts ? 'Cargando...' : 'Mostrar más productos'}
                 </Button>
               )}
               {!hasMoreProducts && productsToDisplay.length > 0 && !isLoadingProducts && (
