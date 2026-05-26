@@ -24,7 +24,7 @@ const ProductForm = ({ editandoId, productoAEditar, onAgregar, onEditar, onCance
 
   const [productData, setProductData] = useState({
     nombre: '',
-    valor: '',
+    valor: '0',
     cantidad: '1',
     category: initialDefaultCategory.id, // Usamos la categoría inicial para el estado.
     icon: initialDefaultCategory.icon,
@@ -55,7 +55,7 @@ const ProductForm = ({ editandoId, productoAEditar, onAgregar, onEditar, onCance
       // usando la categoría inicial que ya está garantizada como válida.
       setProductData({
         nombre: '',
-        valor: '',
+        valor: '0',
         cantidad: '1',
         category: initialDefaultCategory.id,
         icon: initialDefaultCategory.icon,
@@ -99,7 +99,7 @@ const ProductForm = ({ editandoId, productoAEditar, onAgregar, onEditar, onCance
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!productData.nombre.trim() || !productData.valor || !productData.cantidad || productData.category === undefined || !productData.icon) {
+    if (!productData.nombre.trim() || (productData.valor === '' || productData.valor === null || productData.valor === undefined) || !productData.cantidad || productData.category === undefined || !productData.icon) {
       setError('Todos los campos son obligatorios.');
       showErrorAlert('Error', 'Por favor, completa todos los campos.'); // Replaced Swal.fire
       return;
@@ -139,7 +139,7 @@ const ProductForm = ({ editandoId, productoAEditar, onAgregar, onEditar, onCance
     // Reinicia el formulario al estado inicial después de enviar
     setProductData({
       nombre: '',
-      valor: '',
+      valor: '0',
       cantidad: '1',
       category: initialDefaultCategory.id,
       icon: initialDefaultCategory.icon,
@@ -178,6 +178,18 @@ const ProductForm = ({ editandoId, productoAEditar, onAgregar, onEditar, onCance
           type="number"
           value={productData.valor}
           onChange={handleChange}
+          onFocus={(e) => {
+            const valStr = String(productData.valor);
+            if (valStr === '0' || parseFloat(valStr) === 0) {
+              setProductData(prev => ({ ...prev, valor: '' }));
+            }
+          }}
+          onBlur={(e) => {
+            const valStr = String(productData.valor || '');
+            if (valStr.trim() === '') {
+              setProductData(prev => ({ ...prev, valor: '0' }));
+            }
+          }}
           placeholder="Ej: 1.50, 25.75"
           step="0.01"
           min="0"
