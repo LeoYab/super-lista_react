@@ -21,6 +21,7 @@ import SearchBar from './components/SearchBar/SearchBar';
 import Button from './components/Buttons/Button';
 import CategoryFilter from './components/CategoryFilter/CategoryFilter';
 import Supermercados from './components/supermercados/Supermercados';
+import Comparador from './components/Comparador/Comparador';
 import { Html5Qrcode, Html5QrcodeSupportedFormats } from "html5-qrcode";
 import { showErrorAlert, showSuccessToast } from './Notifications/NotificationsServices';
 
@@ -476,6 +477,21 @@ function MainAppContent() {
                     Precios
                   </Button>
                   <Button
+                    onClick={() => navigate('/comparar')}
+                    variant="secondary"
+                    icon={(
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <line x1="18" y1="20" x2="18" y2="10"></line>
+                        <line x1="12" y1="20" x2="12" y2="4"></line>
+                        <line x1="6" y1="20" x2="6" y2="14"></line>
+                      </svg>
+                    )}
+                    className="compare-button btn-square"
+                    title="Comparar Precios"
+                  >
+                    Comparar
+                  </Button>
+                  <Button
                     onClick={handleToggleForm}
                     variant="primary"
                     icon={(
@@ -570,6 +586,7 @@ function AppRouter() {
       <Route path="/" element={currentUser ? <MainAppContent /> : <Navigate to="/auth" />} />
       {/* NUEVA RUTA PARA SUPERMERCADOS */}
       <Route path="/supermercados" element={currentUser ? <Supermercados /> : <Navigate to="/auth" />} />
+      <Route path="/comparar" element={currentUser ? <Comparador /> : <Navigate to="/auth" />} />
       {/* Opcional: Redirigir a una ruta por defecto si la URL no coincide con ninguna */}
       <Route path="*" element={<Navigate to="/" />} />
     </Routes>
