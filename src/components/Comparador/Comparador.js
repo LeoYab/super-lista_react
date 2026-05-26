@@ -37,6 +37,7 @@ const Comparador = () => {
   const [results, setResults] = useState(null);
   const [closestBranches, setClosestBranches] = useState({});
   const [gpsStatus, setGpsStatus] = useState('Buscando ubicación...');
+  const [gpsState, setGpsState] = useState('idle'); // idle, loading, success, warning, error
   const [expandedSuper, setExpandedSuper] = useState(null);
 
   // Subscribe to categories
@@ -51,6 +52,7 @@ const Comparador = () => {
   const findClosestBranches = useCallback(async () => {
     try {
       setGpsStatus('Buscando ubicación GPS...');
+      setGpsState('loading');
       let coords = null;
       try {
         if (navigator.geolocation) {
@@ -58,7 +60,7 @@ const Comparador = () => {
             navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 8000 });
           });
           coords = position.coords;
-          setGpsStatus('Ubicación GPS obtenida. Buscando sucursales cercanas...');
+          setGpsStatus('Ubicación GPS obtenida. Buscando sucursales...');
         } else {
           setGpsStatus('Geolocalización no soportada. Usando sucursales por defecto.');
         }
@@ -120,10 +122,15 @@ const Comparador = () => {
       setClosestBranches(branchMappings);
       if (coords) {
         setGpsStatus('Sucursales más cercanas calculadas.');
+        setGpsState('success');
+      } else {
+        setGpsStatus('Ubicación GPS no disponible. Usando sucursales por defecto.');
+        setGpsState('warning');
       }
     } catch (err) {
       console.error("Error al inicializar sucursales:", err);
       setGpsStatus('Error al buscar sucursales.');
+      setGpsState('error');
     }
   }, []);
 
@@ -202,7 +209,7 @@ const Comparador = () => {
           }
 
           const catalog = await res.json();
-          setLoadingSteps((prev) => ({ ...prev, [brandId]: 'Procesando coincidencias...' }));
+          setLoadingSteps((prev) => ({ ...prev, [brandId]: 'Procesando...' }));
 
           let totalCost = 0;
           let itemsFoundCount = 0;
@@ -324,17 +331,34 @@ const Comparador = () => {
     setExpandedSuper(expandedSuper === brandId ? null : brandId);
   };
 
+  const getRankBadgeContent = (idx) => {
+    if (idx === 0) return '🥇';
+    if (idx === 1) return '🥈';
+    if (idx === 2) return '🥉';
+    return `#${idx + 1}`;
+  };
+
+  const getRankClass = (idx) => {
+    if (idx === 0) return 'rank-first';
+    if (idx === 1) return 'rank-second';
+    if (idx === 2) return 'rank-third';
+    return 'rank-default';
+  };
+
   return (
     <div className="comparador-container">
       <div className="comparador-header">
-        <h2>Comparador de Precios</h2>
+        <div className="header-title-wrapper">
+          <span className="header-decor-bar"></span>
+          <h2>Comparador de Precios</h2>
+        </div>
         <Button
           onClick={() => navigate('/')}
           size="small"
           variant="secondary"
-          style={{ display: 'flex', alignItems: 'center', gap: '5px' }}
+          className="back-list-btn"
         >
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
             <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
             <polyline points="9 22 9 12 15 12 15 22"></polyline>
           </svg>
@@ -342,27 +366,36 @@ const Comparador = () => {
         </Button>
       </div>
 
-      <div className="gps-status-card">
-        <span>📍</span>
+      <div className={`gps-status-card gps-state-${gpsState}`}>
+        <span className="gps-indicator-dot"></span>
+        <span className="gps-icon">📍</span>
         <p>{gpsStatus}</p>
-        <Button size="small" variant="secondary" onClick={findClosestBranches} style={{ marginLeft: 'auto', padding: '2px 8px', fontSize: '0.75rem' }}>
-          Recargar GPS
-        </Button>
+        <button className="gps-reload-btn" onClick={findClosestBranches}>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
+          </svg>
+          Actualizar
+        </button>
       </div>
 
       {/* Quick Add Form Section */}
       <div className="card quick-add-section">
-        <h3>Agregar Producto Rápido</h3>
+        <div className="section-title-wrapper">
+          <h3>Agregar Producto Rápido</h3>
+          <p className="section-subtitle">Agrega elementos sin precio para compararlos en un toque</p>
+        </div>
         <form onSubmit={handleQuickAdd} className="quick-add-form">
-          <Input
-            label="Nombre del Producto:"
-            id="quickName"
-            name="quickName"
-            value={quickAddName}
-            onChange={(e) => setQuickAddName(e.target.value)}
-            placeholder="Ej: Leche Entera, Arroz Gallo"
-            required
-          />
+          <div className="input-group name-group">
+            <Input
+              label="Nombre del Producto:"
+              id="quickName"
+              name="quickName"
+              value={quickAddName}
+              onChange={(e) => setQuickAddName(e.target.value)}
+              placeholder="Ej: Leche Entera, Arroz Gallo"
+              required
+            />
+          </div>
           <div className="qty-input-group">
             <Input
               label="Cant:"
@@ -376,6 +409,10 @@ const Comparador = () => {
             />
           </div>
           <Button type="submit" variant="primary" className="quick-add-btn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
             Agregar
           </Button>
         </form>
@@ -384,19 +421,27 @@ const Comparador = () => {
       {/* List display & Comparison wrapper */}
       <div className="list-comparison-wrapper">
         <div className="card list-card">
-          <h3>Mi Lista de Compras ({products.length})</h3>
+          <div className="card-header-with-count">
+            <h3>Mi Lista de Compras</h3>
+            <span className="items-count-badge">{products.length}</span>
+          </div>
+          
           {products.length === 0 ? (
-            <p style={{ color: 'var(--text-color-light)', textAlign: 'center', margin: '20px 0' }}>
-              Tu lista está vacía. Agrega productos arriba para empezar la comparación.
-            </p>
+            <div className="empty-list-placeholder">
+              <div className="placeholder-icon">🛒</div>
+              <p>Tu lista está vacía.</p>
+              <p className="placeholder-subtext">Agrega productos en el formulario de arriba para iniciar la comparación.</p>
+            </div>
           ) : (
             <>
               <ul className="comparar-list-items">
                 {products.map((item) => (
                   <li key={item.firebaseId} className="comparar-list-item">
                     <div className="item-info">
-                      <span className="item-icon">{item.icon || '🛒'}</span>
-                      <span className="item-name">{item.nombre}</span>
+                      <span className="item-icon-wrapper">{item.icon || '🛒'}</span>
+                      <div className="item-name-details">
+                        <span className="item-name">{item.nombre}</span>
+                      </div>
                       <span className="item-qty">x{item.cantidad}</span>
                     </div>
                     <button
@@ -421,7 +466,8 @@ const Comparador = () => {
                   className="search-cheapest-btn"
                   disabled={loading}
                 >
-                  🔍 Buscar Supermercado Más Barato
+                  <span className="search-btn-icon">🔍</span>
+                  Buscar Supermercado Más Barato
                 </Button>
               </div>
             </>
@@ -429,28 +475,48 @@ const Comparador = () => {
         </div>
 
         {/* Loading and Results panel */}
-        <div className="card" style={{ display: 'flex', flexDirection: 'column', minHeight: '300px' }}>
+        <div className="card results-card">
           <h3>Resultados de Búsqueda</h3>
 
           {loading && (
             <div className="loader-section">
-              <div className="custom-spinner"></div>
-              <p style={{ fontWeight: '600' }}>Buscando precios en catálogos locales...</p>
+              <div className="spinner-wrapper">
+                <div className="custom-spinner"></div>
+                <div className="spinner-pulse"></div>
+              </div>
+              <p className="loader-title">Buscando precios en catálogos locales...</p>
               <div className="loader-steps">
-                {Object.entries(loadingSteps).map(([brand, status]) => (
-                  <div key={brand} className={`loader-step ${status === 'Completado' ? 'completed' : ''}`}>
-                    <span style={{ textTransform: 'capitalize' }}>{brand}:</span>
-                    <span>{status}</span>
-                  </div>
-                ))}
+                {Object.entries(loadingSteps).map(([brand, status]) => {
+                  const isCompleted = status === 'Completado';
+                  const isFailed = status.startsWith('Error');
+                  return (
+                    <div key={brand} className={`loader-step ${isCompleted ? 'completed' : isFailed ? 'failed' : 'loading'}`}>
+                      <span className="brand-name">{brand}</span>
+                      <span className="step-status">
+                        {isCompleted ? (
+                          <span className="status-badge success">✓ Listo</span>
+                        ) : isFailed ? (
+                          <span className="status-badge error">✗ Falló</span>
+                        ) : (
+                          <span className="status-badge pending">
+                            <span className="mini-spinner"></span>
+                            {status}
+                          </span>
+                        )}
+                      </span>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           )}
 
           {!loading && !results && (
-            <p style={{ color: 'var(--text-color-light)', textAlign: 'center', margin: 'auto' }}>
-              Presiona el botón de búsqueda para calcular qué supermercado te conviene.
-            </p>
+            <div className="empty-results-placeholder">
+              <div className="placeholder-icon">📊</div>
+              <p>Esperando comparación...</p>
+              <p className="placeholder-subtext">Hacé clic en el botón de búsqueda para comparar precios en tiempo real.</p>
+            </div>
           )}
 
           {!loading && results && (
@@ -459,12 +525,13 @@ const Comparador = () => {
                 <div className="winner-banner">
                   <span className="winner-icon">🏆</span>
                   <div className="winner-info">
-                    <h3>¡{results[0].brandName} es el más barato!</h3>
-                    <p>
-                      Total estimado de <strong>{results[0].totalCost.toLocaleString('es-AR', { style: 'currency', currency: 'ARS' })}</strong>
+                    <span className="winner-tag">MÁS ECONÓMICO</span>
+                    <h3>¡{results[0].brandName} es la mejor opción!</h3>
+                    <p className="winner-price">
+                      Costo estimado: <strong>{results[0].totalCost.toLocaleString('es-AR', { style: 'currency', currency: 'ARS' })}</strong>
                     </p>
-                    <p style={{ fontSize: '0.8rem', marginTop: '4px' }}>
-                      ({results[0].itemsFoundCount} de {results[0].totalItemsCount} productos encontrados)
+                    <p className="winner-stats">
+                      Se encontraron {results[0].itemsFoundCount} de {results[0].totalItemsCount} productos.
                     </p>
                   </div>
                 </div>
@@ -475,28 +542,35 @@ const Comparador = () => {
                   const isWinner = index === 0 && res.totalCost !== Infinity;
                   const isLoadFailed = res.totalCost === Infinity;
                   const hasDetails = expandedSuper === res.brandId;
+                  const ratio = res.totalItemsCount > 0 ? (res.itemsFoundCount / res.totalItemsCount) : 0;
+                  
+                  let ratioClass = 'ratio-low';
+                  if (ratio === 1) ratioClass = 'ratio-high';
+                  else if (ratio >= 0.5) ratioClass = 'ratio-mid';
 
                   return (
                     <div
                       key={res.brandId}
-                      className={`supermarket-rank-card ${isWinner ? 'is-winner' : ''}`}
+                      className={`supermarket-rank-card ${isWinner ? 'is-winner' : ''} ${hasDetails ? 'is-expanded' : ''}`}
                       onClick={() => toggleDetails(res.brandId)}
                     >
                       <div className="supermarket-rank-header">
                         <div className="super-logo-title-group">
-                          <span className="rank-badge">{index + 1}</span>
+                          <span className={`rank-badge ${getRankClass(index)}`}>
+                            {getRankBadgeContent(index)}
+                          </span>
                           <img
                             src={`logo_super/logo_${res.brandId}.png`}
                             alt={res.brandName}
                             className="supermarket-rank-logo"
                             onError={(e) => { e.target.style.display = 'none'; }}
                           />
-                          <div>
+                          <div className="super-info-labels">
                             <span className="supermarket-rank-name">{res.brandName}</span>
                             {res.branchInfo && (
                               <p className="supermarket-rank-branch">
-                                Suc. {res.branchInfo.id_sucursal || res.branchInfo.id} - {res.branchInfo.nombre_sucursal || res.branchInfo.direccion_sucursal}
-                                {res.branchInfo.distance && ` (${res.branchInfo.distance.toFixed(1)} km)`}
+                                {res.branchInfo.nombre_sucursal || `Suc. ${res.branchInfo.id_sucursal || res.branchInfo.id}`}
+                                {res.branchInfo.distance && ` • ${res.branchInfo.distance.toFixed(1)} km`}
                               </p>
                             )}
                           </div>
@@ -506,38 +580,74 @@ const Comparador = () => {
                           <span className="supermarket-rank-total">
                             {isLoadFailed ? 'Error de Carga' : res.totalCost.toLocaleString('es-AR', { style: 'currency', currency: 'ARS' })}
                           </span>
-                          <span className="supermarket-rank-found-ratio">
+                          <span className={`supermarket-rank-found-ratio ${ratioClass}`}>
                             {res.itemsFoundCount}/{res.totalItemsCount}
+                          </span>
+                          <span className="expand-chevron-icon">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                              <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
                           </span>
                         </div>
                       </div>
 
                       {hasDetails && !isLoadFailed && (
                         <div className="supermarket-rank-details" onClick={(e) => e.stopPropagation()}>
-                          {res.matches.map((match, idx) => (
-                            <div key={idx} className="details-product-row">
-                              <div>
-                                <span className="details-product-name">{match.userProduct.nombre}</span>
-                                <span style={{ fontSize: '0.8rem', color: 'var(--text-color-light)', marginLeft: '4px' }}>
-                                  (x{match.userProduct.cantidad})
-                                </span>
-                                {match.found && (
-                                  <p className="details-product-match">
-                                    Coincidencia: {match.matchedProduct.nombre} ({match.matchedProduct.marca_producto})
-                                  </p>
-                                )}
+                          <div className="details-header-row">
+                            <span>Producto de tu lista</span>
+                            <span className="text-right">Mejor coincidencia / Subtotal</span>
+                          </div>
+                          
+                          {res.matches.map((match, idx) => {
+                            const originalPrice = match.matchedProduct ? match.matchedProduct.precio : null;
+                            const currentPrice = match.price;
+                            const hasDiscount = originalPrice && Number(originalPrice) > Number(currentPrice);
+                            
+                            const originalTotal = originalPrice ? Number(originalPrice) * match.userProduct.cantidad : null;
+                            const currentTotal = Number(currentPrice) * match.userProduct.cantidad;
+
+                            return (
+                              <div key={idx} className="details-product-row">
+                                <div className="details-left">
+                                  <div className="product-title-group">
+                                    <span className="details-product-name">{match.userProduct.nombre}</span>
+                                    <span className="details-product-qty">x{match.userProduct.cantidad}</span>
+                                  </div>
+                                  {match.found && (
+                                    <div className="details-product-match-container">
+                                      <span className="match-icon">↳</span>
+                                      <span className="details-product-match">
+                                        {match.matchedProduct.nombre} {match.matchedProduct.marca_producto && `• ${match.matchedProduct.marca_producto}`}
+                                      </span>
+                                    </div>
+                                  )}
+                                </div>
+                                <div className="details-right">
+                                  {match.found ? (
+                                    <div className="price-details-group">
+                                      <div className="price-numbers">
+                                        {hasDiscount && (
+                                          <span className="details-original-price">
+                                            {originalTotal.toLocaleString('es-AR', { style: 'currency', currency: 'ARS' })}
+                                          </span>
+                                        )}
+                                        <span className={`details-product-price ${hasDiscount ? 'has-discount' : ''}`}>
+                                          {currentTotal.toLocaleString('es-AR', { style: 'currency', currency: 'ARS' })}
+                                        </span>
+                                      </div>
+                                      {match.matchedProduct.promo1_leyenda && (
+                                        <span className="promo-badge-tag" title={match.matchedProduct.promo1_leyenda}>
+                                          🏷️ {match.matchedProduct.promo1_leyenda}
+                                        </span>
+                                      )}
+                                    </div>
+                                  ) : (
+                                    <span className="details-product-notfound">No Encontrado</span>
+                                  )}
+                                </div>
                               </div>
-                              <div>
-                                {match.found ? (
-                                  <span className="details-product-price">
-                                    {(match.price * match.userProduct.cantidad).toLocaleString('es-AR', { style: 'currency', currency: 'ARS' })}
-                                  </span>
-                                ) : (
-                                  <span className="details-product-notfound">No Encontrado</span>
-                                )}
-                              </div>
-                            </div>
-                          ))}
+                            );
+                          })}
 
                           <div className="apply-prices-btn-wrapper">
                             <Button
