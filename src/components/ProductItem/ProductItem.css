@@ -1,32 +1,5 @@
 /* src/components/ProductItem/ProductItem.css */
-
-/* Variables (asegúrate de que estén definidas en tu archivo de variables o en algún lugar global) */
-:root {
-  --border-radius: 8px;
-  --shadow-light: 0 2px 4px rgba(0, 0, 0, 0.1);
-  --shadow-medium: 0 4px 8px rgba(0, 0, 0, 0.15);
-  --border-color: #e0e0e0;
-  --card-bg-color: #ffffff;
-  --text-color-primary: #333333;
-  --text-color-secondary: #666666;
-  --delete-color: #dc3545;
-  /* Rojo peligro */
-  --edit-color: #007bff;
-  /* Usar el mismo azul primario o uno específico para editar */
-  --background-light-color: #f8f9fa;
-
-  --spacing-xs: 4px;
-  --spacing-sm: 8px;
-  --spacing-md: 16px;
-  --spacing-lg: 24px;
-
-  --font-size-xs: 0.75rem;
-  --font-size-sm: 0.875rem;
-  --font-size-md: 1rem;
-  --font-size-lg: 1.125rem;
-
-  --border-radius-small: 4px;
-}
+/* Las variables globales se definen en src/styles/variables.css — no redefinir aquí */
 
 
 .product-item-wrapper {

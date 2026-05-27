@@ -30,7 +30,14 @@ const tempZipPath = path.join(TEMP_DATA_DIR, 'temp_sepa.zip');
 const BASE_SUPER_DIR = path.join(__dirname, '../public/data/super');
 const BASE_PRODUCTS_DIR = path.join(__dirname, '../public/data/products');
 
-
+// Headers comunes para todas las requests HTTP - evitan bloqueos 403 por User-Agent
+const FETCH_HEADERS = {
+  'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+  'Accept': 'application/zip, application/octet-stream, */*',
+  'Accept-Language': 'es-AR,es;q=0.9,en;q=0.8',
+  'Accept-Encoding': 'gzip, deflate, br',
+  'Connection': 'keep-alive',
+};
 
 const TARGET_COMERCIO_IDENTIFIERS = {
   'Carrefour': {
@@ -107,7 +114,11 @@ function sleep(ms) {
 async function downloadZipForDay(url, outputPath) {
   console.log(`Descargando ZIP para el día desde: ${url}`);
   try {
-    const response = await fetch(url, { timeout: 60000 });
+    const response = await fetch(url, {
+      headers: FETCH_HEADERS,
+      timeout: 60000,
+      redirect: 'follow',
+    });
 
     if (!response.ok) {
       throw new Error(`Error HTTP al descargar el ZIP: ${response.statusText} (Status: ${response.status})`);
@@ -158,8 +169,6 @@ async function writeToJson(data, filename) {
     const dir = path.dirname(filename);
     await fsp.mkdir(dir, { recursive: true });
     await fsp.writeFile(filename, JSON.stringify(data), 'utf8');
-    // Silenced repetitive log to keep output clean as requested
-    // console.log(`Datos guardados en ${filename}`);
   } catch (err) {
     console.error(`Error al escribir en ${filename}:`, err);
     throw err;
@@ -233,8 +242,6 @@ async function procesarCsvStream(streamCsv, callback, filenameForLog = 'CSV desc
           }
         }
 
-        // console.log(`[CSV] Delimitador detectado para ${filenameForLog}: '${detectedDelimiter}'`);
-
         parser = csv({
           separator: detectedDelimiter,
           strict: false,
@@ -305,13 +312,11 @@ function findMatchingBranch(branch, targetLocations) {
 }
 
 function normalizeProductData(product, targetBrand, targetSucursalId) {
-  // Validación mejorada de campos requeridos
   const descripcion = product.productos_descripcion?.trim();
   if (!descripcion || !product.productos_precio_lista) {
     return null;
   }
 
-  // Validación y parseo de precio simple
   let precio = parseFloat(String(product.productos_precio_lista).replace(',', '.'));
 
   if (isNaN(precio) || precio <= 0) {
@@ -326,7 +331,6 @@ function normalizeProductData(product, targetBrand, targetSucursalId) {
   } else if (sanitizedEan && sanitizedEan !== '0') {
     uniqueIdentifier = sanitizedEan;
   } else {
-    // CORREGIDO: Sin timestamp ni random para IDs consistentes
     const fallbackSource = `${descripcion}-${product.productos_marca || 'NOMARCA'}-${product.productos_cantidad_presentacion || 'NOQTY'}-${product.productos_unidad_medida_presentacion || 'NOUNIT'}`;
     uniqueIdentifier = crypto.createHash('md5')
       .update(fallbackSource)
@@ -337,14 +341,12 @@ function normalizeProductData(product, targetBrand, targetSucursalId) {
 
   const productId = `${uniqueIdentifier}-${targetSucursalId}`;
 
-  // Procesar precios de promociones
   let promo1_precio = parseFloat(String(product.productos_precio_unitario_promo1 || '').replace(',', '.'));
   let promo2_precio = parseFloat(String(product.productos_precio_unitario_promo2 || '').replace(',', '.'));
 
   const p1 = isNaN(promo1_precio) || promo1_precio <= 0 ? null : promo1_precio;
   const p2 = isNaN(promo2_precio) || promo2_precio <= 0 ? null : promo2_precio;
 
-  // El "mejor precio" es el mínimo entre el precio de lista y las promociones disponibles
   const mejoresPrecios = [precio];
   if (p1 !== null) mejoresPrecios.push(p1);
   if (p2 !== null) mejoresPrecios.push(p2);
@@ -405,15 +407,12 @@ async function procesarZipInterno(zipPath, allFilteredSucursalesByBrand, zipFile
     }
   }
 
-  // Map to link products to branches within this ZIP
-  // Key: `${id_comercio}_${id_bandera}_${id_sucursal}`
   const branchesInThisZip = new Map();
 
   if (sucursalFile) {
     try {
       const sucursalStream = sucursalFile.stream();
       await procesarCsvStream(sucursalStream, (doc) => {
-        // Filtrar por Provincia de Buenos Aires y CABA
         if (!isTargetLocation(doc)) return;
 
         let foundBrand = 'Desconocido';
@@ -421,7 +420,6 @@ async function procesarZipInterno(zipPath, allFilteredSucursalesByBrand, zipFile
         const rawNombreSucursal = (doc.sucursal_nombre || '').toLowerCase();
         const text = rawRazonSocial + ' ' + rawNombreSucursal;
 
-        // Identificar Marca - Intento 1: Por ID de comercio del ZIP si está disponible
         const zipIdMatch = zipFileName.match(/comercio-sepa-(\d+)/);
         const zipCommerceId = zipIdMatch ? zipIdMatch[1] : null;
 
@@ -432,7 +430,6 @@ async function procesarZipInterno(zipPath, allFilteredSucursalesByBrand, zipFile
         else if (zipCommerceId === '9') foundBrand = 'Cencosud';
         else if (zipCommerceId === '3001') foundBrand = 'Easy';
 
-        // Intento 2: Por palabras clave si el intento 1 falló o es Cencosud
         if (foundBrand === 'Desconocido' || foundBrand === 'Cencosud') {
           for (const brand in TARGET_COMERCIO_IDENTIFIERS) {
             const keywords = TARGET_COMERCIO_IDENTIFIERS[brand].razon_social_keywords;
@@ -445,17 +442,12 @@ async function procesarZipInterno(zipPath, allFilteredSucursalesByBrand, zipFile
           }
         }
 
-        // Lógica especial para Cencosud (Jumbo/Vea/Easy)
-        // CAMBIO: Solo desambiguar si es 'Cencosud' genérico. Si ya sabemos que es Easy (por ZIP 3001) o Jumbo, lo respetamos.
         if (foundBrand === 'Cencosud') {
           if (text.includes('jumbo')) foundBrand = 'Jumbo';
           else if (text.includes('vea')) foundBrand = 'Vea';
           else if (text.includes('easy')) foundBrand = 'Easy';
-          // Si es Cencosud y no dice nada, asumimos Vea por defecto (común en minimercados)
           else foundBrand = 'Vea';
         }
-
-
 
         if (!MARCAS_NORMALIZADAS_INTERES.has(foundBrand)) return;
 
@@ -528,11 +520,7 @@ async function writeFinalJsons(allFilteredSucursalesByBrand) {
     if (!MARCAS_NORMALIZADAS_INTERES.has(brandName)) continue;
 
     const safeBrandName = brandName.replace(/[^a-z0-9]/gi, '').toLowerCase();
-
-    // CAMBIO: Ahora escribimos TODAS las sucursales de la marca en UN SOLO archivo .json
     const sucursalFilename = path.join(baseSuperDir, `${safeBrandName}.json`);
-
-    // Convertimos el Map de sucursales a un array
     const branchesArray = Array.from(sucursalesMap.values());
 
     await writeToJson(branchesArray, sucursalFilename);
@@ -541,7 +529,6 @@ async function writeFinalJsons(allFilteredSucursalesByBrand) {
   }
   console.log(`Archivos JSON de sucursales completados. Total sucursales procesadas: ${totalSucursalesWritten}.`);
 
-  // --- NUEVA LÓGICA: Generar supermarkets_list.json ---
   console.log('Generando supermarkets_list.json...');
   const supermarketsList = [];
   for (const brandName of allFilteredSucursalesByBrand.keys()) {
@@ -555,7 +542,6 @@ async function writeFinalJsons(allFilteredSucursalesByBrand) {
   const supermarketsListPath = path.join(path.dirname(BASE_SUPER_DIR), 'supermarkets_list.json');
   await writeToJson(supermarketsList, supermarketsListPath);
   console.log(`supermarkets_list.json generado en ${supermarketsListPath}`);
-  // ----------------------------------------------------
 
   console.log(`\nConvirtiendo archivos JSONL a JSON finales en '${BASE_PRODUCTS_DIR}'...`);
   let totalProductsFilesWritten = 0;
@@ -574,10 +560,6 @@ async function writeFinalJsons(allFilteredSucursalesByBrand) {
   console.log(`Generación de JSONs de productos finalizada. Total: ${totalProductsFilesWritten}.`);
 }
 
-/**
- * Convierte un archivo JSONL (líneas de JSON) a un array JSON []
- * de forma eficiente usando streams para no saturar la memoria (Heap limit).
- */
 async function convertJsonlToJsonArray(src, dest) {
   const writeStream = fs.createWriteStream(dest);
   const readStream = fs.createReadStream(src, { encoding: 'utf8' });
@@ -621,8 +603,6 @@ async function cleanTempJsons() {
   }
 }
 
-
-
 async function generarJsonFiltrados() {
   const downloadDate = new Date();
   console.log(`\n=== Iniciando proceso de descarga y procesamiento ===`);
@@ -656,9 +636,7 @@ async function generarJsonFiltrados() {
     }
 
     const allFoundZips = directory.files.filter(f => f.path.toLowerCase().endsWith('.zip')).map(f => f.path);
-    // console.log('DEBUG: Todos los ZIPs encontrados (rutas completas):', allFoundZips);
 
-    // Filter deleted: Process all ZIPs found
     let zipsInternos = directory.files.filter(f => f.path.toLowerCase().endsWith('.zip'));
 
     if (zipsInternos.length === 0) {
@@ -668,11 +646,8 @@ async function generarJsonFiltrados() {
     }
 
     console.log(`Encontrados ${zipsInternos.length} ZIPs internos especificados para procesar.`);
-    // console.log('Listando ZIPs internos que serán procesados:');
-    // zipsInternos.forEach(zip => console.log(`- ${zip.path}`));
 
     const allFilteredSucursalesByBrand = new Map();
-    // const processingErrors = [];
 
     let currentZipCount = 0;
     const totalZipsCount = zipsInternos.length;
@@ -683,19 +658,11 @@ async function generarJsonFiltrados() {
       const zipIdMatch = internalZipFileName.match(/comercio-sepa-(\d+)/);
       const zipCommerceId = zipIdMatch ? zipIdMatch[1] : null;
 
-      // IDs de interés:
-      // 9: Cencosud (Jumbo, Vea)
-      // 10: Carrefour
-      // 11: ChangoMas
-      // 12: Coto
-      // 15: Dia
-      // 3001: Easy
       const WANTED_COMMERCE_IDS = new Set(['9', '10', '11', '12', '15', '3001']);
 
       const shouldProcess = zipCommerceId && WANTED_COMMERCE_IDS.has(zipCommerceId);
 
       if (!shouldProcess) {
-        // console.log(`[SKIP] Skip ${internalZipFileName} (ID ${zipCommerceId} no es de interés)`);
         continue;
       }
 
@@ -710,10 +677,9 @@ async function generarJsonFiltrados() {
       } catch (innerZipError) {
         const errorMsg = `Error al extraer o procesar el ZIP interno ${zip.path}: ${innerZipError.message}`;
         console.error(errorMsg);
-        // processingErrors.push(errorMsg);
       }
     }
-    // processingErrors section removed
+
     console.log('\nTodos los ZIPs internos procesados.');
 
     console.log('\n--- Escribiendo archivos JSON locales ---');

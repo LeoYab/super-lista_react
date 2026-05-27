@@ -55,4 +55,7 @@
 
   /* Swipe Threshold */
   --swipe-threshold: 90px;
+
+  /* Typography */
+  --font-family: 'Outfit', 'Inter', sans-serif;
 }

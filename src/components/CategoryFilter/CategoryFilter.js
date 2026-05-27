@@ -8,7 +8,7 @@ const CategoryFilter = ({ categories, selectedCategoryId, onSelectCategory }) =>
         className={`category-item ${selectedCategoryId === '' ? 'active' : ''}`}
         onClick={() => onSelectCategory('')}
       >
-        <span className="category-name">Todas</span>
+        <span className="category-name">🛒 Todas</span>
       </div>
       {categories.map((cat) => (
         <div
@@ -16,7 +16,7 @@ const CategoryFilter = ({ categories, selectedCategoryId, onSelectCategory }) =>
           className={`category-item ${selectedCategoryId === cat.id ? 'active' : ''}`}
           onClick={() => onSelectCategory(cat.id)}
         >
-          <span className="category-name">{cat.title}</span>
+          <span className="category-name">{cat.icon} {cat.title}</span>
         </div>
       ))}
     </div>
@@ -24,3 +24,4 @@ const CategoryFilter = ({ categories, selectedCategoryId, onSelectCategory }) =>
 };
 
 export default CategoryFilter;
+

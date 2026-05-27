@@ -265,12 +265,18 @@
   margin-left: var(--spacing-sm);
   transition: all var(--transition-fast);
   opacity: 0;
-  /* Hidden by default */
+  /* Hidden by default on desktop, revealed on hover */
 }
 
 .list-item:hover .delete-list-button {
   opacity: 1;
-  /* Show on hover */
+}
+
+/* En mobile (sin hover), el botón siempre es visible */
+@media (hover: none) {
+  .delete-list-button {
+    opacity: 1;
+  }
 }
 
 .delete-list-button:hover {

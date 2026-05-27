@@ -406,10 +406,10 @@ function MainAppContent() {
                         href={`https://www.google.com/maps/search/?api=1&query=${detectedSupermarket.branchData.latitud},${detectedSupermarket.branchData.longitud}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        style={{ fontSize: '0.75rem', color: 'var(--primary-dark-color)', marginBottom: '0px', textAlign: 'right', fontWeight: '600', textDecoration: 'none', cursor: 'pointer' }}
+                        className="detected-super-link"
                       >
                         📍 {detectedSupermarket.name}
-                        {' '}<span style={{ fontSize: '0.7rem' }}>↗️</span>
+                        {' '}<span className="detected-super-arrow">↗️</span>
                       </a>
                     )}
                     <span className="stat-item total-amount">
@@ -417,7 +417,7 @@ function MainAppContent() {
                       {formattedTotal}
                     </span>
                     {totalAhorro > 0 && (
-                      <span className="stat-item total-savings" style={{ fontSize: '0.8rem', color: '#2f855a', fontWeight: '600', marginTop: '-2px' }}>
+                      <span className="stat-item total-savings savings-badge">
                         Ahorrás: {totalAhorro.toLocaleString('es-AR', { style: 'currency', currency: 'ARS' })}
                       </span>
                     )}
@@ -446,7 +446,7 @@ function MainAppContent() {
             <div className="empty-state card">
               <div className="empty-icon">📂</div>
               <h3 className="empty-title">Crea o selecciona una lista</h3>
-              <p className="empty-description">Usa el botón de menú (☰) en la esquina superior derecha para gestionar tus listas.</p>
+              <p className="empty-description">Usá el menú (☰) para gestionar tus listas de compras.</p>
             </div>
           )}
         </div>

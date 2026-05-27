@@ -82,6 +82,8 @@ body {
   gap: var(--spacing-md);
   z-index: 100;
   transition: all var(--transition-normal);
+  display: flex;
+  flex-direction: column;
 }
 
 .bottom-controls-header {
@@ -197,11 +199,65 @@ body {
   box-shadow: 0 2px 4px rgb(54 16 185 / 20%);
 }
 
-/*.stat-item.total-amount {
+/* Empty State */
+.empty-state {
+  text-align: center;
+  padding: var(--spacing-xl);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.empty-icon {
+  font-size: 3rem;
+  opacity: 0.6;
+}
+
+.empty-title {
+  font-size: 1.2rem;
   font-weight: 700;
+  color: var(--text-color-primary);
+  margin: 0;
+}
+
+.empty-description {
+  font-size: 0.9rem;
+  color: var(--text-color-secondary);
+  margin: 0;
+  max-width: 260px;
+  line-height: 1.5;
+}
+
+/* Detected Supermarket Link */
+.detected-super-link {
+  font-size: 0.75rem;
   color: var(--primary-dark-color);
-  font-size: 1.1rem;
-}*/
+  text-align: right;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: opacity var(--transition-fast);
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.detected-super-link:hover {
+  opacity: 0.8;
+  text-decoration: underline;
+}
+
+.detected-super-arrow {
+  font-size: 0.7rem;
+}
+
+/* Savings Badge */
+.savings-badge {
+  font-size: 0.8rem;
+  color: #2f855a;
+  font-weight: 600;
+}
 
 /* SweetAlert2 Overrides for Consistency */
 .swal2-popup {
