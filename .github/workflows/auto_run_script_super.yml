@@ -9,6 +9,7 @@ on:
 jobs:
   import-data:
     runs-on: ubuntu-latest
+
     permissions:
       contents: write
       pull-requests: write
@@ -22,22 +23,35 @@ jobs:
       - name: Configure Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "24"
+          node-version: "22"
+
+      - name: Show Node version
+        run: |
+          node -v
+          npm -v
 
       - name: Install dependencies
         run: npm install
 
-      - name: Configure Firebase Credentials (Create temporary file)
+      - name: Configure Firebase Credentials
         run: |
           echo '${{ secrets.FIREBASE_SERVICE_ACCOUNT_KEY }}' > ./scripts/serviceAccountKey.json
 
       - name: Verify credentials file
         run: |
           if [ ! -f ./scripts/serviceAccountKey.json ]; then
-            echo "Error: The credentials file does not exist after attempting to create it."
+            echo "❌ Error: credentials file not found"
             exit 1
           fi
-          node -e "try { JSON.parse(require('fs').readFileSync('./scripts/serviceAccountKey.json', 'utf8')); console.log('Valid JSON'); } catch(e) { console.log('Invalid JSON or read error:', e.message); process.exit(1); }"
+
+          node -e "
+          try {
+            JSON.parse(require('fs').readFileSync('./scripts/serviceAccountKey.json', 'utf8'));
+            console.log('✅ Valid JSON');
+          } catch(e) {
+            console.log('❌ Invalid JSON:', e.message);
+            process.exit(1);
+          }"
 
       - name: Prepare branch
         run: |
@@ -53,12 +67,17 @@ jobs:
             git checkout -b feature/automated-data-update origin/main
           fi
 
-          # ✅ Traer los últimos cambios de main a la rama feature (incluye cambios del script)
+          # Merge latest main changes
           git fetch origin main
           git merge origin/main --no-edit || (echo "❌ Merge main into feature failed" && exit 1)
 
-          echo "✅ Current branch: $(git branch --show-current)"
-          echo "✅ Current commit: $(git rev-parse HEAD)"
+          echo "✅ Current branch:"
+          git branch --show-current
+
+          echo "✅ Current commit:"
+          git rev-parse HEAD
+
+          echo "✅ Last script commit:"
           git log -1 --oneline -- scripts/importProductsToJson.js || true
 
       - name: Run Import Script
@@ -70,11 +89,13 @@ jobs:
         id: commit_changes
         run: |
           if git diff --quiet public/data; then
-            echo "No changes detected in public/data."
+            echo "ℹ️ No changes detected in public/data."
             echo "has_changes=false" >> $GITHUB_OUTPUT
           else
             git add public/data
+
             git commit -m "update: JSON data for products and branches (Automated by GH Actions)"
+
             echo "has_changes=true" >> $GITHUB_OUTPUT
           fi
 
@@ -82,15 +103,18 @@ jobs:
         if: steps.commit_changes.outputs.has_changes == 'true'
         run: |
           git fetch origin main
+
           git merge origin/main -X ours || (echo "❌ Merge failed" && exit 1)
 
       - name: Push Branch and Create Pull Request
         if: success() && steps.commit_changes.outputs.has_changes == 'true'
         run: |
-          echo "Pushing feature/automated-data-update branch to remote..."
+          echo "🚀 Pushing branch..."
+
           git push origin feature/automated-data-update
 
-          echo "Creating Pull Request..."
+          echo "🚀 Creating Pull Request..."
+
           curl -L \
             -X POST \
             -H "Accept: application/vnd.github+json" \
