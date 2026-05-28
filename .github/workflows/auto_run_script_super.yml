@@ -9,6 +9,8 @@ on:
 jobs:
   import-data:
     runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
     permissions:
       contents: write
@@ -23,7 +25,7 @@ jobs:
       - name: Configure Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "22"
+          node-version: "24"
 
       - name: Show Node version
         run: |
@@ -43,7 +45,6 @@ jobs:
             echo "❌ Error: credentials file not found"
             exit 1
           fi
-
           node -e "
           try {
             JSON.parse(require('fs').readFileSync('./scripts/serviceAccountKey.json', 'utf8'));
@@ -57,33 +58,90 @@ jobs:
         run: |
           git config user.name "GitHub Actions Bot"
           git config user.email "actions@github.com"
-
           git fetch origin
-
           if git show-ref --quiet refs/remotes/origin/feature/automated-data-update; then
             git checkout feature/automated-data-update
             git pull --rebase origin feature/automated-data-update
           else
             git checkout -b feature/automated-data-update origin/main
           fi
-
-          # Merge latest main changes
           git fetch origin main
           git merge origin/main --no-edit || (echo "❌ Merge main into feature failed" && exit 1)
-
-          echo "✅ Current branch:"
-          git branch --show-current
-
-          echo "✅ Current commit:"
-          git rev-parse HEAD
-
-          echo "✅ Last script commit:"
+          echo "✅ Current branch: $(git branch --show-current)"
+          echo "✅ Current commit: $(git rev-parse HEAD)"
           git log -1 --oneline -- scripts/importProductsToJson.js || true
+
+      # ─── Descarga del ZIP con curl (evita el bloqueo 403 de GitHub Actions IPs) ───
+      - name: Download SEPA ZIP
+        run: |
+          mkdir -p public/data/temp_processing
+
+          # Detectar día de la semana (0=domingo … 6=sábado)
+          DAY=$(date +%w)
+          declare -A URLS=(
+            [0]="https://datos.produccion.gob.ar/dataset/6f47ec76-d1ce-4e34-a7e1-621fe9b1d0b5/resource/f8e75128-515a-436e-bf8d-5c63a62f2005/download/sepa_domingo.zip"
+            [1]="https://datos.produccion.gob.ar/dataset/6f47ec76-d1ce-4e34-a7e1-621fe9b1d0b5/resource/0a9069a9-06e8-4f98-874d-da5578693290/download/sepa_lunes.zip"
+            [2]="https://datos.produccion.gob.ar/dataset/6f47ec76-d1ce-4e34-a7e1-621fe9b1d0b5/resource/9dc06241-cc83-44f4-8e25-c9b1636b8bc8/download/sepa_martes.zip"
+            [3]="https://datos.produccion.gob.ar/dataset/6f47ec76-d1ce-4e34-a7e1-621fe9b1d0b5/resource/1e92cd42-4f94-4071-a165-62c4cb2ce23c/download/sepa_miercoles.zip"
+            [4]="https://datos.produccion.gob.ar/dataset/6f47ec76-d1ce-4e34-a7e1-621fe9b1d0b5/resource/d076720f-a7f0-4af8-b1d6-1b99d5a90c14/download/sepa_jueves.zip"
+            [5]="https://datos.produccion.gob.ar/dataset/6f47ec76-d1ce-4e34-a7e1-621fe9b1d0b5/resource/91bc072a-4726-44a1-85ec-4a8467aad27e/download/sepa_viernes.zip"
+            [6]="https://datos.produccion.gob.ar/dataset/6f47ec76-d1ce-4e34-a7e1-621fe9b1d0b5/resource/b3c3da5d-213d-41e7-8d74-f23fda0a3c30/download/sepa_sabado.zip"
+          )
+          URL="${URLS[$DAY]}"
+          echo "📅 Día: $DAY  →  $URL"
+
+          OUTPUT="public/data/temp_processing/temp_sepa.zip"
+
+          for attempt in 1 2 3; do
+            echo "⬇️  Intento $attempt/3..."
+            HTTP_CODE=$(curl -L \
+              --silent \
+              --show-error \
+              --output "$OUTPUT" \
+              --write-out "%{http_code}" \
+              --max-time 120 \
+              --retry 0 \
+              -H "User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36" \
+              -H "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8" \
+              -H "Accept-Language: es-AR,es;q=0.9,en;q=0.8" \
+              -H "Accept-Encoding: gzip, deflate, br" \
+              -H "Referer: https://datos.produccion.gob.ar/" \
+              -H "Sec-Fetch-Dest: document" \
+              -H "Sec-Fetch-Mode: navigate" \
+              -H "Sec-Fetch-Site: same-origin" \
+              -H "Cache-Control: max-age=0" \
+              "$URL")
+
+            echo "HTTP Code: $HTTP_CODE"
+
+            if [ "$HTTP_CODE" = "200" ]; then
+              SIZE=$(stat -c%s "$OUTPUT" 2>/dev/null || echo 0)
+              if [ "$SIZE" -gt 100 ]; then
+                echo "✅ ZIP descargado correctamente ($SIZE bytes)"
+                break
+              else
+                echo "⚠️  Archivo muy pequeño ($SIZE bytes), reintentando..."
+              fi
+            else
+              echo "❌ HTTP $HTTP_CODE, reintentando en 10s..."
+            fi
+
+            if [ "$attempt" -lt 3 ]; then sleep 10; fi
+          done
+
+          # Verificar que el ZIP es válido
+          if ! unzip -t "$OUTPUT" > /dev/null 2>&1; then
+            echo "❌ El ZIP descargado está corrupto o no se pudo descargar."
+            exit 1
+          fi
+          echo "✅ ZIP verificado correctamente."
 
       - name: Run Import Script
         run: node --max-old-space-size=4096 scripts/importProductsToJson.js
         env:
           FIREBASE_SERVICE_ACCOUNT_KEY: "./scripts/serviceAccountKey.json"
+          # Le avisamos al script que el ZIP ya está descargado
+          SEPA_ZIP_ALREADY_DOWNLOADED: "true"
 
       - name: Commit changes
         id: commit_changes
@@ -93,9 +151,7 @@ jobs:
             echo "has_changes=false" >> $GITHUB_OUTPUT
           else
             git add public/data
-
             git commit -m "update: JSON data for products and branches (Automated by GH Actions)"
-
             echo "has_changes=true" >> $GITHUB_OUTPUT
           fi
 
@@ -103,18 +159,14 @@ jobs:
         if: steps.commit_changes.outputs.has_changes == 'true'
         run: |
           git fetch origin main
-
           git merge origin/main -X ours || (echo "❌ Merge failed" && exit 1)
 
       - name: Push Branch and Create Pull Request
         if: success() && steps.commit_changes.outputs.has_changes == 'true'
         run: |
           echo "🚀 Pushing branch..."
-
           git push origin feature/automated-data-update
-
           echo "🚀 Creating Pull Request..."
-
           curl -L \
             -X POST \
             -H "Accept: application/vnd.github+json" \

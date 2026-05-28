@@ -1,7 +1,7 @@
 require('dotenv').config();
 const unzipper = require('unzipper');
 const csv = require('csv-parser');
-const https = require('https');
+const fetch = require('node-fetch');
 const stream = require('stream');
 const { promisify } = require('util');
 const path = require('path');
@@ -10,9 +10,7 @@ const fsp = require('fs/promises');
 const crypto = require('crypto');
 const readline = require('readline');
 
-// Pre-calculate timestamp to avoid excessive Date object creation
 const EXECUTION_TIMESTAMP = new Date().toISOString();
-
 const pipeline = promisify(stream.pipeline);
 
 const DAILY_URLS = {
@@ -30,19 +28,20 @@ const tempZipPath = path.join(TEMP_DATA_DIR, 'temp_sepa.zip');
 const BASE_SUPER_DIR = path.join(__dirname, '../public/data/super');
 const BASE_PRODUCTS_DIR = path.join(__dirname, '../public/data/products');
 
-// Headers comunes para todas las requests HTTP - evitan bloqueos 403 por User-Agent
+// ─── Flag: el workflow ya descargó el ZIP con curl ───────────────────────────
+const ZIP_ALREADY_DOWNLOADED = process.env.SEPA_ZIP_ALREADY_DOWNLOADED === 'true';
+
+// Headers para fallback (descarga desde Node, sin el workflow)
 const FETCH_HEADERS = {
-  'User-Agent':
-    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36',
-  'Accept':
-    'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
+  'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+  'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
   'Accept-Language': 'es-AR,es;q=0.9,en;q=0.8',
   'Accept-Encoding': 'gzip, deflate, br',
   'Referer': 'https://datos.produccion.gob.ar/',
-  'Origin': 'https://datos.produccion.gob.ar',
-  'Connection': 'keep-alive',
-  'Cache-Control': 'no-cache',
-  'Pragma': 'no-cache',
+  'Sec-Fetch-Dest': 'document',
+  'Sec-Fetch-Mode': 'navigate',
+  'Sec-Fetch-Site': 'same-origin',
+  'Cache-Control': 'max-age=0',
 };
 
 const TARGET_COMERCIO_IDENTIFIERS = {
@@ -69,13 +68,7 @@ const TARGET_COMERCIO_IDENTIFIERS = {
 };
 
 const MARCAS_NORMALIZADAS_INTERES = new Set([
-  'Dia',
-  'Carrefour',
-  'ChangoMas',
-  'Coto',
-  'Jumbo',
-  'Vea',
-  'Easy'
+  'Dia', 'Carrefour', 'ChangoMas', 'Coto', 'Jumbo', 'Vea', 'Easy'
 ]);
 
 const AMBA_LOCALITIES = new Set([
@@ -106,8 +99,8 @@ function isTargetLocation(branchDoc) {
 
   if (isCaba) return true;
 
-  if (provincia === 'AR-B' || provincia.includes('BUENOS AIRES') || provincia === 'BA' || provincia === 'B.A.' || provincia.includes('BS AS')) {
-    // Si la provincia es Buenos Aires (AR-B), la aceptamos completa como pidió el usuario
+  if (provincia === 'AR-B' || provincia.includes('BUENOS AIRES') || provincia === 'BA' ||
+    provincia === 'B.A.' || provincia.includes('BS AS')) {
     return true;
   }
   return false;
@@ -117,97 +110,35 @@ function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+// ─── Descarga con node-fetch (fallback si no se usa el workflow) ──────────────
 async function downloadZipForDay(url, outputPath) {
   console.log(`Descargando ZIP para el día desde: ${url}`);
-
   try {
-    const controller = new AbortController();
-
-    const timeout = setTimeout(() => {
-      controller.abort();
-    }, 120000);
-
     const response = await fetch(url, {
-      method: 'GET',
       headers: FETCH_HEADERS,
+      timeout: 120000,
       redirect: 'follow',
-      compress: true,
-      signal: controller.signal,
-      agent: new https.Agent({
-        keepAlive: true,
-      }),
     });
 
-    clearTimeout(timeout);
-
-    console.log(`HTTP Status: ${response.status}`);
-    console.log(`HTTP Status Text: ${response.statusText}`);
-
     if (!response.ok) {
-      let body = '';
-
-      try {
-        body = await response.text();
-      } catch (_) { }
-
-      console.error('Respuesta del servidor:');
-      console.error(body.substring(0, 1000));
-
-      throw new Error(
-        `Error HTTP al descargar el ZIP: ${response.status} ${response.statusText}`
-      );
+      const bodyText = await response.text().catch(() => '');
+      console.log(`HTTP Status: ${response.status}`);
+      console.log(`HTTP Status Text: ${response.statusText}`);
+      console.log(`Respuesta del servidor:\n${bodyText.substring(0, 500)}`);
+      throw new Error(`Error HTTP al descargar el ZIP: ${response.status} ${response.statusText}`);
     }
 
-    const contentType = response.headers.get('content-type');
-
-    console.log(`Content-Type: ${contentType}`);
-
-    if (contentType && contentType.includes('text/html')) {
-      const html = await response.text();
-
-      console.error('El servidor devolvió HTML en vez de ZIP');
-      console.error(html.substring(0, 1000));
-
-      throw new Error(
-        'El servidor devolvió HTML en lugar del archivo ZIP'
-      );
-    }
-
-    const fileStream = fs.createWriteStream(outputPath);
-
-    await pipeline(response.body, fileStream);
-
-    if (!fs.existsSync(outputPath)) {
-      throw new Error('El archivo ZIP no fue creado');
-    }
+    await pipeline(response.body, fs.createWriteStream(outputPath));
 
     const stats = await fsp.stat(outputPath);
-
-    console.log(`ZIP descargado: ${stats.size} bytes`);
-
-    if (stats.size < 1000) {
-      let content = '';
-
-      try {
-        content = await fsp.readFile(outputPath, 'utf8');
-      } catch (_) { }
-
-      console.error('Contenido sospechoso del ZIP:');
-      console.error(content.substring(0, 1000));
-
-      throw new Error(
-        `Archivo ZIP inválido o demasiado pequeño (${stats.size} bytes)`
-      );
+    if (stats.size < 22) {
+      throw new Error(`El archivo ZIP es muy pequeño (${stats.size} bytes) - posiblemente corrupto`);
     }
 
-    console.log(`ZIP descargado correctamente en: ${outputPath}`);
-
+    console.log(`ZIP del día descargado en ${outputPath} (${stats.size} bytes).`);
     return outputPath;
-
   } catch (error) {
-    console.error(`ERROR al descargar el ZIP de ${url}`);
-    console.error(error);
-
+    console.error(`ERROR al descargar el ZIP de ${url}:`, error.message);
     throw error;
   }
 }
@@ -230,9 +161,24 @@ async function downloadZipWithRetries(url, outputPath, maxRetries = 3, retryDela
   }
 }
 
+// ─── Verifica si el ZIP ya fue descargado por el workflow ────────────────────
+async function ensureZipAvailable(url, outputPath) {
+  if (ZIP_ALREADY_DOWNLOADED) {
+    try {
+      const stats = await fsp.stat(outputPath);
+      if (stats.size > 100) {
+        console.log(`✅ ZIP ya descargado por el workflow (${stats.size} bytes). Saltando descarga.`);
+        return outputPath;
+      }
+    } catch (_) {
+      console.warn('⚠️  SEPA_ZIP_ALREADY_DOWNLOADED=true pero el archivo no existe. Intentando descargar...');
+    }
+  }
+  return await downloadZipWithRetries(url, outputPath, 3, 5000);
+}
+
 async function writeToJson(data, filename) {
   if (!data || (Array.isArray(data) && data.length === 0)) {
-    console.log(`No hay datos para escribir en ${filename}. El archivo estará vacío o no se creará.`);
     const dir = path.dirname(filename);
     await fsp.mkdir(dir, { recursive: true });
     await fsp.writeFile(filename, JSON.stringify([], null, 2), 'utf8');
@@ -386,15 +332,10 @@ function findMatchingBranch(branch, targetLocations) {
 
 function normalizeProductData(product, targetBrand, targetSucursalId) {
   const descripcion = product.productos_descripcion?.trim();
-  if (!descripcion || !product.productos_precio_lista) {
-    return null;
-  }
+  if (!descripcion || !product.productos_precio_lista) return null;
 
   let precio = parseFloat(String(product.productos_precio_lista).replace(',', '.'));
-
-  if (isNaN(precio) || precio <= 0) {
-    return null;
-  }
+  if (isNaN(precio) || precio <= 0) return null;
 
   const sanitizedEan = String(product.productos_ean || '').replace(/\D/g, '');
 
@@ -541,7 +482,7 @@ async function procesarZipInterno(zipPath, allFilteredSucursalesByBrand, zipFile
         branchesInThisZip.set(key, { brand: foundBrand, branchId: branchId });
       }, sucursalFile.path);
     } catch (error) {
-      // console.error(`Error al procesar archivo de sucursal en '${zipFileName}':`, error.message);
+      // console.error(`Error al procesar sucursal en '${zipFileName}':`, error.message);
     }
   }
 
@@ -549,16 +490,11 @@ async function procesarZipInterno(zipPath, allFilteredSucursalesByBrand, zipFile
     try {
       const productStream = productFile.stream();
       await procesarCsvStream(productStream, (doc) => {
-        const productCsvIdComercio = String(doc.id_comercio || '').trim();
-        const productCsvIdBandera = String(doc.id_bandera || '').trim();
-        const productCsvIdSucursal = String(doc.id_sucursal || '').trim();
-
-        const key = `${productCsvIdComercio}_${productCsvIdBandera}_${productCsvIdSucursal}`;
+        const key = `${String(doc.id_comercio || '').trim()}_${String(doc.id_bandera || '').trim()}_${String(doc.id_sucursal || '').trim()}`;
         const branchInfo = branchesInThisZip.get(key);
 
         if (branchInfo) {
           const { brand, branchId } = branchInfo;
-
           if (!MARCAS_NORMALIZADAS_INTERES.has(brand)) return;
 
           const normalizedProduct = normalizeProductData(doc, brand, branchId);
@@ -578,7 +514,7 @@ async function procesarZipInterno(zipPath, allFilteredSucursalesByBrand, zipFile
         }
       }, productFile.path);
     } catch (error) {
-      // console.error(`Error al procesar archivo de productos en '${zipFileName}':`, error.message);
+      // console.error(`Error al procesar productos en '${zipFileName}':`, error.message);
     }
   }
 }
@@ -600,17 +536,14 @@ async function writeFinalJsons(allFilteredSucursalesByBrand) {
     totalSucursalesWritten += branchesArray.length;
     console.log(`Escritas ${branchesArray.length} sucursales en ${sucursalFilename}`);
   }
-  console.log(`Archivos JSON de sucursales completados. Total sucursales procesadas: ${totalSucursalesWritten}.`);
+  console.log(`Total sucursales procesadas: ${totalSucursalesWritten}.`);
 
   console.log('Generando supermarkets_list.json...');
   const supermarketsList = [];
   for (const brandName of allFilteredSucursalesByBrand.keys()) {
     if (!MARCAS_NORMALIZADAS_INTERES.has(brandName)) continue;
     const safeBrandName = brandName.replace(/[^a-z0-9]/gi, '').toLowerCase();
-    supermarketsList.push({
-      id: safeBrandName,
-      nombre: brandName
-    });
+    supermarketsList.push({ id: safeBrandName, nombre: brandName });
   }
   const supermarketsListPath = path.join(path.dirname(BASE_SUPER_DIR), 'supermarkets_list.json');
   await writeToJson(supermarketsList, supermarketsListPath);
@@ -630,25 +563,20 @@ async function writeFinalJsons(allFilteredSucursalesByBrand) {
     }
   }
 
-  console.log(`Generación de JSONs de productos finalizada. Total: ${totalProductsFilesWritten}.`);
+  console.log(`JSONs de productos finalizados. Total: ${totalProductsFilesWritten}.`);
 }
 
 async function convertJsonlToJsonArray(src, dest) {
   const writeStream = fs.createWriteStream(dest);
   const readStream = fs.createReadStream(src, { encoding: 'utf8' });
-  const rl = readline.createInterface({
-    input: readStream,
-    crlfDelay: Infinity
-  });
+  const rl = readline.createInterface({ input: readStream, crlfDelay: Infinity });
 
   writeStream.write('[\n');
   let firstLine = true;
 
   for await (const line of rl) {
     if (!line.trim()) continue;
-    if (!firstLine) {
-      writeStream.write(',\n');
-    }
+    if (!firstLine) writeStream.write(',\n');
     writeStream.write(line);
     firstLine = false;
   }
@@ -663,15 +591,13 @@ async function convertJsonlToJsonArray(src, dest) {
 }
 
 async function cleanTempJsons() {
-  console.log(`[LIMPIEZA] Intentando eliminar el directorio temporal: ${TEMP_DATA_DIR}`);
+  console.log(`[LIMPIEZA] Eliminando directorio temporal: ${TEMP_DATA_DIR}`);
   try {
     await fsp.rm(TEMP_DATA_DIR, { recursive: true, force: true });
-    console.log(`[LIMPIEZA] Directorio temporal '${TEMP_DATA_DIR}' y su contenido eliminados exitosamente.`);
+    console.log(`[LIMPIEZA] Directorio temporal eliminado.`);
   } catch (error) {
-    if (error.code === 'ENOENT') {
-      console.log(`[LIMPIEZA] Directorio temporal '${TEMP_DATA_DIR}' no existía, no es necesario eliminar.`);
-    } else {
-      console.error(`[LIMPIEZA] ERROR crítico al limpiar el directorio temporal '${TEMP_DATA_DIR}':`, error);
+    if (error.code !== 'ENOENT') {
+      console.error(`[LIMPIEZA] ERROR:`, error);
     }
   }
 }
@@ -693,71 +619,60 @@ async function generarJsonFiltrados() {
     const currentDayZipUrl = DAILY_URLS[dayOfWeek];
 
     if (!currentDayZipUrl) {
-      throw new Error(`No se encontró URL de descarga para el día de la semana actual (${dayOfWeek}). Por favor, verifica la constante DAILY_URLS.`);
+      throw new Error(`No se encontró URL para el día ${dayOfWeek}. Verificar DAILY_URLS.`);
     }
 
-    console.log(`Intentando descargar y abrir ZIP desde: ${tempZipPath}`);
-    await downloadZipWithRetries(currentDayZipUrl, tempZipPath, 3, 5000);
+    // ── Usa el ZIP ya descargado por el workflow, o descarga si no está ──
+    await ensureZipAvailable(currentDayZipUrl, tempZipPath);
 
     console.log('Abriendo ZIP principal...');
     let directory;
     try {
       directory = await unzipper.Open.file(tempZipPath);
     } catch (unzipError) {
-      console.error('Error al abrir el ZIP:', unzipError.message);
-      throw new Error(`No se pudo abrir el archivo ZIP. Posiblemente esté corrupto: ${unzipError.message}`);
+      throw new Error(`No se pudo abrir el ZIP (posiblemente corrupto): ${unzipError.message}`);
     }
-
-    const allFoundZips = directory.files.filter(f => f.path.toLowerCase().endsWith('.zip')).map(f => f.path);
 
     let zipsInternos = directory.files.filter(f => f.path.toLowerCase().endsWith('.zip'));
 
     if (zipsInternos.length === 0) {
       console.error('No se encontraron ZIPs internos para procesar.');
-      console.log('Archivos encontrados:', allFoundZips);
       return;
     }
 
-    console.log(`Encontrados ${zipsInternos.length} ZIPs internos especificados para procesar.`);
+    console.log(`Encontrados ${zipsInternos.length} ZIPs internos para procesar.`);
 
     const allFilteredSucursalesByBrand = new Map();
-
     let currentZipCount = 0;
     const totalZipsCount = zipsInternos.length;
+
     for (const zip of zipsInternos) {
       currentZipCount++;
       const internalZipFileName = path.basename(zip.path);
-
       const zipIdMatch = internalZipFileName.match(/comercio-sepa-(\d+)/);
       const zipCommerceId = zipIdMatch ? zipIdMatch[1] : null;
-
       const WANTED_COMMERCE_IDS = new Set(['9', '10', '11', '12', '15', '3001']);
 
-      const shouldProcess = zipCommerceId && WANTED_COMMERCE_IDS.has(zipCommerceId);
-
-      if (!shouldProcess) {
-        continue;
-      }
+      if (!zipCommerceId || !WANTED_COMMERCE_IDS.has(zipCommerceId)) continue;
 
       if (currentZipCount % 5 === 0 || currentZipCount === 1 || currentZipCount === totalZipsCount) {
         console.log(`Procesando ZIPs: ${currentZipCount}/${totalZipsCount}...`);
       }
+
       try {
         const tempInnerZipPath = path.join(TEMP_DATA_DIR, `inner_${Math.random().toString(36).substring(7)}.zip`);
         await pipeline(zip.stream(), fs.createWriteStream(tempInnerZipPath));
         await procesarZipInterno(tempInnerZipPath, allFilteredSucursalesByBrand, internalZipFileName);
         await fsp.unlink(tempInnerZipPath);
       } catch (innerZipError) {
-        const errorMsg = `Error al extraer o procesar el ZIP interno ${zip.path}: ${innerZipError.message}`;
-        console.error(errorMsg);
+        console.error(`Error al procesar ZIP interno ${zip.path}: ${innerZipError.message}`);
       }
     }
 
     console.log('\nTodos los ZIPs internos procesados.');
-
     console.log('\n--- Escribiendo archivos JSON locales ---');
     await writeFinalJsons(allFilteredSucursalesByBrand);
-    console.log('Archivos JSON locales actualizados completamente.');
+    console.log('Archivos JSON locales actualizados.');
 
     console.log('\n=== Proceso completado exitosamente ===');
     console.log(`Sucursales actualizadas: ${Array.from(allFilteredSucursalesByBrand.values()).reduce((acc, map) => acc + map.size, 0)}`);
@@ -774,7 +689,7 @@ async function generarJsonFiltrados() {
       await cleanTempJsons();
     } catch (cleanupError) {
       if (cleanupError.code !== 'ENOENT') {
-        console.warn(`No se pudo completar la limpieza de archivos temporales:`, cleanupError);
+        console.warn(`No se pudo limpiar temporales:`, cleanupError);
       }
     }
   }
