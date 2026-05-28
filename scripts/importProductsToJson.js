@@ -1,7 +1,7 @@
 require('dotenv').config();
 const unzipper = require('unzipper');
 const csv = require('csv-parser');
-const fetch = require('node-fetch');
+const https = require('https');
 const stream = require('stream');
 const { promisify } = require('util');
 const path = require('path');
@@ -32,11 +32,17 @@ const BASE_PRODUCTS_DIR = path.join(__dirname, '../public/data/products');
 
 // Headers comunes para todas las requests HTTP - evitan bloqueos 403 por User-Agent
 const FETCH_HEADERS = {
-  'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-  'Accept': 'application/zip, application/octet-stream, */*',
+  'User-Agent':
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36',
+  'Accept':
+    'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
   'Accept-Language': 'es-AR,es;q=0.9,en;q=0.8',
   'Accept-Encoding': 'gzip, deflate, br',
+  'Referer': 'https://datos.produccion.gob.ar/',
+  'Origin': 'https://datos.produccion.gob.ar',
   'Connection': 'keep-alive',
+  'Cache-Control': 'no-cache',
+  'Pragma': 'no-cache',
 };
 
 const TARGET_COMERCIO_IDENTIFIERS = {
@@ -113,28 +119,95 @@ function sleep(ms) {
 
 async function downloadZipForDay(url, outputPath) {
   console.log(`Descargando ZIP para el día desde: ${url}`);
+
   try {
+    const controller = new AbortController();
+
+    const timeout = setTimeout(() => {
+      controller.abort();
+    }, 120000);
+
     const response = await fetch(url, {
+      method: 'GET',
       headers: FETCH_HEADERS,
-      timeout: 60000,
       redirect: 'follow',
+      compress: true,
+      signal: controller.signal,
+      agent: new https.Agent({
+        keepAlive: true,
+      }),
     });
 
+    clearTimeout(timeout);
+
+    console.log(`HTTP Status: ${response.status}`);
+    console.log(`HTTP Status Text: ${response.statusText}`);
+
     if (!response.ok) {
-      throw new Error(`Error HTTP al descargar el ZIP: ${response.statusText} (Status: ${response.status})`);
+      let body = '';
+
+      try {
+        body = await response.text();
+      } catch (_) { }
+
+      console.error('Respuesta del servidor:');
+      console.error(body.substring(0, 1000));
+
+      throw new Error(
+        `Error HTTP al descargar el ZIP: ${response.status} ${response.statusText}`
+      );
     }
 
-    await pipeline(response.body, fs.createWriteStream(outputPath));
+    const contentType = response.headers.get('content-type');
+
+    console.log(`Content-Type: ${contentType}`);
+
+    if (contentType && contentType.includes('text/html')) {
+      const html = await response.text();
+
+      console.error('El servidor devolvió HTML en vez de ZIP');
+      console.error(html.substring(0, 1000));
+
+      throw new Error(
+        'El servidor devolvió HTML en lugar del archivo ZIP'
+      );
+    }
+
+    const fileStream = fs.createWriteStream(outputPath);
+
+    await pipeline(response.body, fileStream);
+
+    if (!fs.existsSync(outputPath)) {
+      throw new Error('El archivo ZIP no fue creado');
+    }
 
     const stats = await fsp.stat(outputPath);
-    if (stats.size < 22) {
-      throw new Error(`El archivo ZIP es muy pequeño (${stats.size} bytes) - posiblemente corrupto`);
+
+    console.log(`ZIP descargado: ${stats.size} bytes`);
+
+    if (stats.size < 1000) {
+      let content = '';
+
+      try {
+        content = await fsp.readFile(outputPath, 'utf8');
+      } catch (_) { }
+
+      console.error('Contenido sospechoso del ZIP:');
+      console.error(content.substring(0, 1000));
+
+      throw new Error(
+        `Archivo ZIP inválido o demasiado pequeño (${stats.size} bytes)`
+      );
     }
 
-    console.log(`ZIP del día descargado en ${outputPath} (${stats.size} bytes).`);
+    console.log(`ZIP descargado correctamente en: ${outputPath}`);
+
     return outputPath;
+
   } catch (error) {
-    console.error(`ERROR al descargar el ZIP de ${url}:`, error.message);
+    console.error(`ERROR al descargar el ZIP de ${url}`);
+    console.error(error);
+
     throw error;
   }
 }
