@@ -76,4 +76,40 @@ export const showConfirmAlert = async ({
   return result.isConfirmed;
 };
 
+/**
+ * Muestra una alerta con un campo de entrada de texto (input prompt) usando SweetAlert2.
+ * @param {object} options - Opciones de la alerta.
+ * @param {string} options.title - Título.
+ * @param {string} [options.inputPlaceholder=''] - Placeholder del campo.
+ * @param {string} [options.inputValue=''] - Valor inicial.
+ * @param {string} [options.confirmButtonText='Aceptar'] - Texto del botón de confirmar.
+ * @param {string} [options.cancelButtonText='Cancelar'] - Texto del botón de cancelar.
+ * @returns {Promise<string|null>} El texto ingresado o null si se canceló.
+ */
+export const showInputAlert = async ({
+  title,
+  inputPlaceholder = '',
+  inputValue = '',
+  confirmButtonText = 'Aceptar',
+  cancelButtonText = 'Cancelar'
+}) => {
+  const result = await Swal.fire({
+    title: title,
+    input: 'text',
+    inputPlaceholder: inputPlaceholder,
+    inputValue: inputValue,
+    showCancelButton: true,
+    confirmButtonColor: '#7c3aed', // Primary color
+    cancelButtonColor: '#6b7280',  // Gray
+    confirmButtonText: confirmButtonText,
+    cancelButtonText: cancelButtonText,
+    inputValidator: (value) => {
+      if (!value || !value.trim()) {
+        return '¡Debes ingresar un nombre!';
+      }
+    }
+  });
+  return result.isConfirmed ? result.value : null;
+};
+
 // Puedes añadir más funciones aquí según necesites otros tipos de SweetAlerts.

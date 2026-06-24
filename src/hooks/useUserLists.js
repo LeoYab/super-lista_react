@@ -69,6 +69,21 @@ export function useUserLists(currentUser) {
     }
   };
 
+  const copyList = async (sourceListId, newListName) => {
+    if (!currentUser || !sourceListId || !newListName.trim()) return;
+    try {
+      const newListId = await firebaseService.copyListWithoutPrices(currentUser.uid, sourceListId, newListName.trim());
+      if (newListId) {
+        setCurrentListId(newListId);
+        setCurrentListName(newListName.trim());
+      }
+      showSuccessToast(`¡Lista copiada como <strong>"${newListName}"</strong>!`);
+    } catch (error) {
+      console.error("Error al copiar lista:", error);
+      showErrorAlert('Error', 'No se pudo copiar la lista.');
+    }
+  };
+
   return {
     userLists,
     currentListId,
@@ -77,5 +92,6 @@ export function useUserLists(currentUser) {
     createList,
     deleteList,
     selectList,
+    copyList,
   };
 }

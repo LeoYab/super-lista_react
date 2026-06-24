@@ -11,16 +11,16 @@ import Button from '../Buttons/Button';
 import { showErrorAlert } from '../../Notifications/NotificationsServices';
 
 
-const ProductForm = ({ editandoId, productoAEditar, onAgregar, onEditar, onCancelar, categories = [], onScan }) => {
+const ProductForm = ({ editandoId, productoAEditar, onAgregar, onEditar, onCancelar, categories = [], onScan, lastCategoryId }) => {
 
   // Definimos una categoría de respaldo por si no hay categorías cargadas.
   const fallbackDefaultCategory = { id: 0, title: 'Sin Categoría', icon: '🔤', icons: ['🔤'] };
 
-  // Buscamos la categoría 'Otros' o la primera categoría si existe.
-  // Si 'categories' está vacío, 'find' devolverá undefined y categories[0] será undefined.
-  // En ese caso, usamos 'fallbackDefaultCategory'.
+  // Buscamos la categoría guardada anteriormente, o 'Otros' o la primera categoría si existe.
+  // Si 'categories' está vacío, 'find' devolverá undefined.
+  const lastCategory = lastCategoryId !== undefined && lastCategoryId !== null ? categories.find(cat => cat.id === lastCategoryId) : null;
   const otrosCategory = categories.find(cat => cat.title === 'Otros');
-  const initialDefaultCategory = otrosCategory || categories[0] || fallbackDefaultCategory;
+  const initialDefaultCategory = lastCategory || otrosCategory || categories[0] || fallbackDefaultCategory;
 
   const [productData, setProductData] = useState({
     nombre: '',

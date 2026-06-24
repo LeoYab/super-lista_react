@@ -1,4 +1,4 @@
-import { ref, onValue, push, remove, set, update } from 'firebase/database';
+import { ref, onValue, push, remove, set, update, get } from 'firebase/database';
 import { dbRealtime } from '../firebase/config';
 
 // --- List Management ---
@@ -32,6 +32,32 @@ export const createList = async (userId, listName) => {
 export const deleteList = (userId, listId) => {
   const listRefToDelete = ref(dbRealtime, `Users/${userId}/User_Lists/${listId}`);
   return remove(listRefToDelete);
+};
+
+export const copyListWithoutPrices = async (userId, sourceListId, newListName) => {
+  const newListId = await createList(userId, newListName);
+  const sourceProductsRef = ref(dbRealtime, `Users/${userId}/User_Lists/${sourceListId}/products`);
+  const snapshot = await get(sourceProductsRef);
+  const data = snapshot.val();
+
+  if (data) {
+    const newProductsRef = ref(dbRealtime, `Users/${userId}/User_Lists/${newListId}/products`);
+    for (const value of Object.values(data)) {
+      const newProductRef = push(newProductsRef);
+      await set(newProductRef, {
+        nameProd: value.nameProd,
+        price: 0,
+        quantity: value.quantity || 1,
+        completed: false,
+        category: value.category,
+        icon: value.icon,
+        originalPrice: null,
+        promoLegend: null,
+        supermarket: null
+      });
+    }
+  }
+  return newListId;
 };
 
 // --- Product Management ---

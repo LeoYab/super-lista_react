@@ -250,39 +250,60 @@
   font-size: 0.9rem;
 }
 
-/* Delete Button */
-.delete-list-button {
-  background-color: transparent;
-  color: var(--text-color-light);
-  border: none;
-  border-radius: 50%;
-  width: 32px;
-  height: 32px;
+/* Action Buttons in List Items */
+.list-item-actions {
   display: flex;
-  justify-content: center;
+  gap: 4px;
   align-items: center;
-  cursor: pointer;
-  margin-left: var(--spacing-sm);
-  transition: all var(--transition-fast);
   opacity: 0;
-  /* Hidden by default on desktop, revealed on hover */
+  transition: opacity var(--transition-fast);
 }
 
-.list-item:hover .delete-list-button {
+.list-item:hover .list-item-actions {
   opacity: 1;
 }
 
-/* En mobile (sin hover), el botón siempre es visible */
 @media (hover: none) {
-  .delete-list-button {
+  .list-item-actions {
     opacity: 1;
   }
 }
 
+.delete-list-button,
+.copy-list-button {
+  background-color: transparent !important;
+  border: none !important;
+  border-radius: 50% !important;
+  width: 32px !important;
+  height: 32px !important;
+  display: inline-flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  cursor: pointer !important;
+  transition: all var(--transition-fast) !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+.delete-list-button {
+  color: var(--text-color-light) !important;
+}
+
 .delete-list-button:hover {
-  background-color: #fee2e2;
-  /* Red-100 */
-  color: var(--danger-color);
+  background-color: #fee2e2 !important; /* Red-100 */
+  color: var(--danger-color) !important;
+  box-shadow: none !important;
+}
+
+.copy-list-button {
+  color: var(--text-color-light) !important;
+}
+
+.copy-list-button:hover {
+  background-color: var(--primary-light-color) !important;
+  color: var(--primary-color) !important;
+  box-shadow: none !important;
 }
 
 /* Additional Links */
