@@ -394,42 +394,9 @@ function MainAppContent() {
           ) : currentListId ? (
             <>
               <div className="list-header">
-                <div className="list-title-row" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%', marginBottom: '15px' }}>
-                  <h3 className="current-list-title" style={{ margin: 0 }}>
-                    {currentListName || 'Cargando...'}
-                  </h3>
-                  <Button
-                    onClick={() => setGroupByCategory(prev => !prev)}
-                    variant={groupByCategory ? "primary" : "secondary"}
-                    className="toggle-group-button"
-                    title={groupByCategory ? "Desactivar vista por categorías" : "Activar vista por categorías"}
-                    size="small"
-                  >
-                    {groupByCategory ? (
-                      <>
-                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: '6px', verticalAlign: 'middle' }}>
-                          <line x1="8" y1="6" x2="21" y2="6"></line>
-                          <line x1="8" y1="12" x2="21" y2="12"></line>
-                          <line x1="8" y1="18" x2="21" y2="18"></line>
-                          <line x1="3" y1="6" x2="3.01" y2="6"></line>
-                          <line x1="3" y1="12" x2="3.01" y2="12"></line>
-                          <line x1="3" y1="18" x2="3.01" y2="18"></line>
-                        </svg>
-                        Lista Simple
-                      </>
-                    ) : (
-                      <>
-                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: '6px', verticalAlign: 'middle' }}>
-                          <rect x="3" y="3" width="7" height="9"></rect>
-                          <rect x="14" y="3" width="7" height="5"></rect>
-                          <rect x="14" y="12" width="7" height="9"></rect>
-                          <rect x="3" y="16" width="7" height="5"></rect>
-                        </svg>
-                        Agrupar Categorías
-                      </>
-                    )}
-                  </Button>
-                </div>
+                <h3 className="current-list-title">
+                  {currentListName || 'Cargando...'}
+                </h3>
                 {/* Detected supermarket moved to header stats */}
 
                 <div className="list-header-stats">
@@ -467,6 +434,8 @@ function MainAppContent() {
                     categories={categories}
                     selectedCategoryId={selectedCategoryId}
                     onSelectCategory={setSelectedCategoryId}
+                    groupByCategory={groupByCategory}
+                    onToggleGroupBy={() => setGroupByCategory(prev => !prev)}
                   />
                 </div>
               </div>
