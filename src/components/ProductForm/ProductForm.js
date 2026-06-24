@@ -1,5 +1,5 @@
 // src/components/ProductForm/ProductForm.js
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 import './ProductForm.css';
 import Input from '../Input/Input';
@@ -32,6 +32,25 @@ const ProductForm = ({ editandoId, productoAEditar, onAgregar, onEditar, onCance
     promo_leyenda: null
   });
   const [error, setError] = useState('');
+
+  const categoryScrollRef = useRef(null);
+
+  // Scroll automatico al chip de la categoria seleccionada/activa
+  useEffect(() => {
+    if (categoryScrollRef.current) {
+      const timer = setTimeout(() => {
+        const activeChip = categoryScrollRef.current.querySelector('.category-chip.active');
+        if (activeChip) {
+          activeChip.scrollIntoView({
+            behavior: 'smooth',
+            block: 'nearest',
+            inline: 'center'
+          });
+        }
+      }, 100); // Pequeño delay para asegurar que el DOM se renderizó con la clase active
+      return () => clearTimeout(timer);
+    }
+  }, [productData.category]);
 
 
   // Efecto para inicializar o resetear el formulario.
@@ -217,7 +236,7 @@ const ProductForm = ({ editandoId, productoAEditar, onAgregar, onEditar, onCance
 
         <div className="input-group category-section">
           <label>Categoría:</label>
-          <div className="category-scroll-list">
+          <div className="category-scroll-list" ref={categoryScrollRef}>
             {categories.map((cat) => (
               <button
                 key={cat.id}

@@ -134,7 +134,9 @@ export const subscribeToCategories = (callback) => {
   const categoriesRef = ref(dbRealtime, 'Categories');
   return onValue(categoriesRef, (snapshot) => {
     const data = snapshot.val();
-    const loadedCategories = data ? Object.values(data) : [];
+    const loadedCategories = data
+      ? Object.values(data).sort((a, b) => (a.order ?? 999) - (b.order ?? 999))
+      : [];
     callback(loadedCategories);
   }, (error) => {
     console.error("Error al cargar categorías:", error);

@@ -7,7 +7,6 @@ const CategoryFilter = ({ categories, selectedCategoryId, onSelectCategory, grou
       <div
         className={`category-item toggle-group-tab ${groupByCategory ? 'active' : ''}`}
         onClick={onToggleGroupBy}
-        style={{ borderRight: '1px solid var(--border-color-light)' }}
         title={groupByCategory ? "Ver como lista simple" : "Agrupar por categorías"}
       >
         <span className="category-name">
