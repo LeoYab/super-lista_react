@@ -595,8 +595,32 @@ function AppRouter() {
       {/* Ruta para la aplicación principal (tus listas) */}
       <Route path="/" element={currentUser ? <MainAppContent /> : <Navigate to="/auth" />} />
       {/* NUEVA RUTA PARA SUPERMERCADOS */}
-      <Route path="/supermercados" element={currentUser ? <Supermercados /> : <Navigate to="/auth" />} />
-      <Route path="/comparar" element={currentUser ? <Comparador /> : <Navigate to="/auth" />} />
+      <Route path="/supermercados" element={
+        currentUser ? (
+          <div className="App">
+            <Header />
+            <div className="container">
+              <SidebarMenu />
+              <div className="main-content-area" style={{ paddingBottom: '20px' }}>
+                <Supermercados />
+              </div>
+            </div>
+          </div>
+        ) : <Navigate to="/auth" />
+      } />
+      <Route path="/comparar" element={
+        currentUser ? (
+          <div className="App">
+            <Header />
+            <div className="container">
+              <SidebarMenu />
+              <div className="main-content-area" style={{ paddingBottom: '20px' }}>
+                <Comparador />
+              </div>
+            </div>
+          </div>
+        ) : <Navigate to="/auth" />
+      } />
       {/* Opcional: Redirigir a una ruta por defecto si la URL no coincide con ninguna */}
       <Route path="*" element={<Navigate to="/" />} />
     </Routes>

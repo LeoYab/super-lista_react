@@ -4,10 +4,12 @@
 .comparador-container {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-lg);
-  padding: var(--spacing-md);
-  padding-bottom: calc(var(--spacing-xl) * 2);
+  gap: var(--spacing-md);
+  padding: 0;
+  padding-bottom: var(--spacing-lg);
   animation: fadeIn 0.35s ease-out;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 /* ─── Header ─────────────────────────────────────────── */
@@ -683,8 +685,20 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  flex-wrap: wrap;
   gap: var(--spacing-sm);
+  width: 100%;
+}
+
+@media (max-width: 480px) {
+  .supermarket-rank-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .supermarket-rank-pricing {
+    width: 100%;
+    justify-content: space-between;
+    margin-top: var(--spacing-xs);
+  }
 }
 
 .super-logo-title-group {
