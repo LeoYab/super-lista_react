@@ -64,7 +64,7 @@ export const fetchCarrefourProductByEan = async (rawEan) => {
 
   let responseData = null;
 
-  // 3. Perform Fetch (Try direct first, fallback to CORS proxy)
+  // 3. Perform Fetch (Try direct first, fallback to CORS proxies)
   try {
     console.log(`[Fetch Direct] Querying Carrefour API for EAN: ${ean}`);
     const response = await fetch(directUrl);
@@ -74,18 +74,34 @@ export const fetchCarrefourProductByEan = async (rawEan) => {
       throw new Error(`Direct request failed with status: ${response.status}`);
     }
   } catch (directError) {
-    console.warn(`[Fetch Direct Failed] Direct call failed due to CORS or Network. Trying CORS proxy.`, directError);
+    console.warn(`[Fetch Direct Failed] Direct call failed due to CORS or Network. Trying CORS Proxy 1 (corsproxy.io).`, directError);
+    
+    // Fallback 1: corsproxy.io
     try {
-      console.log(`[Fetch Proxy] Querying Carrefour API via proxy for EAN: ${ean}`);
-      const response = await fetch(proxyUrl);
+      const proxy1Url = `https://corsproxy.io/?${encodeURIComponent(directUrl)}`;
+      console.log(`[Fetch Proxy 1] Querying Carrefour API via corsproxy.io for EAN: ${ean}`);
+      const response = await fetch(proxy1Url);
       if (response.ok) {
         responseData = await response.json();
       } else {
-        throw new Error(`Proxy request failed with status: ${response.status}`);
+        throw new Error(`Proxy 1 request failed with status: ${response.status}`);
       }
-    } catch (proxyError) {
-      console.error(`[Fetch Failed] Both direct and proxy queries failed.`, proxyError);
-      return null;
+    } catch (proxy1Error) {
+      console.warn(`[Fetch Proxy 1 Failed] Proxy 1 failed. Trying CORS Proxy 2 (allorigins).`, proxy1Error);
+      
+      // Fallback 2: allorigins.win
+      try {
+        console.log(`[Fetch Proxy 2] Querying Carrefour API via allorigins for EAN: ${ean}`);
+        const response = await fetch(proxyUrl);
+        if (response.ok) {
+          responseData = await response.json();
+        } else {
+          throw new Error(`Proxy 2 request failed with status: ${response.status}`);
+        }
+      } catch (proxy2Error) {
+        console.error(`[Fetch Failed] All direct and proxy queries failed.`, proxy2Error);
+        return null;
+      }
     }
   }
 
