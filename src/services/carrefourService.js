@@ -128,7 +128,8 @@ export const fetchCarrefourProductByEan = async (rawEan) => {
       ean: ean,
       imageUrl: item.images?.[0]?.imageUrl || null,
       productId: product.productId,
-      itemId: item.itemId
+      itemId: item.itemId,
+      categories: product.categories || []
     };
 
     console.log(`[Success] Found product: ${parsedProduct.nombre} - Price: $${parsedProduct.valor}`);

@@ -215,6 +215,39 @@ const ProductForm = ({ editandoId, productoAEditar, onAgregar, onEditar, onCance
           required
         />
 
+        {(productData.precio_original || productData.promo_leyenda) && (
+          <div className="promo-info-badge" style={{
+            marginTop: '-10px',
+            marginBottom: '15px',
+            padding: '10px 14px',
+            borderRadius: '8px',
+            backgroundColor: 'rgba(235, 94, 40, 0.08)',
+            border: '1px dashed #eb5e28',
+            fontSize: '0.88rem',
+            color: '#eb5e28',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '6px',
+            lineHeight: '1.4'
+          }}>
+            {productData.precio_original && (
+              <div>
+                <strong>Precio de lista original:</strong> <span style={{ textDecoration: 'line-through', opacity: 0.8 }}>${parseFloat(productData.precio_original).toFixed(2)}</span>
+                {productData.valor && parseFloat(productData.valor) > 0 && (
+                  <span style={{ marginLeft: '8px', fontWeight: 'bold' }}>
+                    (Ahorro: ${(parseFloat(productData.precio_original) - parseFloat(productData.valor)).toFixed(2)})
+                  </span>
+                )}
+              </div>
+            )}
+            {productData.promo_leyenda && (
+              <div>
+                <strong>Promo activa:</strong> {productData.promo_leyenda}
+              </div>
+            )}
+          </div>
+        )}
+
         <div className="input-group">
           <label htmlFor="cantidad">Cantidad:</label>
           <div className="quantity-controls">

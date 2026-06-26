@@ -143,3 +143,32 @@ export const subscribeToCategories = (callback) => {
     callback([]);
   });
 };
+
+export const addCategory = async (categoryData) => {
+  const categoriesRef = ref(dbRealtime, 'Categories');
+  const snapshot = await get(categoriesRef);
+  const data = snapshot.val();
+  
+  let nextId = 1;
+  let nextOrder = 1;
+  
+  if (data) {
+    const list = Object.values(data);
+    const maxId = Math.max(...list.map(c => Number(c.id) || 0), 0);
+    nextId = maxId + 1;
+    const maxOrder = Math.max(...list.map(c => Number(c.order) || 0), 0);
+    nextOrder = maxOrder + 1;
+  }
+  
+  const newCatRef = ref(dbRealtime, `Categories/${nextId}`);
+  const newCat = {
+    id: nextId,
+    title: categoryData.title,
+    icon: categoryData.icon || '🛒',
+    icons: categoryData.icons || [categoryData.icon || '🛒'],
+    order: nextOrder
+  };
+  
+  await set(newCatRef, newCat);
+  return newCat;
+};

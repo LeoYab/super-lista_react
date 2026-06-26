@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 
 import { useAuth, AuthProvider } from './context/AuthContext';
-import { subscribeToCategories } from './services/firebaseService';
+import { subscribeToCategories, addCategory } from './services/firebaseService';
 import { UserListsProvider } from './context/UserListsContext';
 import { ProductsProvider } from './context/ProductsContext';
 import { useUserListsContext } from './context/UserListsContext';
@@ -61,6 +61,75 @@ function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
 function deg2rad(deg) {
   return deg * (Math.PI / 180)
 }
+
+const mapCarrefourCategory = (categoriesList) => {
+  if (!categoriesList || categoriesList.length === 0) return { title: 'Otros', icon: '🛒' };
+  
+  const path = categoriesList[0];
+  const parts = path.split('/').filter(Boolean);
+  if (parts.length === 0) return { title: 'Otros', icon: '🛒' };
+  
+  const root = parts[0].toLowerCase();
+  
+  if (root.includes('limpieza')) return { title: 'Limpieza', icon: '🧼', icons: ['🧼', '🧹'] };
+  if (root.includes('perfumer') || root.includes('cuidado personal') || root.includes('higiene') || root.includes('estética') || root.includes('cosmet') || root.includes('belleza')) {
+    return { title: 'Perfumería', icon: '🧴', icons: ['🧴', '🧼', '💅'] };
+  }
+  if (root.includes('bebida') || root.includes('gaseosa') || root.includes('jugo') || root.includes('alcohol') || root.includes('cerveza') || root.includes('vino')) {
+    return { title: 'Bebidas', icon: '🥤', icons: ['🥤', '🍺', '🍷'] };
+  }
+  if (root.includes('lacteo') || root.includes('lácteo') || root.includes('queso') || root.includes('manteca') || root.includes('yogur') || root.includes('leche')) {
+    return { title: 'Lácteos', icon: '🥛', icons: ['🥛', '🧀'] };
+  }
+  if (root.includes('almacen') || root.includes('almacén')) {
+    const fullPathLower = path.toLowerCase();
+    if (fullPathLower.includes('galletita') || fullPathLower.includes('galleta') || fullPathLower.includes('cookies')) {
+      return { title: 'Galletitas', icon: '🍪', icons: ['🍪', '🥮'] };
+    }
+    if (fullPathLower.includes('snack') || fullPathLower.includes('copet') || fullPathLower.includes('papa frita')) {
+      return { title: 'Snacks', icon: '🍿', icons: ['🍿', '🥜', '🍡'] };
+    }
+    return { title: 'Almacén', icon: '🥫', icons: ['🥫', '🍞'] };
+  }
+  if (root.includes('galletita') || root.includes('galleta')) return { title: 'Galletitas', icon: '🍪', icons: ['🍪', '🥮'] };
+  if (root.includes('snack')) return { title: 'Snacks', icon: '🍿', icons: ['🍿', '🥜', '🍡'] };
+  if (root.includes('congelado')) return { title: 'Congelados', icon: '❄️', icons: ['❄️', '🍦'] };
+  if (root.includes('mascota') || root.includes('perro') || root.includes('gato')) return { title: 'Mascotas', icon: '🐶', icons: ['🐶', '🐱'] };
+  if (root.includes('bebe') || root.includes('bebés') || root.includes('pañal') || root.includes('maternidad')) {
+    return { title: 'Bebés', icon: '👶', icons: ['👶', '🍼'] };
+  }
+  if (root.includes('fiambr') || root.includes('embutido') || root.includes('queso')) return { title: 'Fiambrería', icon: '🥓', icons: ['🥓', '🍖'] };
+  if (root.includes('carne') || root.includes('pollo') || root.includes('pescado') || root.includes('vacuno') || root.includes('cerdo')) {
+    return { title: 'Carnes', icon: '🥩', icons: ['🥩', '🍗'] };
+  }
+  if (root.includes('fruta') || root.includes('verdur') || root.includes('huerta')) return { title: 'Verdulería', icon: '🍎', icons: ['🍎', '🥦'] };
+  if (root.includes('panader') || root.includes('factura') || root.includes('harina') || root.includes('reposteria') || root.includes('repostería')) {
+    return { title: 'Harinas', icon: '🌾', icons: ['🌾', '🍞', '🥐'] };
+  }
+  
+  const cleanTitle = parts[0].charAt(0).toUpperCase() + parts[0].slice(1).toLowerCase();
+  return { title: cleanTitle, icon: '🛒', icons: ['🛒'] };
+};
+
+const resolveProductCategory = async (categoriesList, currentCategories) => {
+  const targetCategoryInfo = mapCarrefourCategory(categoriesList);
+  
+  let foundCategory = currentCategories.find(
+    cat => cat.title.toLowerCase() === targetCategoryInfo.title.toLowerCase()
+  );
+  
+  if (!foundCategory) {
+    console.log(`Categoría no encontrada: "${targetCategoryInfo.title}". Agregándola...`);
+    try {
+      foundCategory = await addCategory(targetCategoryInfo);
+    } catch (err) {
+      console.error("Error al agregar categoría dinámicamente:", err);
+      foundCategory = currentCategories.find(cat => cat.title.toLowerCase() === 'otros') || currentCategories[0];
+    }
+  }
+  
+  return foundCategory;
+};
 
 function MainAppContent() {
   const navigate = useNavigate();
@@ -211,25 +280,32 @@ function MainAppContent() {
     const normalizedScannedCode = normalizeCode(decodedText);
     console.log(`Normalized scanned code: ${normalizedScannedCode}`);
 
+    const isNearCarrefour = detectedSupermarket && detectedSupermarket.brandKey === 'carrefour';
+
     const searchProduct = async () => {
-      // 1. Try real-time Carrefour API lookup first (with caching)
-      try {
-        const apiProduct = await fetchCarrefourProductByEan(decodedText);
-        if (apiProduct) {
-          setEditingProduct(prev => ({
-            ...(prev || {}),
-            nombre: apiProduct.nombre,
-            valor: apiProduct.valor.toString(),
-            precio_original: apiProduct.precio_original,
-            promo_leyenda: apiProduct.promo_leyenda,
-            cantidad: prev ? prev.cantidad : 1,
-          }));
-          setShowProductForm(true);
-          showSuccessToast(`Producto encontrado (Carrefour API): ${apiProduct.nombre}`);
-          return;
+      // 1. Try real-time Carrefour API lookup first (with caching) ONLY if near Carrefour branch
+      if (isNearCarrefour) {
+        try {
+          const apiProduct = await fetchCarrefourProductByEan(decodedText);
+          if (apiProduct) {
+            const resolvedCat = await resolveProductCategory(apiProduct.categories, categories);
+            setEditingProduct(prev => ({
+              ...(prev || {}),
+              nombre: apiProduct.nombre,
+              valor: apiProduct.valor.toString(),
+              precio_original: apiProduct.precio_original,
+              promo_leyenda: apiProduct.promo_leyenda,
+              category: resolvedCat ? resolvedCat.id : prev?.category || 0,
+              icon: resolvedCat ? resolvedCat.icon : prev?.icon || '🛒',
+              cantidad: prev ? prev.cantidad : 1,
+            }));
+            setShowProductForm(true);
+            showSuccessToast(`Producto encontrado (Carrefour API): ${apiProduct.nombre}`);
+            return;
+          }
+        } catch (err) {
+          console.warn("Error querying Carrefour API, falling back to local files:", err);
         }
-      } catch (err) {
-        console.warn("Error querying Carrefour API, falling back to local files:", err);
       }
 
       // 2. Fallback to local supermarket database
@@ -284,7 +360,7 @@ function MainAppContent() {
     };
 
     searchProduct();
-  }, [detectedSupermarket]);
+  }, [detectedSupermarket, categories]);
 
   const handleCloseScanner = () => {
     setShowScanner(false);
