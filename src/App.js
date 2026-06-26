@@ -24,6 +24,7 @@ import Supermercados from './components/supermercados/Supermercados';
 import Comparador from './components/Comparador/Comparador';
 import { Html5Qrcode, Html5QrcodeSupportedFormats } from "html5-qrcode";
 import { showErrorAlert, showSuccessToast } from './Notifications/NotificationsServices';
+import { fetchCarrefourProductByEan } from './services/carrefourService';
 
 // Import local product data for scanner lookup
 // Unused import removed
@@ -210,52 +211,79 @@ function MainAppContent() {
     const normalizedScannedCode = normalizeCode(decodedText);
     console.log(`Normalized scanned code: ${normalizedScannedCode}`);
 
-    // Search for the product in brand CSVs
-    const brandIds = detectedSupermarket
-      ? [detectedSupermarket.brandKey]
-      : [];
-
-    if (brandIds.length === 0) {
-      showErrorAlert('Supermercado no detectado', 'No estás cerca de ningún supermercado conocido o el GPS está desactivado. Selecciona uno manualmente en el buscador de precios.');
-      return;
-    }
-
-    Promise.all(brandIds.map(async (brandId) => {
+    const searchProduct = async () => {
+      // 1. Try real-time Carrefour API lookup first (with caching)
       try {
-        const branchId = detectedSupermarket.branchData.id_sucursal || detectedSupermarket.branchData.id;
+        const apiProduct = await fetchCarrefourProductByEan(decodedText);
+        if (apiProduct) {
+          setEditingProduct(prev => ({
+            ...(prev || {}),
+            nombre: apiProduct.nombre,
+            valor: apiProduct.valor.toString(),
+            precio_original: apiProduct.precio_original,
+            promo_leyenda: apiProduct.promo_leyenda,
+            cantidad: prev ? prev.cantidad : 1,
+          }));
+          setShowProductForm(true);
+          showSuccessToast(`Producto encontrado (Carrefour API): ${apiProduct.nombre}`);
+          return;
+        }
+      } catch (err) {
+        console.warn("Error querying Carrefour API, falling back to local files:", err);
+      }
 
-        const response = await fetch(`/data/products/${brandId}/${branchId}.json`);
-        if (!response.ok) return null;
-        const products = await response.json();
-        const found = products.find(p => {
-          const idParts = (p.id || '').split('-');
-          if (idParts.length > 0) {
-            const idCodePart = idParts[0];
-            return normalizeCode(idCodePart) === normalizedScannedCode;
+      // 2. Fallback to local supermarket database
+      const brandIds = detectedSupermarket
+        ? [detectedSupermarket.brandKey]
+        : [];
+
+      if (brandIds.length === 0) {
+        showErrorAlert('Producto no encontrado', `No se encontró información para el código: ${decodedText}. Habilita el GPS o selecciona un supermercado.`);
+        return;
+      }
+
+      try {
+        const results = await Promise.all(brandIds.map(async (brandId) => {
+          try {
+            const branchId = detectedSupermarket.branchData.id_sucursal || detectedSupermarket.branchData.id;
+            const response = await fetch(`/data/products/${brandId}/${branchId}.json`);
+            if (!response.ok) return null;
+            const products = await response.json();
+            const found = products.find(p => {
+              const idParts = (p.id || '').split('-');
+              if (idParts.length > 0) {
+                const idCodePart = idParts[0];
+                return normalizeCode(idCodePart) === normalizedScannedCode;
+              }
+              return false;
+            });
+            return found;
+          } catch (e) {
+            return null;
           }
-          return false;
-        });
-        return found;
-      } catch (e) {
-        return null;
-      }
-    })).then(results => {
-      const foundProduct = results.find(r => r !== null);
-      if (foundProduct) {
-        setEditingProduct(prev => ({
-          ...(prev || {}),
-          nombre: foundProduct.nombre,
-          valor: foundProduct.mejor_precio || foundProduct.precio || '',
-          precio_original: foundProduct.precio || null,
-          promo_leyenda: foundProduct.promo_leyenda || null,
-          cantidad: prev ? prev.cantidad : 1,
         }));
-        setShowProductForm(true);
-        showSuccessToast(`Producto encontrado: ${foundProduct.nombre}`);
-      } else {
-        showErrorAlert('Producto no encontrado', `No se encontró información para el código: ${decodedText} en esta sucursal.`);
+
+        const foundProduct = results.find(r => r !== null);
+        if (foundProduct) {
+          setEditingProduct(prev => ({
+            ...(prev || {}),
+            nombre: foundProduct.nombre,
+            valor: foundProduct.mejor_precio || foundProduct.precio || '',
+            precio_original: foundProduct.precio || null,
+            promo_leyenda: foundProduct.promo_leyenda || null,
+            cantidad: prev ? prev.cantidad : 1,
+          }));
+          setShowProductForm(true);
+          showSuccessToast(`Producto encontrado: ${foundProduct.nombre}`);
+        } else {
+          showErrorAlert('Producto no encontrado', `No se encontró información para el código: ${decodedText} en esta sucursal.`);
+        }
+      } catch (err) {
+        showErrorAlert('Error', `Ocurrió un error al buscar el producto.`);
       }
-    });
+    };
+
+    searchProduct();
   }, [detectedSupermarket]);
 
   const handleCloseScanner = () => {

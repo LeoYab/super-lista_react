@@ -10,6 +10,7 @@ import { useProductsContext } from '../../context/ProductsContext';
 import { useUserListsContext } from '../../context/UserListsContext';
 import { subscribeToCategories } from '../../services/firebaseService';
 import { showErrorAlert } from '../../Notifications/NotificationsServices';
+import { fetchCarrefourProductByEan } from '../../services/carrefourService';
 
 
 const PRODUCTS_PER_PAGE = 20;
@@ -494,11 +495,36 @@ const Supermercados = () => {
     }
 
     const brandId = selectedBrand.id.toLowerCase();
-    const branchId = selectedBranch.id_sucursal || selectedBranch.id; // Manejar diferentes estructuras si acaso
+    const branchId = selectedBranch.id_sucursal || selectedBranch.id;
 
     console.log(`Buscando producto en: ${brandId}, Sucursal: ${branchId}`);
 
     const searchProduct = async () => {
+      // 1. Try real-time Carrefour API lookup first (with caching) if selected brand is Carrefour
+      if (brandId === 'carrefour') {
+        try {
+          const apiProduct = await fetchCarrefourProductByEan(decodedText);
+          if (apiProduct) {
+            const result = {
+              id: `${apiProduct.ean}-${apiProduct.productId || '0'}`,
+              nombre: apiProduct.nombre,
+              precio: apiProduct.precio_original || apiProduct.valor,
+              mejor_precio: apiProduct.valor,
+              mejor_precio_tipo: apiProduct.precio_original ? 'Descuento' : 'Precio Regular',
+              promo1_leyenda: apiProduct.promo_leyenda || '',
+              supermercado_marca: 'Carrefour',
+              sucursal_nombre: selectedBranch.nombre_sucursal || 'Carrefour Online',
+              imagen_url: apiProduct.imageUrl
+            };
+            setScannedProducts([result]);
+            return;
+          }
+        } catch (err) {
+          console.warn("Error querying Carrefour API, falling back to local files:", err);
+        }
+      }
+
+      // 2. Fallback to local branch JSON file
       try {
         const response = await fetch(`/data/products/${brandId}/${branchId}.json`);
         if (!response.ok) {
