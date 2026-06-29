@@ -77,6 +77,8 @@ export const subscribeToProducts = (userId, listId, callback) => {
       precio_original: value.originalPrice || null,
       promo_leyenda: value.promoLegend || null,
       supermercado: value.supermarket || null,
+      promo_cantidad: value.promoQuantity || null,
+      valor_unitario_base: value.unitPriceBase || null,
     })) : [];
     callback(loadedProducts);
   }, (error) => {
@@ -97,6 +99,8 @@ export const addProduct = (userId, listId, productData) => {
     originalPrice: productData.precio_original || null,
     promoLegend: productData.promo_leyenda || null,
     supermarket: productData.supermercado || null,
+    promoQuantity: productData.promo_cantidad || null,
+    unitPriceBase: productData.valor_unitario_base || null,
   });
 };
 
@@ -110,6 +114,8 @@ export const editProduct = (userId, listId, productId, productData) => {
     icon: productData.icon,
     originalPrice: productData.precio_original || null,
     promoLegend: productData.promo_leyenda || null,
+    promoQuantity: productData.promo_cantidad || null,
+    unitPriceBase: productData.valor_unitario_base || null,
   });
 };
 
