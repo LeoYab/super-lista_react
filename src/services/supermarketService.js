@@ -75,34 +75,19 @@ export const fetchProductByEan = async (rawEan, brandKey = 'carrefour') => {
   const directUrl = `${baseUrl}/api/catalog_system/pub/products/search?fq=alternateIds_Ean:${ean}`;
   const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(directUrl)}`;
 
-  const isBrowser = typeof window !== 'undefined';
-  const currentHost = isBrowser ? window.location.hostname : '';
-  const targetHost = baseUrl.replace(/^https?:\/\//, '');
-  const isTargetDomain = currentHost.endsWith(targetHost);
-
   let responseData = null;
-  let triedDirect = false;
 
-  // 3. Perform Fetch (Try direct first if on target domain, otherwise use proxies to avoid CORS delay)
+  // 3. Perform Fetch (Try direct first, fallback to CORS proxies)
   try {
-    if (isTargetDomain) {
-      triedDirect = true;
-      console.log(`[Fetch Direct] Querying ${brandKey} API for EAN: ${ean}`);
-      const response = await fetch(directUrl);
-      if (response.ok) {
-        responseData = await response.json();
-      } else {
-        throw new Error(`Direct request failed with status: ${response.status}`);
-      }
+    console.log(`[Fetch Direct] Querying ${brandKey} API for EAN: ${ean}`);
+    const response = await fetch(directUrl);
+    if (response.ok) {
+      responseData = await response.json();
     } else {
-      throw new Error(`Bypassing direct fetch to avoid CORS block and delays since we are not on ${targetHost}`);
+      throw new Error(`Direct request failed with status: ${response.status}`);
     }
   } catch (directError) {
-    if (triedDirect) {
-      console.warn(`[Fetch Direct Failed] Direct call to ${brandKey} failed. Trying CORS Proxy 1 (corsproxy.io).`, directError);
-    } else {
-      console.log(`[Fetch Proxy] ${directError.message}. Trying CORS Proxy 1 (corsproxy.io).`);
-    }
+    console.warn(`[Fetch Direct Failed] Direct call to ${brandKey} failed. Trying CORS Proxy 1 (corsproxy.io).`, directError);
     
     // Fallback 1: corsproxy.io
     try {
