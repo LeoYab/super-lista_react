@@ -10,7 +10,7 @@ import { useProductsContext } from '../../context/ProductsContext';
 import { useUserListsContext } from '../../context/UserListsContext';
 import { subscribeToCategories, addCategory } from '../../services/firebaseService';
 import { showErrorAlert } from '../../Notifications/NotificationsServices';
-import { fetchCarrefourProductByEan } from '../../services/carrefourService';
+import { fetchProductByEan } from '../../services/supermarketService';
 
 
 const PRODUCTS_PER_PAGE = 20;
@@ -570,12 +570,15 @@ const Supermercados = () => {
     console.log(`Buscando producto en: ${brandId}, Sucursal: ${branchId}`);
 
     const searchProduct = async () => {
-      // 1. Try real-time Carrefour API lookup first (with caching) if selected brand is Carrefour
-      if (brandId === 'carrefour') {
+      const isLiveSupported = ['carrefour', 'dia', 'changomas'].includes(brandId);
+
+      // 1. Try real-time API lookup first (with caching) if the selected brand supports live API
+      if (isLiveSupported) {
         try {
-          const apiProduct = await fetchCarrefourProductByEan(decodedText);
+          const apiProduct = await fetchProductByEan(decodedText, brandId);
           if (apiProduct) {
             const resolvedCat = await resolveProductCategory(apiProduct.categories, categories);
+            const brandLabel = brandId === 'dia' ? 'Día' : (brandId === 'changomas' ? 'Chango Más' : 'Carrefour');
             const result = {
               id: `${apiProduct.ean}-${apiProduct.productId || '0'}`,
               nombre: apiProduct.nombre,
@@ -583,8 +586,8 @@ const Supermercados = () => {
               mejor_precio: apiProduct.valor,
               mejor_precio_tipo: apiProduct.precio_original ? 'Descuento' : 'Precio Regular',
               promo1_leyenda: apiProduct.promo_leyenda || '',
-              supermercado_marca: 'Carrefour',
-              sucursal_nombre: selectedBranch.nombre_sucursal || 'Carrefour Online',
+              supermercado_marca: brandLabel,
+              sucursal_nombre: selectedBranch.nombre_sucursal || `${brandLabel} Online`,
               imagen_url: apiProduct.imageUrl,
               category: resolvedCat ? resolvedCat.id : 'otros',
               icon: resolvedCat ? resolvedCat.icon : '🛒'
@@ -593,7 +596,7 @@ const Supermercados = () => {
             return;
           }
         } catch (err) {
-          console.warn("Error querying Carrefour API, falling back to local files:", err);
+          console.warn(`Error querying ${brandId} API, falling back to local files:`, err);
         }
       }
 

@@ -24,7 +24,7 @@ import Supermercados from './components/supermercados/Supermercados';
 import Comparador from './components/Comparador/Comparador';
 import { Html5Qrcode, Html5QrcodeSupportedFormats } from "html5-qrcode";
 import { showErrorAlert, showSuccessToast } from './Notifications/NotificationsServices';
-import { fetchCarrefourProductByEan } from './services/carrefourService';
+import { fetchProductByEan } from './services/supermarketService';
 
 // Import local product data for scanner lookup
 // Unused import removed
@@ -280,13 +280,14 @@ function MainAppContent() {
     const normalizedScannedCode = normalizeCode(decodedText);
     console.log(`Normalized scanned code: ${normalizedScannedCode}`);
 
-    const isNearCarrefour = detectedSupermarket && detectedSupermarket.brandKey === 'carrefour';
-
     const searchProduct = async () => {
-      // 1. Try real-time Carrefour API lookup first (with caching) ONLY if near Carrefour branch
-      if (isNearCarrefour) {
+      const activeBrand = detectedSupermarket ? detectedSupermarket.brandKey : 'carrefour';
+      const isLiveSupported = ['carrefour', 'dia', 'changomas'].includes(activeBrand);
+
+      // 1. Try real-time API lookup first (with caching) if the brand supports live API
+      if (isLiveSupported) {
         try {
-          const apiProduct = await fetchCarrefourProductByEan(decodedText);
+          const apiProduct = await fetchProductByEan(decodedText, activeBrand);
           if (apiProduct) {
             const resolvedCat = await resolveProductCategory(apiProduct.categories, categories);
             setEditingProduct(prev => ({
@@ -300,11 +301,12 @@ function MainAppContent() {
               cantidad: prev ? prev.cantidad : 1,
             }));
             setShowProductForm(true);
-            showSuccessToast(`Producto encontrado (Carrefour API): ${apiProduct.nombre}`);
+            const brandLabel = activeBrand === 'dia' ? 'Día' : (activeBrand === 'changomas' ? 'Chango Más' : 'Carrefour');
+            showSuccessToast(`Producto encontrado (${brandLabel} API): ${apiProduct.nombre}`);
             return;
           }
         } catch (err) {
-          console.warn("Error querying Carrefour API, falling back to local files:", err);
+          console.warn(`Error querying ${activeBrand} API, falling back to local files:`, err);
         }
       }
 
