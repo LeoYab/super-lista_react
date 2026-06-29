@@ -1,5 +1,27 @@
 // src/services/supermarketService.js
 
+// Auto-cleanup: Eliminar cachés viejas que no tienen timestamps (_ts)
+// para que no se devuelvan precios desactualizados de sesiones anteriores.
+try {
+  ['carrefour', 'dia', 'changomas'].forEach(brand => {
+    const key = `superlista_${brand}_ean_cache`;
+    const raw = localStorage.getItem(key);
+    if (raw) {
+      const data = JSON.parse(raw);
+      const hasOldEntries = Object.values(data).some(v => v && !v._ts);
+      if (hasOldEntries) {
+        console.log(`[Cache Cleanup] Removing stale cache for ${brand} (old format without TTL)`);
+        localStorage.removeItem(key);
+      }
+    }
+  });
+} catch (e) {
+  console.warn('[Cache Cleanup] Error during cleanup:', e);
+}
+
+// Tiempo de vida de la caché: 30 minutos (para que los precios se actualicen)
+const CACHE_TTL_MS = 30 * 60 * 1000;
+
 // In-memory cache for fast lookups during the active session, separated by brand
 const memoryCaches = {
   carrefour: new Map(),
@@ -7,11 +29,21 @@ const memoryCaches = {
   changomas: new Map()
 };
 
-// Helper to get cache from localStorage
+// Helper to get cache from localStorage (with TTL check)
 const getStoredCache = (brandKey) => {
   try {
-    const data = localStorage.getItem(`superlista_${brandKey}_ean_cache`);
-    return data ? JSON.parse(data) : {};
+    const raw = localStorage.getItem(`superlista_${brandKey}_ean_cache`);
+    if (!raw) return {};
+    const data = JSON.parse(raw);
+    // Clean expired entries
+    const now = Date.now();
+    const cleaned = {};
+    for (const [key, entry] of Object.entries(data)) {
+      if (entry && entry._ts && (now - entry._ts) < CACHE_TTL_MS) {
+        cleaned[key] = entry;
+      }
+    }
+    return cleaned;
   } catch (e) {
     console.error(`Error reading localStorage cache for ${brandKey}`, e);
     return {};
@@ -36,8 +68,28 @@ export const normalizeEan = (code) => {
 };
 
 /**
+ * Rutas del proxy local configuradas en setupProxy.js
+ * El servidor de desarrollo de React redirige estas rutas a los dominios reales.
+ */
+const PROXY_PATHS = {
+  carrefour: '/proxy-api/carrefour',
+  dia: '/proxy-api/dia',
+  changomas: '/proxy-api/changomas'
+};
+
+/**
+ * URLs directas de las APIs de los supermercados (para producción o entornos sin proxy).
+ */
+const DIRECT_URLS = {
+  carrefour: 'https://www.carrefour.com.ar',
+  dia: 'https://diaonline.supermercadosdia.com.ar',
+  changomas: 'https://www.masonline.com.ar'
+};
+
+/**
  * Searches for a product on a supermarket's catalog API by EAN/barcode.
- * Caches the response to avoid duplicate requests.
+ * Uses the local dev proxy to avoid CORS issues.
+ * Caches the response with a TTL to keep prices fresh.
  * 
  * @param {string} rawEan - The scanned barcode / EAN
  * @param {string} brandKey - The brand key ('carrefour', 'dia', or 'changomas')
@@ -50,13 +102,22 @@ export const fetchProductByEan = async (rawEan, brandKey = 'carrefour') => {
   const cacheBrand = memoryCaches[brandKey] ? brandKey : 'carrefour';
   const memoryCache = memoryCaches[cacheBrand];
 
-  // 1. Check in-memory cache
+  // 1. Check in-memory cache (with TTL)
   if (memoryCache.has(ean)) {
-    console.log(`[Cache Hit - Memory] Brand: ${cacheBrand}, EAN: ${ean}`);
-    return memoryCache.get(ean);
+    const cached = memoryCache.get(ean);
+    if (cached && cached._ts && (Date.now() - cached._ts) < CACHE_TTL_MS) {
+      console.log(`[Cache Hit - Memory] Brand: ${cacheBrand}, EAN: ${ean}`);
+      return cached;
+    } else if (cached === null) {
+      // Negative result cached recently — still skip
+      console.log(`[Cache Hit - Memory (not found)] Brand: ${cacheBrand}, EAN: ${ean}`);
+      return null;
+    }
+    // Expired, remove from memory
+    memoryCache.delete(ean);
   }
 
-  // 2. Check localStorage cache
+  // 2. Check localStorage cache (with TTL)
   const localCache = getStoredCache(cacheBrand);
   if (localCache[ean] !== undefined) {
     console.log(`[Cache Hit - LocalStorage] Brand: ${cacheBrand}, EAN: ${ean}`);
@@ -64,67 +125,76 @@ export const fetchProductByEan = async (rawEan, brandKey = 'carrefour') => {
     return localCache[ean];
   }
 
-  // Define base URL based on brand
-  let baseUrl = 'https://www.carrefour.com.ar';
-  if (brandKey === 'dia') {
-    baseUrl = 'https://diaonline.supermercadosdia.com.ar';
-  } else if (brandKey === 'changomas') {
-    baseUrl = 'https://www.masonline.com.ar';
-  }
-
-  const directUrl = `${baseUrl}/api/catalog_system/pub/products/search?fq=alternateIds_Ean:${ean}`;
-  const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(directUrl)}`;
+  const directBase = DIRECT_URLS[cacheBrand];
+  const apiPath = `/api/catalog_system/pub/products/search?fq=alternateIds_Ean:${ean}`;
 
   let responseData = null;
 
-  // 3. Perform Fetch (Try direct first, fallback to CORS proxies)
-  try {
-    console.log(`[Fetch Direct] Querying ${brandKey} API for EAN: ${ean}`);
-    const response = await fetch(directUrl);
-    if (response.ok) {
-      responseData = await response.json();
-    } else {
-      throw new Error(`Direct request failed with status: ${response.status}`);
+  /**
+   * Helper: intenta un fetch y parsea JSON. Retorna los datos o lanza un error.
+   */
+  const tryFetch = async (url, label) => {
+    console.log(`[${label}] Querying ${brandKey} for EAN: ${ean} → ${url}`);
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`${label} failed with status: ${response.status}`);
     }
-  } catch (directError) {
-    console.warn(`[Fetch Direct Failed] Direct call to ${brandKey} failed. Trying CORS Proxy 1 (corsproxy.io).`, directError);
-    
-    // Fallback 1: corsproxy.io
+    const text = await response.text();
+    // Verificar que sea JSON válido (no una página HTML de error)
+    if (text.startsWith('[') || text.startsWith('{')) {
+      return JSON.parse(text);
+    }
+    throw new Error(`${label} returned non-JSON response`);
+  };
+
+  // Estrategias de fetch en orden de prioridad:
+  const strategies = [
+    // 1. Vercel Serverless Function (funciona en Vercel producción Y en dev con setupProxy)
+    {
+      label: 'Serverless Proxy',
+      getUrl: () => `/api/supermarket-proxy?brand=${cacheBrand}&ean=${ean}`
+    },
+    // 2. Local dev proxy (funciona en desarrollo con npm start / setupProxy.js)
+    {
+      label: 'Dev Proxy',
+      getUrl: () => `${PROXY_PATHS[cacheBrand]}${apiPath}`
+    },
+    // 3. Fetch directo (funciona en webviews móviles sin restricción CORS)
+    {
+      label: 'Direct Fetch',
+      getUrl: () => `${directBase}${apiPath}`
+    },
+    // 4. CORS proxy público (corsproxy.io) - último recurso
+    {
+      label: 'CORS Proxy (corsproxy.io)',
+      getUrl: () => `https://corsproxy.io/?${encodeURIComponent(`${directBase}${apiPath}`)}`
+    },
+    // 5. CORS proxy público (allorigins) - último recurso
+    {
+      label: 'CORS Proxy (allorigins)',
+      getUrl: () => `https://api.allorigins.win/raw?url=${encodeURIComponent(`${directBase}${apiPath}`)}`
+    }
+  ];
+
+  for (const strategy of strategies) {
     try {
-      const proxy1Url = `https://corsproxy.io/?${encodeURIComponent(directUrl)}`;
-      console.log(`[Fetch Proxy 1] Querying ${brandKey} API via corsproxy.io for EAN: ${ean}`);
-      const response = await fetch(proxy1Url);
-      if (response.ok) {
-        responseData = await response.json();
-      } else {
-        throw new Error(`Proxy 1 request failed with status: ${response.status}`);
-      }
-    } catch (proxy1Error) {
-      console.warn(`[Fetch Proxy 1 Failed] Proxy 1 failed. Trying CORS Proxy 2 (allorigins).`, proxy1Error);
-      
-      // Fallback 2: allorigins.win
-      try {
-        console.log(`[Fetch Proxy 2] Querying ${brandKey} API via allorigins for EAN: ${ean}`);
-        const response = await fetch(proxyUrl);
-        if (response.ok) {
-          responseData = await response.json();
-        } else {
-          throw new Error(`Proxy 2 request failed with status: ${response.status}`);
-        }
-      } catch (proxy2Error) {
-        console.error(`[Fetch Failed] All direct and proxy queries failed for ${brandKey}.`, proxy2Error);
-        return null;
-      }
+      responseData = await tryFetch(strategy.getUrl(), strategy.label);
+      break; // Si funciona, salimos del loop
+    } catch (err) {
+      console.warn(`[${strategy.label} Failed] ${err.message}`);
     }
+  }
+
+  if (!responseData) {
+    console.error(`[Fetch Failed] All fetch strategies failed for ${brandKey}, EAN: ${ean}`);
+    return null;
   }
 
   // 4. Parse response
   if (!responseData || !Array.isArray(responseData) || responseData.length === 0) {
     console.log(`[Not Found] Product for EAN ${ean} not found in ${brandKey}.`);
-    // Cache the negative result too to prevent repeated queries for unknown products
+    // Cache the negative result in memory only (don't persist null to localStorage)
     memoryCache.set(ean, null);
-    const updatedCache = { ...getStoredCache(cacheBrand), [ean]: null };
-    saveStoredCache(cacheBrand, updatedCache);
     return null;
   }
 
@@ -158,7 +228,8 @@ export const fetchProductByEan = async (rawEan, brandKey = 'carrefour') => {
       imageUrl: item.images?.[0]?.imageUrl || null,
       productId: product.productId,
       itemId: item.itemId,
-      categories: product.categories || []
+      categories: product.categories || [],
+      _ts: Date.now() // Timestamp for cache TTL
     };
 
     console.log(`[Success] Found product in ${brandKey}: ${parsedProduct.nombre} - Price: $${parsedProduct.valor}`);
