@@ -208,7 +208,7 @@ export const fetchProductByEan = async (rawEan, brandKey = 'carrefour') => {
       return null;
     }
 
-    // Extract promo info
+    // Extract promo info from DiscountHighLight
     let promo_leyenda = null;
     if (offer.DiscountHighLight && Array.isArray(offer.DiscountHighLight) && offer.DiscountHighLight.length > 0) {
       const match = offer.DiscountHighLight[0];
@@ -217,11 +217,38 @@ export const fetchProductByEan = async (rawEan, brandKey = 'carrefour') => {
       }
     }
 
+    // Extract quantity-based promos from PromotionTeasers (e.g., "2do al 50%")
+    let promo_cantidad = null; // e.g., { min: 2, descuento: 50, leyenda: "2do al 50%" }
+    const promotionTeasers = offer.PromotionTeasers || offer.Teasers || [];
+    if (Array.isArray(promotionTeasers)) {
+      for (const teaser of promotionTeasers) {
+        const name = teaser.Name || teaser["<Name>k__BackingField"] || '';
+        // Match patterns like "2do al 50%", "2da al 70%", "Reg-2-50"
+        const regMatch = name.match(/Reg-(\d+)-(\d+)/i);
+        if (regMatch) {
+          const minQty = parseInt(regMatch[1], 10);
+          const descPct = parseInt(regMatch[2], 10);
+          if (minQty >= 2 && descPct > 0 && descPct <= 100) {
+            // Extract human-readable promo text
+            const humanMatch = name.match(/((?:2do|2da|3ro|3ra|\d+[a-z]{2})\s+al\s+\d+%)/i);
+            const leyenda = humanMatch ? humanMatch[1] : `${minQty}° al ${descPct}%`;
+            promo_cantidad = { min: minQty, descuento: descPct, leyenda };
+            // Use this promo_leyenda if we don't already have one
+            if (!promo_leyenda) {
+              promo_leyenda = leyenda;
+            }
+            break;
+          }
+        }
+      }
+    }
+
     const parsedProduct = {
       nombre: product.productName || item.nameComplete || item.name || '',
       valor: offer.Price,
       precio_original: offer.ListPrice && offer.ListPrice > offer.Price ? offer.ListPrice : null,
       promo_leyenda: promo_leyenda,
+      promo_cantidad: promo_cantidad,
       supermercado: brandKey === 'dia' ? 'Día' : (brandKey === 'changomas' ? 'Chango Más' : 'Carrefour'),
       brand: product.brand || '',
       ean: ean,

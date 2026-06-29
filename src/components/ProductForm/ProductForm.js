@@ -29,7 +29,9 @@ const ProductForm = ({ editandoId, productoAEditar, onAgregar, onEditar, onCance
     category: initialDefaultCategory.id, // Usamos la categoría inicial para el estado.
     icon: initialDefaultCategory.icon,
     precio_original: null,
-    promo_leyenda: null
+    promo_leyenda: null,
+    promo_cantidad: null,        // { min: 2, descuento: 50, leyenda: '2do al 50%' }
+    valor_unitario_base: null    // Precio unitario original sin descuento por cantidad
   });
   const [error, setError] = useState('');
 
@@ -60,6 +62,7 @@ const ProductForm = ({ editandoId, productoAEditar, onAgregar, onEditar, onCance
         ? parseInt(productoAEditar.category, 10)
         : productoAEditar.category;
 
+      const baseValor = productoAEditar.valor_unitario_base || productoAEditar.valor;
       setProductData({
         nombre: productoAEditar.nombre,
         valor: productoAEditar.valor.toString(),
@@ -67,7 +70,9 @@ const ProductForm = ({ editandoId, productoAEditar, onAgregar, onEditar, onCance
         category: loadedCategory || initialDefaultCategory.id,
         icon: productoAEditar.icon || initialDefaultCategory.icon,
         precio_original: productoAEditar.precio_original || null,
-        promo_leyenda: productoAEditar.promo_leyenda || null
+        promo_leyenda: productoAEditar.promo_leyenda || null,
+        promo_cantidad: productoAEditar.promo_cantidad || null,
+        valor_unitario_base: parseFloat(baseValor) || null
       });
     } else {
       // Si no estamos editando, reiniciamos el formulario a sus valores por defecto
@@ -79,7 +84,9 @@ const ProductForm = ({ editandoId, productoAEditar, onAgregar, onEditar, onCance
         category: initialDefaultCategory.id,
         icon: initialDefaultCategory.icon,
         precio_original: null,
-        promo_leyenda: null
+        promo_leyenda: null,
+        promo_cantidad: null,
+        valor_unitario_base: null
       });
       setError('');
     }
@@ -88,26 +95,69 @@ const ProductForm = ({ editandoId, productoAEditar, onAgregar, onEditar, onCance
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setProductData(prev => ({
-      ...prev,
-      [name]: value
-    }));
+    setProductData(prev => {
+      let updated = { ...prev, [name]: value };
+      if (name === 'cantidad') {
+        const qtyVal = parseInt(value, 10);
+        if (!isNaN(qtyVal) && qtyVal >= 1) {
+          updated.valor = updateValorWithPromo(qtyVal, prev);
+        }
+      }
+      return updated;
+    });
+  };
+
+  /**
+   * Calcula el precio promedio por unidad cuando hay una promo de cantidad.
+   * Ej: "2do al 50%" con precio base $2609 y qty=2:
+   *   Unidad 1: $2609, Unidad 2: $1304.50 → Promedio: $1956.75
+   */
+  const calcularPrecioConPromo = (qty, basePrice, promoCantidad) => {
+    if (!promoCantidad || !basePrice || qty < 1) return basePrice;
+    const { min, descuento } = promoCantidad;
+    if (qty < min) return basePrice; // No alcanza el mínimo
+
+    // Cada grupo de 'min' unidades: (min-1) a precio completo + 1 con descuento
+    const fullPriceUnits = min - 1; // ej: 1 a precio completo
+    const discountedUnits = 1;       // ej: 1 con descuento
+    const groupSize = fullPriceUnits + discountedUnits;
+    const groupTotal = (fullPriceUnits * basePrice) + (discountedUnits * basePrice * (1 - descuento / 100));
+
+    const fullGroups = Math.floor(qty / groupSize);
+    const remainder = qty % groupSize;
+
+    const total = (fullGroups * groupTotal) + (remainder * basePrice);
+    return Math.round((total / qty) * 100) / 100; // Promedio por unidad, redondeado a 2 decimales
+  };
+
+  const updateValorWithPromo = (newQty, prev) => {
+    if (prev.promo_cantidad && prev.valor_unitario_base) {
+      const newValor = calcularPrecioConPromo(newQty, prev.valor_unitario_base, prev.promo_cantidad);
+      return newValor.toString();
+    }
+    return prev.valor;
   };
 
   const handleIncrement = () => {
-    setProductData(prev => ({
-      ...prev,
-      cantidad: (parseInt(prev.cantidad || 0, 10) + 1).toString()
-    }));
+    setProductData(prev => {
+      const newQty = parseInt(prev.cantidad || 0, 10) + 1;
+      return {
+        ...prev,
+        cantidad: newQty.toString(),
+        valor: updateValorWithPromo(newQty, prev)
+      };
+    });
   };
 
   const handleDecrement = () => {
     setProductData(prev => {
       const current = parseInt(prev.cantidad || 0, 10);
       if (current <= 1) return prev;
+      const newQty = current - 1;
       return {
         ...prev,
-        cantidad: (current - 1).toString()
+        cantidad: newQty.toString(),
+        valor: updateValorWithPromo(newQty, prev)
       };
     });
   };
@@ -147,6 +197,8 @@ const ProductForm = ({ editandoId, productoAEditar, onAgregar, onEditar, onCance
       icon: productData.icon,
       precio_original: productData.precio_original,
       promo_leyenda: productData.promo_leyenda,
+      promo_cantidad: productData.promo_cantidad || null,
+      valor_unitario_base: productData.valor_unitario_base || parsedValor
     };
 
     if (editandoId) {
@@ -163,7 +215,9 @@ const ProductForm = ({ editandoId, productoAEditar, onAgregar, onEditar, onCance
       category: initialDefaultCategory.id,
       icon: initialDefaultCategory.icon,
       precio_original: null,
-      promo_leyenda: null
+      promo_leyenda: null,
+      promo_cantidad: null,
+      valor_unitario_base: null
     });
   };
 
@@ -215,7 +269,7 @@ const ProductForm = ({ editandoId, productoAEditar, onAgregar, onEditar, onCance
           required
         />
 
-        {((productData.precio_original && parseFloat(productData.precio_original) > parseFloat(productData.valor || 0)) || productData.promo_leyenda) && (
+        {((productData.precio_original && parseFloat(productData.precio_original) > parseFloat(productData.valor || 0)) || productData.promo_leyenda || productData.promo_cantidad) && (
           <div className="promo-info-badge" style={{
             marginTop: '-10px',
             marginBottom: '15px',
@@ -241,6 +295,25 @@ const ProductForm = ({ editandoId, productoAEditar, onAgregar, onEditar, onCance
             {productData.promo_leyenda && (
               <div>
                 <strong>Promo activa:</strong> {productData.promo_leyenda}
+              </div>
+            )}
+            {productData.promo_cantidad && (
+              <div>
+                <strong>🏷️ {productData.promo_cantidad.leyenda}:</strong>
+                {parseInt(productData.cantidad || 0) >= productData.promo_cantidad.min ? (
+                  <span style={{ marginLeft: '6px', fontWeight: 'bold', color: '#16a34a' }}>
+                    ✅ ¡Descuento aplicado! Precio promedio: ${parseFloat(productData.valor).toFixed(2)}/u
+                    {productData.valor_unitario_base && (
+                      <span style={{ marginLeft: '4px', opacity: 0.7, textDecoration: 'line-through' }}>
+                        ${productData.valor_unitario_base.toFixed(2)}
+                      </span>
+                    )}
+                  </span>
+                ) : (
+                  <span style={{ marginLeft: '6px', opacity: 0.8 }}>
+                    Llevando {productData.promo_cantidad.min} unidades
+                  </span>
+                )}
               </div>
             )}
           </div>

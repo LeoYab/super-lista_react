@@ -296,6 +296,7 @@ function MainAppContent() {
               valor: apiProduct.valor.toString(),
               precio_original: apiProduct.precio_original,
               promo_leyenda: apiProduct.promo_leyenda,
+              promo_cantidad: apiProduct.promo_cantidad,
               category: resolvedCat ? resolvedCat.id : prev?.category || 0,
               icon: resolvedCat ? resolvedCat.icon : prev?.icon || '🛒',
               cantidad: prev ? prev.cantidad : 1,

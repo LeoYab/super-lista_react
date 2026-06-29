@@ -38,7 +38,7 @@ export function useProducts(currentUser, currentListId) {
     if (!currentUser || !currentListId) return;
     try {
       await firebaseService.editProduct(currentUser.uid, currentListId, firebaseId, productData);
-      showSuccessAlert('¡Producto Actualizado!');
+      showSuccessToast('¡Producto Actualizado!');
     } catch (error) {
       console.error("Error al actualizar producto:", error);
       showErrorAlert('Error', 'No se pudo actualizar el producto.');
