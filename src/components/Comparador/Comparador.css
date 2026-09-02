@@ -15,8 +15,9 @@
 /* ─── Header ─────────────────────────────────────────── */
 .comparador-header {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
+  gap: var(--spacing-md);
   padding-bottom: var(--spacing-md);
   border-bottom: 2px solid var(--border-color);
 }

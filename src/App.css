@@ -394,13 +394,32 @@ body {
 
   .action-buttons-container {
     justify-content: center;
-    /* Center buttons on mobile */
+    /* Center buttons on mobile, wrap to a 2nd row instead of
+       overflowing/cutting off on narrow phones (4 x 72px buttons
+       don't fit in ~320px of width). */
+    flex-wrap: wrap;
     width: 100%;
+  }
+
+  .action-buttons-container .btn-square {
+    flex: 0 1 auto;
   }
 
   .list-header {
     top: 0;
     margin: 0 0 var(--spacing-md) 0;
     border-radius: 0 0 var(--border-radius) var(--border-radius);
+  }
+}
+
+@media (max-width: 360px) {
+  /* Shrink the square action buttons a bit so all 4 have a better
+     chance of fitting on one row on very narrow phones before the
+     flex-wrap fallback above kicks in. */
+  .action-buttons-container .btn-square {
+    min-width: 64px;
+    height: 64px;
+    padding: 6px;
+    font-size: 0.7rem;
   }
 }

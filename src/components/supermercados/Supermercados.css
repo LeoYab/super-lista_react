@@ -68,10 +68,19 @@
   box-shadow: var(--shadow-sm);
 }
 
-.supermarket-card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-md);
-  border-color: var(--primary-light-color);
+/* Only lift on hover for devices that actually have a mouse — on touch
+   screens :hover sticks after a tap (there's no pointer to "leave" with),
+   so the card would stay shifted up and overlap the heading above it. */
+@media (hover: hover) and (pointer: fine) {
+  .supermarket-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--primary-light-color);
+  }
+
+  .supermarket-card:hover .supermarket-logo {
+    transform: scale(1.1);
+  }
 }
 
 .supermarket-card.active {
@@ -86,10 +95,6 @@
   object-fit: contain;
   margin-bottom: 12px;
   transition: transform var(--transition-fast);
-}
-
-.supermarket-card:hover .supermarket-logo {
-  transform: scale(1.1);
 }
 
 .supermarket-name {
