@@ -8,11 +8,6 @@
 }
 
 .no-products-message {
-  text-align: center;
-  color: var(--text-color-secondary);
-  font-style: normal;
-  font-weight: 500;
-  padding: var(--spacing-xl);
   border: 2px dashed var(--border-color);
   border-radius: var(--border-radius-lg);
   background-color: rgba(255, 255, 255, 0.5);

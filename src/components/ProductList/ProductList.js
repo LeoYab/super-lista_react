@@ -10,13 +10,20 @@ const ProductList = ({ productos, busqueda, onEditar, categories = [], groupByCa
   );
 
   if (filteredProducts.length === 0) {
+    const isEmptyList = productos.length === 0;
     return (
       <div className="product-list-container">
-        <div className="no-products-message">
-          {productos.length === 0
-            ? "No hay productos en esta lista. ¡Agrega tu primer producto!"
-            : `No se encontraron productos que coincidan con "${busqueda}"`
-          }
+        <div className="empty-state no-products-message">
+          <span className="empty-icon">{isEmptyList ? '🛒' : '🔍'}</span>
+          <p className="empty-title">
+            {isEmptyList ? 'Tu lista está vacía' : 'Sin resultados'}
+          </p>
+          <p className="empty-description">
+            {isEmptyList
+              ? 'Agregá tu primer producto manualmente o escaneando su código de barras.'
+              : `No encontramos productos que coincidan con "${busqueda}".`
+            }
+          </p>
         </div>
       </div>
     );

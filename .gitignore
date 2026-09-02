@@ -25,3 +25,6 @@ yarn-error.log*
 /scripts/serviceAccountKey.json
 /src/data/temp_processing
 public/data/temp_processing/
+
+# local dev preview tooling
+/.claude

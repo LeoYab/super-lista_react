@@ -1,96 +1,121 @@
 // src/pages/AuthPage/AuthPage.js
 import React, { useState } from 'react';
+import { AlertCircle, Eye, EyeOff } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
-import './AuthPage.css'; // Asegúrate de que este archivo CSS exista
+import './AuthPage.css';
 
-// Importa tus componentes UI
 import Input from '../../components/Input/Input';
 import Button from '../../components/Buttons/Button';
 
 function AuthPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [isLogin, setIsLogin] = useState(true); // true para login, false para registro
+  const [showPassword, setShowPassword] = useState(false);
+  const [isLogin, setIsLogin] = useState(true);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const { signup, login } = useAuth(); // Asumiendo que useAuth proporciona estas funciones
+  const { signup, login } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(''); // Limpia errores previos
-    setLoading(true); // Inicia el estado de carga
+    setError('');
+    setLoading(true);
 
     try {
       if (isLogin) {
         await login(email, password);
-        // Opcional: Redirigir al usuario después de un login exitoso
-        // history.push('/dashboard'); // Si usas react-router-dom y tienes acceso a history
       } else {
         await signup(email, password);
-        // Opcional: Redirigir o notificar después de un registro exitoso
       }
     } catch (err) {
-      // Manejo de errores específicos de Firebase Auth
       if (err.code === 'auth/invalid-email') {
         setError('El formato del correo electrónico no es válido.');
-      } else if (err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password') {
+      } else if (err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password' || err.code === 'auth/invalid-credential') {
         setError('Correo electrónico o contraseña incorrectos.');
       } else if (err.code === 'auth/email-already-in-use') {
         setError('Este correo electrónico ya está registrado.');
       } else if (err.code === 'auth/weak-password') {
         setError('La contraseña debe tener al menos 6 caracteres.');
       } else {
-        // Error genérico
         setError('Error al autenticar. Por favor, inténtalo de nuevo.');
-        console.error("Error de autenticación:", err);
+        console.error('Error de autenticación:', err);
       }
     } finally {
-      setLoading(false); // Finaliza el estado de carga
+      setLoading(false);
     }
   };
 
   return (
     <div className="auth-page-container">
-      <div className="auth-form-card">
-        <h2>{isLogin ? 'Iniciar Sesión' : 'Registrarse'}</h2>
-        {/* Muestra el mensaje de error si existe */}
-        {error && <p className="auth-error">{error}</p>}
-        <form onSubmit={handleSubmit}>
-          {/* Componente Input para el Email */}
-          <Input
-            label="Email:"
-            id="email"
-            name="email" // Importante para la coherencia, aunque no se use en este handleChange directo
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            placeholder="tu@email.com" // Añadido para mejor UX
-          />
-          {/* Componente Input para la Contraseña */}
-          <Input
-            label="Contraseña:"
-            id="password"
-            name="password" // Importante para la coherencia
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            placeholder="******" // Añadido para mejor UX
-          />
-          {/* Componente Button para el envío del formulario */}
-          <Button type="submit" disabled={loading} variant="primary">
-            {loading ? 'Cargando...' : (isLogin ? 'Iniciar Sesión' : 'Registrarse')}
-          </Button>
-        </form>
-        <p className="toggle-auth">
-          {isLogin ? '¿No tienes una cuenta?' : '¿Ya tienes una cuenta?'}
-          {/* Usamos un span para el texto que cambia, mejor para semántica y clic */}
-          <span onClick={() => setIsLogin(!isLogin)} className="toggle-auth-link">
-            {isLogin ? ' Regístrate' : ' Inicia Sesión'}
-          </span>
-        </p>
+      <div>
+        <div className="auth-brand">
+          <img src="/logo512.png" alt="Super Lista" className="auth-brand-icon" />
+          <span className="auth-brand-title">Super Lista</span>
+        </div>
+
+        <div className="auth-form-card">
+          <h2>{isLogin ? 'Bienvenido de nuevo' : 'Creá tu cuenta'}</h2>
+          <p className="auth-form-subtitle">
+            {isLogin ? 'Iniciá sesión para ver tus listas' : 'Registrate para empezar a organizar tus compras'}
+          </p>
+
+          {error && (
+            <p className="auth-error">
+              <AlertCircle size={16} />
+              {error}
+            </p>
+          )}
+
+          <form onSubmit={handleSubmit}>
+            <Input
+              label="Email"
+              id="email"
+              name="email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              placeholder="tu@email.com"
+              autoComplete="email"
+            />
+
+            <div className="auth-password-field">
+              <Input
+                label="Contraseña"
+                id="password"
+                name="password"
+                type={showPassword ? 'text' : 'password'}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                placeholder="••••••••"
+                autoComplete={isLogin ? 'current-password' : 'new-password'}
+                minLength={6}
+              />
+              <button
+                type="button"
+                className="auth-password-toggle"
+                onClick={() => setShowPassword(!showPassword)}
+                title={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
+                tabIndex={-1}
+              >
+                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+              </button>
+            </div>
+
+            <Button type="submit" disabled={loading} variant="primary" className="auth-submit-btn" size="large">
+              {loading ? 'Cargando...' : (isLogin ? 'Iniciar Sesión' : 'Registrarse')}
+            </Button>
+          </form>
+
+          <p className="toggle-auth">
+            {isLogin ? '¿No tenés una cuenta?' : '¿Ya tenés una cuenta?'}
+            <span onClick={() => { setIsLogin(!isLogin); setError(''); }} className="toggle-auth-link">
+              {isLogin ? ' Registrate' : ' Iniciá sesión'}
+            </span>
+          </p>
+        </div>
       </div>
     </div>
   );
