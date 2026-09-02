@@ -1,11 +1,12 @@
 // src/pages/AuthPage/AuthPage.js
 import React, { useState } from 'react';
-import { AlertCircle, Eye, EyeOff } from 'lucide-react';
+import { AlertCircle, Eye, EyeOff, Sun, Moon } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import './AuthPage.css';
 
 import Input from '../../components/Input/Input';
 import Button from '../../components/Buttons/Button';
+import { useTheme } from '../../hooks/useTheme';
 
 function AuthPage() {
   const [email, setEmail] = useState('');
@@ -16,6 +17,7 @@ function AuthPage() {
   const [loading, setLoading] = useState(false);
 
   const { signup, login } = useAuth();
+  const { theme, toggleTheme } = useTheme();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -48,6 +50,14 @@ function AuthPage() {
 
   return (
     <div className="auth-page-container">
+      <Button
+        onClick={toggleTheme}
+        variant="ghost"
+        size="small"
+        title={theme === 'dark' ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
+        icon={theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
+        className="auth-theme-toggle"
+      />
       <div>
         <div className="auth-brand">
           <img src="/logo512.png" alt="Super Lista" className="auth-brand-icon" />

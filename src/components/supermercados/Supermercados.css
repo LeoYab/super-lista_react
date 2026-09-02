@@ -116,6 +116,18 @@
   margin-bottom: 32px;
   display: flex;
   gap: 16px;
+  align-items: flex-start;
+}
+
+.product-search-bar .input-group {
+  flex: 1;
+  min-width: 0;
+}
+
+.product-search-bar-actions {
+  display: flex;
+  gap: 10px;
+  flex-shrink: 0;
 }
 
 .product-categories-wrapper {
@@ -180,18 +192,36 @@
     padding: 24px 16px;
   }
 
+  .supermarket-slider-wrapper h3 {
+    font-size: 0.85rem;
+    white-space: nowrap;
+  }
+
   .supermarket-card {
-    width: 110px;
-    padding: 16px;
+    width: 90px;
+    padding: 10px;
   }
 
   .supermarket-logo {
-    width: 60px;
-    height: 60px;
+    width: 44px;
+    height: 44px;
+    margin-bottom: 6px;
+  }
+
+  .supermarket-name {
+    font-size: 0.8rem;
   }
 
   .product-search-bar {
     flex-direction: column;
+  }
+
+  .product-search-bar-actions {
+    width: 100%;
+  }
+
+  .product-search-bar-actions .btn {
+    flex: 1;
   }
 }
 

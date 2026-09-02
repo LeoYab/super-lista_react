@@ -115,30 +115,30 @@ const SidebarMenu = () => {
       {/* El menú lateral en sí */}
       <div className={`sidebar-menu ${isMenuOpen ? 'open' : ''}`}>
         <div className="menu-header">
-          {currentUser && (
-            <p className="user-email-display">
-              Bienvenido, <br />
-              <strong>{currentUser.email}</strong>
-            </p>
-          )}
-          <div className="menu-header-actions">
-            <Button
-              onClick={toggleTheme}
-              variant="ghost"
-              size="small"
-              title={theme === 'dark' ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
-              icon={theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
-            />
-            {/* Botón de Cerrar Sesión (ahora un componente Button) */}
-            <Button
-              className="logout-button-menu"
-              onClick={logout}
-              variant="ghost"
-              size="small"
-              title="Cerrar sesión"
-              icon={<LogOut size={16} />}
-            />
+          <div className="menu-header-top">
+            <span className="menu-header-greeting">Bienvenido</span>
+            <div className="menu-header-actions">
+              <Button
+                onClick={toggleTheme}
+                variant="ghost"
+                size="small"
+                title={theme === 'dark' ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
+                icon={theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
+              />
+              {/* Botón de Cerrar Sesión (ahora un componente Button) */}
+              <Button
+                className="logout-button-menu"
+                onClick={logout}
+                variant="ghost"
+                size="small"
+                title="Cerrar sesión"
+                icon={<LogOut size={16} />}
+              />
+            </div>
           </div>
+          {currentUser && (
+            <p className="user-email-display">{currentUser.email}</p>
+          )}
         </div>
 
         <div className="menu-section">

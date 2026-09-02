@@ -212,6 +212,7 @@
 .quick-add-form .input-group,
 .quick-add-form .name-group {
   flex: 1;
+  min-width: 0;
   margin-bottom: 0;
 }
 

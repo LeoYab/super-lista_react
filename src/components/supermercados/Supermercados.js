@@ -466,6 +466,10 @@ const Supermercados = () => {
       }
 
       console.log("Debug - Sucursal y Marca seleccionadas. Se espera la búsqueda para cargar productos.");
+      // Hay una sucursal válida seleccionada: limpiar cualquier error previo
+      // (p.ej. el de "no se encontró sucursal" que pudo haberse seteado
+      // mientras la búsqueda de sucursal todavía estaba en curso).
+      setError(null);
       // Reiniciar estados relevantes para una nueva selección de sucursal
       setProductsToDisplay([]);
       lastVisibleProductRef.current = null;
@@ -1016,55 +1020,54 @@ const Supermercados = () => {
               </div>
 
               {error && <p className="error-message">{error}</p>}
-              <p className="data-source-info">Datos cargados desde: <strong>{dataSource}</strong></p>
 
               <div className="product-search-bar">
                 <Input
                   id="busquedaSuper"
                   name="busquedaSuper"
                   type="text"
-                  placeholder="Buscar productos por nombre o marca..."
+                  placeholder="Buscar producto..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   onKeyDown={handleKeyDown}
                   disabled={!selectedBranch || isLoadingProducts}
                 />
-                <Button
-                  onClick={handleSearch}
-                  size="small"
-                  variant="primary"
-                  disabled={!selectedBranch || isLoadingProducts}
-                >
-                  Buscar
-                </Button>
-                <Button
-                  onClick={() => setShowScanner(true)}
-                  size="small"
-                  variant="secondary"
-                  style={{ marginLeft: '10px' }}
-                >
-                  📷 Escanear
-                </Button>
-                {isSearching && (
+                <div className="product-search-bar-actions">
                   <Button
-                    onClick={() => {
-                      setSearchTerm('');
-                      setIsSearching(false);
-                      setProductsToDisplay([]);
-                      lastVisibleProductRef.current = null;
-                      localPaginationIndexRef.current = 0;
-                      filteredLocalProductsRef.current = [];
-                      setHasMoreProducts(true);
-                      // CAMBIO: Al limpiar, no se carga nada, solo se espera la nueva búsqueda
-                      // fetchProductsData(selectedBrand.id, selectedBranch.id_sucursal, true, false, '');
-                    }}
+                    onClick={handleSearch}
+                    size="small"
+                    variant="primary"
+                    disabled={!selectedBranch || isLoadingProducts}
+                  >
+                    Buscar
+                  </Button>
+                  <Button
+                    onClick={() => setShowScanner(true)}
                     size="small"
                     variant="secondary"
-                    style={{ marginLeft: '10px' }}
                   >
-                    Limpiar
+                    📷 Escanear
                   </Button>
-                )}
+                  {isSearching && (
+                    <Button
+                      onClick={() => {
+                        setSearchTerm('');
+                        setIsSearching(false);
+                        setProductsToDisplay([]);
+                        lastVisibleProductRef.current = null;
+                        localPaginationIndexRef.current = 0;
+                        filteredLocalProductsRef.current = [];
+                        setHasMoreProducts(true);
+                        // CAMBIO: Al limpiar, no se carga nada, solo se espera la nueva búsqueda
+                        // fetchProductsData(selectedBrand.id, selectedBranch.id_sucursal, true, false, '');
+                      }}
+                      size="small"
+                      variant="secondary"
+                    >
+                      Limpiar
+                    </Button>
+                  )}
+                </div>
               </div>
 
               {isLoadingProducts && productsToDisplay.length === 0 ? (

@@ -134,25 +134,30 @@
 /* Menu Header */
 .menu-header {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--spacing-sm);
+  flex-direction: column;
+  gap: 2px;
   border-bottom: 1px solid var(--border-color-light);
   padding-bottom: var(--spacing-md);
   text-align: left;
 }
 
-.user-email-display {
-  font-size: 0.85rem;
-  color: var(--text-color-secondary);
-  min-width: 0;
+.menu-header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-sm);
 }
 
-.user-email-display strong {
+.menu-header-greeting {
+  font-size: 0.85rem;
+  color: var(--text-color-secondary);
+}
+
+.user-email-display {
   color: var(--text-color-primary);
   font-size: 1rem;
-  display: block;
-  margin-top: 2px;
+  font-weight: 700;
+  margin: 0;
   overflow-wrap: anywhere;
 }
 
