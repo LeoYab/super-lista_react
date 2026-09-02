@@ -1,6 +1,7 @@
 // src/components/SidebarMenu/SidebarMenu.js
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // <--- IMPORTA useNavigate
+import { LogOut, Store } from 'lucide-react';
 import './SidebarMenu.css';
 // REMOVED: import Swal from 'sweetalert2'; // ¡Eliminamos esta importación!
 
@@ -119,9 +120,14 @@ const SidebarMenu = () => {
             </p>
           )}
           {/* Botón de Cerrar Sesión (ahora un componente Button) */}
-          <Button className="logout-button-menu" onClick={logout} variant="danger">
-            Cerrar Sesión
-          </Button>
+          <Button
+            className="logout-button-menu"
+            onClick={logout}
+            variant="ghost"
+            size="small"
+            title="Cerrar sesión"
+            icon={<LogOut size={16} />}
+          />
         </div>
 
         <div className="menu-section">
@@ -202,7 +208,7 @@ const SidebarMenu = () => {
           <h4>Otras Secciones</h4>
           <ul>
             <li className="list-item" onClick={handleGoToSupermercados}>
-              <span className="list-date">🛒</span> Explorar Supermercados
+              <Store size={16} /> Explorar Supermercados
             </li>
             {/* Puedes agregar más enlaces aquí si los necesitas */}
           </ul>

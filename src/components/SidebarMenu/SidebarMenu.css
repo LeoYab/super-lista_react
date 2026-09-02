@@ -130,27 +130,37 @@
 
 /* Menu Header */
 .menu-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-sm);
   border-bottom: 1px solid var(--border-color-light);
   padding-bottom: var(--spacing-md);
-  text-align: center;
+  text-align: left;
 }
 
 .user-email-display {
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   color: var(--text-color-secondary);
-  margin-bottom: var(--spacing-md);
+  min-width: 0;
 }
 
 .user-email-display strong {
   color: var(--text-color-primary);
-  font-size: 1.1rem;
+  font-size: 1rem;
   display: block;
-  margin-top: 4px;
+  margin-top: 2px;
+  overflow-wrap: anywhere;
 }
 
 .logout-button-menu {
-  width: 100%;
-  justify-content: center;
+  flex-shrink: 0;
+  color: var(--text-color-light) !important;
+}
+
+.logout-button-menu:hover {
+  color: var(--danger-color) !important;
+  background-color: #fee2e2 !important;
 }
 
 /* Menu Sections */

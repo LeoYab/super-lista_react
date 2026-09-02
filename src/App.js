@@ -215,10 +215,10 @@ function MainAppContent() {
         });
 
       }, (error) => {
+        // La detección de supermercado cercano es una mejora opcional:
+        // si el usuario no dio permiso de GPS o falló, fallamos en silencio
+        // en vez de interrumpirlo con un modal de error en cada carga.
         console.warn("Error obteniendo ubicación:", error);
-        if (error.code === 1) {
-          showErrorAlert("Permiso GPS Denegado", "Por favor habilita el GPS para detectar el supermercado cercano.");
-        }
       }, { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 });
     } else {
       console.warn("Geolocalización no soportada en este navegador.");
