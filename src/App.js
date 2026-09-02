@@ -509,7 +509,7 @@ function MainAppContent() {
                 <div className="list-header-stats">
                   <span className="stat-item">
                     <span>Productos: </span>
-                    <span dangerouslySetInnerHTML={{ __html: totalProductos || '<em style="font-weight: lighter;">Vacío</em>' }}></span>
+                    <span>{totalProductos || <em style={{ fontWeight: 'lighter' }}>Vacío</em>}</span>
 
                   </span>
                   <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px' }}>

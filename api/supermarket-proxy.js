@@ -8,7 +8,38 @@ const BRAND_URLS = {
   changomas: 'https://www.masonline.com.ar'
 };
 
+// Orígenes desde los que se permite llamar a este endpoint.
+// Configurable vía env var para no hardcodear el dominio de producción.
+const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGIN || 'http://localhost:3000')
+  .split(',')
+  .map(o => o.trim());
+
+// Rate limiting básico en memoria (por instancia serverless "caliente").
+// No es robusto entre instancias frías, pero frena ráfagas de abuso baratas.
+const RATE_LIMIT_WINDOW_MS = 60_000;
+const RATE_LIMIT_MAX = 30;
+const requestLog = new Map();
+
+function isRateLimited(ip) {
+  const now = Date.now();
+  const timestamps = (requestLog.get(ip) || []).filter(t => now - t < RATE_LIMIT_WINDOW_MS);
+  timestamps.push(now);
+  requestLog.set(ip, timestamps);
+  return timestamps.length > RATE_LIMIT_MAX;
+}
+
 module.exports = async (req, res) => {
+  const origin = req.headers.origin;
+  if (origin && ALLOWED_ORIGINS.includes(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+  }
+  res.setHeader('Vary', 'Origin');
+
+  const ip = req.headers['x-forwarded-for']?.split(',')[0]?.trim() || req.socket?.remoteAddress || 'unknown';
+  if (isRateLimited(ip)) {
+    return res.status(429).json({ error: 'Demasiadas solicitudes. Intentá de nuevo en un minuto.' });
+  }
+
   const { brand, ean } = req.query;
 
   // Validaciones
@@ -38,7 +69,6 @@ module.exports = async (req, res) => {
 
     // Permitir caché en el edge por 5 minutos, pero revalidar
     res.setHeader('Cache-Control', 's-maxage=300, stale-while-revalidate=600');
-    res.setHeader('Access-Control-Allow-Origin', '*');
     return res.status(200).json(data);
   } catch (error) {
     console.error(`Error proxying to ${brand}:`, error);
