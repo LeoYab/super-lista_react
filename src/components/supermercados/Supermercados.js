@@ -11,6 +11,7 @@ import { useUserListsContext } from '../../context/UserListsContext';
 import { subscribeToCategories, addCategory } from '../../services/firebaseService';
 import { showErrorAlert } from '../../Notifications/NotificationsServices';
 import { fetchProductByEan } from '../../services/supermarketService';
+import { BrandGridSkeleton, ProductListSkeleton } from '../Skeleton/Skeleton';
 
 
 const PRODUCTS_PER_PAGE = 20;
@@ -106,6 +107,7 @@ const Supermercados = () => {
   const [availableBranches, setAvailableBranches] = useState([]);
   const [branchSearchTerm, setBranchSearchTerm] = useState('');
   const [isBranchDropdownOpen, setIsBranchDropdownOpen] = useState(false);
+  const branchDropdownRef = useRef(null);
   // Unused state removed
 
   const [dataSource, setDataSource] = useState('Firestore');
@@ -127,6 +129,27 @@ const Supermercados = () => {
     });
     return () => unsubscribe();
   }, []);
+
+  // Cierra el dropdown de sucursal al hacer click afuera o presionar Escape
+  useEffect(() => {
+    if (!isBranchDropdownOpen) return;
+
+    const handleClickOutside = (e) => {
+      if (branchDropdownRef.current && !branchDropdownRef.current.contains(e.target)) {
+        setIsBranchDropdownOpen(false);
+      }
+    };
+    const handleEscape = (e) => {
+      if (e.key === 'Escape') setIsBranchDropdownOpen(false);
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('keydown', handleEscape);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleEscape);
+    };
+  }, [isBranchDropdownOpen]);
 
   const handleAddProductToUserList = useCallback((product) => {
     if (!currentListId) {
@@ -560,7 +583,7 @@ const Supermercados = () => {
     console.log(`Normalized scanned code: ${normalizedScannedCode}`);
 
     if (!selectedBrand || !selectedBranch) {
-      alert("Por favor, selecciona un supermercado y sucursal primero.");
+      showErrorAlert('Falta seleccionar sucursal', 'Por favor, selecciona un supermercado y sucursal primero.');
       return;
     }
 
@@ -624,12 +647,12 @@ const Supermercados = () => {
           };
           setScannedProducts([result]);
         } else {
-          alert(`No se encontró el producto en esta sucursal: ${decodedText}`);
+          showErrorAlert('Producto no encontrado', `No se encontró el producto en esta sucursal: ${decodedText}`);
           setScannedProducts([]);
         }
       } catch (e) {
         console.error("Error buscando producto escaneado:", e);
-        alert(`Error al buscar el producto: ${e.message}`);
+        showErrorAlert('Error', `Error al buscar el producto: ${e.message}`);
         setScannedProducts([]);
       }
     };
@@ -657,7 +680,7 @@ const Supermercados = () => {
       onScanSuccess(decodedText.decodedText, decodedText);
     } catch (err) {
       console.error("Error scanning file:", err);
-      alert("No se pudo detectar un código de barras en la imagen. Intenta con una imagen más clara.");
+      showErrorAlert('No se detectó el código', 'No se pudo detectar un código de barras en la imagen. Intenta con una imagen más clara.');
     }
   };
 
@@ -714,7 +737,7 @@ const Supermercados = () => {
               userMsg += ` Detalles: ${err.message || err}`;
             }
 
-            alert(`${userMsg} (Asegúrate de usar HTTPS si no es localhost)`);
+            showErrorAlert('Error de cámara', `${userMsg} (Asegúrate de usar HTTPS si no es localhost)`);
             setShowScanner(false);
           });
       }, 100);
@@ -848,7 +871,7 @@ const Supermercados = () => {
       <div className="supermarket-slider-wrapper">
         <h3>Selecciona un Supermercado:</h3>
         {isLoadingBrands ? (
-          <p className="loading-message">Cargando marcas de supermercados...</p>
+          <BrandGridSkeleton count={6} />
         ) : (
           <div className="supermarket-slider">
             {allBrandsFirebase.length > 0 ? (
@@ -886,11 +909,22 @@ const Supermercados = () => {
                 {availableBranches.length > 0 && (
                   <div className="branch-selection-controls" style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
 
-                    <div className="custom-dropdown-container">
-                      <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>Sucursal:</label>
+                    <div className="custom-dropdown-container" ref={branchDropdownRef}>
+                      <label id="branch-select-label" style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>Sucursal:</label>
                       <div
                         className="dropdown-trigger"
+                        role="button"
+                        tabIndex={0}
+                        aria-haspopup="listbox"
+                        aria-expanded={isBranchDropdownOpen}
+                        aria-labelledby="branch-select-label"
                         onClick={() => setIsBranchDropdownOpen(!isBranchDropdownOpen)}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            setIsBranchDropdownOpen(!isBranchDropdownOpen);
+                          }
+                        }}
                       >
                         <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                           {selectedBranch ? (() => {
@@ -913,12 +947,13 @@ const Supermercados = () => {
                               autoFocus
                               className="dropdown-search-input"
                               placeholder="🔍 Buscar sucursal..."
+                              aria-label="Buscar sucursal"
                               value={branchSearchTerm}
                               onChange={(e) => setBranchSearchTerm(e.target.value)}
                               onClick={(e) => e.stopPropagation()}
                             />
                           </div>
-                          <div className="dropdown-list">
+                          <div className="dropdown-list" role="listbox" aria-label="Sucursales">
                             {availableBranches
                               .filter(branch => {
                                 if (!branchSearchTerm) return true;
@@ -935,6 +970,17 @@ const Supermercados = () => {
                                   <div
                                     key={branch.id_sucursal}
                                     className="dropdown-item"
+                                    role="option"
+                                    aria-selected={selectedBranch?.id_sucursal === branch.id_sucursal}
+                                    tabIndex={0}
+                                    onKeyDown={(e) => {
+                                      if (e.key === 'Enter' || e.key === ' ') {
+                                        e.preventDefault();
+                                        setSelectedBranch(branch);
+                                        setIsBranchDropdownOpen(false);
+                                        setBranchSearchTerm('');
+                                      }
+                                    }}
                                     onClick={() => {
                                       setSelectedBranch(branch);
                                       setIsBranchDropdownOpen(false);
@@ -1022,7 +1068,7 @@ const Supermercados = () => {
               </div>
 
               {isLoadingProducts && productsToDisplay.length === 0 ? (
-                <p className="loading-message">Cargando productos...</p>
+                <ProductListSkeleton rows={4} />
               ) : (
                 groupedProductsByBrand.length > 0 ? (
                   <div className="product-categories-wrapper">

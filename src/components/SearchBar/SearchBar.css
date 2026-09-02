@@ -50,7 +50,7 @@
 }
 
 .clear-search-button:hover {
-  background-color: rgba(0, 0, 0, 0.05);
+  background-color: var(--hairline-shade);
   color: var(--text-color-primary);
 }
 

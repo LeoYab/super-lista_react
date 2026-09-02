@@ -8,6 +8,18 @@
   --primary-hover: #4f46e5;       /* Indigo 600 */
   --primary-light-color: #e0e7ff; /* Indigo 100 */
   --primary-dark-color: #4338ca;  /* Indigo 700 */
+  /* Fixed deep indigo for solid fills paired with white text (badges, primary CTAs).
+     Unlike --primary-dark-color, this does NOT flip lighter in dark mode, so
+     white text keeps WCAG AA contrast (~8:1) in both themes. */
+  --primary-solid-end: #4338ca;
+  --primary-solid-hover: #3730a3;
+  /* Same idea for success/danger solid fills: the 500-shade tokens above
+     read as ~2.5-3.8:1 against white (fails WCAG AA even in light mode),
+     so solid white-text fills use these darker, fixed 700/600 shades instead. */
+  --success-solid: #047857;
+  --success-solid-hover: #065f46;
+  --danger-solid: #dc2626;
+  --danger-solid-hover: #b91c1c;
 
   /* Accent Colors */
   --accent-color: #10b981;        /* Emerald 500 (Success) */
@@ -15,6 +27,10 @@
   --secondary-accent: #f59e0b;    /* Amber 500 (Warning) */
   --danger-color: #ef4444;        /* Red 500 (Error/Delete) */
   --danger-hover: #dc2626;        /* Red 600 */
+  --danger-light-color: #fee2e2;  /* Red 100 */
+  --danger-text-color: #991b1b;   /* Red 800, readable on --danger-light-color */
+  --success-light-color: #d1fae5; /* Emerald 100 */
+  --success-text-color: #065f46;  /* Emerald 800, readable on --success-light-color */
 
   /* Neutral / Backgrounds */
   --background-color: #f8fafc;    /* Slate 50 */
@@ -28,6 +44,14 @@
   --text-color-secondary: #64748b;/* Slate 500 */
   --text-color-light: #94a3b8;    /* Slate 400 */
   --text-color-inverse: #ffffff;  /* White text */
+
+  /* Glass / overlay surfaces (theme-aware) */
+  --glass-bg-strong: rgba(255, 255, 255, 0.85);
+  --glass-bg-soft: rgba(255, 255, 255, 0.6);
+  --glass-border: rgba(255, 255, 255, 0.5);
+  --bg-glass: rgba(248, 250, 252, 0.95);
+  --scrim-color: rgba(15, 23, 42, 0.4);
+  --hairline-shade: rgba(0, 0, 0, 0.05);
 
   /* Shadows (Soft/Floating) */
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
@@ -58,4 +82,54 @@
 
   /* Typography */
   --font-family: 'Outfit', 'Inter', sans-serif;
+
+  color-scheme: light;
+}
+
+/*
+  Dark theme. The app sets data-theme="dark"|"light" on <html> on load
+  (see src/hooks/useTheme.js), computed from the saved preference or the
+  OS setting, so this single explicit selector is the only source of truth
+  — no reliance on prefers-color-scheme cascading here.
+*/
+:root[data-theme="dark"] {
+  --primary-color: #818cf8;
+  --primary-hover: #a5b4fc;
+  --primary-light-color: rgba(129, 140, 248, 0.16);
+  --primary-dark-color: #c7d2fe;
+
+  --accent-color: #34d399;
+  --accent-hover: #6ee7b7;
+  --secondary-accent: #fbbf24;
+  --danger-color: #f87171;
+  --danger-hover: #fca5a5;
+  --danger-light-color: rgba(248, 113, 113, 0.16);
+  --danger-text-color: #fca5a5;
+  --success-light-color: rgba(52, 211, 153, 0.16);
+  --success-text-color: #6ee7b7;
+
+  --background-color: #0f172a;
+  --card-bg-color: #1e293b;
+  --input-bg-color: #16213a;
+  --border-color: #334155;
+  --border-color-light: #263449;
+
+  --text-color-primary: #f1f5f9;
+  --text-color-secondary: #94a3b8;
+  --text-color-light: #64748b;
+  --text-color-inverse: #0f172a;
+
+  --glass-bg-strong: rgba(30, 41, 59, 0.85);
+  --glass-bg-soft: rgba(30, 41, 59, 0.6);
+  --glass-border: rgba(148, 163, 184, 0.15);
+  --bg-glass: rgba(15, 23, 42, 0.95);
+  --scrim-color: rgba(0, 0, 0, 0.6);
+  --hairline-shade: rgba(255, 255, 255, 0.06);
+
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4), 0 2px 4px -2px rgb(0 0 0 / 0.4);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.4), 0 4px 6px -4px rgb(0 0 0 / 0.4);
+  --shadow-strong: 0 20px 25px -5px rgb(0 0 0 / 0.5), 0 8px 10px -6px rgb(0 0 0 / 0.5);
+
+  color-scheme: dark;
 }

@@ -101,10 +101,10 @@
 
 .product-item-promo-legend {
   font-size: 0.7rem;
-  color: #e53e3e;
+  color: var(--danger-text-color);
   font-weight: 600;
   margin-top: 4px;
-  background-color: #fff5f5;
+  background-color: var(--danger-light-color);
   padding: 2px 6px;
   border-radius: 4px;
   display: inline-block;
@@ -125,9 +125,9 @@
 
 .product-item-promo-price {
   font-size: 0.7rem;
-  color: #c53030;
+  color: var(--danger-text-color);
   font-weight: 800;
-  background-color: #fff5f5;
+  background-color: var(--danger-light-color);
   padding: 2px 6px;
   border-radius: 4px;
   margin-top: 2px;
@@ -159,7 +159,7 @@
 .product-item-total-price {
   font-size: 1rem;
   font-weight: 700;
-  background-color: var(--accent-color);
+  background-color: var(--success-solid);
   color: white;
   padding: 4px 12px;
   border-radius: var(--border-radius-full);
@@ -199,13 +199,13 @@
 
 .product-item-delete-overlay {
   right: 0;
-  background-color: var(--danger-color);
+  background-color: var(--danger-solid);
   border-radius: 0 var(--border-radius) var(--border-radius) 0;
 }
 
 .product-item-edit-overlay {
   left: 0;
-  background-color: var(--primary-color);
+  background-color: var(--primary-solid-end);
   border-radius: var(--border-radius) 0 0 var(--border-radius);
 }
 

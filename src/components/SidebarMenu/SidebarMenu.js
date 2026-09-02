@@ -1,8 +1,9 @@
 // src/components/SidebarMenu/SidebarMenu.js
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // <--- IMPORTA useNavigate
-import { LogOut, Store } from 'lucide-react';
+import { LogOut, Store, Sun, Moon } from 'lucide-react';
 import './SidebarMenu.css';
+import { useTheme } from '../../hooks/useTheme';
 // REMOVED: import Swal from 'sweetalert2'; // ¡Eliminamos esta importación!
 
 // IMPORT NEW SERVICE: Importa tus funciones de notificación
@@ -41,6 +42,7 @@ const SidebarMenu = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [newListName, setNewListName] = useState('');
   const navigate = useNavigate(); // <--- INICIALIZA useNavigate
+  const { theme, toggleTheme } = useTheme();
 
   const handleCreateList = () => {
     if (newListName.trim()) {
@@ -119,15 +121,24 @@ const SidebarMenu = () => {
               <strong>{currentUser.email}</strong>
             </p>
           )}
-          {/* Botón de Cerrar Sesión (ahora un componente Button) */}
-          <Button
-            className="logout-button-menu"
-            onClick={logout}
-            variant="ghost"
-            size="small"
-            title="Cerrar sesión"
-            icon={<LogOut size={16} />}
-          />
+          <div className="menu-header-actions">
+            <Button
+              onClick={toggleTheme}
+              variant="ghost"
+              size="small"
+              title={theme === 'dark' ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
+              icon={theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
+            />
+            {/* Botón de Cerrar Sesión (ahora un componente Button) */}
+            <Button
+              className="logout-button-menu"
+              onClick={logout}
+              variant="ghost"
+              size="small"
+              title="Cerrar sesión"
+              icon={<LogOut size={16} />}
+            />
+          </div>
         </div>
 
         <div className="menu-section">

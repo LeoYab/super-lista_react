@@ -22,6 +22,7 @@ import Button from './components/Buttons/Button';
 import CategoryFilter from './components/CategoryFilter/CategoryFilter';
 import Supermercados from './components/supermercados/Supermercados';
 import Comparador from './components/Comparador/Comparador';
+import { ProductListSkeleton } from './components/Skeleton/Skeleton';
 import { Html5Qrcode, Html5QrcodeSupportedFormats } from "html5-qrcode";
 import { showErrorAlert, showSuccessToast } from './Notifications/NotificationsServices';
 import { fetchProductByEan } from './services/supermarketService';
@@ -497,7 +498,7 @@ function MainAppContent() {
 
         <div className="main-content-area">
           {loadingLists ? (
-            <p className="loading-message">Cargando tus listas...</p>
+            <ProductListSkeleton rows={3} />
           ) : currentListId ? (
             <>
               <div className="list-header">
@@ -547,7 +548,7 @@ function MainAppContent() {
                 </div>
               </div>
               {loadingProducts ? (
-                <p className="loading-message">Cargando productos...</p>
+                <ProductListSkeleton rows={4} />
               ) : (
                 <ProductList
                   productos={filteredProducts}
@@ -693,7 +694,12 @@ function AppRouter() {
   }, []);
 
   if (!authLoaded) {
-    return <div className="loading-auth">Cargando autenticación...</div>;
+    return (
+      <div className="loading-auth" role="status" aria-label="Cargando">
+        <img src="/logo512.png" alt="" className="loading-auth-icon" />
+        <div className="loading-auth-spinner"></div>
+      </div>
+    );
   }
 
   return (

@@ -93,6 +93,31 @@
   color: #b91c1c;
 }
 
+:root[data-theme="dark"] .gps-state-idle,
+:root[data-theme="dark"] .gps-state-loading {
+  background-color: rgba(59, 130, 246, 0.12);
+  border-color: rgba(96, 165, 250, 0.4);
+  color: #93c5fd;
+}
+
+:root[data-theme="dark"] .gps-state-success {
+  background-color: rgba(34, 197, 94, 0.12);
+  border-color: rgba(74, 222, 128, 0.4);
+  color: #86efac;
+}
+
+:root[data-theme="dark"] .gps-state-warning {
+  background-color: rgba(245, 158, 11, 0.12);
+  border-color: rgba(251, 191, 36, 0.4);
+  color: #fcd34d;
+}
+
+:root[data-theme="dark"] .gps-state-error {
+  background-color: rgba(239, 68, 68, 0.12);
+  border-color: rgba(248, 113, 113, 0.4);
+  color: #fca5a5;
+}
+
 .gps-indicator-dot {
   width: 9px;
   height: 9px;
@@ -134,7 +159,7 @@
   display: flex;
   align-items: center;
   gap: 5px;
-  background: rgba(255, 255, 255, 0.6);
+  background: var(--glass-bg-soft);
   border: 1px solid currentColor;
   color: inherit;
   border-radius: var(--border-radius-full);
@@ -148,7 +173,7 @@
 }
 
 .gps-reload-btn:hover {
-  background: rgba(255, 255, 255, 0.95);
+  background: var(--glass-bg-strong);
   transform: scale(1.04);
 }
 
@@ -240,7 +265,7 @@
 }
 
 .items-count-badge {
-  background: linear-gradient(135deg, var(--primary-color), var(--primary-dark-color));
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-solid-end));
   color: white;
   font-size: 0.75rem;
   font-weight: 700;
@@ -407,7 +432,7 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
-  background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark-color) 100%) !important;
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-solid-end) 100%) !important;
   box-shadow: 0 4px 18px rgba(99, 102, 241, 0.45) !important;
   transition: all 0.25s ease !important;
 }

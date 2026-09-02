@@ -30,6 +30,11 @@
   filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
 }
 
+/* multiply only reads correctly over a light backdrop */
+:root[data-theme="dark"] .auth-brand-icon {
+  mix-blend-mode: normal;
+}
+
 .auth-brand-title {
   font-family: 'Outfit', 'Inter', sans-serif;
   font-size: 1.75rem;
@@ -42,13 +47,13 @@
 }
 
 .auth-form-card {
-  background-color: rgba(255, 255, 255, 0.85);
+  background-color: var(--glass-bg-strong);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   padding: var(--spacing-xl);
   border-radius: var(--border-radius-xl);
   box-shadow: var(--shadow-strong);
-  border: 1px solid rgba(255, 255, 255, 0.6);
+  border: 1px solid var(--glass-border);
   width: 100%;
   max-width: 400px;
   animation: authCardIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);

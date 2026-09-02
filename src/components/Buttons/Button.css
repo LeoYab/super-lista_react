@@ -37,13 +37,16 @@
 
 /* Primary */
 .btn-primary {
-  background-color: var(--primary-color);
+  /* Fixed indigo (not the theme-adaptive --primary-color) so white text
+     always keeps WCAG AA contrast, even in dark mode where the accent
+     lightens for legibility elsewhere. */
+  background-color: var(--primary-solid-end);
   color: white;
   box-shadow: 0 4px 6px -1px rgba(99, 102, 241, 0.3);
 }
 
 .btn-primary:hover:not(:disabled) {
-  background-color: var(--primary-hover);
+  background-color: var(--primary-solid-hover);
   box-shadow: 0 6px 8px -1px rgba(99, 102, 241, 0.4);
   transform: translateY(-1px);
 }
@@ -62,26 +65,30 @@
 
 /* Danger */
 .btn-danger {
-  background-color: var(--danger-color);
+  /* Fixed shade (not the theme-adaptive --danger-color) so white text
+     keeps WCAG AA contrast in both themes. */
+  background-color: var(--danger-solid);
   color: white;
   box-shadow: 0 4px 6px -1px rgba(239, 68, 68, 0.3);
 }
 
 .btn-danger:hover:not(:disabled) {
-  background-color: var(--danger-hover);
+  background-color: var(--danger-solid-hover);
   box-shadow: 0 6px 8px -1px rgba(239, 68, 68, 0.4);
   transform: translateY(-1px);
 }
 
 /* Success */
 .btn-success {
-  background-color: var(--accent-color);
+  /* Fixed shade (not the theme-adaptive --accent-color) so white text
+     keeps WCAG AA contrast in both themes. */
+  background-color: var(--success-solid);
   color: white;
   box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.3);
 }
 
 .btn-success:hover:not(:disabled) {
-  background-color: var(--accent-hover);
+  background-color: var(--success-solid-hover);
   box-shadow: 0 6px 8px -1px rgba(16, 185, 129, 0.4);
   transform: translateY(-1px);
 }

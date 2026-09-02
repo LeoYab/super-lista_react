@@ -23,10 +23,10 @@
 }
 
 .btn.menu-toggle-button:hover {
-  background-color: var(--primary-color);
+  background-color: var(--primary-solid-end);
   color: white;
   box-shadow: var(--shadow-lg);
-  border-color: var(--primary-color);
+  border-color: var(--primary-solid-end);
 }
 
 /* Hamburger Icon Animation */
@@ -118,6 +118,9 @@
   transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   /* Smooth ease-out */
   padding: var(--spacing-lg);
+  /* Extra top clearance so content never sits under the fixed
+     open/close toggle button (top:16px, 38px tall, z-index above this). */
+  padding-top: 64px;
   display: flex;
   flex-direction: column;
   gap: var(--spacing-lg);
@@ -151,6 +154,12 @@
   display: block;
   margin-top: 2px;
   overflow-wrap: anywhere;
+}
+
+.menu-header-actions {
+  display: flex;
+  gap: 4px;
+  flex-shrink: 0;
 }
 
 .logout-button-menu {
