@@ -8,11 +8,7 @@
   align-items: center;
   min-height: 100vh;
   padding: var(--spacing-lg);
-  background:
-    radial-gradient(at 0% 0%, rgba(187, 247, 208, 0.45) 0px, transparent 50%),
-    radial-gradient(at 50% 0%, rgba(254, 215, 170, 0.3) 0px, transparent 50%),
-    radial-gradient(at 100% 0%, rgba(221, 214, 254, 0.3) 0px, transparent 50%),
-    var(--background-color);
+  background: var(--background-color);
 }
 
 .auth-theme-toggle {
@@ -33,24 +29,16 @@
 .auth-brand-icon {
   width: 3.5rem;
   height: 3.5rem;
+  border-radius: 16px;
   object-fit: contain;
-  mix-blend-mode: multiply;
-  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
-}
-
-/* multiply only reads correctly over a light backdrop */
-:root[data-theme="dark"] .auth-brand-icon {
-  mix-blend-mode: normal;
+  filter: drop-shadow(0 4px 10px rgba(21, 128, 61, 0.3));
 }
 
 .auth-brand-title {
   font-family: 'Outfit', 'Inter', sans-serif;
   font-size: 1.75rem;
   font-weight: 800;
-  background: linear-gradient(135deg, var(--primary-color), var(--primary-dark-color));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--primary-dark-color);
   letter-spacing: -0.02em;
 }
 

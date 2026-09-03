@@ -33,7 +33,7 @@
   width: 5px;
   height: 26px;
   border-radius: 4px;
-  background: linear-gradient(180deg, var(--primary-color), var(--primary-dark-color));
+  background: var(--primary-color);
   flex-shrink: 0;
 }
 
@@ -434,7 +434,7 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
-  background: linear-gradient(135deg, var(--primary-light-color) 0%, var(--primary-solid-end) 100%) !important;
+  background: var(--primary-solid-end) !important;
   box-shadow: 0 4px 18px rgba(134, 239, 172, 0.5) !important;
   transition: all 0.25s ease !important;
 }
@@ -597,7 +597,7 @@
 
 /* ─── Winner Banner ──────────────────────────────────── */
 .winner-banner {
-  background: linear-gradient(135deg, #059669 0%, #10b981 50%, #34d399 100%);
+  background: #059669;
   color: white;
   border-radius: var(--border-radius-lg);
   padding: var(--spacing-md) var(--spacing-lg);
@@ -695,7 +695,7 @@
 
 .supermarket-rank-card.is-winner {
   border-color: #10b981;
-  background: linear-gradient(135deg, rgba(16, 185, 129, 0.03) 0%, rgba(255,255,255,1) 100%);
+  background: var(--card-bg-color);
 }
 
 .supermarket-rank-card.is-expanded {
@@ -991,7 +991,7 @@
   display: inline-flex;
   align-items: center;
   gap: 3px;
-  background: linear-gradient(135deg, rgba(245, 158, 11, 0.12), rgba(252, 211, 77, 0.12));
+  background: rgba(245, 158, 11, 0.12);
   color: #92400e;
   border: 1px solid rgba(245, 158, 11, 0.3);
   border-radius: var(--border-radius-full);

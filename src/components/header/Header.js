@@ -3,15 +3,10 @@ import './Header.css';
 
 const Header = () => {
   return (
-    <header className="header card fade-in">
+    <header className="header fade-in">
       <div className="header-content">
-        <img src="/logo512.png" alt="Super Lista Logo" className="header-icon" />
-        <div className="header-text">
-          <h1 className="header-title">Super Lista</h1>
-        </div>
-        <div className="header-subtitle">
-          <p>¡Gestiona tu lista de compras en supermercados!</p>
-        </div>
+        <img src="/logo.svg" alt="Super Lista" className="header-icon" />
+        <h1 className="header-title">Super Lista</h1>
       </div>
     </header>
   );

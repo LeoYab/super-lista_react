@@ -696,7 +696,7 @@ function AppRouter() {
   if (!authLoaded) {
     return (
       <div className="loading-auth" role="status" aria-label="Cargando">
-        <img src="/logo512.png" alt="" className="loading-auth-icon" />
+        <img src="/logo.svg" alt="" className="loading-auth-icon" />
         <div className="loading-auth-spinner"></div>
       </div>
     );

@@ -23,11 +23,7 @@ textarea:focus-visible,
 
 body {
   font-family: 'Outfit', sans-serif;
-  background:
-    radial-gradient(at 0% 0%, rgba(187, 247, 208, 0.35) 0px, transparent 50%),
-    radial-gradient(at 50% 0%, rgba(254, 215, 170, 0.25) 0px, transparent 50%),
-    radial-gradient(at 100% 0%, rgba(221, 214, 254, 0.25) 0px, transparent 50%),
-    var(--background-color);
+  background: var(--background-color);
   color: var(--text-color-primary);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
@@ -55,13 +51,9 @@ body {
 .loading-auth-icon {
   width: 3.5rem;
   height: 3.5rem;
+  border-radius: 16px;
   object-fit: contain;
-  mix-blend-mode: multiply;
   animation: loadingPulse 1.6s ease-in-out infinite;
-}
-
-:root[data-theme="dark"] .loading-auth-icon {
-  mix-blend-mode: normal;
 }
 
 .loading-auth-spinner {

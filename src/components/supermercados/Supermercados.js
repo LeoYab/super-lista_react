@@ -816,7 +816,7 @@ const Supermercados = () => {
             <polyline points="12 19 5 12 12 5"></polyline>
           </svg>
         </Button>
-        <h2 style={{ margin: 0, fontSize: '1.8rem', textAlign: 'left', background: 'linear-gradient(135deg, var(--primary-color), #ec4899)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
+        <h2 style={{ margin: 0, fontSize: '1.8rem', textAlign: 'left', color: 'var(--primary-dark-color)' }}>
           Supermercados
         </h2>
       </div>

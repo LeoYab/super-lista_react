@@ -60,7 +60,7 @@ function AuthPage() {
       />
       <div>
         <div className="auth-brand">
-          <img src="/logo512.png" alt="Super Lista" className="auth-brand-icon" />
+          <img src="/logo.svg" alt="Super Lista" className="auth-brand-icon" />
           <span className="auth-brand-title">Super Lista</span>
         </div>
 
