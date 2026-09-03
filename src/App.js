@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from 'r
 
 import { useAuth, AuthProvider } from './context/AuthContext';
 import { subscribeToCategories, addCategory } from './services/firebaseService';
-import { resolveProductCategory, getCategorySetForBrand } from './utils/categoryMapping';
+import { resolveProductCategory, getCategorySetForBrand, MAPPED_BRANDS, CATEGORY_BRANDS } from './utils/categoryMapping';
 import { UserListsProvider } from './context/UserListsContext';
 import { ProductsProvider } from './context/ProductsContext';
 import { useUserListsContext } from './context/UserListsContext';
@@ -380,17 +380,22 @@ function MainAppContent() {
     }
   }, [showScanner, onScanSuccess]);
 
-  // Categories offered when adding/editing a product: when a supermarket is
-  // detected via GPS, show ONLY that brand's own main categories (+ Otros)
-  // so the picker matches where the user is actually shopping. Without a
-  // detected brand, fall back to the full saved list (every category from
-  // every brand) so nothing is hidden.
-  const formCategories = useMemo(() => {
-    if (!detectedSupermarket) return categories;
-    const brandIds = new Set(getCategorySetForBrand(detectedSupermarket.brandKey).map(c => c.id));
+  // The supermarket whose categories are currently "active": the
+  // GPS-detected one when it's Carrefour or ChangoMas, otherwise Carrefour
+  // as the default — so there's always exactly one brand's category set in
+  // use, never a mix of both and never neither.
+  const activeBrandKey = (detectedSupermarket && MAPPED_BRANDS.includes(detectedSupermarket.brandKey))
+    ? detectedSupermarket.brandKey
+    : CATEGORY_BRANDS.CARREFOUR;
+
+  // Only the active brand's own main categories (+ Otros) — both for the
+  // filter ribbon and the add/edit product picker, so exactly one
+  // supermarket's categories show at a time.
+  const activeCategories = useMemo(() => {
+    const brandIds = new Set(getCategorySetForBrand(activeBrandKey).map(c => c.id));
     const fromSaved = categories.filter(c => brandIds.has(c.id));
     return fromSaved.length > 0 ? fromSaved : categories;
-  }, [categories, detectedSupermarket]);
+  }, [categories, activeBrandKey]);
 
   // Filtering and calculations
   const filteredProducts = products
@@ -480,7 +485,7 @@ function MainAppContent() {
 
                 <div className="category-tabs-wrapper" style={{ width: '100%', overflow: 'hidden' }}>
                   <CategoryFilter
-                    categories={categories}
+                    categories={activeCategories}
                     selectedCategoryId={selectedCategoryId}
                     onSelectCategory={setSelectedCategoryId}
                     groupByCategory={groupByCategory}
@@ -595,7 +600,7 @@ function MainAppContent() {
                   onAgregar={handleAddProduct}
                   onEditar={handleEditProduct}
                   onCancelar={handleCancelForm}
-                  categories={formCategories}
+                  categories={activeCategories}
                   onScan={() => setShowScanner(true)}
                   lastCategoryId={lastCategoryId}
                 />
