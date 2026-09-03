@@ -86,7 +86,7 @@
 .supermarket-card.active {
   border-color: var(--primary-color);
   background-color: var(--primary-light-color);
-  box-shadow: 0 8px 20px rgba(124, 58, 237, 0.15);
+  box-shadow: 0 8px 20px rgba(21, 128, 61, 0.15);
 }
 
 .supermarket-logo {

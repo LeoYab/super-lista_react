@@ -267,8 +267,8 @@
 }
 
 .items-count-badge {
-  background: linear-gradient(135deg, var(--primary-color), var(--primary-solid-end));
-  color: white;
+  background: var(--primary-solid-end);
+  color: var(--primary-solid-text);
   font-size: 0.75rem;
   font-weight: 700;
   border-radius: var(--border-radius-full);
@@ -434,14 +434,14 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
-  background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-solid-end) 100%) !important;
-  box-shadow: 0 4px 18px rgba(99, 102, 241, 0.45) !important;
+  background: linear-gradient(135deg, var(--primary-light-color) 0%, var(--primary-solid-end) 100%) !important;
+  box-shadow: 0 4px 18px rgba(134, 239, 172, 0.5) !important;
   transition: all 0.25s ease !important;
 }
 
 .search-cheapest-btn:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(99, 102, 241, 0.5) !important;
+  box-shadow: 0 8px 24px rgba(134, 239, 172, 0.6) !important;
 }
 
 .search-cheapest-btn:active:not(:disabled) {
@@ -573,14 +573,14 @@
 }
 
 .status-badge.pending {
-  background-color: rgba(99, 102, 241, 0.1);
+  background-color: rgba(21, 128, 61, 0.1);
   color: var(--primary-color);
 }
 
 .mini-spinner {
   width: 10px;
   height: 10px;
-  border: 2px solid rgba(99, 102, 241, 0.3);
+  border: 2px solid rgba(21, 128, 61, 0.3);
   border-top: 2px solid var(--primary-color);
   border-radius: 50%;
   animation: spin 0.6s linear infinite;
@@ -689,7 +689,7 @@
 
 .supermarket-rank-card:hover {
   border-color: var(--primary-color);
-  box-shadow: 0 4px 20px rgba(99, 102, 241, 0.15);
+  box-shadow: 0 4px 20px rgba(21, 128, 61, 0.15);
   transform: translateY(-1px);
 }
 
@@ -700,7 +700,7 @@
 
 .supermarket-rank-card.is-expanded {
   border-color: var(--primary-color);
-  box-shadow: 0 4px 20px rgba(99, 102, 241, 0.12);
+  box-shadow: 0 4px 20px rgba(21, 128, 61, 0.12);
 }
 
 .supermarket-rank-card.is-expanded .expand-chevron-icon {

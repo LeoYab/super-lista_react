@@ -24,7 +24,7 @@
 
 .btn.menu-toggle-button:hover {
   background-color: var(--primary-solid-end);
-  color: white;
+  color: var(--primary-solid-text);
   box-shadow: var(--shadow-lg);
   border-color: var(--primary-solid-end);
 }
@@ -219,7 +219,7 @@
 .list-item.active {
   background-color: var(--primary-light-color);
   color: var(--primary-dark-color);
-  border-color: rgba(99, 102, 241, 0.2);
+  border-color: rgba(21, 128, 61, 0.2);
   /* Primary color with opacity */
 }
 

@@ -164,7 +164,7 @@
 
 .qty-btn {
   background-color: var(--primary-solid-end);
-  color: white;
+  color: var(--primary-solid-text);
   border: none;
   border-radius: 50%;
   width: 32px;

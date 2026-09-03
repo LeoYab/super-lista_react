@@ -68,8 +68,10 @@ export const showConfirmAlert = async ({
     text: text,
     icon: 'warning',
     showCancelButton: true,
-    confirmButtonColor: '#ef4444', // Danger color
-    cancelButtonColor: '#7c3aed',  // Primary color
+    // Colored via the .swal2-confirm-danger / .swal2-cancel CSS classes
+    // (App.css) instead of inline colors, so the buttons follow the app's
+    // theme tokens rather than a hardcoded palette.
+    customClass: { confirmButton: 'swal2-confirm-danger' },
     confirmButtonText: confirmButtonText,
     cancelButtonText: cancelButtonText
   });
@@ -99,8 +101,7 @@ export const showInputAlert = async ({
     inputPlaceholder: inputPlaceholder,
     inputValue: inputValue,
     showCancelButton: true,
-    confirmButtonColor: '#7c3aed', // Primary color
-    cancelButtonColor: '#6b7280',  // Gray
+    // Colored via the .swal2-confirm / .swal2-cancel CSS defaults (App.css).
     confirmButtonText: confirmButtonText,
     cancelButtonText: cancelButtonText,
     inputValidator: (value) => {

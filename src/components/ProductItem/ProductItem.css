@@ -160,12 +160,12 @@
   font-size: 1rem;
   font-weight: 700;
   background-color: var(--success-solid);
-  color: white;
+  color: var(--success-solid-text);
   padding: 4px 12px;
   border-radius: var(--border-radius-full);
   min-width: 80px;
   text-align: center;
-  box-shadow: 0 2px 4px rgba(16, 185, 129, 0.2);
+  box-shadow: 0 2px 4px rgba(167, 243, 208, 0.4);
 }
 
 
@@ -213,12 +213,21 @@
 .swipe-edit-button {
   background: transparent !important;
   border: none !important;
-  color: white !important;
   font-weight: 600;
   padding: 0;
   width: 100%;
   height: 100%;
   pointer-events: auto;
+}
+
+.swipe-delete-button {
+  color: white !important;
+}
+
+.swipe-edit-button {
+  /* Overlay is now a pastel fill (--primary-solid-end), so its text/icon
+     need the matching dark text instead of white. */
+  color: var(--primary-solid-text) !important;
 }
 
 /* Responsive */

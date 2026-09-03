@@ -37,17 +37,16 @@
 
 /* Primary */
 .btn-primary {
-  /* Fixed indigo (not the theme-adaptive --primary-color) so white text
-     always keeps WCAG AA contrast, even in dark mode where the accent
-     lightens for legibility elsewhere. */
+  /* Pastel fill + dark text (not the theme-adaptive --primary-color/white
+     pairing) so the button reads as soft in both light and dark mode. */
   background-color: var(--primary-solid-end);
-  color: white;
-  box-shadow: 0 4px 6px -1px rgba(99, 102, 241, 0.3);
+  color: var(--primary-solid-text);
+  box-shadow: 0 4px 6px -1px rgba(134, 239, 172, 0.4);
 }
 
 .btn-primary:hover:not(:disabled) {
   background-color: var(--primary-solid-hover);
-  box-shadow: 0 6px 8px -1px rgba(99, 102, 241, 0.4);
+  box-shadow: 0 6px 8px -1px rgba(134, 239, 172, 0.5);
   transform: translateY(-1px);
 }
 
@@ -80,16 +79,15 @@
 
 /* Success */
 .btn-success {
-  /* Fixed shade (not the theme-adaptive --accent-color) so white text
-     keeps WCAG AA contrast in both themes. */
+  /* Pastel fill + dark text, same pattern as .btn-primary. */
   background-color: var(--success-solid);
-  color: white;
-  box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.3);
+  color: var(--success-solid-text);
+  box-shadow: 0 4px 6px -1px rgba(167, 243, 208, 0.5);
 }
 
 .btn-success:hover:not(:disabled) {
   background-color: var(--success-solid-hover);
-  box-shadow: 0 6px 8px -1px rgba(16, 185, 129, 0.4);
+  box-shadow: 0 6px 8px -1px rgba(167, 243, 208, 0.6);
   transform: translateY(-1px);
 }
 

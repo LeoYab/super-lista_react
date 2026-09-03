@@ -24,9 +24,9 @@ textarea:focus-visible,
 body {
   font-family: 'Outfit', sans-serif;
   background:
-    radial-gradient(at 0% 0%, rgba(124, 58, 237, 0.1) 0px, transparent 50%),
-    radial-gradient(at 50% 0%, rgba(236, 72, 153, 0.1) 0px, transparent 50%),
-    radial-gradient(at 100% 0%, rgba(59, 130, 246, 0.1) 0px, transparent 50%),
+    radial-gradient(at 0% 0%, rgba(187, 247, 208, 0.35) 0px, transparent 50%),
+    radial-gradient(at 50% 0%, rgba(254, 215, 170, 0.25) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(221, 214, 254, 0.25) 0px, transparent 50%),
     var(--background-color);
   color: var(--text-color-primary);
   line-height: 1.6;
@@ -251,12 +251,12 @@ body {
   font-size: 1rem;
   font-weight: 700;
   background-color: var(--primary-solid-end);
-  color: white;
+  color: var(--primary-solid-text);
   padding: 4px 12px;
   border-radius: var(--border-radius-full);
   min-width: 80px;
   text-align: center;
-  box-shadow: 0 2px 4px rgb(54 16 185 / 20%);
+  box-shadow: 0 2px 4px rgba(134, 239, 172, 0.35);
 }
 
 /* Empty State */
@@ -333,6 +333,16 @@ body {
 
 .swal2-confirm {
   background-color: var(--primary-solid-end) !important;
+  color: var(--primary-solid-text) !important;
+  box-shadow: none !important;
+}
+
+/* Used for destructive confirmations (e.g. "Sí, eliminar") via
+   customClass: { confirmButton: 'swal2-confirm-danger' } — the button
+   needs the danger color, not the default primary pastel above. */
+.swal2-confirm-danger {
+  background-color: var(--danger-solid) !important;
+  color: white !important;
   box-shadow: none !important;
 }
 

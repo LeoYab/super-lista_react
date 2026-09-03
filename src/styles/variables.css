@@ -1,23 +1,25 @@
 /* src/styles/variables.css */
 
 :root {
-  /* --- Modern Indigo/Slate Palette --- */
+  /* --- Pastel Green/Mint Palette --- */
 
   /* Primary Colors */
-  --primary-color: #6366f1;       /* Indigo 500 */
-  --primary-hover: #4f46e5;       /* Indigo 600 */
-  --primary-light-color: #e0e7ff; /* Indigo 100 */
-  --primary-dark-color: #4338ca;  /* Indigo 700 */
-  /* Fixed deep indigo for solid fills paired with white text (badges, primary CTAs).
-     Unlike --primary-dark-color, this does NOT flip lighter in dark mode, so
-     white text keeps WCAG AA contrast (~8:1) in both themes. */
-  --primary-solid-end: #4338ca;
-  --primary-solid-hover: #3730a3;
-  /* Same idea for success/danger solid fills: the 500-shade tokens above
-     read as ~2.5-3.8:1 against white (fails WCAG AA even in light mode),
-     so solid white-text fills use these darker, fixed 700/600 shades instead. */
-  --success-solid: #047857;
-  --success-solid-hover: #065f46;
+  --primary-color: #15803d;       /* Green 700 */
+  --primary-hover: #166534;       /* Green 800 */
+  --primary-light-color: #dcfce7; /* Green 100 */
+  --primary-dark-color: #14532d;  /* Green 900 */
+  /* Pastel fill + dark text for CTAs/badges, instead of a dark solid fill
+     with white text: this is the "pastel" pattern used across buttons,
+     pills and badges. Fixed (not theme-adaptive) so the pastel/dark-text
+     pairing keeps WCAG AA contrast in both light and dark mode. */
+  --primary-solid-end: #bbf7d0;
+  --primary-solid-hover: #86efac;
+  --primary-solid-text: #166534;
+  /* Same pastel-fill pattern for success; danger stays a solid/white-text
+     fill since errors should still read as urgent, not soft. */
+  --success-solid: #d1fae5;
+  --success-solid-hover: #a7f3d0;
+  --success-solid-text: #065f46;
   --danger-solid: #dc2626;
   --danger-solid-hover: #b91c1c;
 
@@ -93,10 +95,10 @@
   — no reliance on prefers-color-scheme cascading here.
 */
 :root[data-theme="dark"] {
-  --primary-color: #818cf8;
-  --primary-hover: #a5b4fc;
-  --primary-light-color: rgba(129, 140, 248, 0.16);
-  --primary-dark-color: #c7d2fe;
+  --primary-color: #4ade80;
+  --primary-hover: #86efac;
+  --primary-light-color: rgba(74, 222, 128, 0.16);
+  --primary-dark-color: #bbf7d0;
 
   --accent-color: #34d399;
   --accent-hover: #6ee7b7;
