@@ -380,16 +380,16 @@ function MainAppContent() {
     }
   }, [showScanner, onScanSuccess]);
 
-  // Categories offered when adding/editing a product: the full saved list
-  // (so every existing product, from any brand, still resolves correctly)
-  // plus, when a supermarket is detected via GPS, that brand's own curated
-  // categories so the picker reflects where the user is actually shopping.
+  // Categories offered when adding/editing a product: when a supermarket is
+  // detected via GPS, show ONLY that brand's own main categories (+ Otros)
+  // so the picker matches where the user is actually shopping. Without a
+  // detected brand, fall back to the full saved list (every category from
+  // every brand) so nothing is hidden.
   const formCategories = useMemo(() => {
     if (!detectedSupermarket) return categories;
-    const brandSet = getCategorySetForBrand(detectedSupermarket.brandKey);
-    const existingTitles = new Set(categories.map(c => c.title.toLowerCase()));
-    const extra = brandSet.filter(c => !existingTitles.has(c.title.toLowerCase()));
-    return [...categories, ...extra];
+    const brandIds = new Set(getCategorySetForBrand(detectedSupermarket.brandKey).map(c => c.id));
+    const fromSaved = categories.filter(c => brandIds.has(c.id));
+    return fromSaved.length > 0 ? fromSaved : categories;
   }, [categories, detectedSupermarket]);
 
   // Filtering and calculations

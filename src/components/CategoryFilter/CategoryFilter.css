@@ -52,6 +52,9 @@
   font-weight: 600;
   color: var(--text-color-secondary);
   white-space: nowrap;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
   transition: color var(--transition-fast);
 }
 

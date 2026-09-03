@@ -6,17 +6,17 @@
 // categories — mirroring each retailer's own top-level site navigation —
 // instead of inventing a new one-off category per subcategory.
 //
-// IDs are namespaced by range so a merged list (general + carrefour +
-// changomas) never collides: general 0-99, carrefour 100-199,
-// changomas 200-299.
+// Firebase's `Categories` node mirrors these arrays exactly (id, title,
+// icon, brand) — see scripts/rebuildCategories.js. Each category is tagged
+// with the brand it belongs to ('carrefour' | 'changomas' | 'general' for
+// the single universal "Otros"). Carrefour's and ChangoMas's real category
+// names are genuinely different strings (e.g. "Perfumería y farmacia" vs
+// "Perfumería"), so they are kept as fully separate sets rather than
+// reconciled into one shared list — mixing them was exactly what caused
+// resolveProductCategory to keep spawning new one-off categories.
 //
-// Firebase's `Categories` node stays a single flat list (unchanged) — it's
-// the store of categories a product can actually reference. The per-brand
-// arrays below are never written to Firebase as-is; they only drive (a)
-// which title/icon a scanned subcategory resolves to, via
-// resolveProductCategory, which then finds-or-creates that title in the
-// flat Firebase list, and (b) which chips a brand-scoped screen shows in
-// its category filter/picker (see getCategorySetForBrand).
+// IDs are namespaced by range so the full list never collides:
+// general (Otros only) = 0, carrefour = 100-199, changomas = 200-299.
 
 export const CATEGORY_BRANDS = {
   GENERAL: 'general',
@@ -24,25 +24,13 @@ export const CATEGORY_BRANDS = {
   CHANGOMAS: 'changomas',
 };
 
-// Baseline set for manually-added products and as a fallback when no
-// supermarket context is available. Preserves the ids of the app's
-// original hand-curated categories so existing products keep resolving.
-export const GENERAL_CATEGORIES = [
-  { id: 0, title: 'Otros', icon: '🛍️' },
-  { id: 8, title: 'Almacén', icon: '🏪' },
-  { id: 1, title: 'Lácteos y frescos', icon: '🍶' },
-  { id: 2, title: 'Harinas', icon: '🌾' },
-  { id: 12, title: 'Galletitas', icon: '🍪' },
-  { id: 13, title: 'Snacks', icon: '🍿' },
-  { id: 3, title: 'Bebidas', icon: '🥤' },
-  { id: 4, title: 'Cuidado y farmacia', icon: '💅🏻' },
-  { id: 9, title: 'Perfumería', icon: '🧴' },
-  { id: 5, title: 'Limpieza', icon: '🧹' },
-  { id: 6, title: 'Carnes y pescados', icon: '🥩' },
-  { id: 7, title: 'Frutas y verduras', icon: '🥕' },
-  { id: 10, title: 'Congelados', icon: '❄️' },
-  { id: 11, title: 'Juguetería y librería', icon: '🛝' },
-];
+// The only brands with a real, mapped taxonomy. A scan from any other
+// brand (Día, Jumbo, Vea, Easy, ...) is never mapped — it always lands in
+// "Otros" for the user to recategorize by hand.
+export const MAPPED_BRANDS = [CATEGORY_BRANDS.CARREFOUR, CATEGORY_BRANDS.CHANGOMAS];
+
+// Single universal fallback category, shared by every brand context.
+export const OTROS_CATEGORY = { id: 0, title: 'Otros', icon: '🛍️', brand: CATEGORY_BRANDS.GENERAL };
 
 // Real top-level categories from carrefour.com.ar's own mega menu
 // (carrefourar-mega-menu-0-x-menuContainerVertical), minus "Ofertas" and
@@ -66,8 +54,7 @@ export const CARREFOUR_CATEGORIES = [
   { id: 115, title: 'Aire Libre y Ocio', icon: '⛺' },
   { id: 116, title: 'Hogar', icon: '🏠' },
   { id: 117, title: 'Electro y tecnología', icon: '📱' },
-  { id: 118, title: 'Otros', icon: '🛍️' },
-];
+].map((c) => ({ ...c, brand: CATEGORY_BRANDS.CARREFOUR }));
 
 // Real top-level categories from masonline.com.ar's own mega menu
 // (valtech-gdn-new-seller-menu-0-x-menuContainerVertical).
@@ -87,14 +74,16 @@ export const CHANGOMAS_CATEGORIES = [
   { id: 212, title: 'Deportes, Ocio y Aire Libre', icon: '⚽' },
   { id: 213, title: 'Automotor', icon: '🚗' },
   { id: 214, title: 'Indumentaria, Calzado y Marroquinería', icon: '👕' },
-  { id: 215, title: 'Otros', icon: '🛍️' },
-];
+].map((c) => ({ ...c, brand: CATEGORY_BRANDS.CHANGOMAS }));
 
 export const CATEGORY_SETS = {
-  [CATEGORY_BRANDS.GENERAL]: GENERAL_CATEGORIES,
+  [CATEGORY_BRANDS.GENERAL]: [OTROS_CATEGORY],
   [CATEGORY_BRANDS.CARREFOUR]: CARREFOUR_CATEGORIES,
   [CATEGORY_BRANDS.CHANGOMAS]: CHANGOMAS_CATEGORIES,
 };
+
+// The full category universe, exactly as it should exist in Firebase.
+export const ALL_CATEGORIES = [OTROS_CATEGORY, ...CARREFOUR_CATEGORIES, ...CHANGOMAS_CATEGORIES];
 
 const normalize = (s) =>
   (s || '')
@@ -108,8 +97,6 @@ const normalize = (s) =>
  */
 const findByTitle = (set, title) => set.find((c) => normalize(c.title) === normalize(title));
 
-const findOtros = (set) => findByTitle(set, 'Otros') || set[set.length - 1];
-
 /**
  * Builds a raw-path -> curated-title matcher. `rules` is an ordered list of
  * [title, keywords[]] pairs; the first rule whose keyword appears in the
@@ -117,11 +104,11 @@ const findOtros = (set) => findByTitle(set, 'Otros') || set[set.length - 1];
  * (e.g. "Galletitas") must come before broader ones (e.g. "Almacén").
  */
 const buildMatcher = (set, rules) => (categoriesList) => {
-  if (!categoriesList || categoriesList.length === 0) return findOtros(set);
+  if (!categoriesList || categoriesList.length === 0) return OTROS_CATEGORY;
 
   const path = categoriesList[0];
   const parts = path.split('/').filter(Boolean);
-  if (parts.length === 0) return findOtros(set);
+  if (parts.length === 0) return OTROS_CATEGORY;
 
   const root = normalize(parts[0]);
   const fullPath = normalize(path);
@@ -142,14 +129,14 @@ const buildMatcher = (set, rules) => (categoriesList) => {
   }
 
   // 3. Never invent a new category — fall back to "Otros".
-  return findOtros(set);
+  return OTROS_CATEGORY;
 };
 
 export const mapToCarrefourCategory = buildMatcher(CARREFOUR_CATEGORIES, [
-  ['Panadería', ['panader', 'factura', 'reposteria', 'reposteria', 'panificado']],
+  ['Panadería', ['panader', 'factura', 'reposteria', 'panificado']],
   ['Desayuno y merienda', ['desayuno', 'merienda', 'te ', 'cafe', 'café', 'infusion', 'edulcorante', 'mermelada', 'miel']],
   ['Congelados', ['congelado']],
-  ['Limpieza', ['limpieza', 'lavandina', 'detergente', 'lavado de ropa', 'insecticida', 'repelente', 'papel higienico', 'papeles', 'bolsas', 'film', 'rollo de cocina']],
+  ['Limpieza', ['limpieza', 'lavandina', 'detergente', 'lavado de ropa', 'insecticida', 'repelente', 'papel higienico', 'papeles', 'bolsas', 'film', 'rollo de cocina', 'pisos', 'muebles']],
   ['Perfumería y farmacia', ['perfumer', 'farmacia', 'cuidado personal', 'higiene', 'cosmet', 'cuidado del cabello', 'cuidado oral', 'shampoo', 'crema dental', 'medicamento']],
   ['Mundo bebé', ['bebe', 'bebé', 'pañal', 'lactancia', 'maternidad']],
   ['Bebidas', ['bebida', 'gaseosa', 'jugo', 'agua', 'alcohol', 'cerveza', 'vino', 'licor', 'fernet']],
@@ -161,7 +148,7 @@ export const mapToCarrefourCategory = buildMatcher(CARREFOUR_CATEGORIES, [
   ['Juguetería y Librería', ['juguet', 'libreria', 'librería', 'utiles escolares']],
   ['Automotor', ['automotor', 'auto ', 'vehiculo']],
   ['Aire Libre y Ocio', ['aire libre', 'jardin', 'jardín', 'camping', 'pileta']],
-  ['Hogar', ['hogar', 'bazar', 'muebles', 'decoracion', 'iluminacion', 'textil']],
+  ['Hogar', ['hogar', 'bazar', 'decoracion', 'iluminacion', 'textil']],
   ['Electro y tecnología', ['electro', 'tecnolog', 'celular', 'informatica', 'electronica']],
   ['Almacén', [
     'almacen', 'almacén', 'galletita', 'galleta', 'snack', 'copet', 'papa frita',
@@ -185,7 +172,7 @@ export const mapToChangoMasCategory = buildMatcher(CHANGOMAS_CATEGORIES, [
   ['Deportes, Ocio y Aire Libre', ['deporte', 'aire libre', 'jardin', 'jardín', 'camping', 'pileta']],
   ['Automotor', ['automotor', 'auto ', 'vehiculo']],
   ['Indumentaria, Calzado y Marroquinería', ['ropa', 'indumentaria', 'calzado', 'zapatilla', 'marroquineria']],
-  ['Hogar', ['hogar', 'bazar', 'muebles', 'decoracion', 'iluminacion', 'textil', 'juguet', 'libreria', 'librería']],
+  ['Hogar', ['hogar', 'bazar', 'decoracion', 'iluminacion', 'textil', 'juguet', 'libreria', 'librería']],
   ['Almacén', [
     'almacen', 'almacén', 'galletita', 'galleta', 'snack', 'copet', 'papa frita',
     'aceite', 'vinagre', 'aderezo', 'conserva', 'enlatado', 'arroz', 'legumbre',
@@ -196,33 +183,44 @@ export const mapToChangoMasCategory = buildMatcher(CHANGOMAS_CATEGORIES, [
 ]);
 
 /**
- * Picks the right mapper for a given brand key. Falls back to the
- * Carrefour mapper (the safest default keyword coverage) for brands
- * without a dedicated real taxonomy yet.
+ * Picks the right mapper for a mapped brand. Returns null for a brand that
+ * has no curated taxonomy (Día, Jumbo, Vea, Easy, ...) — callers must treat
+ * that as "don't map, use Otros directly".
  */
 export const getCategoryMapperForBrand = (brandKey) => {
+  if (brandKey === CATEGORY_BRANDS.CARREFOUR) return mapToCarrefourCategory;
   if (brandKey === CATEGORY_BRANDS.CHANGOMAS) return mapToChangoMasCategory;
-  return mapToCarrefourCategory;
+  return null;
 };
 
 /**
  * The curated category set to show as filter chips / picker options for a
  * given brand context (GPS-detected supermarket, or the brand explicitly
- * selected on the Supermercados screen). Falls back to the general
- * baseline when there's no brand context yet.
+ * selected on the Supermercados screen): "Otros" plus that brand's own main
+ * categories. Falls back to just "Otros" for a brand with no taxonomy.
  */
-export const getCategorySetForBrand = (brandKey) => CATEGORY_SETS[brandKey] || GENERAL_CATEGORIES;
+export const getCategorySetForBrand = (brandKey) => [OTROS_CATEGORY, ...(CATEGORY_SETS[brandKey] || [])];
 
 /**
  * Resolves a scanned product's raw category path to a category the
- * product can actually reference in Firebase: maps the path to one of the
- * curated main-category titles for `brandKey`, then finds that title in
- * `currentCategories` (the live flat Firebase Categories list) or, if it
- * doesn't exist yet, creates it there via `addCategory` — so subcategories
- * always land in a main category instead of spawning a new one-off entry.
+ * product can actually reference in Firebase.
+ *
+ * - Carrefour/ChangoMas: maps the path to one of that brand's curated
+ *   main-category titles, then finds it in `currentCategories` (the live
+ *   Firebase Categories list, which mirrors ALL_CATEGORIES) by title. Since
+ *   Firebase already holds every curated title, this should always find a
+ *   match; `addCategoryFn` is kept only as a last-resort safety net.
+ * - Any other brand (or no brand detected): never attempted — always
+ *   "Otros", for the user to recategorize by hand. This is deliberate:
+ *   guessing from an unmapped retailer's own category names is exactly
+ *   what used to spawn a new one-off category per scan.
  */
 export const resolveProductCategory = async (categoriesList, currentCategories, brandKey, addCategoryFn) => {
+  const otros = currentCategories.find((c) => normalize(c.title) === 'otros') || currentCategories[0] || OTROS_CATEGORY;
+
   const mapper = getCategoryMapperForBrand(brandKey);
+  if (!mapper) return otros;
+
   const targetCategoryInfo = mapper(categoriesList);
 
   let foundCategory = currentCategories.find(
@@ -232,10 +230,10 @@ export const resolveProductCategory = async (categoriesList, currentCategories, 
   if (!foundCategory) {
     console.log(`Categoría no encontrada: "${targetCategoryInfo.title}". Agregándola...`);
     try {
-      foundCategory = await addCategoryFn(targetCategoryInfo);
+      foundCategory = await addCategoryFn({ ...targetCategoryInfo, brand: brandKey });
     } catch (err) {
       console.error('Error al agregar categoría dinámicamente:', err);
-      foundCategory = currentCategories.find((cat) => normalize(cat.title) === 'otros') || currentCategories[0];
+      foundCategory = otros;
     }
   }
 
