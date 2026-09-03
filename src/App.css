@@ -211,44 +211,96 @@ body {
   overflow: hidden;
 }
 
-.current-list-title {
-  text-align: center;
-  color: var(--primary-dark-color);
-  font-weight: 700;
-  font-size: 1.25rem;
-}
-
-.list-header-stats {
+/* Summary Banner — flat pastel card replacing the old title/total row */
+.list-summary-banner {
+  position: relative;
+  overflow: hidden;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
-  gap: var(--spacing-sm);
-  color: var(--text-color-secondary);
-  font-size: 1rem;
-  margin-bottom: var(--spacing-sm);
+  gap: var(--spacing-md);
   width: 100%;
+  margin-bottom: var(--spacing-md);
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-radius: var(--border-radius-lg);
+  background-color: var(--primary-light-color);
 }
 
-.stat-item {
+.list-summary-banner::before,
+.list-summary-banner::after {
+  content: '';
+  position: absolute;
+  border-radius: 999px;
+  background-color: var(--glass-bg-soft);
+  pointer-events: none;
+}
+
+.list-summary-banner::before {
+  top: -30px;
+  right: -20px;
+  width: 110px;
+  height: 110px;
+}
+
+.list-summary-banner::after {
+  bottom: -40px;
+  right: 30px;
+  width: 80px;
+  height: 80px;
+}
+
+.list-summary-content {
+  position: relative;
   display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  min-width: 0;
+}
+
+.list-summary-savings {
+  display: inline-flex;
   align-items: center;
   gap: 4px;
-}
-
-.stat-separator {
-  color: var(--border-color);
-}
-
-.stat-item.total-amount {
-  font-size: 1rem;
+  background-color: var(--glass-bg-strong);
+  color: var(--primary-dark-color);
+  font-size: 0.7rem;
   font-weight: 700;
-  background-color: var(--primary-solid-end);
-  color: var(--primary-solid-text);
-  padding: 4px 12px;
+  padding: 3px 10px;
   border-radius: var(--border-radius-full);
-  min-width: 80px;
-  text-align: center;
-  box-shadow: 0 2px 4px rgba(134, 239, 172, 0.35);
+  margin-bottom: 4px;
+}
+
+.list-summary-meta {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--primary-dark-color);
+  opacity: 0.85;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.list-summary-total {
+  font-family: 'Outfit', 'Inter', sans-serif;
+  font-weight: 800;
+  font-size: 1.6rem;
+  color: var(--primary-dark-color);
+  letter-spacing: -0.02em;
+}
+
+.list-summary-icon {
+  position: relative;
+  flex-shrink: 0;
+  width: 42px;
+  height: 42px;
+  border-radius: var(--border-radius);
+  background-color: var(--glass-bg-strong);
+  color: var(--primary-dark-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* Empty State */
@@ -285,7 +337,6 @@ body {
 .detected-super-link {
   font-size: 0.75rem;
   color: var(--primary-dark-color);
-  text-align: right;
   font-weight: 600;
   text-decoration: none;
   cursor: pointer;
@@ -293,6 +344,7 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 2px;
+  margin-top: 4px;
 }
 
 .detected-super-link:hover {
@@ -302,13 +354,6 @@ body {
 
 .detected-super-arrow {
   font-size: 0.7rem;
-}
-
-/* Savings Badge */
-.savings-badge {
-  font-size: 0.8rem;
-  color: #2f855a;
-  font-weight: 600;
 }
 
 /* SweetAlert2 Overrides for Consistency */

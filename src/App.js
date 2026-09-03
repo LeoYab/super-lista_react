@@ -502,18 +502,17 @@ function MainAppContent() {
           ) : currentListId ? (
             <>
               <div className="list-header">
-                <h3 className="current-list-title">
-                  {currentListName || 'Cargando...'}
-                </h3>
-                {/* Detected supermarket moved to header stats */}
-
-                <div className="list-header-stats">
-                  <span className="stat-item">
-                    <span>Productos: </span>
-                    <span>{totalProductos || <em style={{ fontWeight: 'lighter' }}>Vacío</em>}</span>
-
-                  </span>
-                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px' }}>
+                <div className="list-summary-banner">
+                  <div className="list-summary-content">
+                    {totalAhorro > 0 && (
+                      <span className="list-summary-savings">
+                        ⚡ Ahorrás {totalAhorro.toLocaleString('es-AR', { style: 'currency', currency: 'ARS' })} esta semana
+                      </span>
+                    )}
+                    <div className="list-summary-meta">
+                      {currentListName || 'Cargando...'} · {totalProductos || 0} producto{totalProductos === 1 ? '' : 's'}
+                    </div>
+                    <div className="list-summary-total">{formattedTotal}</div>
                     {detectedSupermarket && (
                       <a
                         href={`https://www.google.com/maps/search/?api=1&query=${detectedSupermarket.branchData.latitud},${detectedSupermarket.branchData.longitud}`}
@@ -525,15 +524,13 @@ function MainAppContent() {
                         {' '}<span className="detected-super-arrow">↗️</span>
                       </a>
                     )}
-                    <span className="stat-item total-amount">
-                      <span>Total: </span>
-                      {formattedTotal}
-                    </span>
-                    {totalAhorro > 0 && (
-                      <span className="stat-item total-savings savings-badge">
-                        Ahorrás: {totalAhorro.toLocaleString('es-AR', { style: 'currency', currency: 'ARS' })}
-                      </span>
-                    )}
+                  </div>
+                  <div className="list-summary-icon">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"></path>
+                      <path d="M3 6h18"></path>
+                      <path d="M16 10a4 4 0 0 1-8 0"></path>
+                    </svg>
                   </div>
                 </div>
 
