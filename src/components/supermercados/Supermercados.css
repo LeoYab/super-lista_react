@@ -41,6 +41,10 @@
   display: flex;
   gap: 16px;
   overflow-x: auto;
+  /* Explicit, since overflow-x: auto without this makes overflow-y
+     compute to auto too — clipping the hover lift/shadow below. */
+  overflow-y: visible;
+  padding-top: 6px;
   padding-bottom: 12px;
   scrollbar-width: none;
 }

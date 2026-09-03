@@ -246,6 +246,15 @@
   align-items: start;
 }
 
+.list-comparison-wrapper > * {
+  /* Grid tracks default to a min-width based on their content's
+     min-content size — without this, a long nowrap button label
+     (e.g. "Buscar Supermercado Más Barato") forces the whole column
+     wider than the container, which then gets clipped by the page's
+     overflow-x: hidden instead of wrapping. */
+  min-width: 0;
+}
+
 /* ─── List Card ──────────────────────────────────────── */
 .list-card {
   display: flex;
@@ -434,6 +443,8 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
+  white-space: normal !important;
+  text-align: center;
   background: var(--primary-solid-end) !important;
   box-shadow: 0 4px 18px rgba(134, 239, 172, 0.5) !important;
   transition: all 0.25s ease !important;
