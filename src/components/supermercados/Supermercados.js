@@ -9,81 +9,13 @@ import { Html5Qrcode, Html5QrcodeSupportedFormats } from "html5-qrcode";
 import { useProductsContext } from '../../context/ProductsContext';
 import { useUserListsContext } from '../../context/UserListsContext';
 import { subscribeToCategories, addCategory } from '../../services/firebaseService';
+import { resolveProductCategory } from '../../utils/categoryMapping';
 import { showErrorAlert } from '../../Notifications/NotificationsServices';
 import { fetchProductByEan } from '../../services/supermarketService';
 import { BrandGridSkeleton, ProductListSkeleton } from '../Skeleton/Skeleton';
 
 
 const PRODUCTS_PER_PAGE = 20;
-
-const mapCarrefourCategory = (categoriesList) => {
-  if (!categoriesList || categoriesList.length === 0) return { title: 'Otros', icon: '🛒' };
-  
-  const path = categoriesList[0];
-  const parts = path.split('/').filter(Boolean);
-  if (parts.length === 0) return { title: 'Otros', icon: '🛒' };
-  
-  const root = parts[0].toLowerCase();
-  
-  if (root.includes('limpieza')) return { title: 'Limpieza', icon: '🧼', icons: ['🧼', '🧹'] };
-  if (root.includes('perfumer') || root.includes('cuidado personal') || root.includes('higiene') || root.includes('estética') || root.includes('cosmet') || root.includes('belleza')) {
-    return { title: 'Perfumería', icon: '🧴', icons: ['🧴', '🧼', '💅'] };
-  }
-  if (root.includes('bebida') || root.includes('gaseosa') || root.includes('jugo') || root.includes('alcohol') || root.includes('cerveza') || root.includes('vino')) {
-    return { title: 'Bebidas', icon: '🥤', icons: ['🥤', '🍺', '🍷'] };
-  }
-  if (root.includes('lacteo') || root.includes('lácteo') || root.includes('queso') || root.includes('manteca') || root.includes('yogur') || root.includes('leche')) {
-    return { title: 'Lácteos', icon: '🥛', icons: ['🥛', '🧀'] };
-  }
-  if (root.includes('almacen') || root.includes('almacén')) {
-    const fullPathLower = path.toLowerCase();
-    if (fullPathLower.includes('galletita') || fullPathLower.includes('galleta') || fullPathLower.includes('cookies')) {
-      return { title: 'Galletitas', icon: '🍪', icons: ['🍪', '🥮'] };
-    }
-    if (fullPathLower.includes('snack') || fullPathLower.includes('copet') || fullPathLower.includes('papa frita')) {
-      return { title: 'Snacks', icon: '🍿', icons: ['🍿', '🥜', '🍡'] };
-    }
-    return { title: 'Almacén', icon: '🥫', icons: ['🥫', '🍞'] };
-  }
-  if (root.includes('galletita') || root.includes('galleta')) return { title: 'Galletitas', icon: '🍪', icons: ['🍪', '🥮'] };
-  if (root.includes('snack')) return { title: 'Snacks', icon: '🍿', icons: ['🍿', '🥜', '🍡'] };
-  if (root.includes('congelado')) return { title: 'Congelados', icon: '❄️', icons: ['❄️', '🍦'] };
-  if (root.includes('mascota') || root.includes('perro') || root.includes('gato')) return { title: 'Mascotas', icon: '🐶', icons: ['🐶', '🐱'] };
-  if (root.includes('bebe') || root.includes('bebés') || root.includes('pañal') || root.includes('maternidad')) {
-    return { title: 'Bebés', icon: '👶', icons: ['👶', '🍼'] };
-  }
-  if (root.includes('fiambr') || root.includes('embutido') || root.includes('queso')) return { title: 'Fiambrería', icon: '🥓', icons: ['🥓', '🍖'] };
-  if (root.includes('carne') || root.includes('pollo') || root.includes('pescado') || root.includes('vacuno') || root.includes('cerdo')) {
-    return { title: 'Carnes', icon: '🥩', icons: ['🥩', '🍗'] };
-  }
-  if (root.includes('fruta') || root.includes('verdur') || root.includes('huerta')) return { title: 'Verdulería', icon: '🍎', icons: ['🍎', '🥦'] };
-  if (root.includes('panader') || root.includes('factura') || root.includes('harina') || root.includes('reposteria') || root.includes('repostería')) {
-    return { title: 'Harinas', icon: '🌾', icons: ['🌾', '🍞', '🥐'] };
-  }
-  
-  const cleanTitle = parts[0].charAt(0).toUpperCase() + parts[0].slice(1).toLowerCase();
-  return { title: cleanTitle, icon: '🛒', icons: ['🛒'] };
-};
-
-const resolveProductCategory = async (categoriesList, currentCategories) => {
-  const targetCategoryInfo = mapCarrefourCategory(categoriesList);
-  
-  let foundCategory = currentCategories.find(
-    cat => cat.title.toLowerCase() === targetCategoryInfo.title.toLowerCase()
-  );
-  
-  if (!foundCategory) {
-    console.log(`Categoría no encontrada: "${targetCategoryInfo.title}". Agregándola...`);
-    try {
-      foundCategory = await addCategory(targetCategoryInfo);
-    } catch (err) {
-      console.error("Error al agregar categoría dinámicamente:", err);
-      foundCategory = currentCategories.find(cat => cat.title.toLowerCase() === 'otros') || currentCategories[0];
-    }
-  }
-  
-  return foundCategory;
-};
 
 const Supermercados = () => {
   const navigate = useNavigate();
@@ -604,7 +536,7 @@ const Supermercados = () => {
         try {
           const apiProduct = await fetchProductByEan(decodedText, brandId);
           if (apiProduct) {
-            const resolvedCat = await resolveProductCategory(apiProduct.categories, categories);
+            const resolvedCat = await resolveProductCategory(apiProduct.categories, categories, brandId, addCategory);
             const brandLabel = brandId === 'dia' ? 'Día' : (brandId === 'changomas' ? 'Chango Más' : 'Carrefour');
             const result = {
               id: `${apiProduct.ean}-${apiProduct.productId || '0'}`,
