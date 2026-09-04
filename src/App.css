@@ -6,6 +6,11 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  /* Mobile browsers shade any tapped element with a solid highlight
+     overlay by default (e.g. the round menu button flashing teal on tap)
+     — disable it everywhere and rely on our own :hover/:active/:focus-visible
+     styles instead. */
+  -webkit-tap-highlight-color: transparent;
 }
 
 /* Keyboard accessibility: visible focus ring on every interactive element,
