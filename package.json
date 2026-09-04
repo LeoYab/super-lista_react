@@ -14,7 +14,7 @@
     "lucide-react": "^1.41.0",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
-    "react-router-dom": "^6.30.6",
+    "react-router-dom": "^7.18.3",
     "react-scripts": "^5.0.1",
     "sweetalert2": "^11.26.25",
     "web-vitals": "^6.2.1"
