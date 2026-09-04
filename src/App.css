@@ -193,6 +193,21 @@ body {
   font-weight: 500;
 }
 
+/* Invisible marker used by useScrollCollapse (via IntersectionObserver) to
+   detect "has the user scrolled down past this point" without tracking
+   scroll position/direction by hand. Positioned absolutely against
+   .main-content-area (position: relative) so it scrolls with the content
+   but doesn't affect layout or take up visual space. The offset is the
+   scroll depth at which the list-header collapses. */
+.scroll-collapse-sentinel {
+  position: absolute;
+  top: 64px;
+  left: 0;
+  width: 1px;
+  height: 1px;
+  pointer-events: none;
+}
+
 /* Sticky List Header */
 .list-header {
   display: flex;

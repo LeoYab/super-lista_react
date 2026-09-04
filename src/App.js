@@ -80,7 +80,7 @@ function MainAppContent() {
   // Collapses the list-header (hides the category chips, shrinks the
   // summary banner) while the user scrolls down the product list, to give
   // it more vertical room; expands again near the top or on scroll-up.
-  const isListHeaderCollapsed = useScrollCollapse();
+  const { isCollapsed: isListHeaderCollapsed, sentinelRef: scrollCollapseSentinelRef } = useScrollCollapse();
 
   // GPS State
   const [detectedSupermarket, setDetectedSupermarket] = useState(null);
@@ -442,6 +442,7 @@ function MainAppContent() {
             <ProductListSkeleton rows={3} />
           ) : currentListId ? (
             <>
+              <div ref={scrollCollapseSentinelRef} className="scroll-collapse-sentinel" aria-hidden="true"></div>
               <div className={`list-header ${isListHeaderCollapsed ? 'list-header--collapsed' : ''}`}>
                 <div className="list-summary-banner">
                   <div className="list-summary-content">

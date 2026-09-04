@@ -1,80 +1,106 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 
 /**
- * Tracks window scroll to drive a "collapse on scroll-down" UI pattern
- * (e.g. shrinking a sticky header to give a list more room).
+ * Drives a "collapse on scroll-down" UI pattern (e.g. shrinking a sticky
+ * header to give a list more room) by comparing the current scroll
+ * position against a single fixed point, instead of tracking scroll
+ * direction/velocity from a moving reference.
  *
- * Combines anchor-based hysteresis (only flips once the scroll position has
- * moved `flipDistance` px away from wherever it was at the last flip) with a
- * minimum time gap between flips (`minFlipIntervalMs`). The distance check
- * alone isn't enough: real scroll input is noisy (momentum-deceleration
- * overshoot that settles back a bit, a mouse-wheel/trackpad's residual
- * micro-jitter right as the user's hand slows down near the flip point,
- * scroll events that arrive as one big coalesced jump instead of many small
- * ones) and can cross the same boundary back and forth in rapid succession,
- * which read naively looks like the header should flip every time — that's
- * exactly the reported "opens and closes constantly while scrolling up"
- * bug. Rate-limiting flips with a short cooldown makes rapid back-and-forth
- * flipping structurally impossible (at most one flip per cooldown window)
- * without adding any perceptible lag to a real, deliberate scroll gesture.
+ * Earlier approaches (a per-frame scroll delta, then anchor-based
+ * hysteresis with a cooldown) both kept finding new ways to flicker on
+ * real scroll input: momentum-deceleration overshoot, the browser's own
+ * rubber-band bounce at the top of the page, and — confirmed via a real
+ * phone screen recording — plain touch-scroll jitter. All of those failure
+ * modes came from the same root problem: reconstructing "did the user
+ * actually change direction" from a *moving* reference point (the
+ * position at the last flip) is inherently noisy, because that reference
+ * itself shifts every time state changes.
  *
- * Returns true once scrolled down past `threshold` px from the top AND
- * `flipDistance` px past the last flip (subject to the cooldown); returns
- * false again near the top of the page, or once scrolled back up
- * `flipDistance` px from the last flip (also subject to the cooldown).
+ * Comparing against a single *fixed* point removes that whole class of
+ * bug: attach `sentinelRef` to a zero-size element positioned `offsetPx`
+ * down from the top of the scrollable content (an absolutely-positioned
+ * child of a `position: relative` ancestor works well). `isCollapsed`
+ * becomes true once that fixed point has scrolled above the viewport,
+ * false again once it's back in view (including at the very top of the
+ * page). There's no accumulated distance or last-flip state to get
+ * corrupted by a single noisy sample — it's the same one comparison every
+ * time, so the only way to flip rapidly is to genuinely cross that one
+ * line back and forth, which a short cooldown comfortably absorbs.
+ *
+ * The cooldown itself needs care: if a flip is blocked because it lands
+ * inside the cooldown window, and the user's scroll gesture happens to
+ * stop right there, nothing else would ever re-check the sentinel and the
+ * header gets stuck showing the wrong state until the next scroll tick.
+ * A blocked evaluation schedules a retry for when the cooldown actually
+ * clears, instead of being silently dropped.
+ *
+ * All of the decision logic (the sentinel check, the cooldown, scheduling
+ * a retry) runs as a plain side effect, deliberately outside any
+ * `setState` updater function. React 18 StrictMode intentionally
+ * double-invokes functional `setState` updaters in development to catch
+ * impure ones; an earlier version of this hook did the cooldown/timer
+ * bookkeeping *inside* the updater, so StrictMode silently ran that
+ * bookkeeping twice per real scroll event, corrupting `lastFlipTime` and
+ * scheduling duplicate retries. `isCollapsedRef` mirrors the committed
+ * state synchronously so the "did this actually change" check can happen
+ * before ever touching `setState`, keeping the updater itself trivial.
+ *
+ * (IntersectionObserver is the more idiomatic way to watch a fixed point
+ * like this, but its callback is deferred by the browser whenever the
+ * document isn't actively compositing — confirmed via
+ * `document.visibilityState` during testing — the same throttling that
+ * ruled out requestAnimationFrame for this hook. A plain scroll listener
+ * doesn't have that failure mode.)
+ *
+ * `sentinelRef` is a callback ref rather than a plain ref object: the
+ * sentinel element only exists once its parent has actually rendered
+ * (e.g. after a list finishes loading), so a plain `useRef` + effect can
+ * end up wiring the listener up against a still-null `.current` on first
+ * mount and never retry once the element appears. A callback ref runs
+ * again every time the underlying DOM node changes (attaches, swaps, or
+ * unmounts), so the listener is always attached to whatever's current.
  */
-const useScrollCollapse = (threshold = 24, flipDistance = 36, minFlipIntervalMs = 300) => {
+const useScrollCollapse = (minFlipIntervalMs = 150) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const isCollapsedRef = useRef(false);
+  const cleanupRef = useRef(null);
 
-  useEffect(() => {
-    let lastFlipScrollY = window.scrollY;
+  const sentinelRef = useCallback((node) => {
+    if (cleanupRef.current) {
+      cleanupRef.current();
+      cleanupRef.current = null;
+    }
+    if (!node) return;
+
     let lastFlipTime = 0;
+    let retryTimer = null;
 
-    // Deliberately not throttled through requestAnimationFrame: rAF is
-    // paused by the browser whenever the page isn't the actively
-    // compositing tab (Page Visibility API), which would silently stop
-    // this listener from ever updating. Reading scrollY and comparing two
-    // numbers is cheap enough to run on every native scroll event as-is.
-    const onScroll = () => {
-      const currentScrollY = window.scrollY;
+    const evaluate = () => {
+      const shouldCollapse = node.getBoundingClientRect().top < 0;
+      if (shouldCollapse === isCollapsedRef.current) return;
+
       const now = performance.now();
-
-      // The cooldown applies uniformly, including the "near the top" case.
-      // It used to bypass the cooldown so reaching the top always expanded
-      // instantly, but that meant the browser's own rubber-band/momentum
-      // bounce around the top of the page — which can cross back and forth
-      // over `threshold` several times in well under 220ms while it settles
-      // — flipped state on every single crossing, uncooled. That was the
-      // real cause of the reported "opens and closes constantly while
-      // scrolling up": it always happens near the top, exactly where a
-      // bounce lives. Gating this branch too means the same one-flip-per-
-      // cooldown-window guarantee applies everywhere, at the cost of a
-      // barely-perceptible (<300ms) delay before it expands right at the top.
-      if (now - lastFlipTime < minFlipIntervalMs) return;
-
-      if (currentScrollY <= threshold) {
-        setIsCollapsed(false);
-        lastFlipScrollY = currentScrollY;
-        lastFlipTime = now;
+      const elapsed = now - lastFlipTime;
+      if (elapsed < minFlipIntervalMs) {
+        clearTimeout(retryTimer);
+        retryTimer = setTimeout(evaluate, minFlipIntervalMs - elapsed + 10);
         return;
       }
 
-      if (currentScrollY - lastFlipScrollY > flipDistance) {
-        setIsCollapsed(true);
-        lastFlipScrollY = currentScrollY;
-        lastFlipTime = now;
-      } else if (lastFlipScrollY - currentScrollY > flipDistance) {
-        setIsCollapsed(false);
-        lastFlipScrollY = currentScrollY;
-        lastFlipTime = now;
-      }
+      lastFlipTime = now;
+      isCollapsedRef.current = shouldCollapse;
+      setIsCollapsed(shouldCollapse);
     };
 
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
-  }, [threshold, flipDistance, minFlipIntervalMs]);
+    evaluate(); // sync initial state (e.g. landing mid-scroll on reload)
+    window.addEventListener('scroll', evaluate, { passive: true });
+    cleanupRef.current = () => {
+      clearTimeout(retryTimer);
+      window.removeEventListener('scroll', evaluate);
+    };
+  }, [minFlipIntervalMs]);
 
-  return isCollapsed;
+  return { isCollapsed, sentinelRef };
 };
 
 export default useScrollCollapse;
