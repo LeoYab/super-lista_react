@@ -1,10 +1,11 @@
 // src/App.js
-import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useMemo, useRef, useCallback, Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 
 import { useAuth, AuthProvider } from './context/AuthContext';
 import { subscribeToCategories, addCategory } from './services/firebaseService';
 import { resolveProductCategory, getCategorySetForBrand, MAPPED_BRANDS, CATEGORY_BRANDS } from './utils/categoryMapping';
+import { getDistanceKm } from './utils/geo';
 import { UserListsProvider } from './context/UserListsContext';
 import { ProductsProvider } from './context/ProductsContext';
 import { useUserListsContext } from './context/UserListsContext';
@@ -14,16 +15,14 @@ import { useProductsContext } from './context/ProductsContext';
 import Header from './components/header/Header';
 import ProductForm from './components/ProductForm/ProductForm';
 import ProductList from './components/ProductList/ProductList';
-import AuthPage from './pages/AuthPage/AuthPage';
 import SidebarMenu from './components/SidebarMenu/SidebarMenu';
 import SearchBar from './components/SearchBar/SearchBar';
 // Redundant import removed
 
 import Button from './components/Buttons/Button';
 import CategoryFilter from './components/CategoryFilter/CategoryFilter';
-import Supermercados from './components/supermercados/Supermercados';
-import Comparador from './components/Comparador/Comparador';
 import { ProductListSkeleton } from './components/Skeleton/Skeleton';
+
 import { Html5Qrcode, Html5QrcodeSupportedFormats } from "html5-qrcode";
 import { showErrorAlert, showSuccessToast } from './Notifications/NotificationsServices';
 import { fetchProductByEan } from './services/supermarketService';
@@ -40,29 +39,16 @@ import './components/Select/Select.css';
 import './TotalSummary/TotalSummary.css';
 import './components/Buttons/Button.css';
 
+// Route-level code splitting: these pull in heavy deps (html5-qrcode, large
+// catalog-browsing UI) that shouldn't be in the initial bundle.
+const AuthPage = lazy(() => import('./pages/AuthPage/AuthPage'));
+const Supermercados = lazy(() => import('./components/supermercados/Supermercados'));
+const Comparador = lazy(() => import('./components/Comparador/Comparador'));
+
 // Unused constant removed
 
 
 // Unused constant removed
-
-// Haversine formula to calculate distance between two points in km
-function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
-  var R = 6371; // Radius of the earth in km
-  var dLat = deg2rad(lat2 - lat1);
-  var dLon = deg2rad(lon2 - lon1);
-  var a =
-    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-    Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
-    Math.sin(dLon / 2) * Math.sin(dLon / 2)
-    ;
-  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  var d = R * c; // Distance in km
-  return d;
-}
-
-function deg2rad(deg) {
-  return deg * (Math.PI / 180)
-}
 
 function MainAppContent() {
   const navigate = useNavigate();
@@ -120,7 +106,7 @@ function MainAppContent() {
 
             branches.forEach(branch => {
               if (branch.latitud && branch.longitud) {
-                const dist = getDistanceFromLatLonInKm(latitude, longitude, parseFloat(branch.latitud), parseFloat(branch.longitud));
+                const dist = getDistanceKm(latitude, longitude, parseFloat(branch.latitud), parseFloat(branch.longitud));
                 if (dist < minDistance) {
                   minDistance = dist;
                   nearestForBrand = {
@@ -648,7 +634,15 @@ function AppRouter() {
     );
   }
 
+  const routeFallback = (
+    <div className="loading-auth" role="status" aria-label="Cargando">
+      <img src="/logo.svg" alt="" className="loading-auth-icon" />
+      <div className="loading-auth-spinner"></div>
+    </div>
+  );
+
   return (
+    <Suspense fallback={routeFallback}>
     <Routes>
       <Route path="/auth" element={currentUser ? <Navigate to="/" /> : <AuthPage />} />
       {/* Ruta para la aplicación principal (tus listas) */}
@@ -683,6 +677,7 @@ function AppRouter() {
       {/* Opcional: Redirigir a una ruta por defecto si la URL no coincide con ninguna */}
       <Route path="*" element={<Navigate to="/" />} />
     </Routes>
+    </Suspense>
   );
 }
 

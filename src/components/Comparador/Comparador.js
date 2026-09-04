@@ -8,19 +8,8 @@ import { showErrorAlert, showSuccessToast } from '../../Notifications/Notificati
 import Input from '../Input/Input';
 import Button from '../Buttons/Button';
 import './Comparador.css';
-
-// Haversine distance calculator in km
-const getDistance = (lat1, lon1, lat2, lon2) => {
-  const R = 6371; // Earth's radius in km
-  const dLat = (lat2 - lat1) * (Math.PI / 180);
-  const dLon = (lon2 - lon1) * (Math.PI / 180);
-  const a =
-    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-    Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) *
-    Math.sin(dLon / 2) * Math.sin(dLon / 2);
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  return R * c;
-};
+import { getDistanceKm } from '../../utils/geo';
+import { textMatchesAllWords } from '../../utils/productSearch';
 
 const Comparador = () => {
   const navigate = useNavigate();
@@ -88,7 +77,7 @@ const Comparador = () => {
               let minDistance = Infinity;
               branches.forEach((branch) => {
                 if (branch.latitud && branch.longitud) {
-                  const dist = getDistance(
+                  const dist = getDistanceKm(
                     coords.latitude,
                     coords.longitude,
                     parseFloat(branch.latitud),
@@ -216,18 +205,13 @@ const Comparador = () => {
           const matches = [];
 
           products.forEach((userProduct) => {
-            const queryWords = userProduct.nombre.toLowerCase().trim().split(/\s+/);
             let cheapestMatch = null;
 
             // Search for products that match all words in the user query
             catalog.forEach((item) => {
-              const nameLower = (item.nombre || '').toLowerCase();
-              const brandLower = (item.marca_producto || '').toLowerCase();
-              const fullSearchText = `${nameLower} ${brandLower}`;
+              const fullSearchText = `${item.nombre || ''} ${item.marca_producto || ''}`;
 
-              const matchesAll = queryWords.every((word) => fullSearchText.includes(word));
-
-              if (matchesAll) {
+              if (textMatchesAllWords(fullSearchText, userProduct.nombre)) {
                 const itemPrice = item.mejor_precio || item.precio || 0;
                 if (itemPrice > 0) {
                   if (!cheapestMatch || itemPrice < (cheapestMatch.mejor_precio || cheapestMatch.precio)) {

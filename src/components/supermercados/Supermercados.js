@@ -10,6 +10,8 @@ import { useProductsContext } from '../../context/ProductsContext';
 import { useUserListsContext } from '../../context/UserListsContext';
 import { subscribeToCategories, addCategory } from '../../services/firebaseService';
 import { resolveProductCategory } from '../../utils/categoryMapping';
+import { getDistanceKm } from '../../utils/geo';
+import { filterProductsByTerm } from '../../utils/productSearch';
 import { showErrorAlert } from '../../Notifications/NotificationsServices';
 import { fetchProductByEan } from '../../services/supermarketService';
 import { BrandGridSkeleton, ProductListSkeleton } from '../Skeleton/Skeleton';
@@ -143,19 +145,6 @@ const Supermercados = () => {
     fetchAllBrands();
   }, []);
 
-  const getDistance = (lat1, lon1, lat2, lon2) => {
-    const R = 6371; // Radio de la tierra en km
-    const dLat = (lat2 - lat1) * (Math.PI / 180);
-    const dLon = (lon2 - lon1) * (Math.PI / 180);
-    const a =
-      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-      Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) *
-      Math.sin(dLon / 2) * Math.sin(dLon / 2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    const d = R * c; // Distancia en km
-    return d;
-  };
-
   // GPS logic integrated into fetchAndSetBranch
 
   const fetchAndSetBranch = useCallback(async (brand) => {
@@ -202,7 +191,7 @@ const Supermercados = () => {
           localBranchesList = localBranchesList.map(branch => {
             let dist = Infinity;
             if (branch.latitud && branch.longitud) {
-              dist = getDistance(latitude, longitude, parseFloat(branch.latitud), parseFloat(branch.longitud));
+              dist = getDistanceKm(latitude, longitude, parseFloat(branch.latitud), parseFloat(branch.longitud));
             }
             return { ...branch, distance: dist }; // Añadir propiedad distance
           });
@@ -240,19 +229,7 @@ const Supermercados = () => {
 
   const applySearchFilter = useCallback((products, term) => {
     console.log(`[DEBUG] applySearchFilter: Filtrando ${products.length} productos con término: "${term}"`);
-    if (!term.trim()) return [];
-
-    const searchWords = term.toLowerCase().trim().split(/\s+/);
-
-    return products.filter(p => {
-      const nombre = (p.nombre || "").toLowerCase();
-      const marca = (p.marca_producto || "").toLowerCase();
-      const ean = (p.id || "").toLowerCase();
-
-      return searchWords.every(word =>
-        nombre.includes(word) || marca.includes(word) || ean.includes(word)
-      );
-    });
+    return filterProductsByTerm(products, term, ['nombre', 'marca_producto', 'id']);
   }, []);
 
 
