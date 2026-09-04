@@ -3,15 +3,16 @@
  * Script para leer y actualizar las categorías en Firebase Realtime Database.
  */
 
-const admin = require('firebase-admin');
+const { initializeApp, cert } = require('firebase-admin/app');
+const { getDatabase } = require('firebase-admin/database');
 const serviceAccount = require('./serviceAccountKey.json');
 
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
+const app = initializeApp({
+  credential: cert(serviceAccount),
   databaseURL: 'https://superlista-ac191-default-rtdb.firebaseio.com'
 });
 
-const db = admin.database();
+const db = getDatabase(app);
 
 async function main() {
   const categoriesRef = db.ref('Categories');
