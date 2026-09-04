@@ -17,7 +17,10 @@
     "react-router-dom": "^7.18.3",
     "react-scripts": "^5.0.1",
     "sweetalert2": "^11.26.25",
-    "web-vitals": "^6.2.1"
+    "web-vitals": "^6.2.1",
+    "workbox-core": "^6.6.0",
+    "workbox-precaching": "^6.6.0",
+    "workbox-routing": "^6.6.0"
   },
   "devDependencies": {
     "csv-parser": "^3.2.0",
