@@ -8,10 +8,8 @@
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.20.0",
-    "csv-parser": "^3.2.0",
     "dotenv": "^17.2.1",
     "firebase": "^11.10.0",
-    "firebase-admin": "^13.10.0",
     "html5-qrcode": "^2.3.8",
     "lucide-react": "^0.524.0",
     "react": "^19.2.3",
@@ -19,8 +17,12 @@
     "react-router-dom": "^6.30.6",
     "react-scripts": "^5.0.1",
     "sweetalert2": "^11.26.25",
-    "unzipper": "^0.12.3",
     "web-vitals": "^2.1.4"
+  },
+  "devDependencies": {
+    "csv-parser": "^3.2.0",
+    "firebase-admin": "^13.10.0",
+    "unzipper": "^0.12.3"
   },
   "scripts": {
     "start": "react-scripts start",
