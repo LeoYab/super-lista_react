@@ -214,6 +214,51 @@ body {
   font-weight: 600;
   color: var(--text-color-primary);
   overflow: hidden;
+  transition: padding var(--transition-normal);
+  /* Without this, the browser's scroll anchoring "corrects" the scroll
+     position every time this element's height changes (i.e. every time it
+     collapses/expands), which re-triggers the scroll listener and creates
+     an infinite collapse/expand loop. */
+  overflow-anchor: none;
+}
+
+/* Collapsed on scroll-down: shrinks the summary banner and hides the
+   category chips entirely, giving the product list more room. The chip
+   row's height is fixed regardless of category count (single scrollable
+   row), so animating to a fixed max-height is safe here. */
+.list-header .category-tabs-wrapper {
+  max-height: 110px;
+  opacity: 1;
+  transition: max-height var(--transition-normal), opacity var(--transition-fast);
+}
+
+.list-header--collapsed {
+  padding-top: var(--spacing-sm);
+}
+
+.list-header--collapsed .category-tabs-wrapper {
+  max-height: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.list-header--collapsed .list-summary-banner {
+  padding: 8px var(--spacing-lg);
+  margin-bottom: var(--spacing-sm);
+}
+
+.list-header--collapsed .list-summary-savings,
+.list-header--collapsed .detected-super-link {
+  display: none;
+}
+
+.list-header--collapsed .list-summary-total {
+  font-size: 1.15rem;
+}
+
+.list-header--collapsed .list-summary-icon {
+  width: 32px;
+  height: 32px;
 }
 
 /* Summary Banner — flat pastel card replacing the old title/total row */
@@ -229,6 +274,7 @@ body {
   padding: var(--spacing-md) var(--spacing-lg);
   border-radius: var(--border-radius-lg);
   background-color: var(--primary-light-color);
+  transition: padding var(--transition-normal), margin-bottom var(--transition-normal);
 }
 
 .list-summary-banner::before,
@@ -293,6 +339,7 @@ body {
   font-size: 1.6rem;
   color: var(--primary-dark-color);
   letter-spacing: -0.02em;
+  transition: font-size var(--transition-normal);
 }
 
 .list-summary-icon {
@@ -306,6 +353,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: width var(--transition-normal), height var(--transition-normal);
 }
 
 /* Empty State */

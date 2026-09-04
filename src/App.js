@@ -6,6 +6,7 @@ import { useAuth, AuthProvider } from './context/AuthContext';
 import { subscribeToCategories, addCategory } from './services/firebaseService';
 import { resolveProductCategory, getCategorySetForBrand, MAPPED_BRANDS, CATEGORY_BRANDS } from './utils/categoryMapping';
 import { getDistanceKm } from './utils/geo';
+import useScrollCollapse from './hooks/useScrollCollapse';
 import { UserListsProvider } from './context/UserListsContext';
 import { ProductsProvider } from './context/ProductsContext';
 import { useUserListsContext } from './context/UserListsContext';
@@ -75,6 +76,11 @@ function MainAppContent() {
   const [selectedCategoryId, setSelectedCategoryId] = useState('');
   const [lastCategoryId, setLastCategoryId] = useState(null);
   const [groupByCategory, setGroupByCategory] = useState(false);
+
+  // Collapses the list-header (hides the category chips, shrinks the
+  // summary banner) while the user scrolls down the product list, to give
+  // it more vertical room; expands again near the top or on scroll-up.
+  const isListHeaderCollapsed = useScrollCollapse();
 
   // GPS State
   const [detectedSupermarket, setDetectedSupermarket] = useState(null);
@@ -436,7 +442,7 @@ function MainAppContent() {
             <ProductListSkeleton rows={3} />
           ) : currentListId ? (
             <>
-              <div className="list-header">
+              <div className={`list-header ${isListHeaderCollapsed ? 'list-header--collapsed' : ''}`}>
                 <div className="list-summary-banner">
                   <div className="list-summary-content">
                     {totalAhorro > 0 && (
