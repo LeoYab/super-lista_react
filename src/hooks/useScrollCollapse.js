@@ -4,31 +4,32 @@ import { useEffect, useState } from 'react';
  * Tracks window scroll to drive a "collapse on scroll-down" UI pattern
  * (e.g. shrinking a sticky header to give a list more room).
  *
- * Uses hysteresis rather than a per-frame delta: it only flips state once
- * the scroll position has moved by `flipDistance` px away from wherever it
- * was the last time state changed. A per-frame delta check flickers on any
- * momentary reversal inside a single scroll gesture — e.g. the deceleration
- * curve of a mouse-wheel "smooth scroll" often overshoots and settles back a
- * few px right at the end, which a naive delta check reads as "scrolled
- * back up". Comparing against the last flip point instead ignores that kind
- * of in-gesture noise while still reacting immediately to a genuine
- * direction change (a real upward swipe starts accumulating from the
- * current position right away).
+ * Combines anchor-based hysteresis (only flips once the scroll position has
+ * moved `flipDistance` px away from wherever it was at the last flip) with a
+ * minimum time gap between flips (`minFlipIntervalMs`). The distance check
+ * alone isn't enough: real scroll input is noisy (momentum-deceleration
+ * overshoot that settles back a bit, a mouse-wheel/trackpad's residual
+ * micro-jitter right as the user's hand slows down near the flip point,
+ * scroll events that arrive as one big coalesced jump instead of many small
+ * ones) and can cross the same boundary back and forth in rapid succession,
+ * which read naively looks like the header should flip every time — that's
+ * exactly the reported "opens and closes constantly while scrolling up"
+ * bug. Rate-limiting flips with a short cooldown makes rapid back-and-forth
+ * flipping structurally impossible (at most one flip per cooldown window)
+ * without adding any perceptible lag to a real, deliberate scroll gesture.
  *
  * Returns true once scrolled down past `threshold` px from the top AND
- * `flipDistance` px past the last flip; returns false again near the top
- * of the page or once scrolled back up `flipDistance` px from the last flip.
- * `flipDistance` defaults fairly high (well above a single line of text)
- * because mouse-wheel "smooth scroll" easing can overshoot the target and
- * settle back 20-35px right after a fast scroll — with a smaller margin
- * that settle-back alone reads as a genuine reversal and flips state right
- * back. A real swipe/scroll gesture moves far more than this either way.
+ * `flipDistance` px past the last flip; returns false again near the top of
+ * the page (always, regardless of cooldown — reaching the very top should
+ * never be blocked from re-expanding) or once scrolled back up
+ * `flipDistance` px from the last flip.
  */
-const useScrollCollapse = (threshold = 24, flipDistance = 56) => {
+const useScrollCollapse = (threshold = 24, flipDistance = 36, minFlipIntervalMs = 220) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
 
   useEffect(() => {
     let lastFlipScrollY = window.scrollY;
+    let lastFlipTime = 0;
 
     // Deliberately not throttled through requestAnimationFrame: rAF is
     // paused by the browser whenever the page isn't the actively
@@ -41,18 +42,27 @@ const useScrollCollapse = (threshold = 24, flipDistance = 56) => {
       if (currentScrollY <= threshold) {
         setIsCollapsed(false);
         lastFlipScrollY = currentScrollY;
-      } else if (currentScrollY - lastFlipScrollY > flipDistance) {
+        lastFlipTime = performance.now();
+        return;
+      }
+
+      const now = performance.now();
+      if (now - lastFlipTime < minFlipIntervalMs) return;
+
+      if (currentScrollY - lastFlipScrollY > flipDistance) {
         setIsCollapsed(true);
         lastFlipScrollY = currentScrollY;
+        lastFlipTime = now;
       } else if (lastFlipScrollY - currentScrollY > flipDistance) {
         setIsCollapsed(false);
         lastFlipScrollY = currentScrollY;
+        lastFlipTime = now;
       }
     };
 
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
-  }, [threshold, flipDistance]);
+  }, [threshold, flipDistance, minFlipIntervalMs]);
 
   return isCollapsed;
 };

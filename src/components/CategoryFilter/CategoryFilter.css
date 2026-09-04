@@ -12,6 +12,11 @@
   border-top: 1px solid var(--border-color-light);
   background-color: var(--background-color);
   -webkit-overflow-scrolling: touch;
+  /* Lets this shrink below its content's intrinsic height when the parent
+     .category-tabs-wrapper animates its CSS grid row down to 0fr (a grid
+     item's default min-height is "auto", which would otherwise refuse to
+     shrink and break the collapse animation). */
+  min-height: 0;
 }
 
 .category-scroll-container::-webkit-scrollbar {

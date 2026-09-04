@@ -475,7 +475,7 @@ function MainAppContent() {
                   </div>
                 </div>
 
-                <div className="category-tabs-wrapper" style={{ width: '100%', overflow: 'hidden' }}>
+                <div className="category-tabs-wrapper">
                   <CategoryFilter
                     categories={activeCategories}
                     selectedCategoryId={selectedCategoryId}

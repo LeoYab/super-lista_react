@@ -214,7 +214,7 @@ body {
   font-weight: 600;
   color: var(--text-color-primary);
   overflow: hidden;
-  transition: padding var(--transition-normal);
+  transition: padding var(--transition-collapse);
   /* Without this, the browser's scroll anchoring "corrects" the scroll
      position every time this element's height changes (i.e. every time it
      collapses/expands), which re-triggers the scroll listener and creates
@@ -223,13 +223,26 @@ body {
 }
 
 /* Collapsed on scroll-down: shrinks the summary banner and hides the
-   category chips entirely, giving the product list more room. The chip
-   row's height is fixed regardless of category count (single scrollable
-   row), so animating to a fixed max-height is safe here. */
+   category chips entirely, giving the product list more room. Uses the
+   CSS grid "1fr / 0fr" row-collapse technique instead of animating
+   max-height: animating max-height to a value bigger than the real content
+   (needed since content height isn't known in CSS) makes the easing curve
+   feel uneven — most of the transition happens with nothing visibly
+   changing. Animating the grid row itself tracks the actual content height
+   exactly, so the motion reads as smooth regardless of the chip row's size. */
 .list-header .category-tabs-wrapper {
-  max-height: 110px;
+  display: grid;
+  grid-template-rows: 1fr;
+  width: 100%;
   opacity: 1;
-  transition: max-height var(--transition-normal), opacity var(--transition-fast);
+  transition: grid-template-rows var(--transition-collapse), opacity var(--transition-normal);
+}
+
+/* The chip row's own padding/border isn't part of its "content" as far as
+   the grid row-collapse is concerned, so it'd otherwise be left behind as a
+   ~17px sliver once collapsed — shrink it along with the row. */
+.list-header .category-scroll-container {
+  transition: padding var(--transition-collapse), border-top-width var(--transition-collapse);
 }
 
 .list-header--collapsed {
@@ -237,9 +250,15 @@ body {
 }
 
 .list-header--collapsed .category-tabs-wrapper {
-  max-height: 0;
+  grid-template-rows: 0fr;
   opacity: 0;
   pointer-events: none;
+}
+
+.list-header--collapsed .category-scroll-container {
+  padding-top: 0;
+  padding-bottom: 0;
+  border-top-width: 0;
 }
 
 .list-header--collapsed .list-summary-banner {
@@ -274,7 +293,7 @@ body {
   padding: var(--spacing-md) var(--spacing-lg);
   border-radius: var(--border-radius-lg);
   background-color: var(--primary-light-color);
-  transition: padding var(--transition-normal), margin-bottom var(--transition-normal);
+  transition: padding var(--transition-collapse), margin-bottom var(--transition-collapse);
 }
 
 .list-summary-banner::before,
@@ -339,7 +358,7 @@ body {
   font-size: 1.6rem;
   color: var(--primary-dark-color);
   letter-spacing: -0.02em;
-  transition: font-size var(--transition-normal);
+  transition: font-size var(--transition-collapse);
 }
 
 .list-summary-icon {
@@ -353,7 +372,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: width var(--transition-normal), height var(--transition-normal);
+  transition: width var(--transition-collapse), height var(--transition-collapse);
 }
 
 /* Empty State */

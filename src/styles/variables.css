@@ -78,6 +78,10 @@
   /* Transitions */
   --transition-fast: 0.15s ease;
   --transition-normal: 0.3s ease;
+  /* Slightly longer, ease-out curve for content that grows/shrinks (e.g. the
+     collapsing list-header) — reads as noticeably softer than plain "ease"
+     without feeling sluggish. */
+  --transition-collapse: 0.36s cubic-bezier(0.4, 0, 0.2, 1);
 
   /* Swipe Threshold */
   --swipe-threshold: 90px;
