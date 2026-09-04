@@ -21,7 +21,7 @@ jobs:
       run: node -v && npm -v
 
     - name: Checkout dev branch
-      uses: actions/checkout@v4
+      uses: actions/checkout@v7
       with:
         ref: dev
         
