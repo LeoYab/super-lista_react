@@ -22,6 +22,15 @@
     "unzipper": "^0.12.3",
     "web-vitals": "^2.1.4"
   },
+  "overrides": {
+    "@tootallnate/once": "^2.0.1",
+    "underscore": "^1.13.8",
+    "qs": "^6.16.0",
+    "uuid": "^11.1.1",
+    "nth-check": "^2.1.1",
+    "css-select": "^4.3.0",
+    "serialize-javascript": "^7.1.1"
+  },
   "scripts": {
     "start": "react-scripts start",
     "data:copy": "node scripts/organize_data_for_public.js",
