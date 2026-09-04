@@ -11,13 +11,13 @@
     "dotenv": "^17.2.1",
     "firebase": "^11.10.0",
     "html5-qrcode": "^2.3.8",
-    "lucide-react": "^0.524.0",
+    "lucide-react": "^1.41.0",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
     "react-router-dom": "^6.30.6",
     "react-scripts": "^5.0.1",
     "sweetalert2": "^11.26.25",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^6.2.1"
   },
   "devDependencies": {
     "csv-parser": "^3.2.0",
