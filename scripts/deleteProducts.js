@@ -1,16 +1,17 @@
-const admin = require('firebase-admin');
+const { initializeApp, cert } = require('firebase-admin/app');
+const { getFirestore, FieldPath } = require('firebase-admin/firestore');
 
 // --- CONFIGURACIÓN ---
 // Reemplaza con la ruta a tu archivo de Service Account de Firebase.
 // Asegúrate de que este archivo no se suba a repositorios públicos.
-const serviceAccount = require('./serviceAccountKey.json'); 
+const serviceAccount = require('./serviceAccountKey.json');
 
 // Inicializa Firebase Admin SDK
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount)
+const app = initializeApp({
+  credential: cert(serviceAccount)
 });
 
-const db = admin.firestore();
+const db = getFirestore(app);
 
 // Define el patrón de terminación que quieres eliminar
 const SUFIX_TO_DELETE = '_changomas_1004';
@@ -85,7 +86,7 @@ async function cleanProductIdsWithSuffix() {
         let totalDeletedCount = 0;
 
         do {
-            query = productCollectionRef.orderBy(admin.firestore.FieldPath.documentId()).limit(batchSize);
+            query = productCollectionRef.orderBy(FieldPath.documentId()).limit(batchSize);
             if (lastDoc) {
                 query = query.startAfter(lastDoc);
             }
