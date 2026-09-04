@@ -19,12 +19,11 @@ import { useEffect, useState } from 'react';
  * without adding any perceptible lag to a real, deliberate scroll gesture.
  *
  * Returns true once scrolled down past `threshold` px from the top AND
- * `flipDistance` px past the last flip; returns false again near the top of
- * the page (always, regardless of cooldown — reaching the very top should
- * never be blocked from re-expanding) or once scrolled back up
- * `flipDistance` px from the last flip.
+ * `flipDistance` px past the last flip (subject to the cooldown); returns
+ * false again near the top of the page, or once scrolled back up
+ * `flipDistance` px from the last flip (also subject to the cooldown).
  */
-const useScrollCollapse = (threshold = 24, flipDistance = 36, minFlipIntervalMs = 220) => {
+const useScrollCollapse = (threshold = 24, flipDistance = 36, minFlipIntervalMs = 300) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
 
   useEffect(() => {
@@ -38,16 +37,27 @@ const useScrollCollapse = (threshold = 24, flipDistance = 36, minFlipIntervalMs 
     // numbers is cheap enough to run on every native scroll event as-is.
     const onScroll = () => {
       const currentScrollY = window.scrollY;
+      const now = performance.now();
+
+      // The cooldown applies uniformly, including the "near the top" case.
+      // It used to bypass the cooldown so reaching the top always expanded
+      // instantly, but that meant the browser's own rubber-band/momentum
+      // bounce around the top of the page — which can cross back and forth
+      // over `threshold` several times in well under 220ms while it settles
+      // — flipped state on every single crossing, uncooled. That was the
+      // real cause of the reported "opens and closes constantly while
+      // scrolling up": it always happens near the top, exactly where a
+      // bounce lives. Gating this branch too means the same one-flip-per-
+      // cooldown-window guarantee applies everywhere, at the cost of a
+      // barely-perceptible (<300ms) delay before it expands right at the top.
+      if (now - lastFlipTime < minFlipIntervalMs) return;
 
       if (currentScrollY <= threshold) {
         setIsCollapsed(false);
         lastFlipScrollY = currentScrollY;
-        lastFlipTime = performance.now();
+        lastFlipTime = now;
         return;
       }
-
-      const now = performance.now();
-      if (now - lastFlipTime < minFlipIntervalMs) return;
 
       if (currentScrollY - lastFlipScrollY > flipDistance) {
         setIsCollapsed(true);
