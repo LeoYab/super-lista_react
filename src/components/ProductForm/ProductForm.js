@@ -2,10 +2,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 
 import './ProductForm.css';
+import '../CategoryFilter/CategoryFilter.css';
 import Input from '../Input/Input';
 // Unused import removed
 
 import Button from '../Buttons/Button';
+import { CIRCLE_COLORS } from '../CategoryFilter/CategoryFilter';
 
 // IMPORT NEW SERVICE: Importa tus funciones de notificación
 import { showErrorAlert } from '../../Notifications/NotificationsServices';
@@ -41,7 +43,7 @@ const ProductForm = ({ editandoId, productoAEditar, onAgregar, onEditar, onCance
   useEffect(() => {
     if (categoryScrollRef.current) {
       const timer = setTimeout(() => {
-        const activeChip = categoryScrollRef.current.querySelector('.category-chip.active');
+        const activeChip = categoryScrollRef.current.querySelector('.category-circle-item.active');
         if (activeChip) {
           activeChip.scrollIntoView({
             behavior: 'smooth',
@@ -340,12 +342,12 @@ const ProductForm = ({ editandoId, productoAEditar, onAgregar, onEditar, onCance
 
         <div className="input-group category-section">
           <label>Categoría:</label>
-          <div className="category-scroll-list" ref={categoryScrollRef}>
-            {categories.map((cat) => (
+          <div className="category-scroll-container" ref={categoryScrollRef}>
+            {categories.map((cat, index) => (
               <button
                 key={cat.id}
                 type="button"
-                className={`category-chip ${productData.category === cat.id ? 'active' : ''}`}
+                className={`category-circle-item ${CIRCLE_COLORS[index % CIRCLE_COLORS.length]} ${productData.category === cat.id ? 'active' : ''}`}
                 onClick={() => {
                   const selectedCat = categories.find(c => c.id === cat.id);
                   setProductData(prev => ({
@@ -355,8 +357,8 @@ const ProductForm = ({ editandoId, productoAEditar, onAgregar, onEditar, onCance
                   }));
                 }}
               >
-                <span className="category-icon">{cat.icon}</span>
-                <span className="category-title">{cat.title}</span>
+                <span className="category-icon-circle category-icon-emoji">{cat.icon}</span>
+                <span className="category-circle-label">{cat.title}</span>
               </button>
             ))}
           </div>

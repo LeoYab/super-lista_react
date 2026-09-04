@@ -49,55 +49,17 @@
   color: var(--text-color-primary);
 }
 
-.category-scroll-list {
-  display: flex;
-  overflow-x: auto;
-  gap: var(--spacing-sm);
-  padding-bottom: var(--spacing-xs);
-  /* Space for scrollbar if visible */
-  scrollbar-width: none;
-  /* Firefox */
-  -ms-overflow-style: none;
-  /* IE 10+ */
-  -webkit-overflow-scrolling: touch;
-}
-
-.category-scroll-list::-webkit-scrollbar {
-  display: none;
-  /* Chrome/Safari/Webkit */
-}
-
-.category-chip {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 12px;
-  border-radius: var(--border-radius-full);
-  border: 1px solid var(--border-color);
-  background-color: var(--input-bg-color);
-  color: var(--text-color-secondary);
-  cursor: pointer;
-  white-space: nowrap;
-  transition: all 0.2s ease;
-  font-size: 0.85rem;
-  flex-shrink: 0;
-  height: 32px;
-  /* Fixed height to prevent stretching */
-}
-
-.category-chip:hover {
-  background-color: var(--border-color-light);
-}
-
-.category-chip.active {
-  background-color: var(--primary-light-color);
-  border-color: var(--primary-color);
-  color: var(--primary-dark-color);
-  font-weight: 600;
-}
-
-.category-icon {
-  font-size: 1.1rem;
+/* .category-scroll-container (shared with CategoryFilter) is normally a
+   full-bleed ribbon flush under the page header — its negative margins,
+   top border and page-background fill don't belong inside this padded
+   modal card, so neutralize just those here and keep the rest (the
+   circular chip layout, gap, hidden scrollbar) as-is. */
+.category-section .category-scroll-container {
+  width: 100%;
+  margin: 0;
+  padding: 4px 0 6px;
+  border-top: none;
+  background-color: transparent;
 }
 
 @media (max-width: 600px) {

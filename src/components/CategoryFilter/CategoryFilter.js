@@ -3,7 +3,9 @@ import './CategoryFilter.css';
 
 // Rotating pastel palette for the category circles — purely presentational
 // (derived from item position), no change to the categories data model.
-const CIRCLE_COLORS = ['tone-mint', 'tone-amber', 'tone-peach', 'tone-pink', 'tone-purple'];
+// Exported so other category pickers (e.g. ProductForm's) can reuse the
+// same circle-chip look for visual consistency.
+export const CIRCLE_COLORS = ['tone-mint', 'tone-amber', 'tone-peach', 'tone-pink', 'tone-purple'];
 
 const CategoryFilter = ({ categories, selectedCategoryId, onSelectCategory, groupByCategory, onToggleGroupBy }) => {
   return (
