@@ -35,6 +35,16 @@ body {
   -moz-osx-font-smoothing: grayscale;
   overflow-y: scroll;
   min-height: 100vh;
+  /* This is the actual scrolling box (html has default 'visible' overflow,
+     so its overflow-y above propagates here). `overflow-anchor: none` on
+     .list-header alone only stops that element from being chosen as the
+     anchor node — it doesn't stop the browser from picking a DIFFERENT
+     anchor (e.g. a product-list item) and adjusting scrollTop to keep it
+     visually still whenever .list-header's height changes above it. That
+     scrollTop correction is what re-triggers useScrollCollapse's scroll
+     listener and produces the expand/collapse loop. Disabling anchoring
+     for the whole scroller removes the correction entirely. */
+  overflow-anchor: none;
 }
 
 #root {
@@ -193,12 +203,13 @@ body {
   font-weight: 500;
 }
 
-/* Invisible marker used by useScrollCollapse (via IntersectionObserver) to
+/* Invisible marker used by useScrollCollapse (via a scroll listener) to
    detect "has the user scrolled down past this point" without tracking
    scroll position/direction by hand. Positioned absolutely against
    .main-content-area (position: relative) so it scrolls with the content
    but doesn't affect layout or take up visual space. The offset is the
-   scroll depth at which the list-header collapses. */
+   scroll depth at which the list-header collapses (expanding back needs a
+   further scroll-up past that, per the hysteresis gap in the hook). */
 .scroll-collapse-sentinel {
   position: absolute;
   top: 64px;
@@ -230,10 +241,10 @@ body {
   color: var(--text-color-primary);
   overflow: hidden;
   transition: padding var(--transition-collapse);
-  /* Without this, the browser's scroll anchoring "corrects" the scroll
-     position every time this element's height changes (i.e. every time it
-     collapses/expands), which re-triggers the scroll listener and creates
-     an infinite collapse/expand loop. */
+  /* Belt-and-suspenders alongside the `overflow-anchor: none` on `body`
+     (App.css): stops this element specifically from ever being picked as
+     the scroll anchor, on top of disabling anchoring for the page as a
+     whole. */
   overflow-anchor: none;
 }
 
