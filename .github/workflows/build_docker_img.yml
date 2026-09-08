@@ -47,16 +47,24 @@ jobs:
           file: ./Dockerfile
           push: false
           load: true
+          build-args: |
+            REACT_APP_FIREBASE_API_KEY=${{ secrets.REACT_APP_FIREBASE_API_KEY }}
+            REACT_APP_FIREBASE_AUTH_DOMAIN=${{ secrets.REACT_APP_FIREBASE_AUTH_DOMAIN }}
+            REACT_APP_FIREBASE_DATABASE_URL=${{ secrets.REACT_APP_FIREBASE_DATABASE_URL }}
+            REACT_APP_FIREBASE_PROJECT_ID=${{ secrets.REACT_APP_FIREBASE_PROJECT_ID }}
+            REACT_APP_FIREBASE_STORAGE_BUCKET=${{ secrets.REACT_APP_FIREBASE_STORAGE_BUCKET }}
+            REACT_APP_FIREBASE_MESSAGING_SENDER_ID=${{ secrets.REACT_APP_FIREBASE_MESSAGING_SENDER_ID }}
+            REACT_APP_FIREBASE_APP_ID=${{ secrets.REACT_APP_FIREBASE_APP_ID }}
           tags: |
             ${{ vars.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:${{ steps.calculate_tag.outputs.NEW_TAG }}
             ${{ vars.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:lts
 
       - name: Test Docker image
         run: |
-          docker run -d -p 3000:3000 ${{ vars.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:${{ steps.calculate_tag.outputs.NEW_TAG }}
+          docker run -d -p 8080:80 ${{ vars.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:${{ steps.calculate_tag.outputs.NEW_TAG }}
           sleep 15
-          curl -f http://localhost:3000 || { echo "The application didn't respond on port 3000"; exit 1; }
-          echo "The application responds correctly on port 3000."
+          curl -f http://localhost:8080 || { echo "The application didn't respond on port 8080"; exit 1; }
+          echo "The application responds correctly on port 8080."
 
       - name: Push Docker image
         if: success()
@@ -65,13 +73,21 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
+          build-args: |
+            REACT_APP_FIREBASE_API_KEY=${{ secrets.REACT_APP_FIREBASE_API_KEY }}
+            REACT_APP_FIREBASE_AUTH_DOMAIN=${{ secrets.REACT_APP_FIREBASE_AUTH_DOMAIN }}
+            REACT_APP_FIREBASE_DATABASE_URL=${{ secrets.REACT_APP_FIREBASE_DATABASE_URL }}
+            REACT_APP_FIREBASE_PROJECT_ID=${{ secrets.REACT_APP_FIREBASE_PROJECT_ID }}
+            REACT_APP_FIREBASE_STORAGE_BUCKET=${{ secrets.REACT_APP_FIREBASE_STORAGE_BUCKET }}
+            REACT_APP_FIREBASE_MESSAGING_SENDER_ID=${{ secrets.REACT_APP_FIREBASE_MESSAGING_SENDER_ID }}
+            REACT_APP_FIREBASE_APP_ID=${{ secrets.REACT_APP_FIREBASE_APP_ID }}
           tags: |
             ${{ vars.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:${{ steps.calculate_tag.outputs.NEW_TAG }}
             ${{ vars.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:lts
 
       # Disabled: Jenkins deploy is no longer used as of September 2026. Re-enable by removing the if: false line if Jenkins comes back.
       - name: Trigger Jenkins deploy (staging)
-        if: ture
+        if: true
         env:
           JENKINS_WEBHOOK_URL: ${{ secrets.JENKINS_WEBHOOK_URL }}
         run: |
