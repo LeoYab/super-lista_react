@@ -71,7 +71,7 @@ jobs:
 
       # Disabled: Jenkins deploy is no longer used as of September 2026. Re-enable by removing the if: false line if Jenkins comes back.
       - name: Trigger Jenkins deploy (staging)
-        if: false
+        if: ture
         env:
           JENKINS_WEBHOOK_URL: ${{ secrets.JENKINS_WEBHOOK_URL }}
         run: |
