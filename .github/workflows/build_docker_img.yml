@@ -110,3 +110,31 @@ jobs:
               fi
             }
           done
+
+
+            - name: Cleanup old Docker Hub tags
+        if: success()
+        env:
+          DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+        run: |
+          REPO="${{ vars.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}"
+          KEEP=5
+          TOKEN=$(curl -s -H "Content-Type: application/json" -X POST \
+            -d '{"username": "'"${{ vars.DOCKERHUB_USERNAME }}"'", "password": "'"$DOCKERHUB_TOKEN"'"}' \
+            https://hub.docker.com/v2/users/login/ | jq -r .token)
+          ALL_TAGS=$(curl -s -H "Authorization: Bearer $TOKEN" \
+            "https://hub.docker.com/v2/repositories/$REPO/tags/?page_size=100" | jq -r '.results[].name')
+          NUMERIC_SORTED=$(echo "$ALL_TAGS" | grep -v '^lts$' | sort -t. -k1,1nr)
+          TO_DELETE=$(echo "$NUMERIC_SORTED" | tail -n +$((KEEP + 1)))
+          if [ -z "$TO_DELETE" ]; then
+            echo "Nothing to delete, only $(echo "$NUMERIC_SORTED" | wc -l) versioned tags exist."
+          else
+            echo "Keeping: lts + $(echo "$NUMERIC_SORTED" | head -n $KEEP | tr '\n' ' ')"
+            echo "Deleting:"
+            echo "$TO_DELETE"
+            for TAG in $TO_DELETE; do
+              curl -s -o /dev/null -w "Deleted $TAG -> %{http_code}\n" -X DELETE \
+                -H "Authorization: Bearer $TOKEN" \
+                "https://hub.docker.com/v2/repositories/$REPO/tags/$TAG/"
+            done
+          fi
