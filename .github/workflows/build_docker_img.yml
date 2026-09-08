@@ -85,9 +85,7 @@ jobs:
             ${{ vars.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:${{ steps.calculate_tag.outputs.NEW_TAG }}
             ${{ vars.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:lts
 
-      # Disabled: Jenkins deploy is no longer used as of September 2026. Re-enable by removing the if: false line if Jenkins comes back.
       - name: Trigger Jenkins deploy (staging)
-        if: true
         env:
           JENKINS_WEBHOOK_URL: ${{ secrets.JENKINS_WEBHOOK_URL }}
         run: |
@@ -111,19 +109,15 @@ jobs:
             }
           done
 
-
-            - name: Cleanup old Docker Hub tags
+      - name: Cleanup old Docker Hub tags
         if: success()
         env:
           DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
         run: |
           REPO="${{ vars.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}"
           KEEP=5
-          TOKEN=$(curl -s -H "Content-Type: application/json" -X POST \
-            -d '{"username": "'"${{ vars.DOCKERHUB_USERNAME }}"'", "password": "'"$DOCKERHUB_TOKEN"'"}' \
-            https://hub.docker.com/v2/users/login/ | jq -r .token)
-          ALL_TAGS=$(curl -s -H "Authorization: Bearer $TOKEN" \
-            "https://hub.docker.com/v2/repositories/$REPO/tags/?page_size=100" | jq -r '.results[].name')
+          TOKEN=$(curl -s -H "Content-Type: application/json" -X POST -d '{"username": "'"${{ vars.DOCKERHUB_USERNAME }}"'", "password": "'"$DOCKERHUB_TOKEN"'"}' https://hub.docker.com/v2/users/login/ | jq -r .token)
+          ALL_TAGS=$(curl -s -H "Authorization: Bearer $TOKEN" "https://hub.docker.com/v2/repositories/$REPO/tags/?page_size=100" | jq -r '.results[].name')
           NUMERIC_SORTED=$(echo "$ALL_TAGS" | grep -v '^lts$' | sort -t. -k1,1nr)
           TO_DELETE=$(echo "$NUMERIC_SORTED" | tail -n +$((KEEP + 1)))
           if [ -z "$TO_DELETE" ]; then
@@ -133,8 +127,6 @@ jobs:
             echo "Deleting:"
             echo "$TO_DELETE"
             for TAG in $TO_DELETE; do
-              curl -s -o /dev/null -w "Deleted $TAG -> %{http_code}\n" -X DELETE \
-                -H "Authorization: Bearer $TOKEN" \
-                "https://hub.docker.com/v2/repositories/$REPO/tags/$TAG/"
+              curl -s -o /dev/null -w "Deleted $TAG -> %{http_code}\n" -X DELETE -H "Authorization: Bearer $TOKEN" "https://hub.docker.com/v2/repositories/$REPO/tags/$TAG/"
             done
           fi
