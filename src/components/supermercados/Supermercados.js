@@ -52,6 +52,11 @@ const Supermercados = () => {
   const [scannedProducts, setScannedProducts] = useState([]);
   const scannerRef = useRef(null);
   const scannerIsRunningRef = useRef(false);
+  const camerasRef = useRef([]);
+  const zoomFeatureRef = useRef(null);
+  const [activeCameraIndex, setActiveCameraIndex] = useState(0);
+  const [cameraCount, setCameraCount] = useState(0);
+  const [zoomInfo, setZoomInfo] = useState(null);
 
   const { addProduct } = useProductsContext();
   const { currentListId } = useUserListsContext();
@@ -605,6 +610,7 @@ const Supermercados = () => {
         html5QrCode = new Html5Qrcode("reader");
         scannerRef.current = html5QrCode;
         scannerIsRunningRef.current = false;
+        zoomFeatureRef.current = null;
 
         const config = {
           fps: 10,
@@ -619,12 +625,20 @@ const Supermercados = () => {
           ]
         };
 
-        // Intentar obtener cámaras primero para diagnósticos más precisos
-        Html5Qrcode.getCameras().then(devices => {
+        // Reuse the camera list fetched on the first start (e.g. when the
+        // user taps "Cambiar cámara") instead of re-prompting for permission.
+        const getCamerasPromise = camerasRef.current.length
+          ? Promise.resolve(camerasRef.current)
+          : Html5Qrcode.getCameras();
+
+        getCamerasPromise.then(devices => {
           if (devices && devices.length) {
+            camerasRef.current = devices;
+            setCameraCount(devices.length);
+            const selected = devices[activeCameraIndex] || devices[0];
             // Si hay cámaras, intentamos iniciar con la configuración preferida
             return html5QrCode.start(
-              { facingMode: "environment" },
+              selected.id,
               config,
               onScanSuccess,
               () => { }
@@ -635,6 +649,31 @@ const Supermercados = () => {
         })
           .then(() => {
             scannerIsRunningRef.current = true;
+            // Muchos celulares con varias lentes traseras arrancan con la
+            // gran angular/lejana por defecto, que no enfoca bien de cerca
+            // un código de barras. Si la cámara activa soporta zoom óptico
+            // o digital, se aplica un zoom inicial y se muestra un control
+            // deslizante para que el usuario lo ajuste.
+            try {
+              const zoom = html5QrCode.getRunningTrackCameraCapabilities().zoomFeature();
+              if (zoom.isSupported()) {
+                const min = zoom.min();
+                const max = zoom.max();
+                const step = zoom.step() || 0.1;
+                const current = zoom.value();
+                const suggested = Math.min(max, min + (max - min) * 0.4);
+                const initial = current && current > min ? current : suggested;
+                zoomFeatureRef.current = zoom;
+                setZoomInfo({ min, max, step, value: initial });
+                if (initial !== current) {
+                  zoom.apply(initial).catch(() => { });
+                }
+              } else {
+                setZoomInfo(null);
+              }
+            } catch (e) {
+              setZoomInfo(null);
+            }
           })
           .catch(err => {
             console.error("Error starting scanner:", err);
@@ -678,11 +717,29 @@ const Supermercados = () => {
         }
       };
     }
-  }, [showScanner, onScanSuccess]);
+  }, [showScanner, activeCameraIndex, onScanSuccess]);
 
   const handleCloseScanner = () => {
     setShowScanner(false);
     setScannedProducts([]);
+    setActiveCameraIndex(0);
+    setCameraCount(0);
+    setZoomInfo(null);
+    camerasRef.current = [];
+    zoomFeatureRef.current = null;
+  };
+
+  const handleSwitchCamera = () => {
+    if (camerasRef.current.length < 2) return;
+    setActiveCameraIndex(prev => (prev + 1) % camerasRef.current.length);
+  };
+
+  const handleZoomChange = (e) => {
+    const value = parseFloat(e.target.value);
+    setZoomInfo(prev => (prev ? { ...prev, value } : prev));
+    if (zoomFeatureRef.current) {
+      zoomFeatureRef.current.apply(value).catch(() => { });
+    }
   };
 
   const groupedProductsByBrand = useMemo(() => {
@@ -736,10 +793,29 @@ const Supermercados = () => {
           <div className="scanner-modal-content">
             <h3>Escanear Código de Barras</h3>
             <div id="reader" width="600px"></div>
-            <div className="scanner-actions" style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
+            {zoomInfo && (
+              <div className="scanner-zoom-control">
+                <span>Zoom</span>
+                <input
+                  type="range"
+                  min={zoomInfo.min}
+                  max={zoomInfo.max}
+                  step={zoomInfo.step}
+                  value={zoomInfo.value}
+                  onChange={handleZoomChange}
+                  aria-label="Zoom de la cámara"
+                />
+              </div>
+            )}
+            <div className="scanner-actions" style={{ display: 'flex', gap: '10px', marginTop: '10px', flexWrap: 'wrap' }}>
               <Button onClick={handleCloseScanner} variant="secondary">
                 Cerrar Escáner
               </Button>
+              {cameraCount > 1 && (
+                <Button onClick={handleSwitchCamera} variant="secondary">
+                  Cambiar cámara
+                </Button>
+              )}
               <input
                 type="file"
                 accept="image/*"

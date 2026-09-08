@@ -89,6 +89,11 @@ function MainAppContent() {
   const [showScanner, setShowScanner] = useState(false);
   const scannerRef = useRef(null);
   const scannerIsRunningRef = useRef(false);
+  const camerasRef = useRef([]);
+  const zoomFeatureRef = useRef(null);
+  const [activeCameraIndex, setActiveCameraIndex] = useState(0);
+  const [cameraCount, setCameraCount] = useState(0);
+  const [zoomInfo, setZoomInfo] = useState(null);
 
   // GPS Effect
   useEffect(() => {
@@ -292,6 +297,24 @@ function MainAppContent() {
 
   const handleCloseScanner = () => {
     setShowScanner(false);
+    setActiveCameraIndex(0);
+    setCameraCount(0);
+    setZoomInfo(null);
+    camerasRef.current = [];
+    zoomFeatureRef.current = null;
+  };
+
+  const handleSwitchCamera = () => {
+    if (camerasRef.current.length < 2) return;
+    setActiveCameraIndex(prev => (prev + 1) % camerasRef.current.length);
+  };
+
+  const handleZoomChange = (e) => {
+    const value = parseFloat(e.target.value);
+    setZoomInfo(prev => (prev ? { ...prev, value } : prev));
+    if (zoomFeatureRef.current) {
+      zoomFeatureRef.current.apply(value).catch(() => { });
+    }
   };
 
   useEffect(() => {
@@ -302,6 +325,7 @@ function MainAppContent() {
         html5QrCode = new Html5Qrcode("reader");
         scannerRef.current = html5QrCode;
         scannerIsRunningRef.current = false;
+        zoomFeatureRef.current = null;
 
         const config = {
           fps: 10,
@@ -316,10 +340,19 @@ function MainAppContent() {
           ]
         };
 
-        Html5Qrcode.getCameras().then(devices => {
+        // Reuse the camera list fetched on the first start (e.g. when the
+        // user taps "Cambiar cámara") instead of re-prompting for permission.
+        const getCamerasPromise = camerasRef.current.length
+          ? Promise.resolve(camerasRef.current)
+          : Html5Qrcode.getCameras();
+
+        getCamerasPromise.then(devices => {
           if (devices && devices.length) {
+            camerasRef.current = devices;
+            setCameraCount(devices.length);
+            const selected = devices[activeCameraIndex] || devices[0];
             return html5QrCode.start(
-              { facingMode: "environment" },
+              selected.id,
               config,
               onScanSuccess,
               () => { }
@@ -330,6 +363,30 @@ function MainAppContent() {
         })
           .then(() => {
             scannerIsRunningRef.current = true;
+            // Many phones with multiple rear lenses default to the wide/far
+            // one, which struggles to focus close on a barcode. When the
+            // running camera exposes optical/digital zoom, nudge it in a
+            // bit by default and expose a slider so the user can fine-tune.
+            try {
+              const zoom = html5QrCode.getRunningTrackCameraCapabilities().zoomFeature();
+              if (zoom.isSupported()) {
+                const min = zoom.min();
+                const max = zoom.max();
+                const step = zoom.step() || 0.1;
+                const current = zoom.value();
+                const suggested = Math.min(max, min + (max - min) * 0.4);
+                const initial = current && current > min ? current : suggested;
+                zoomFeatureRef.current = zoom;
+                setZoomInfo({ min, max, step, value: initial });
+                if (initial !== current) {
+                  zoom.apply(initial).catch(() => { });
+                }
+              } else {
+                setZoomInfo(null);
+              }
+            } catch (e) {
+              setZoomInfo(null);
+            }
           })
           .catch(err => {
             console.error("Error starting scanner:", err);
@@ -370,7 +427,7 @@ function MainAppContent() {
         }
       };
     }
-  }, [showScanner, onScanSuccess]);
+  }, [showScanner, activeCameraIndex, onScanSuccess]);
 
   // The supermarket whose categories are currently "active": the
   // GPS-detected one when it's Carrefour or ChangoMas, otherwise Carrefour
@@ -608,10 +665,29 @@ function MainAppContent() {
             <div className="scanner-modal-content">
               <h3>Escanear Código de Barras</h3>
               <div id="reader"></div>
-              <div className="scanner-actions" style={{ marginTop: '20px' }}>
+              {zoomInfo && (
+                <div className="scanner-zoom-control">
+                  <span>Zoom</span>
+                  <input
+                    type="range"
+                    min={zoomInfo.min}
+                    max={zoomInfo.max}
+                    step={zoomInfo.step}
+                    value={zoomInfo.value}
+                    onChange={handleZoomChange}
+                    aria-label="Zoom de la cámara"
+                  />
+                </div>
+              )}
+              <div className="scanner-actions" style={{ marginTop: '20px', display: 'flex', gap: '10px', flexWrap: 'wrap', justifyContent: 'center' }}>
                 <Button onClick={handleCloseScanner} variant="secondary">
                   Cerrar Escáner
                 </Button>
+                {cameraCount > 1 && (
+                  <Button onClick={handleSwitchCamera} variant="secondary">
+                    Cambiar cámara
+                  </Button>
+                )}
               </div>
             </div>
           </div>
