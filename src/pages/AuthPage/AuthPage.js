@@ -70,6 +70,9 @@ function AuthPage() {
         // El usuario cerró el popup: no es un error que deba mostrarse.
       } else if (err.code === 'auth/account-exists-with-different-credential') {
         setError('Ese correo ya está registrado con otro método de inicio de sesión.');
+      } else if (err.code === 'auth/unauthorized-domain') {
+        setError('Este sitio no está autorizado para iniciar sesión con Google. Agregá el dominio en Firebase Console > Authentication > Settings > Authorized domains.');
+        console.error('Error de autenticación con Google:', err);
       } else {
         setError('No se pudo iniciar sesión con Google. Por favor, inténtalo de nuevo.');
         console.error('Error de autenticación con Google:', err);
