@@ -13,7 +13,7 @@
 
 .auth-theme-toggle {
   position: absolute;
-  top: var(--spacing-lg);
+  top: calc(var(--spacing-xl) + env(safe-area-inset-top, 0px));
   right: var(--spacing-lg);
   color: var(--text-color-secondary) !important;
 }
@@ -128,6 +128,27 @@
 .auth-submit-btn {
   width: 100%;
   margin-top: var(--spacing-xs);
+}
+
+.auth-divider {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  margin: var(--spacing-lg) 0;
+  color: var(--text-color-light);
+  font-size: 0.8rem;
+}
+
+.auth-divider::before,
+.auth-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background-color: var(--border-color);
+}
+
+.auth-google-btn {
+  width: 100%;
 }
 
 .toggle-auth {
