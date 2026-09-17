@@ -11,7 +11,7 @@
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   text-decoration: none;
   white-space: nowrap;
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font-family);
   position: relative;
   overflow: hidden;
 }
@@ -41,12 +41,12 @@
      pairing) so the button reads as soft in both light and dark mode. */
   background-color: var(--primary-solid-end);
   color: var(--primary-solid-text);
-  box-shadow: 0 4px 6px -1px rgba(134, 239, 172, 0.4);
+  box-shadow: 0 4px 6px -1px color-mix(in srgb, var(--primary-solid-hover) 40%, transparent);
 }
 
 .btn-primary:hover:not(:disabled) {
   background-color: var(--primary-solid-hover);
-  box-shadow: 0 6px 8px -1px rgba(134, 239, 172, 0.5);
+  box-shadow: 0 6px 8px -1px color-mix(in srgb, var(--primary-solid-hover) 50%, transparent);
   transform: translateY(-1px);
 }
 
@@ -68,12 +68,12 @@
      keeps WCAG AA contrast in both themes. */
   background-color: var(--danger-solid);
   color: white;
-  box-shadow: 0 4px 6px -1px rgba(239, 68, 68, 0.3);
+  box-shadow: 0 4px 6px -1px color-mix(in srgb, var(--danger-solid) 30%, transparent);
 }
 
 .btn-danger:hover:not(:disabled) {
   background-color: var(--danger-solid-hover);
-  box-shadow: 0 6px 8px -1px rgba(239, 68, 68, 0.4);
+  box-shadow: 0 6px 8px -1px color-mix(in srgb, var(--danger-solid) 40%, transparent);
   transform: translateY(-1px);
 }
 
@@ -82,12 +82,12 @@
   /* Pastel fill + dark text, same pattern as .btn-primary. */
   background-color: var(--success-solid);
   color: var(--success-solid-text);
-  box-shadow: 0 4px 6px -1px rgba(167, 243, 208, 0.5);
+  box-shadow: 0 4px 6px -1px color-mix(in srgb, var(--success-solid-hover) 50%, transparent);
 }
 
 .btn-success:hover:not(:disabled) {
   background-color: var(--success-solid-hover);
-  box-shadow: 0 6px 8px -1px rgba(167, 243, 208, 0.6);
+  box-shadow: 0 6px 8px -1px color-mix(in srgb, var(--success-solid-hover) 60%, transparent);
   transform: translateY(-1px);
 }
 

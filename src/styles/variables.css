@@ -1,65 +1,77 @@
 /* src/styles/variables.css */
 
 :root {
-  /* --- Pastel Green/Mint Palette --- */
+  /* --- Market Green / Ticket Gold palette --- */
 
   /* Primary Colors */
-  --primary-color: #15803d;       /* Green 700 */
-  --primary-hover: #166534;       /* Green 800 */
-  --primary-light-color: #dcfce7; /* Green 100 */
-  --primary-dark-color: #14532d;  /* Green 900 */
+  --primary-color: #1f6b45;       /* Market green */
+  --primary-hover: #175939;
+  --primary-light-color: #dcefe1;
+  --primary-dark-color: #123421;
   /* Pastel fill + dark text for CTAs/badges, instead of a dark solid fill
      with white text: this is the "pastel" pattern used across buttons,
      pills and badges. Fixed (not theme-adaptive) so the pastel/dark-text
      pairing keeps WCAG AA contrast in both light and dark mode. */
-  --primary-solid-end: #bbf7d0;
-  --primary-solid-hover: #86efac;
-  --primary-solid-text: #166534;
+  --primary-solid-end: #bfe3cc;
+  --primary-solid-hover: #9fd2b3;
+  --primary-solid-text: #123421;
   /* Same pastel-fill pattern for success; danger stays a solid/white-text
      fill since errors should still read as urgent, not soft. */
-  --success-solid: #d1fae5;
-  --success-solid-hover: #a7f3d0;
-  --success-solid-text: #065f46;
-  --danger-solid: #dc2626;
-  --danger-solid-hover: #b91c1c;
+  --success-solid: #cfeedd;
+  --success-solid-hover: #aedfc4;
+  --success-solid-text: #0b4a33;
+  --danger-solid: #b3402a;
+  --danger-solid-hover: #983423;
 
   /* Accent Colors */
-  --accent-color: #10b981;        /* Emerald 500 (Success) */
-  --accent-hover: #059669;        /* Emerald 600 */
-  --secondary-accent: #f59e0b;    /* Amber 500 (Warning) */
-  --danger-color: #ef4444;        /* Red 500 (Error/Delete) */
-  --danger-hover: #dc2626;        /* Red 600 */
-  --danger-light-color: #fee2e2;  /* Red 100 */
-  --danger-text-color: #991b1b;   /* Red 800, readable on --danger-light-color */
-  --success-light-color: #d1fae5; /* Emerald 100 */
-  --success-text-color: #065f46;  /* Emerald 800, readable on --success-light-color */
+  --accent-color: #2f8f63;        /* Secondary green, icons/focus */
+  --accent-hover: #26744f;
+  --secondary-accent: #c98a12;    /* "Oferta" gold — warning/highlight */
+  --danger-color: #c24b33;        /* Brick red (error/delete) */
+  --danger-hover: #a63d28;
+  --danger-light-color: #f3ded4;
+  --danger-text-color: #7a2e1c;   /* readable on --danger-light-color */
+  --success-light-color: #d8f0e3;
+  --success-text-color: #0b4a33;  /* readable on --success-light-color */
+
+  /* "Best price" ticket accent — used only for the cheapest-store moment
+     in Comparador, never as a decorative color elsewhere. */
+  --savings-color: #b9770e;
+  --savings-color-light: #f6e4be;
+  --savings-color-text: #6b4508;  /* readable on --savings-color-light */
+
+  /* Neutral "in progress" status (GPS search, loading) — distinct from
+     success/warning/danger so a searching state never reads as done. */
+  --info-color: #2e6e8e;
+  --info-light-color: #dceaf0;
+  --info-text-color: #1d4a61;
 
   /* Neutral / Backgrounds */
-  --background-color: #f8fafc;    /* Slate 50 */
-  --card-bg-color: #ffffff;       /* White */
-  --input-bg-color: #f1f5f9;      /* Slate 100 */
-  --border-color: #e2e8f0;        /* Slate 200 */
-  --border-color-light: #f1f5f9;  /* Slate 100 */
+  --background-color: #f6f3ea;    /* Warm ticket paper */
+  --card-bg-color: #ffffff;
+  --input-bg-color: #f0ede0;
+  --border-color: #e4e0d2;        /* Parchment */
+  --border-color-light: #efebdd;
 
   /* Text Colors */
-  --text-color-primary: #1e293b;  /* Slate 800 */
-  --text-color-secondary: #64748b;/* Slate 500 */
-  --text-color-light: #94a3b8;    /* Slate 400 */
-  --text-color-inverse: #ffffff;  /* White text */
+  --text-color-primary: #20261f;  /* Green-tinted charcoal */
+  --text-color-secondary: #5b6459;
+  --text-color-light: #6a7263;
+  --text-color-inverse: #ffffff;
 
   /* Glass / overlay surfaces (theme-aware) */
   --glass-bg-strong: rgba(255, 255, 255, 0.85);
   --glass-bg-soft: rgba(255, 255, 255, 0.6);
   --glass-border: rgba(255, 255, 255, 0.5);
-  --bg-glass: rgba(248, 250, 252, 0.95);
-  --scrim-color: rgba(15, 23, 42, 0.4);
-  --hairline-shade: rgba(0, 0, 0, 0.05);
+  --bg-glass: rgba(246, 243, 234, 0.95);
+  --scrim-color: rgba(32, 38, 31, 0.45);
+  --hairline-shade: rgba(32, 38, 31, 0.06);
 
-  /* Shadows (Soft/Floating) */
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-  --shadow-strong: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  /* Shadows (Soft/Floating), ink-tinted instead of neutral black */
+  --shadow-sm: 0 1px 2px 0 rgb(32 38 31 / 0.06);
+  --shadow-md: 0 4px 6px -1px rgb(32 38 31 / 0.1), 0 2px 4px -2px rgb(32 38 31 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(32 38 31 / 0.1), 0 4px 6px -4px rgb(32 38 31 / 0.1);
+  --shadow-strong: 0 20px 25px -5px rgb(32 38 31 / 0.12), 0 8px 10px -6px rgb(32 38 31 / 0.12);
 
   /* Border Radius */
   --border-radius-sm: 6px;
@@ -78,16 +90,22 @@
   /* Transitions */
   --transition-fast: 0.15s ease;
   --transition-normal: 0.3s ease;
-  /* Slightly longer, ease-out curve for content that grows/shrinks (e.g. the
-     collapsing list-header) — reads as noticeably softer than plain "ease"
-     without feeling sluggish. */
-  --transition-collapse: 0.36s cubic-bezier(0.4, 0, 0.2, 1);
+  /* Ease-out curve for content that grows/shrinks (e.g. the collapsing
+     list-header). Kept short deliberately: this animates while the user's
+     finger/wheel is still actively scrolling, so anything much slower reads
+     as the scroll itself snagging rather than a header collapsing. */
+  --transition-collapse: 0.18s cubic-bezier(0.4, 0, 0.2, 1);
 
   /* Swipe Threshold */
   --swipe-threshold: 90px;
 
-  /* Typography */
-  --font-family: 'Outfit', 'Inter', sans-serif;
+  /* Typography: Inter carries body/list copy (best legibility at small
+     sizes); Outfit is reserved for headings and big numbers (prices,
+     screen titles) as a deliberate display voice. */
+  --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto',
+    'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  --font-family-display: 'Outfit', var(--font-family);
 
   color-scheme: light;
 }
@@ -99,36 +117,44 @@
   — no reliance on prefers-color-scheme cascading here.
 */
 :root[data-theme="dark"] {
-  --primary-color: #4ade80;
-  --primary-hover: #86efac;
-  --primary-light-color: rgba(74, 222, 128, 0.16);
-  --primary-dark-color: #bbf7d0;
+  --primary-color: #5fcb8b;
+  --primary-hover: #7ed9a4;
+  --primary-light-color: rgba(95, 203, 139, 0.16);
+  --primary-dark-color: #bfe3cc;
 
-  --accent-color: #34d399;
-  --accent-hover: #6ee7b7;
-  --secondary-accent: #fbbf24;
-  --danger-color: #f87171;
-  --danger-hover: #fca5a5;
-  --danger-light-color: rgba(248, 113, 113, 0.16);
-  --danger-text-color: #fca5a5;
-  --success-light-color: rgba(52, 211, 153, 0.16);
-  --success-text-color: #6ee7b7;
+  --accent-color: #5fcb8b;
+  --accent-hover: #83dba8;
+  --secondary-accent: #e4a83c;
+  --danger-color: #e28569;
+  --danger-hover: #eda58c;
+  --danger-light-color: rgba(226, 133, 105, 0.16);
+  --danger-text-color: #f3b79c;
+  --success-light-color: rgba(95, 203, 139, 0.16);
+  --success-text-color: #83dba8;
 
-  --background-color: #0f172a;
-  --card-bg-color: #1e293b;
-  --input-bg-color: #16213a;
-  --border-color: #334155;
-  --border-color-light: #263449;
+  --savings-color: #e8b34c;
+  --savings-color-light: rgba(232, 179, 76, 0.18);
+  --savings-color-text: #f3d9a0;
 
-  --text-color-primary: #f1f5f9;
-  --text-color-secondary: #94a3b8;
-  --text-color-light: #64748b;
-  --text-color-inverse: #0f172a;
+  --info-color: #7db9d6;
+  --info-light-color: rgba(125, 185, 214, 0.16);
+  --info-text-color: #a9d3e8;
 
-  --glass-bg-strong: rgba(30, 41, 59, 0.85);
-  --glass-bg-soft: rgba(30, 41, 59, 0.6);
-  --glass-border: rgba(148, 163, 184, 0.15);
-  --bg-glass: rgba(15, 23, 42, 0.95);
+  --background-color: #12211a;
+  --card-bg-color: #1c2e24;
+  --input-bg-color: #17281f;
+  --border-color: #2e4335;
+  --border-color-light: #24382c;
+
+  --text-color-primary: #eceae0;
+  --text-color-secondary: #9db0a2;
+  --text-color-light: #849986;
+  --text-color-inverse: #12211a;
+
+  --glass-bg-strong: rgba(28, 46, 36, 0.85);
+  --glass-bg-soft: rgba(28, 46, 36, 0.6);
+  --glass-border: rgba(157, 176, 162, 0.15);
+  --bg-glass: rgba(18, 33, 26, 0.95);
   --scrim-color: rgba(0, 0, 0, 0.6);
   --hairline-shade: rgba(255, 255, 255, 0.06);
 

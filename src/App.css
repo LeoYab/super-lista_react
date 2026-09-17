@@ -27,7 +27,7 @@ textarea:focus-visible,
 }
 
 body {
-  font-family: 'Outfit', sans-serif;
+  font-family: var(--font-family);
   background: var(--background-color);
   color: var(--text-color-primary);
   line-height: 1.6;
@@ -58,22 +58,33 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: var(--spacing-lg);
+  gap: var(--spacing-md);
   width: 100%;
   min-height: 100vh;
+  background-color: var(--background-color);
 }
 
 .loading-auth-icon {
-  width: 3.5rem;
-  height: 3.5rem;
-  border-radius: 16px;
+  width: 4.5rem;
+  height: 4.5rem;
+  border-radius: 20px;
   object-fit: contain;
   animation: loadingPulse 1.6s ease-in-out infinite;
+}
+
+.loading-auth-title {
+  font-family: var(--font-family-display);
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--primary-dark-color);
+  letter-spacing: -0.01em;
+  margin-top: calc(var(--spacing-sm) * -1);
 }
 
 .loading-auth-spinner {
   width: 28px;
   height: 28px;
+  margin-top: var(--spacing-sm);
   border: 3px solid var(--border-color);
   border-top-color: var(--primary-color);
   border-radius: 50%;
@@ -261,7 +272,7 @@ body {
   grid-template-rows: 1fr;
   width: 100%;
   opacity: 1;
-  transition: grid-template-rows var(--transition-collapse), opacity var(--transition-normal);
+  transition: grid-template-rows var(--transition-collapse), opacity var(--transition-collapse);
 }
 
 /* The chip row's own padding/border isn't part of its "content" as far as
@@ -379,11 +390,12 @@ body {
 }
 
 .list-summary-total {
-  font-family: 'Outfit', 'Inter', sans-serif;
-  font-weight: 800;
+  font-family: var(--font-family-display);
+  font-weight: 700;
   font-size: 1.6rem;
+  font-variant-numeric: tabular-nums;
   color: var(--primary-dark-color);
-  letter-spacing: -0.02em;
+  letter-spacing: -0.01em;
   transition: font-size var(--transition-collapse);
 }
 
@@ -457,7 +469,7 @@ body {
 /* SweetAlert2 Overrides for Consistency */
 .swal2-popup {
   border-radius: var(--border-radius-lg) !important;
-  font-family: 'Inter', sans-serif !important;
+  font-family: var(--font-family) !important;
   background-color: var(--card-bg-color) !important;
   color: var(--text-color-primary) !important;
 }

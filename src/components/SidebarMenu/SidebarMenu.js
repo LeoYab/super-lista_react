@@ -1,7 +1,6 @@
 // src/components/SidebarMenu/SidebarMenu.js
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // <--- IMPORTA useNavigate
-import { LogOut, Store, Sun, Moon } from 'lucide-react';
+import { LogOut, Sun, Moon, Copy, Trash2 } from 'lucide-react';
 import './SidebarMenu.css';
 import { useTheme } from '../../hooks/useTheme';
 // REMOVED: import Swal from 'sweetalert2'; // ¡Eliminamos esta importación!
@@ -41,7 +40,6 @@ const SidebarMenu = () => {
   const { userLists, createList, selectList, currentListId, deleteList, copyList } = useUserListsContext();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [newListName, setNewListName] = useState('');
-  const navigate = useNavigate(); // <--- INICIALIZA useNavigate
   const { theme, toggleTheme } = useTheme();
 
   const handleCreateList = () => {
@@ -85,12 +83,6 @@ const SidebarMenu = () => {
         showErrorAlert('Error', 'No se pudo eliminar la lista.'); // Replaced Swal.fire
       }
     }
-  };
-
-  // NUEVA FUNCIÓN para navegar a la página de supermercados
-  const handleGoToSupermercados = () => {
-    navigate('/supermercados'); // Redirige a la ruta /supermercados
-    setIsMenuOpen(false); // Cierra el menú después de navegar
   };
 
   return (
@@ -185,10 +177,7 @@ const SidebarMenu = () => {
                       variant="ghost"
                       size="small"
                     >
-                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-                      </svg>
+                      <Copy size={15} strokeWidth={2.5} />
                     </Button>
                     <Button
                       className="delete-list-button"
@@ -200,12 +189,7 @@ const SidebarMenu = () => {
                       variant="ghost"
                       size="small"
                     >
-                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                        <polyline points="3 6 5 6 21 6"></polyline>
-                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                        <line x1="10" y1="11" x2="10" y2="17"></line>
-                        <line x1="14" y1="11" x2="14" y2="17"></line>
-                      </svg>
+                      <Trash2 size={15} strokeWidth={2.5} />
                     </Button>
                   </div>
                 </li>
@@ -215,16 +199,6 @@ const SidebarMenu = () => {
         </div>
 
         {/* NUEVA SECCIÓN: Enlaces adicionales */}
-        <div className="menu-section additional-links">
-          <h4>Otras Secciones</h4>
-          <ul>
-            <li className="list-item" onClick={handleGoToSupermercados}>
-              <Store size={16} /> Explorar Supermercados
-            </li>
-            {/* Puedes agregar más enlaces aquí si los necesitas */}
-          </ul>
-        </div>
-
       </div >
     </>
   );
