@@ -25,6 +25,7 @@ import CategoryFilter from './components/CategoryFilter/CategoryFilter';
 import { ProductListSkeleton } from './components/Skeleton/Skeleton';
 
 import { Html5Qrcode, Html5QrcodeSupportedFormats } from "html5-qrcode";
+import { ShoppingBag, MapPin, BarChart2, Plus, ScanBarcode } from 'lucide-react';
 import { showErrorAlert, showSuccessToast } from './Notifications/NotificationsServices';
 import { fetchProductByEan } from './services/supermarketService';
 
@@ -37,7 +38,6 @@ import './App.css';
 import './components/header/Header.css';
 import './components/Input/Input.css';
 import './components/Select/Select.css';
-import './TotalSummary/TotalSummary.css';
 import './components/Buttons/Button.css';
 
 // Route-level code splitting: these pull in heavy deps (html5-qrcode, large
@@ -46,10 +46,22 @@ const AuthPage = lazy(() => import('./pages/AuthPage/AuthPage'));
 const Supermercados = lazy(() => import('./components/supermercados/Supermercados'));
 const Comparador = lazy(() => import('./components/Comparador/Comparador'));
 
-// Unused constant removed
-
-
-// Unused constant removed
+// Reorders getUserMedia camera devices so the main/wide rear lens comes
+// first. Phones with multiple rear cameras often enumerate an ultra-wide
+// or telephoto lens before the standard one; those have worse close-focus
+// behavior and make a barcode look smaller/farther in frame, which is the
+// most common cause of "the scanner won't recognize the code". Front
+// cameras are pushed to the very end since they're never useful here.
+function sortCamerasForBarcodeScan(devices) {
+  const scoreOf = (label = '') => {
+    const l = label.toLowerCase();
+    if (/front|user|face/.test(l)) return 3;
+    if (/ultra.?wide|wide.?angle|fish.?eye/.test(l)) return 2;
+    if (/tele/.test(l)) return 1;
+    return 0;
+  };
+  return [...devices].sort((a, b) => scoreOf(a.label) - scoreOf(b.label));
+}
 
 function MainAppContent() {
   const navigate = useNavigate();
@@ -329,7 +341,10 @@ function MainAppContent() {
 
         const config = {
           fps: 10,
-          qrbox: { width: 250, height: 250 },
+          // Wider-than-tall to match a 1D barcode's own shape instead of a
+          // square QR-sized box — easier to frame and a smaller region for
+          // the decoder to search.
+          qrbox: { width: 280, height: 150 },
           aspectRatio: 1.0,
           formatsToSupport: [
             Html5QrcodeSupportedFormats.EAN_13,
@@ -348,12 +363,30 @@ function MainAppContent() {
 
         getCamerasPromise.then(devices => {
           if (devices && devices.length) {
-            camerasRef.current = devices;
-            setCameraCount(devices.length);
-            const selected = devices[activeCameraIndex] || devices[0];
+            // Only reorder on the very first fetch of this scanner session —
+            // camerasRef.current is empty then. A user-triggered "Cambiar
+            // cámara" reuses the already-ordered list so cycling stays
+            // predictable.
+            const orderedDevices = camerasRef.current.length ? devices : sortCamerasForBarcodeScan(devices);
+            camerasRef.current = orderedDevices;
+            setCameraCount(orderedDevices.length);
+            const selected = orderedDevices[activeCameraIndex] || orderedDevices[0];
             return html5QrCode.start(
               selected.id,
-              config,
+              {
+                ...config,
+                // Overrides the plain deviceId constraint built from the
+                // first argument above with a fuller one: same exact
+                // device, but also asking for more resolution and
+                // continuous autofocus, both of which matter more than
+                // raw zoom for actually decoding a close-up barcode.
+                videoConstraints: {
+                  deviceId: { exact: selected.id },
+                  width: { ideal: 1920 },
+                  height: { ideal: 1080 },
+                  focusMode: { ideal: 'continuous' },
+                },
+              },
               onScanSuccess,
               () => { }
             );
@@ -363,10 +396,11 @@ function MainAppContent() {
         })
           .then(() => {
             scannerIsRunningRef.current = true;
-            // Many phones with multiple rear lenses default to the wide/far
-            // one, which struggles to focus close on a barcode. When the
-            // running camera exposes optical/digital zoom, nudge it in a
-            // bit by default and expose a slider so the user can fine-tune.
+            // When the running camera exposes optical/digital zoom, nudge
+            // it in by default (past the halfway point) and expose a
+            // slider so the user can fine-tune — on top of picking the
+            // main lens and requesting continuous autofocus above, this
+            // gets a close-up barcode to fill more of the frame.
             try {
               const zoom = html5QrCode.getRunningTrackCameraCapabilities().zoomFeature();
               if (zoom.isSupported()) {
@@ -374,7 +408,7 @@ function MainAppContent() {
                 const max = zoom.max();
                 const step = zoom.step() || 0.1;
                 const current = zoom.value();
-                const suggested = Math.min(max, min + (max - min) * 0.4);
+                const suggested = Math.min(max, min + (max - min) * 0.5);
                 const initial = current && current > min ? current : suggested;
                 zoomFeatureRef.current = zoom;
                 setZoomInfo({ min, max, step, value: initial });
@@ -525,11 +559,7 @@ function MainAppContent() {
                     )}
                   </div>
                   <div className="list-summary-icon">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"></path>
-                      <path d="M3 6h18"></path>
-                      <path d="M16 10a4 4 0 0 1-8 0"></path>
-                    </svg>
+                    <ShoppingBag size={22} strokeWidth={2.2} />
                   </div>
                 </div>
 
@@ -578,12 +608,7 @@ function MainAppContent() {
                   <Button
                     onClick={() => navigate('/supermercados')}
                     variant="secondary"
-                    icon={(
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-                        <circle cx="12" cy="10" r="3"></circle>
-                      </svg>
-                    )}
+                    icon={<MapPin size={20} />}
                     className="explore-super-button btn-square"
                     title="Explorar Precios"
                   >
@@ -592,13 +617,7 @@ function MainAppContent() {
                   <Button
                     onClick={() => navigate('/comparar')}
                     variant="secondary"
-                    icon={(
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <line x1="18" y1="20" x2="18" y2="10"></line>
-                        <line x1="12" y1="20" x2="12" y2="4"></line>
-                        <line x1="6" y1="20" x2="6" y2="14"></line>
-                      </svg>
-                    )}
+                    icon={<BarChart2 size={20} />}
                     className="compare-button btn-square"
                     title="Comparar Precios"
                   >
@@ -607,12 +626,7 @@ function MainAppContent() {
                   <Button
                     onClick={handleToggleForm}
                     variant="primary"
-                    icon={(
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <line x1="12" y1="5" x2="12" y2="19"></line>
-                        <line x1="5" y1="12" x2="19" y2="12"></line>
-                      </svg>
-                    )}
+                    icon={<Plus size={20} />}
                     className="toggle-form-button btn-square"
                   >
                     Agregar
@@ -620,18 +634,7 @@ function MainAppContent() {
                   <Button
                     onClick={() => setShowScanner(true)}
                     variant="secondary"
-                    icon={(
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M3 7V5a2 2 0 0 1 2-2h2" />
-                        <path d="M17 3h2a2 2 0 0 1 2 2v2" />
-                        <path d="M21 17v2a2 2 0 0 1-2 2h-2" />
-                        <path d="M7 21H5a2 2 0 0 1-2-2v-2" />
-                        <path d="M8 7v10" />
-                        <path d="M12 7v10" />
-                        <path d="M16 7v10" />
-                        <line x1="4" y1="12" x2="20" y2="12" />
-                      </svg>
-                    )}
+                    icon={<ScanBarcode size={20} />}
                     className="scan-product-button btn-square"
                   >
                     Escanear
@@ -712,6 +715,7 @@ function AppRouter() {
     return (
       <div className="loading-auth" role="status" aria-label="Cargando">
         <img src="/logo.svg" alt="" className="loading-auth-icon" />
+        <span className="loading-auth-title">SuperLista</span>
         <div className="loading-auth-spinner"></div>
       </div>
     );
@@ -720,6 +724,7 @@ function AppRouter() {
   const routeFallback = (
     <div className="loading-auth" role="status" aria-label="Cargando">
       <img src="/logo.svg" alt="" className="loading-auth-icon" />
+      <span className="loading-auth-title">SuperLista</span>
       <div className="loading-auth-spinner"></div>
     </div>
   );

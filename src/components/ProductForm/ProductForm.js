@@ -1,5 +1,6 @@
 // src/components/ProductForm/ProductForm.js
 import React, { useState, useEffect, useRef } from 'react';
+import { ScanBarcode, X, Check } from 'lucide-react';
 
 import './ProductForm.css';
 import '../CategoryFilter/CategoryFilter.css';
@@ -277,10 +278,10 @@ const ProductForm = ({ editandoId, productoAEditar, onAgregar, onEditar, onCance
             marginBottom: '15px',
             padding: '10px 14px',
             borderRadius: '8px',
-            backgroundColor: 'rgba(235, 94, 40, 0.08)',
-            border: '1px dashed #eb5e28',
+            backgroundColor: 'var(--savings-color-light)',
+            border: '1px dashed var(--savings-color)',
             fontSize: '0.88rem',
-            color: '#eb5e28',
+            color: 'var(--savings-color-text)',
             display: 'flex',
             flexDirection: 'column',
             gap: '6px',
@@ -303,7 +304,7 @@ const ProductForm = ({ editandoId, productoAEditar, onAgregar, onEditar, onCance
               <div>
                 <strong>🏷️ {productData.promo_cantidad.leyenda}:</strong>
                 {parseInt(productData.cantidad || 0) >= productData.promo_cantidad.min ? (
-                  <span style={{ marginLeft: '6px', fontWeight: 'bold', color: '#16a34a' }}>
+                  <span style={{ marginLeft: '6px', fontWeight: 'bold', color: 'var(--success-text-color)' }}>
                     ✅ ¡Descuento aplicado! Precio promedio: ${parseFloat(productData.valor).toFixed(2)}/u
                     {productData.valor_unitario_base && (
                       <span style={{ marginLeft: '4px', opacity: 0.7, textDecoration: 'line-through' }}>
@@ -366,29 +367,15 @@ const ProductForm = ({ editandoId, productoAEditar, onAgregar, onEditar, onCance
 
         <div className="form-actions">
           <Button type="button" variant="secondary" onClick={onScan} className="btn-square" title="Escanear">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M3 7V5a2 2 0 0 1 2-2h2" />
-              <path d="M17 3h2a2 2 0 0 1 2 2v2" />
-              <path d="M21 17v2a2 2 0 0 1-2 2h-2" />
-              <path d="M7 21H5a2 2 0 0 1-2-2v-2" />
-              <path d="M8 7v10" />
-              <path d="M12 7v10" />
-              <path d="M16 7v10" />
-              <line x1="4" y1="12" x2="20" y2="12" />
-            </svg>
+            <ScanBarcode size={20} />
           </Button>
 
           <Button type="button" variant="secondary" onClick={onCancelar} className="btn-square" title="Cancelar">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <line x1="18" y1="6" x2="6" y2="18"></line>
-              <line x1="6" y1="6" x2="18" y2="18"></line>
-            </svg>
+            <X size={20} />
           </Button>
 
           <Button type="submit" variant="primary" className="btn-square" title={editandoId ? 'Guardar' : 'Agregar'}>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <polyline points="20 6 9 17 4 12"></polyline>
-            </svg>
+            <Check size={20} />
           </Button>
         </div>
       </form>

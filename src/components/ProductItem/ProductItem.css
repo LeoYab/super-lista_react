@@ -3,24 +3,27 @@
 
 
 .product-item-wrapper {
+  /* Flat "ticket line" row instead of a floating shadow card — elevation
+     is reserved for real overlays/modals (see App.css principles). A
+     left accent bar + dashed bottom rule read as a receipt line item. */
   position: relative;
   overflow: hidden;
-  border-radius: var(--border-radius);
-  box-shadow: var(--shadow-sm);
+  border-radius: var(--border-radius-sm);
   border: 1px solid var(--border-color-light);
+  border-bottom: 1px dashed var(--border-color);
+  border-left: 3px solid transparent;
   background-color: var(--card-bg-color);
   display: flex;
   align-items: center;
   width: 100%;
   touch-action: pan-y;
   user-select: none;
-  margin-bottom: var(--spacing-sm);
-  transition: box-shadow var(--transition-normal);
+  transition: border-color var(--transition-normal);
 }
 
 .product-item-wrapper:hover {
-  box-shadow: var(--shadow-md);
   border-color: var(--primary-light-color);
+  border-left-color: var(--primary-color);
 }
 
 .product-item-card {
@@ -138,6 +141,7 @@
 .product-item-unit-detail {
   font-size: 0.85rem;
   color: var(--text-color-secondary);
+  font-variant-numeric: tabular-nums;
 }
 
 /* Right Content */
@@ -157,15 +161,17 @@
 }
 
 .product-item-total-price {
+  font-family: var(--font-family-display);
   font-size: 1rem;
-  font-weight: 700;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
   background-color: var(--success-solid);
   color: var(--success-solid-text);
   padding: 4px 12px;
   border-radius: var(--border-radius-full);
   min-width: 80px;
   text-align: center;
-  box-shadow: 0 2px 4px rgba(167, 243, 208, 0.4);
+  box-shadow: 0 2px 4px color-mix(in srgb, var(--success-solid-hover) 40%, transparent);
 }
 
 

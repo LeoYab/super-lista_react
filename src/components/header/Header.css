@@ -15,7 +15,7 @@
   height: 2.5rem;
   border-radius: 12px;
   object-fit: contain;
-  filter: drop-shadow(0 3px 6px rgba(21, 128, 61, 0.25));
+  filter: drop-shadow(0 3px 6px rgba(31, 107, 69, 0.25));
   transition: transform var(--transition-normal);
   flex-shrink: 0;
 }
@@ -25,7 +25,7 @@
 }
 
 .header-title {
-  font-family: 'Outfit', 'Inter', sans-serif;
+  font-family: var(--font-family-display);
   font-size: 1.35rem;
   font-weight: 700;
   color: var(--text-color-primary);

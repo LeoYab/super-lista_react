@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
+import { Pencil, Trash2 } from 'lucide-react';
 import './ProductItem.css';
 import Button from '../Buttons/Button';
 import { showConfirmAlert, showSuccessToast } from '../../Notifications/NotificationsServices';
@@ -163,14 +164,14 @@ const ProductItem = ({ producto, onEditar }) => {
             <Button
               onClick={handleDesktopEditButtonClick}
               title="Editar producto"
-              icon="✏️"
+              icon={<Pencil size={16} />}
               variant="ghost"
               size="small"
             />
             <Button
               onClick={handleDesktopDeleteButtonClick}
               title="Eliminar producto"
-              icon="🗑️"
+              icon={<Trash2 size={16} />}
               variant="danger"
               size="small"
             />

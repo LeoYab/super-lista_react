@@ -6,6 +6,7 @@ import Input from '../Input/Input';
 import Button from '../Buttons/Button';
 import SupermarketProductItem from './SupermarketProductItem/SupermarketProductItem';
 import { Html5Qrcode, Html5QrcodeSupportedFormats } from "html5-qrcode";
+import { ArrowLeft } from 'lucide-react';
 import { useProductsContext } from '../../context/ProductsContext';
 import { useUserListsContext } from '../../context/UserListsContext';
 import { subscribeToCategories, addCategory } from '../../services/firebaseService';
@@ -18,6 +19,23 @@ import { BrandGridSkeleton, ProductListSkeleton } from '../Skeleton/Skeleton';
 
 
 const PRODUCTS_PER_PAGE = 20;
+
+// Reorders getUserMedia camera devices so the main/wide rear lens comes
+// first. Phones with multiple rear cameras often enumerate an ultra-wide
+// or telephoto lens before the standard one; those have worse close-focus
+// behavior and make a barcode look smaller/farther in frame, which is the
+// most common cause of "the scanner won't recognize the code". Front
+// cameras are pushed to the very end since they're never useful here.
+function sortCamerasForBarcodeScan(devices) {
+  const scoreOf = (label = '') => {
+    const l = label.toLowerCase();
+    if (/front|user|face/.test(l)) return 3;
+    if (/ultra.?wide|wide.?angle|fish.?eye/.test(l)) return 2;
+    if (/tele/.test(l)) return 1;
+    return 0;
+  };
+  return [...devices].sort((a, b) => scoreOf(a.label) - scoreOf(b.label));
+}
 
 const Supermercados = () => {
   const navigate = useNavigate();
@@ -633,13 +651,31 @@ const Supermercados = () => {
 
         getCamerasPromise.then(devices => {
           if (devices && devices.length) {
-            camerasRef.current = devices;
-            setCameraCount(devices.length);
-            const selected = devices[activeCameraIndex] || devices[0];
+            // Only reorder on the very first fetch of this scanner session —
+            // camerasRef.current is empty then. A user-triggered "Cambiar
+            // cámara" reuses the already-ordered list so cycling stays
+            // predictable.
+            const orderedDevices = camerasRef.current.length ? devices : sortCamerasForBarcodeScan(devices);
+            camerasRef.current = orderedDevices;
+            setCameraCount(orderedDevices.length);
+            const selected = orderedDevices[activeCameraIndex] || orderedDevices[0];
             // Si hay cámaras, intentamos iniciar con la configuración preferida
             return html5QrCode.start(
               selected.id,
-              config,
+              {
+                ...config,
+                // Overrides the plain deviceId constraint built from the
+                // first argument above with a fuller one: same exact
+                // device, but also asking for more resolution and
+                // continuous autofocus, both of which matter more than
+                // raw zoom for actually decoding a close-up barcode.
+                videoConstraints: {
+                  deviceId: { exact: selected.id },
+                  width: { ideal: 1920 },
+                  height: { ideal: 1080 },
+                  focusMode: { ideal: 'continuous' },
+                },
+              },
               onScanSuccess,
               () => { }
             );
@@ -651,9 +687,10 @@ const Supermercados = () => {
             scannerIsRunningRef.current = true;
             // Muchos celulares con varias lentes traseras arrancan con la
             // gran angular/lejana por defecto, que no enfoca bien de cerca
-            // un código de barras. Si la cámara activa soporta zoom óptico
-            // o digital, se aplica un zoom inicial y se muestra un control
-            // deslizante para que el usuario lo ajuste.
+            // un código de barras. Elegir el lente principal y pedir foco
+            // continuo (arriba) ya ayuda; si además la cámara activa
+            // soporta zoom óptico o digital, se aplica un zoom inicial y
+            // se muestra un control deslizante para que el usuario lo ajuste.
             try {
               const zoom = html5QrCode.getRunningTrackCameraCapabilities().zoomFeature();
               if (zoom.isSupported()) {
@@ -661,7 +698,7 @@ const Supermercados = () => {
                 const max = zoom.max();
                 const step = zoom.step() || 0.1;
                 const current = zoom.value();
-                const suggested = Math.min(max, min + (max - min) * 0.4);
+                const suggested = Math.min(max, min + (max - min) * 0.5);
                 const initial = current && current > min ? current : suggested;
                 zoomFeatureRef.current = zoom;
                 setZoomInfo({ min, max, step, value: initial });
@@ -777,10 +814,7 @@ const Supermercados = () => {
             border: '1px solid var(--border-color)'
           }}
         >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-            <line x1="19" y1="12" x2="5" y2="12"></line>
-            <polyline points="12 19 5 12 12 5"></polyline>
-          </svg>
+          <ArrowLeft size={20} strokeWidth={2.5} />
         </Button>
         <h2 style={{ margin: 0, fontSize: '1.8rem', textAlign: 'left', color: 'var(--primary-dark-color)' }}>
           Supermercados
@@ -978,7 +1012,7 @@ const Supermercados = () => {
                                   >
                                     <strong>{branch.id_sucursal}</strong> - {label.toUpperCase()}
                                     {branch.distance !== undefined && branch.distance !== null && branch.distance !== Infinity && (
-                                      <span style={{ marginLeft: '8px', color: '#28a745', fontSize: '0.9em' }}>
+                                      <span style={{ marginLeft: '8px', color: 'var(--primary-color)', fontSize: '0.9em' }}>
                                         ({branch.distance.toFixed(1)} km)
                                       </span>
                                     )}
@@ -991,7 +1025,7 @@ const Supermercados = () => {
                               const text = `${branch.id_sucursal} ${branch.direccion_sucursal || ''} ${branch.nombre_sucursal || ''}`.toLowerCase();
                               return text.includes(search);
                             }).length === 0 && (
-                                <div className="dropdown-item" style={{ cursor: 'default', color: '#999' }}>
+                                <div className="dropdown-item" style={{ cursor: 'default', color: 'var(--text-color-light)' }}>
                                   No se encontraron resultados
                                 </div>
                               )}

@@ -87,8 +87,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(15, 23, 42, 0.4);
-  /* Slate-900 with opacity */
+  background-color: var(--scrim-color);
   backdrop-filter: blur(4px);
   z-index: 999;
   animation: fadeIn 0.3s ease;
@@ -174,17 +173,18 @@
 
 .logout-button-menu:hover {
   color: var(--danger-color) !important;
-  background-color: #fee2e2 !important;
+  background-color: var(--danger-light-color) !important;
 }
 
 /* Menu Sections */
 .menu-section h4 {
   color: var(--text-color-secondary);
-  text-transform: uppercase;
-  font-size: 0.75rem;
-  letter-spacing: 0.05em;
+  font-family: var(--font-family-display);
+  font-size: 0.9rem;
   margin-bottom: var(--spacing-md);
-  font-weight: 700;
+  font-weight: 600;
+  border-left: 3px solid var(--primary-light-color);
+  padding-left: var(--spacing-sm);
 }
 
 .list-names {
@@ -219,8 +219,7 @@
 .list-item.active {
   background-color: var(--primary-light-color);
   color: var(--primary-dark-color);
-  border-color: rgba(21, 128, 61, 0.2);
-  /* Primary color with opacity */
+  border-color: color-mix(in srgb, var(--primary-color) 25%, transparent);
 }
 
 .list-item span {
@@ -315,7 +314,7 @@
 }
 
 .delete-list-button:hover {
-  background-color: #fee2e2 !important; /* Red-100 */
+  background-color: var(--danger-light-color) !important;
   color: var(--danger-color) !important;
   box-shadow: none !important;
 }
@@ -328,33 +327,4 @@
   background-color: var(--primary-light-color) !important;
   color: var(--primary-color) !important;
   box-shadow: none !important;
-}
-
-/* Additional Links */
-.sidebar-menu .additional-links {
-  margin-top: auto;
-  /* Push to bottom if space allows, or just spacing */
-  padding-top: var(--spacing-md);
-  border-top: 1px solid var(--border-color-light);
-}
-
-.sidebar-menu .additional-links li {
-  padding: var(--spacing-sm) var(--spacing-md);
-  cursor: pointer;
-  transition: all var(--transition-fast);
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-md);
-  color: var(--text-color-secondary);
-  font-weight: 500;
-  border-radius: var(--border-radius);
-}
-
-.sidebar-menu .additional-links li:hover {
-  background-color: var(--background-color);
-  color: var(--primary-color);
-}
-
-.sidebar-menu .additional-links li span:first-child {
-  font-size: 1.2rem;
 }

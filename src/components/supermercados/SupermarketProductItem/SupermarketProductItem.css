@@ -70,8 +70,10 @@
 }
 
 .product-price {
+  font-family: var(--font-family-display);
+  font-variant-numeric: tabular-nums;
   font-size: 1.15rem;
-  font-weight: 800;
+  font-weight: 700;
   color: var(--success-text-color);
   background: var(--success-light-color);
   padding: 4px 12px;
@@ -80,12 +82,10 @@
 }
 
 .product-stock {
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   padding: 4px 10px;
   border-radius: 99px;
-  text-transform: uppercase;
-  font-weight: 800;
-  letter-spacing: 0.05em;
+  font-weight: 700;
 }
 
 .product-stock.in-stock {
@@ -163,10 +163,10 @@
 }
 
 .supermarket-product-item-card.has-offer {
-  border-left: 4px solid var(--accent-color);
+  border-left: 4px solid var(--savings-color);
 }
 
 .supermarket-product-item-card.has-offer .product-price {
-  color: var(--danger-text-color);
-  background-color: var(--danger-light-color);
+  color: var(--savings-color-text);
+  background-color: var(--savings-color-light);
 }

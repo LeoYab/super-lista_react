@@ -15,13 +15,15 @@
 .product-form-container h3 {
   margin-bottom: var(--spacing-lg);
   color: var(--primary-color);
+  font-family: var(--font-family-display);
+  font-weight: 600;
   text-align: center;
   font-size: 1.5rem;
 }
 
 .form-error {
   color: var(--danger-color);
-  background-color: #fee2e2;
+  background-color: var(--danger-light-color);
   padding: var(--spacing-sm);
   border-radius: var(--border-radius);
   margin-bottom: var(--spacing-md);

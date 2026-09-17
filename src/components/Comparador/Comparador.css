@@ -38,10 +38,11 @@
 }
 
 .comparador-header h2 {
+  font-family: var(--font-family-display);
   font-size: 1.5rem;
-  font-weight: 800;
+  font-weight: 700;
   color: var(--text-color-primary);
-  letter-spacing: -0.02em;
+  letter-spacing: -0.01em;
   margin: 0;
 }
 
@@ -71,52 +72,27 @@
 /* States */
 .gps-state-idle,
 .gps-state-loading {
-  background-color: #eff6ff;
-  border-color: #93c5fd;
-  color: #1d4ed8;
+  background-color: var(--info-light-color);
+  border-color: var(--info-color);
+  color: var(--info-text-color);
 }
 
 .gps-state-success {
-  background-color: #f0fdf4;
-  border-color: #86efac;
-  color: #15803d;
+  background-color: var(--success-light-color);
+  border-color: var(--primary-color);
+  color: var(--success-text-color);
 }
 
 .gps-state-warning {
-  background-color: #fffbeb;
-  border-color: #fcd34d;
-  color: #92400e;
+  background-color: var(--savings-color-light);
+  border-color: var(--savings-color);
+  color: var(--savings-color-text);
 }
 
 .gps-state-error {
-  background-color: #fef2f2;
-  border-color: #fca5a5;
-  color: #b91c1c;
-}
-
-:root[data-theme="dark"] .gps-state-idle,
-:root[data-theme="dark"] .gps-state-loading {
-  background-color: rgba(59, 130, 246, 0.12);
-  border-color: rgba(96, 165, 250, 0.4);
-  color: #93c5fd;
-}
-
-:root[data-theme="dark"] .gps-state-success {
-  background-color: rgba(34, 197, 94, 0.12);
-  border-color: rgba(74, 222, 128, 0.4);
-  color: #86efac;
-}
-
-:root[data-theme="dark"] .gps-state-warning {
-  background-color: rgba(245, 158, 11, 0.12);
-  border-color: rgba(251, 191, 36, 0.4);
-  color: #fcd34d;
-}
-
-:root[data-theme="dark"] .gps-state-error {
-  background-color: rgba(239, 68, 68, 0.12);
-  border-color: rgba(248, 113, 113, 0.4);
-  color: #fca5a5;
+  background-color: var(--danger-light-color);
+  border-color: var(--danger-color);
+  color: var(--danger-text-color);
 }
 
 .gps-indicator-dot {
@@ -128,21 +104,21 @@
 
 .gps-state-idle .gps-indicator-dot,
 .gps-state-loading .gps-indicator-dot {
-  background-color: #3b82f6;
+  background-color: var(--info-color);
   animation: gps-pulse 1.2s ease-in-out infinite;
 }
 
 .gps-state-success .gps-indicator-dot {
-  background-color: #22c55e;
+  background-color: var(--primary-color);
   animation: gps-pulse-green 1.5s ease-in-out infinite;
 }
 
 .gps-state-warning .gps-indicator-dot {
-  background-color: #f59e0b;
+  background-color: var(--savings-color);
 }
 
 .gps-state-error .gps-indicator-dot {
-  background-color: #ef4444;
+  background-color: var(--danger-color);
 }
 
 .gps-icon {
@@ -422,7 +398,7 @@
 
 .delete-item-btn:hover {
   color: var(--danger-color);
-  background-color: rgba(239, 68, 68, 0.1);
+  background-color: var(--danger-light-color);
   transform: scale(1.1);
 }
 
@@ -446,13 +422,13 @@
   white-space: normal !important;
   text-align: center;
   background: var(--primary-solid-end) !important;
-  box-shadow: 0 4px 18px rgba(134, 239, 172, 0.5) !important;
+  box-shadow: 0 4px 18px color-mix(in srgb, var(--primary-solid-hover) 50%, transparent) !important;
   transition: all 0.25s ease !important;
 }
 
 .search-cheapest-btn:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(134, 239, 172, 0.6) !important;
+  box-shadow: 0 8px 24px color-mix(in srgb, var(--primary-solid-hover) 60%, transparent) !important;
 }
 
 .search-cheapest-btn:active:not(:disabled) {
@@ -574,24 +550,24 @@
 }
 
 .status-badge.success {
-  background-color: rgba(16, 185, 129, 0.12);
-  color: #059669;
+  background-color: var(--success-light-color);
+  color: var(--success-text-color);
 }
 
 .status-badge.error {
-  background-color: rgba(239, 68, 68, 0.1);
+  background-color: var(--danger-light-color);
   color: var(--danger-color);
 }
 
 .status-badge.pending {
-  background-color: rgba(21, 128, 61, 0.1);
+  background-color: var(--primary-light-color);
   color: var(--primary-color);
 }
 
 .mini-spinner {
   width: 10px;
   height: 10px;
-  border: 2px solid rgba(21, 128, 61, 0.3);
+  border: 2px solid color-mix(in srgb, var(--primary-color) 30%, transparent);
   border-top: 2px solid var(--primary-color);
   border-radius: 50%;
   animation: spin 0.6s linear infinite;
@@ -607,15 +583,21 @@
 }
 
 /* ─── Winner Banner ──────────────────────────────────── */
+/* This is the app's one bold moment (see design principles in App.css /
+   the redesign plan): a stamped "ticket" rather than another green card,
+   so it reads as a distinct result instead of blending into the rest of
+   the (green) brand chrome. */
 .winner-banner {
-  background: #059669;
-  color: white;
+  background:
+    linear-gradient(135deg, var(--savings-color-light), var(--card-bg-color) 65%);
+  color: var(--text-color-primary);
+  border: 2px dashed var(--savings-color);
   border-radius: var(--border-radius-lg);
   padding: var(--spacing-md) var(--spacing-lg);
   display: flex;
   align-items: center;
   gap: var(--spacing-md);
-  box-shadow: 0 8px 24px rgba(16, 185, 129, 0.4);
+  box-shadow: var(--shadow-md);
   position: relative;
   overflow: hidden;
 }
@@ -627,7 +609,7 @@
   right: -5%;
   width: 130px;
   height: 130px;
-  background: rgba(255, 255, 255, 0.08);
+  background: color-mix(in srgb, var(--savings-color) 12%, transparent);
   border-radius: 50%;
   pointer-events: none;
 }
@@ -645,36 +627,48 @@
 
 .winner-tag {
   display: inline-block;
-  font-size: 0.65rem;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  background: rgba(255, 255, 255, 0.25);
+  font-size: 0.7rem;
+  font-weight: 700;
+  background: var(--savings-color);
+  color: white;
   border-radius: var(--border-radius-full);
-  padding: 2px 9px;
-  margin-bottom: 4px;
+  padding: 2px 10px;
+  margin-bottom: 6px;
 }
 
 .winner-info h3 {
-  font-size: 1.15rem;
-  font-weight: 800;
-  margin: 0 0 4px;
+  font-family: var(--font-family-display);
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin: 0 0 2px;
   line-height: 1.2;
+  color: var(--text-color-primary);
 }
 
 .winner-price {
-  font-size: 0.9rem;
-  opacity: 0.95;
+  font-family: var(--font-family-display);
+  font-variant-numeric: tabular-nums;
+  font-size: 1.7rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--savings-color-text);
   margin: 0 0 2px;
 }
 
-.winner-price strong {
-  font-size: 1.1rem;
-  font-weight: 800;
+.winner-savings {
+  display: inline-block;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--success-text-color);
+  background: var(--success-light-color);
+  border-radius: var(--border-radius-full);
+  padding: 2px 10px;
+  margin: 0 0 6px;
 }
 
 .winner-stats {
   font-size: 0.78rem;
-  opacity: 0.8;
+  color: var(--text-color-secondary);
   margin: 0;
 }
 
@@ -700,18 +694,18 @@
 
 .supermarket-rank-card:hover {
   border-color: var(--primary-color);
-  box-shadow: 0 4px 20px rgba(21, 128, 61, 0.15);
+  box-shadow: 0 4px 20px color-mix(in srgb, var(--primary-color) 15%, transparent);
   transform: translateY(-1px);
 }
 
 .supermarket-rank-card.is-winner {
-  border-color: #10b981;
+  border-color: var(--savings-color);
   background: var(--card-bg-color);
 }
 
 .supermarket-rank-card.is-expanded {
   border-color: var(--primary-color);
-  box-shadow: 0 4px 20px rgba(21, 128, 61, 0.12);
+  box-shadow: 0 4px 20px color-mix(in srgb, var(--primary-color) 12%, transparent);
 }
 
 .supermarket-rank-card.is-expanded .expand-chevron-icon {
@@ -810,13 +804,15 @@
 }
 
 .supermarket-rank-total {
+  font-family: var(--font-family-display);
+  font-variant-numeric: tabular-nums;
   font-size: 1.2rem;
-  font-weight: 800;
+  font-weight: 700;
   color: var(--text-color-primary);
 }
 
 .is-winner .supermarket-rank-total {
-  color: #059669;
+  color: var(--savings-color-text);
 }
 
 /* Found ratio badge */
@@ -828,17 +824,17 @@
 }
 
 .ratio-high {
-  background-color: rgba(16, 185, 129, 0.12);
-  color: #059669;
+  background-color: var(--success-light-color);
+  color: var(--success-text-color);
 }
 
 .ratio-mid {
-  background-color: rgba(245, 158, 11, 0.12);
-  color: #b45309;
+  background-color: var(--savings-color-light);
+  color: var(--savings-color-text);
 }
 
 .ratio-low {
-  background-color: rgba(239, 68, 68, 0.1);
+  background-color: var(--danger-light-color);
   color: var(--danger-color);
 }
 
@@ -864,11 +860,9 @@
 .details-header-row {
   display: flex;
   justify-content: space-between;
-  font-size: 0.72rem;
-  font-weight: 700;
-  color: var(--text-color-light);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-color-secondary);
   padding: 0 4px 6px;
   border-bottom: 1px solid var(--border-color-light);
 }
@@ -983,17 +977,17 @@
 }
 
 .details-product-price.has-discount {
-  color: #059669;
+  color: var(--success-text-color);
 }
 
 .details-product-notfound {
-  background-color: rgba(239, 68, 68, 0.08);
+  background-color: var(--danger-light-color);
   color: var(--danger-color);
   font-weight: 600;
   font-size: 0.78rem;
   padding: 3px 9px;
   border-radius: var(--border-radius-full);
-  border: 1px solid rgba(239, 68, 68, 0.2);
+  border: 1px solid color-mix(in srgb, var(--danger-color) 20%, transparent);
   white-space: nowrap;
 }
 
@@ -1002,9 +996,9 @@
   display: inline-flex;
   align-items: center;
   gap: 3px;
-  background: rgba(245, 158, 11, 0.12);
-  color: #92400e;
-  border: 1px solid rgba(245, 158, 11, 0.3);
+  background: var(--savings-color-light);
+  color: var(--savings-color-text);
+  border: 1px solid color-mix(in srgb, var(--savings-color) 30%, transparent);
   border-radius: var(--border-radius-full);
   padding: 2px 8px;
   font-size: 0.7rem;
@@ -1059,13 +1053,13 @@
 }
 
 @keyframes gps-pulse {
-  0%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4); }
-  50%       { opacity: 0.7; transform: scale(1.1); box-shadow: 0 0 0 5px rgba(59, 130, 246, 0); }
+  0%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 0 0 color-mix(in srgb, var(--info-color) 40%, transparent); }
+  50%       { opacity: 0.7; transform: scale(1.1); box-shadow: 0 0 0 5px color-mix(in srgb, var(--info-color) 0%, transparent); }
 }
 
 @keyframes gps-pulse-green {
-  0%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4); }
-  50%       { opacity: 0.8; transform: scale(1.15); box-shadow: 0 0 0 5px rgba(34, 197, 94, 0); }
+  0%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 0 0 color-mix(in srgb, var(--primary-color) 40%, transparent); }
+  50%       { opacity: 0.8; transform: scale(1.15); box-shadow: 0 0 0 5px color-mix(in srgb, var(--primary-color) 0%, transparent); }
 }
 
 @keyframes pulse-scale {

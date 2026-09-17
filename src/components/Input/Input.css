@@ -21,7 +21,7 @@
   background-color: var(--input-bg-color);
   color: var(--text-color-primary);
   transition: all 0.2s ease;
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font-family);
 }
 
 .input-field:focus {
@@ -38,7 +38,7 @@
 
 .input-group.error .input-field {
   border-color: var(--danger-color);
-  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--danger-color) 15%, transparent);
 }
 
 .input-group.error .error-message {
