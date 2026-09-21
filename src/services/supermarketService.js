@@ -3,7 +3,7 @@
 // Auto-cleanup: Eliminar cachés viejas que no tienen timestamps (_ts)
 // para que no se devuelvan precios desactualizados de sesiones anteriores.
 try {
-  ['carrefour', 'dia', 'changomas'].forEach(brand => {
+  ['carrefour', 'dia', 'changomas', 'jumbo', 'vea'].forEach(brand => {
     const key = `superlista_${brand}_ean_cache`;
     const raw = localStorage.getItem(key);
     if (raw) {
@@ -26,7 +26,9 @@ const CACHE_TTL_MS = 30 * 60 * 1000;
 const memoryCaches = {
   carrefour: new Map(),
   dia: new Map(),
-  changomas: new Map()
+  changomas: new Map(),
+  jumbo: new Map(),
+  vea: new Map()
 };
 
 // Helper to get cache from localStorage (with TTL check)
@@ -74,7 +76,9 @@ export const normalizeEan = (code) => {
 const PROXY_PATHS = {
   carrefour: '/proxy-api/carrefour',
   dia: '/proxy-api/dia',
-  changomas: '/proxy-api/changomas'
+  changomas: '/proxy-api/changomas',
+  jumbo: '/proxy-api/jumbo',
+  vea: '/proxy-api/vea'
 };
 
 /**
@@ -83,7 +87,9 @@ const PROXY_PATHS = {
 const DIRECT_URLS = {
   carrefour: 'https://www.carrefour.com.ar',
   dia: 'https://diaonline.supermercadosdia.com.ar',
-  changomas: 'https://www.masonline.com.ar'
+  changomas: 'https://www.masonline.com.ar',
+  jumbo: 'https://www.jumbo.com.ar',
+  vea: 'https://www.vea.com.ar'
 };
 
 /**
@@ -281,9 +287,12 @@ export const fetchProductByEan = async (rawEan, brandKey = 'carrefour') => {
 };
 
 /** Brands whose website exposes a public VTEX catalog API we can search live. */
-export const LIVE_SEARCH_BRANDS = ['carrefour', 'dia', 'changomas'];
+export const LIVE_SEARCH_BRANDS = ['carrefour', 'dia', 'changomas', 'jumbo', 'vea'];
 
-const BRAND_LABELS = { carrefour: 'Carrefour', dia: 'Día', changomas: 'Chango Más' };
+const BRAND_LABELS = {
+  carrefour: 'Carrefour', dia: 'Día', changomas: 'Chango Más',
+  jumbo: 'Jumbo', vea: 'Vea'
+};
 
 // Short cache so "show more" and repeated searches don't re-hit the store.
 const SEARCH_CACHE_TTL_MS = 5 * 60 * 1000;
@@ -369,4 +378,103 @@ export const searchProductsByText = async (term, brandKey, { from = 0, pageSize 
  */
 export const fetchCarrefourProductByEan = async (rawEan) => {
   return fetchProductByEan(rawEan, 'carrefour');
+};
+
+// fetchProductByEan returns the barcode-scan shape; the comparator (like the
+// search results) works with the catalog shape.
+const eanProductToCatalogShape = (product, brandKey) => ({
+  id: `${brandKey}-${product.productId}-${product.itemId}`,
+  nombre: product.nombre,
+  marca_producto: product.brand || '',
+  precio: product.precio_original || product.valor,
+  precio_oferta: product.precio_original ? product.valor : null,
+  mejor_precio: product.valor,
+  promo1_leyenda: product.promo_leyenda || '',
+  ean: product.ean,
+  supermercado_marca: BRAND_LABELS[brandKey] || brandKey,
+});
+
+// How many not-yet-common barcodes get looked up in the stores that did not
+// list them in their own results (each lookup is one request).
+const MAX_EAN_CROSS_LOOKUPS = 4;
+
+/**
+ * Resolves a generic search ("queso") to one specific product that exists in
+ * every given store, identified by its barcode (EAN), so all stores are
+ * compared on the exact same item. Among the products available everywhere it
+ * picks the one with the lowest combined price.
+ *
+ * If no barcode is found in all stores, it falls back to the barcode found in
+ * the most stores (`complete: false`).
+ *
+ * @param {string} term - What the user wrote in the list
+ * @param {string[]} brandKeys - Stores to compare (from LIVE_SEARCH_BRANDS)
+ * @returns {Promise<{ean: string, byBrand: Object, complete: boolean}|null>}
+ *   `byBrand` maps each store to its product (catalog shape). Null if nothing
+ *   was found in any store.
+ */
+export const findCheapestCommonProduct = async (term, brandKeys) => {
+  const searches = await Promise.all(
+    brandKeys.map(async (brandKey) => ({
+      brandKey,
+      result: await searchProductsByText(term, brandKey, { pageSize: 30 }),
+    }))
+  );
+
+  // Stores that could not be reached, or that list nothing for this search,
+  // must not veto every candidate.
+  const reachable = searches.filter(s => s.result?.products.length > 0).map(s => s.brandKey);
+  if (reachable.length === 0) return null;
+
+  // ean -> { brandKey: product }; keeps the cheapest listing per store.
+  const byEan = new Map();
+  searches.forEach(({ brandKey, result }) => {
+    (result?.products || []).forEach((product) => {
+      const ean = normalizeEan(product.ean);
+      if (!ean || !(product.mejor_precio > 0)) return;
+      if (!byEan.has(ean)) byEan.set(ean, {});
+      const entry = byEan.get(ean);
+      if (!entry[brandKey] || product.mejor_precio < entry[brandKey].mejor_precio) {
+        entry[brandKey] = product;
+      }
+    });
+  });
+  if (byEan.size === 0) return null;
+
+  const totalPrice = (entry) => Object.values(entry).reduce((sum, p) => sum + p.mejor_precio, 0);
+  const coversAll = (entry) => reachable.every(b => entry[b]);
+
+  const pickBest = () => {
+    let best = null;
+    byEan.forEach((entry, ean) => {
+      const count = Object.keys(entry).length;
+      const candidate = { ean, byBrand: entry, count, total: totalPrice(entry) };
+      if (!best || candidate.count > best.count ||
+        (candidate.count === best.count && candidate.total < best.total)) {
+        best = candidate;
+      }
+    });
+    return best;
+  };
+
+  let best = pickBest();
+
+  // Nothing listed by every store's own results: ask the missing stores for
+  // the cheapest candidates by barcode.
+  if (!coversAll(best.byBrand) && reachable.length > 1) {
+    const candidates = [...byEan.entries()]
+      .sort((a, b) => Math.min(...Object.values(a[1]).map(p => p.mejor_precio)) -
+        Math.min(...Object.values(b[1]).map(p => p.mejor_precio)))
+      .slice(0, MAX_EAN_CROSS_LOOKUPS);
+
+    await Promise.all(candidates.flatMap(([ean, entry]) =>
+      reachable.filter(b => !entry[b]).map(async (brandKey) => {
+        const found = await fetchProductByEan(ean, brandKey);
+        if (found && found.valor > 0) entry[brandKey] = eanProductToCatalogShape(found, brandKey);
+      })
+    ));
+    best = pickBest();
+  }
+
+  return { ean: best.ean, byBrand: best.byBrand, complete: coversAll(best.byBrand) };
 };

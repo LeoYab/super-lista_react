@@ -73,7 +73,7 @@ The `scripts/` directory holds one-off Node scripts (not run automatically) that
 
 Scanning a barcode (`html5-qrcode`) tries a live EAN lookup first for the three brands with a working API (Carrefour, Día, ChangoMas), then falls back to the static branch JSON above:
 - **Dev**: `src/setupProxy.js` proxies `/proxy-api/{carrefour|dia|changomas}` to each brand's site via `http-proxy-middleware` (avoids CORS).
-- **Prod (Vercel)**: `api/supermarket-proxy.js` is a serverless function that does the same via `/api/supermarket-proxy?brand=...&ean=...`, with an `ALLOWED_ORIGIN` CORS allowlist and a 30-req/min-per-IP in-memory rate limit.
+- **Prod (Vercel)**: `api/supermarket-proxy.js` is a serverless function that does the same via `/api/supermarket-proxy?brand=...&ean=...`, with an `ALLOWED_ORIGIN` CORS allowlist and a 120-req/min-per-IP in-memory rate limit.
 - `src/services/supermarketService.js` calls whichever endpoint is live and caches results in `localStorage` (`superlista_{brand}_ean_cache`, TTL-based).
 
 ### Theming (dark mode)

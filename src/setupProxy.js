@@ -39,4 +39,23 @@ module.exports = function(app) {
       secure: true,
     })
   );
+  app.use(
+    '/proxy-api/jumbo',
+    createProxyMiddleware({
+      target: 'https://www.jumbo.com.ar',
+      changeOrigin: true,
+      pathRewrite: { '^/proxy-api/jumbo': '' },
+      secure: true,
+    })
+  );
+
+  app.use(
+    '/proxy-api/vea',
+    createProxyMiddleware({
+      target: 'https://www.vea.com.ar',
+      changeOrigin: true,
+      pathRewrite: { '^/proxy-api/vea': '' },
+      secure: true,
+    })
+  );
 };
