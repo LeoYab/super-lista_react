@@ -1,0 +1,92 @@
+.scan-fs {
+  --scan-w: min(82vw, 420px);
+  --scan-h: min(34vw, 170px);
+  position: fixed;
+  inset: 0;
+  z-index: 3000;
+  background: #000;
+  overflow: hidden;
+}
+
+.scan-fs .scan-fs__reader,
+.scan-fs #reader {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0 !important;
+  border-radius: 0 !important;
+  overflow: hidden;
+}
+
+.scan-fs #reader video {
+  position: absolute;
+  inset: 0;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover;
+}
+
+.scan-fs__mask {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  pointer-events: none;
+  clip-path: polygon(evenodd,
+      0 0, 100% 0, 100% 100%, 0 100%, 0 0,
+      calc(50% - var(--scan-w) / 2) calc(50% - var(--scan-h) / 2),
+      calc(50% + var(--scan-w) / 2) calc(50% - var(--scan-h) / 2),
+      calc(50% + var(--scan-w) / 2) calc(50% + var(--scan-h) / 2),
+      calc(50% - var(--scan-w) / 2) calc(50% + var(--scan-h) / 2),
+      calc(50% - var(--scan-w) / 2) calc(50% - var(--scan-h) / 2));
+}
+
+.scan-fs__frame {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: var(--scan-w);
+  height: var(--scan-h);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.scan-fs__corner {
+  position: absolute;
+  width: 28px;
+  height: 28px;
+  border: 0 solid #fff;
+}
+
+.scan-fs__corner--tl { top: 0; left: 0; border-top-width: 4px; border-left-width: 4px; border-top-left-radius: 12px; }
+.scan-fs__corner--tr { top: 0; right: 0; border-top-width: 4px; border-right-width: 4px; border-top-right-radius: 12px; }
+.scan-fs__corner--bl { bottom: 0; left: 0; border-bottom-width: 4px; border-left-width: 4px; border-bottom-left-radius: 12px; }
+.scan-fs__corner--br { bottom: 0; right: 0; border-bottom-width: 4px; border-right-width: 4px; border-bottom-right-radius: 12px; }
+
+.scan-fs__hint {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(50% + var(--scan-h) / 2 + 20px);
+  margin: 0;
+  padding: 0 24px;
+  text-align: center;
+  color: #fff;
+  font-size: 0.95rem;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7);
+  pointer-events: none;
+}
+
+.scan-fs__actions {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: max(24px, env(safe-area-inset-bottom));
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 0 16px;
+}

@@ -1,5 +1,5 @@
 // src/App.js
-import React, { useState, useEffect, useMemo, useRef, useCallback, Suspense, lazy } from 'react';
+import React, { useState, useEffect, useMemo, useCallback, Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 
 import { useAuth, AuthProvider } from './context/AuthContext';
@@ -21,10 +21,11 @@ import SearchBar from './components/SearchBar/SearchBar';
 // Redundant import removed
 
 import Button from './components/Buttons/Button';
+import ScannerView from './components/BarcodeScanner/ScannerView';
 import CategoryFilter from './components/CategoryFilter/CategoryFilter';
 import { ProductListSkeleton } from './components/Skeleton/Skeleton';
 
-import { Html5Qrcode, Html5QrcodeSupportedFormats } from "html5-qrcode";
+import useBarcodeScanner from './hooks/useBarcodeScanner';
 import { ShoppingBag, MapPin, BarChart2, Plus, ScanBarcode } from 'lucide-react';
 import { showErrorAlert, showSuccessToast } from './Notifications/NotificationsServices';
 import { fetchProductByEan } from './services/supermarketService';
@@ -45,23 +46,6 @@ import './components/Buttons/Button.css';
 const AuthPage = lazy(() => import('./pages/AuthPage/AuthPage'));
 const Supermercados = lazy(() => import('./components/supermercados/Supermercados'));
 const Comparador = lazy(() => import('./components/Comparador/Comparador'));
-
-// Reorders getUserMedia camera devices so the main/wide rear lens comes
-// first. Phones with multiple rear cameras often enumerate an ultra-wide
-// or telephoto lens before the standard one; those have worse close-focus
-// behavior and make a barcode look smaller/farther in frame, which is the
-// most common cause of "the scanner won't recognize the code". Front
-// cameras are pushed to the very end since they're never useful here.
-function sortCamerasForBarcodeScan(devices) {
-  const scoreOf = (label = '') => {
-    const l = label.toLowerCase();
-    if (/front|user|face/.test(l)) return 3;
-    if (/ultra.?wide|wide.?angle|fish.?eye/.test(l)) return 2;
-    if (/tele/.test(l)) return 1;
-    return 0;
-  };
-  return [...devices].sort((a, b) => scoreOf(a.label) - scoreOf(b.label));
-}
 
 function MainAppContent() {
   const navigate = useNavigate();
@@ -99,13 +83,6 @@ function MainAppContent() {
 
   // Scanner states
   const [showScanner, setShowScanner] = useState(false);
-  const scannerRef = useRef(null);
-  const scannerIsRunningRef = useRef(false);
-  const camerasRef = useRef([]);
-  const zoomFeatureRef = useRef(null);
-  const [activeCameraIndex, setActiveCameraIndex] = useState(0);
-  const [cameraCount, setCameraCount] = useState(0);
-  const [zoomInfo, setZoomInfo] = useState(null);
 
   // GPS Effect
   useEffect(() => {
@@ -309,159 +286,23 @@ function MainAppContent() {
 
   const handleCloseScanner = () => {
     setShowScanner(false);
-    setActiveCameraIndex(0);
-    setCameraCount(0);
-    setZoomInfo(null);
-    camerasRef.current = [];
-    zoomFeatureRef.current = null;
   };
 
-  const handleSwitchCamera = () => {
-    if (camerasRef.current.length < 2) return;
-    setActiveCameraIndex(prev => (prev + 1) % camerasRef.current.length);
-  };
+  useBarcodeScanner(showScanner, onScanSuccess, (err) => {
+    console.error("Error starting scanner:", err);
+    let userMsg = `No se pudo iniciar la cámara.`;
 
-  const handleZoomChange = (e) => {
-    const value = parseFloat(e.target.value);
-    setZoomInfo(prev => (prev ? { ...prev, value } : prev));
-    if (zoomFeatureRef.current) {
-      zoomFeatureRef.current.apply(value).catch(() => { });
+    if (err.name === 'NotReadableError' || err.message?.includes('NotReadableError')) {
+      userMsg = "La cámara parece estar en uso por otra aplicación o hay un fallo de hardware.";
+    } else if (err.name === 'NotAllowedError' || err.message?.includes('Permission denied')) {
+      userMsg = "Permiso denegado. Habilita el acceso a la cámara.";
+    } else if (err.name === 'NotFoundError') {
+      userMsg = "No se encontró ninguna cámara.";
     }
-  };
 
-  useEffect(() => {
-    let html5QrCode;
-    if (showScanner) {
-      // Small timeout to ensure DOM element exists
-      const timer = setTimeout(() => {
-        html5QrCode = new Html5Qrcode("reader");
-        scannerRef.current = html5QrCode;
-        scannerIsRunningRef.current = false;
-        zoomFeatureRef.current = null;
-
-        const config = {
-          fps: 10,
-          // Wider-than-tall to match a 1D barcode's own shape instead of a
-          // square QR-sized box — easier to frame and a smaller region for
-          // the decoder to search.
-          qrbox: { width: 280, height: 150 },
-          aspectRatio: 1.0,
-          formatsToSupport: [
-            Html5QrcodeSupportedFormats.EAN_13,
-            Html5QrcodeSupportedFormats.EAN_8,
-            Html5QrcodeSupportedFormats.UPC_A,
-            Html5QrcodeSupportedFormats.UPC_E,
-            Html5QrcodeSupportedFormats.CODE_128
-          ]
-        };
-
-        // Reuse the camera list fetched on the first start (e.g. when the
-        // user taps "Cambiar cámara") instead of re-prompting for permission.
-        const getCamerasPromise = camerasRef.current.length
-          ? Promise.resolve(camerasRef.current)
-          : Html5Qrcode.getCameras();
-
-        getCamerasPromise.then(devices => {
-          if (devices && devices.length) {
-            // Only reorder on the very first fetch of this scanner session —
-            // camerasRef.current is empty then. A user-triggered "Cambiar
-            // cámara" reuses the already-ordered list so cycling stays
-            // predictable.
-            const orderedDevices = camerasRef.current.length ? devices : sortCamerasForBarcodeScan(devices);
-            camerasRef.current = orderedDevices;
-            setCameraCount(orderedDevices.length);
-            const selected = orderedDevices[activeCameraIndex] || orderedDevices[0];
-            return html5QrCode.start(
-              selected.id,
-              {
-                ...config,
-                // Overrides the plain deviceId constraint built from the
-                // first argument above with a fuller one: same exact
-                // device, but also asking for more resolution and
-                // continuous autofocus, both of which matter more than
-                // raw zoom for actually decoding a close-up barcode.
-                videoConstraints: {
-                  deviceId: { exact: selected.id },
-                  width: { ideal: 1920 },
-                  height: { ideal: 1080 },
-                  focusMode: { ideal: 'continuous' },
-                },
-              },
-              onScanSuccess,
-              () => { }
-            );
-          } else {
-            throw new Error("No se detectaron cámaras.");
-          }
-        })
-          .then(() => {
-            scannerIsRunningRef.current = true;
-            // When the running camera exposes optical/digital zoom, nudge
-            // it in by default (past the halfway point) and expose a
-            // slider so the user can fine-tune — on top of picking the
-            // main lens and requesting continuous autofocus above, this
-            // gets a close-up barcode to fill more of the frame.
-            try {
-              const zoom = html5QrCode.getRunningTrackCameraCapabilities().zoomFeature();
-              if (zoom.isSupported()) {
-                const min = zoom.min();
-                const max = zoom.max();
-                const step = zoom.step() || 0.1;
-                const current = zoom.value();
-                const suggested = Math.min(max, min + (max - min) * 0.5);
-                const initial = current && current > min ? current : suggested;
-                zoomFeatureRef.current = zoom;
-                setZoomInfo({ min, max, step, value: initial });
-                if (initial !== current) {
-                  zoom.apply(initial).catch(() => { });
-                }
-              } else {
-                setZoomInfo(null);
-              }
-            } catch (e) {
-              setZoomInfo(null);
-            }
-          })
-          .catch(err => {
-            console.error("Error starting scanner:", err);
-            let userMsg = `No se pudo iniciar la cámara.`;
-
-            if (err.name === 'NotReadableError' || err.message?.includes('NotReadableError')) {
-              userMsg = "La cámara parece estar en uso por otra aplicación o hay un fallo de hardware.";
-            } else if (err.name === 'NotAllowedError' || err.message?.includes('Permission denied')) {
-              userMsg = "Permiso denegado. Habilita el acceso a la cámara.";
-            } else if (err.name === 'NotFoundError') {
-              userMsg = "No se encontró ninguna cámara.";
-            }
-
-            showErrorAlert('Error de Cámara', userMsg);
-            setShowScanner(false);
-          });
-      }, 100);
-
-      return () => {
-        clearTimeout(timer);
-        if (html5QrCode) {
-          const stopScanner = async () => {
-            if (scannerIsRunningRef.current) {
-              try {
-                await html5QrCode.stop();
-              } catch (err) {
-                console.warn("Error stopping scanner:", err);
-              }
-            }
-            try {
-              html5QrCode.clear();
-            } catch (e) {
-              console.warn("Error clearing scanner:", e);
-            }
-            scannerIsRunningRef.current = false;
-          };
-          stopScanner();
-        }
-      };
-    }
-  }, [showScanner, activeCameraIndex, onScanSuccess]);
+    showErrorAlert('Error de Cámara', userMsg);
+    setShowScanner(false);
+  });
 
   // The supermarket whose categories are currently "active": the
   // GPS-detected one when it's Carrefour or ChangoMas, otherwise Carrefour
@@ -664,36 +505,11 @@ function MainAppContent() {
 
         {/* Scanner Modal - Rendered outside fixed-bottom-controls for proper centering */}
         {showScanner && (
-          <div className="scanner-modal-overlay">
-            <div className="scanner-modal-content">
-              <h3>Escanear Código de Barras</h3>
-              <div id="reader"></div>
-              {zoomInfo && (
-                <div className="scanner-zoom-control">
-                  <span>Zoom</span>
-                  <input
-                    type="range"
-                    min={zoomInfo.min}
-                    max={zoomInfo.max}
-                    step={zoomInfo.step}
-                    value={zoomInfo.value}
-                    onChange={handleZoomChange}
-                    aria-label="Zoom de la cámara"
-                  />
-                </div>
-              )}
-              <div className="scanner-actions" style={{ marginTop: '20px', display: 'flex', gap: '10px', flexWrap: 'wrap', justifyContent: 'center' }}>
-                <Button onClick={handleCloseScanner} variant="secondary">
-                  Cerrar Escáner
-                </Button>
-                {cameraCount > 1 && (
-                  <Button onClick={handleSwitchCamera} variant="secondary">
-                    Cambiar cámara
-                  </Button>
-                )}
-              </div>
-            </div>
-          </div>
+          <ScannerView>
+            <Button onClick={handleCloseScanner} variant="secondary">
+              Cerrar Escáner
+            </Button>
+          </ScannerView>
         )}
       </div>
     </div>
