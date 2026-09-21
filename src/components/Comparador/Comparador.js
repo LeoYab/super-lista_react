@@ -1,26 +1,17 @@
 // src/components/Comparador/Comparador.js
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useProductsContext } from '../../context/ProductsContext';
-import { useUserListsContext } from '../../context/UserListsContext';
-import { subscribeToCategories } from '../../services/firebaseService';
 import { showErrorAlert, showSuccessToast } from '../../Notifications/NotificationsServices';
-import { ArrowLeft, RefreshCw, Plus, Trash2, ChevronDown } from 'lucide-react';
-import Input from '../Input/Input';
+import { ArrowLeft, RefreshCw, ChevronDown } from 'lucide-react';
 import Button from '../Buttons/Button';
 import './Comparador.css';
 import { getDistanceKm } from '../../utils/geo';
-import { textMatchesAllWords } from '../../utils/productSearch';
 import { LIVE_SEARCH_BRANDS, findCheapestCommonProduct } from '../../services/supermarketService';
 
 const Comparador = () => {
   const navigate = useNavigate();
-  const { products, addProduct, editProduct, deleteProduct } = useProductsContext();
-  const { currentListId } = useUserListsContext();
-
-  const [categories, setCategories] = useState([]);
-  const [quickAddName, setQuickAddName] = useState('');
-  const [quickAddQty, setQuickAddQty] = useState('1');
+  const { products, editProduct } = useProductsContext();
 
   // Comparison states
   const [loading, setLoading] = useState(false);
@@ -30,14 +21,6 @@ const Comparador = () => {
   const [gpsStatus, setGpsStatus] = useState('Buscando ubicación...');
   const [gpsState, setGpsState] = useState('idle'); // idle, loading, success, warning, error
   const [expandedSuper, setExpandedSuper] = useState(null);
-
-  // Subscribe to categories
-  useEffect(() => {
-    const unsubscribe = subscribeToCategories((loadedCategories) => {
-      setCategories(loadedCategories);
-    });
-    return () => unsubscribe();
-  }, []);
 
   // Fetch and calculate closest branch for all supermarkets
   const findClosestBranches = useCallback(async () => {
@@ -62,7 +45,8 @@ const Comparador = () => {
 
       const response = await fetch('/data/supermarkets_list.json');
       if (!response.ok) throw new Error('No se pudo cargar la lista de supermercados.');
-      const brands = await response.json();
+      // Only stores with a live website catalog are compared.
+      const brands = (await response.json()).filter((brand) => LIVE_SEARCH_BRANDS.includes(brand.id));
 
       const branchMappings = {};
 
@@ -130,50 +114,15 @@ const Comparador = () => {
     findClosestBranches();
   }, [findClosestBranches]);
 
-  // Handle quick adding of products
-  const handleQuickAdd = (e) => {
-    e.preventDefault();
-    if (!currentListId) {
-      showErrorAlert('No hay lista seleccionada', 'Por favor, selecciona o crea una lista primero.');
-      return;
-    }
-
-    if (!quickAddName.trim()) {
-      showErrorAlert('Error', 'Por favor, ingresa el nombre del producto.');
-      return;
-    }
-
-    const defaultCategory = categories.find(cat => cat.title.toLowerCase() === 'otros') ||
-      categories[0] ||
-      { id: 'otros', icon: '🛒' };
-
-    const parsedQty = parseInt(quickAddQty, 10);
-    if (isNaN(parsedQty) || parsedQty < 1) {
-      showErrorAlert('Error', 'La cantidad debe ser mayor o igual a 1.');
-      return;
-    }
-
-    const newProduct = {
-      nombre: quickAddName.trim(),
-      valor: 0, // No price initially
-      cantidad: parsedQty,
-      category: defaultCategory.id,
-      icon: defaultCategory.icon,
-      precio_original: null,
-      promo_leyenda: null,
-      supermercado: null
-    };
-
-    addProduct(newProduct);
-    showSuccessToast(`¡"${quickAddName}" agregado a la lista!`);
-    setQuickAddName('');
-    setQuickAddQty('1');
-  };
+  // Bumped on every run so a slow, outdated run never overwrites newer results.
+  const runIdRef = useRef(0);
 
   // Main list comparison algorithm
   const handleCompare = async () => {
+    const runId = ++runIdRef.current;
     if (products.length === 0) {
-      showErrorAlert('Lista vacía', 'Agrega productos a tu lista antes de buscar.');
+      setResults(null);
+      setLoading(false);
       return;
     }
 
@@ -189,10 +138,10 @@ const Comparador = () => {
 
     const comparisonResults = [];
 
-    // Stores with a live website API: each list item is resolved to ONE product
+    // Each list item is resolved to ONE product
     // (by barcode) that exists in all of them, so they are compared on the
     // exact same item. One item at a time to go easy on the stores' servers.
-    const liveBrandIds = Object.keys(closestBranches).filter((id) => LIVE_SEARCH_BRANDS.includes(id));
+    const liveBrandIds = Object.keys(closestBranches);
     const liveMatchesByProduct = new Map();
     if (liveBrandIds.length > 0) {
       for (let i = 0; i < products.length; i++) {
@@ -211,20 +160,10 @@ const Comparador = () => {
       }
     }
 
-    // Fetch and search catalogs for each supermarket
+    // Build each supermarket's result from the resolved products
     await Promise.all(
       Object.entries(closestBranches).map(async ([brandId, info]) => {
-        const branchId = info.branchData.id_sucursal || info.branchData.id;
         try {
-          const isLive = liveBrandIds.includes(brandId);
-          let catalog = [];
-          if (!isLive) {
-            const res = await fetch(`/data/products/${brandId}/${branchId}.json`);
-            if (!res.ok) {
-              throw new Error(`Catálogo no encontrado`);
-            }
-            catalog = await res.json();
-          }
           setLoadingSteps((prev) => ({ ...prev, [brandId]: 'Procesando...' }));
 
           let totalCost = 0;
@@ -232,25 +171,7 @@ const Comparador = () => {
           const matches = [];
 
           products.forEach((userProduct) => {
-            let cheapestMatch = null;
-
-            if (isLive) {
-              cheapestMatch = liveMatchesByProduct.get(userProduct)?.byBrand[brandId] || null;
-            }
-
-            // Search for products that match all words in the user query
-            catalog.forEach((item) => {
-              const fullSearchText = `${item.nombre || ''} ${item.marca_producto || ''}`;
-
-              if (textMatchesAllWords(fullSearchText, userProduct.nombre)) {
-                const itemPrice = item.mejor_precio || item.precio || 0;
-                if (itemPrice > 0) {
-                  if (!cheapestMatch || itemPrice < (cheapestMatch.mejor_precio || cheapestMatch.precio)) {
-                    cheapestMatch = item;
-                  }
-                }
-              }
-            });
+            const cheapestMatch = liveMatchesByProduct.get(userProduct)?.byBrand[brandId] || null;
 
             if (cheapestMatch) {
               const price = cheapestMatch.mejor_precio || cheapestMatch.precio || 0;
@@ -302,16 +223,39 @@ const Comparador = () => {
       })
     );
 
-    // Sort by total cost (ascending), placing failures at the bottom
+    // A store that finds fewer of your products has a lower total only because
+    // it is missing items, so rank by products found first (most first), then
+    // by total cost. Failures go last.
     comparisonResults.sort((a, b) => {
       if (a.totalCost === Infinity) return 1;
       if (b.totalCost === Infinity) return -1;
+      if (a.itemsFoundCount !== b.itemsFoundCount) return b.itemsFoundCount - a.itemsFoundCount;
       return a.totalCost - b.totalCost;
     });
 
+    if (runId !== runIdRef.current) return;
     setResults(comparisonResults);
     setLoading(false);
   };
+
+  // The comparison runs by itself whenever the list (names/quantities) or the
+  // nearest branches change, so there is no search button.
+  const compareRef = useRef(handleCompare);
+  compareRef.current = handleCompare;
+  const compareKey = useMemo(() => {
+    const listKey = products.map((p) => `${p.nombre}|${p.cantidad}`).join('¦');
+    const branchKey = Object.entries(closestBranches)
+      .map(([id, info]) => `${id}:${info.branchData.id_sucursal || info.branchData.id}`)
+      .join(',');
+    return `${listKey}#${branchKey}`;
+  }, [products, closestBranches]);
+
+  useEffect(() => {
+    if (Object.keys(closestBranches).length === 0) return undefined;
+    const timer = setTimeout(() => compareRef.current(), 500);
+    return () => clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [compareKey]);
 
   // Optional: Apply the prices of the winner supermarket to the user list
   const handleApplyPrices = async (supermarketResult) => {
@@ -399,43 +343,6 @@ const Comparador = () => {
         </button>
       </div>
 
-      {/* Quick Add Form Section */}
-      <div className="card quick-add-section">
-        <div className="section-title-wrapper">
-          <h3>Agregar Producto Rápido</h3>
-          <p className="section-subtitle">Agrega elementos sin precio para compararlos en un toque</p>
-        </div>
-        <form onSubmit={handleQuickAdd} className="quick-add-form">
-          <div className="input-group name-group">
-            <Input
-              label="Nombre del Producto:"
-              id="quickName"
-              name="quickName"
-              value={quickAddName}
-              onChange={(e) => setQuickAddName(e.target.value)}
-              placeholder="Ej: Leche Entera, Arroz Gallo"
-              required
-            />
-          </div>
-          <div className="qty-input-group">
-            <Input
-              label="Cant:"
-              id="quickQty"
-              name="quickQty"
-              type="number"
-              min="1"
-              value={quickAddQty}
-              onChange={(e) => setQuickAddQty(e.target.value)}
-              required
-            />
-          </div>
-          <Button type="submit" variant="primary" className="quick-add-btn">
-            <Plus size={18} strokeWidth={2.5} />
-            Agregar
-          </Button>
-        </form>
-      </div>
-
       {/* List display & Comparison wrapper */}
       <div className="list-comparison-wrapper">
         <div className="card list-card">
@@ -448,7 +355,8 @@ const Comparador = () => {
             <div className="empty-list-placeholder">
               <div className="placeholder-icon">🛒</div>
               <p>Tu lista está vacía.</p>
-              <p className="placeholder-subtext">Agrega productos en el formulario de arriba para iniciar la comparación.</p>
+              <p className="placeholder-subtext">Agregá productos en Mi Lista y acá vas a ver enseguida en qué supermercado te conviene comprar.</p>
+              <Button onClick={() => navigate('/')} variant="primary">Ir a Mi Lista</Button>
             </div>
           ) : (
             <>
@@ -462,27 +370,9 @@ const Comparador = () => {
                       </div>
                       <span className="item-qty">x{item.cantidad}</span>
                     </div>
-                    <button
-                      onClick={() => deleteProduct(item.firebaseId)}
-                      className="delete-item-btn"
-                      title="Eliminar"
-                    >
-                      <Trash2 size={18} />
-                    </button>
                   </li>
                 ))}
               </ul>
-              <div className="search-cheapest-btn-wrapper">
-                <Button
-                  onClick={handleCompare}
-                  variant="primary"
-                  className="search-cheapest-btn"
-                  disabled={loading}
-                >
-                  <span className="search-btn-icon">🔍</span>
-                  Buscar Supermercado Más Barato
-                </Button>
-              </div>
             </>
           )}
         </div>
@@ -527,23 +417,25 @@ const Comparador = () => {
           {!loading && !results && (
             <div className="empty-results-placeholder">
               <div className="placeholder-icon">📊</div>
-              <p>Esperando comparación...</p>
-              <p className="placeholder-subtext">Hacé clic en el botón de búsqueda para comparar precios en tiempo real.</p>
+              <p>Sin resultados todavía</p>
+              <p className="placeholder-subtext">Cuando tengas productos en tu lista, la comparación aparece acá sola.</p>
             </div>
           )}
 
           {!loading && results && (
             <div className="results-wrapper">
-              {results[0] && results[0].totalCost !== Infinity && (() => {
-                const validResults = results.filter((r) => r.totalCost !== Infinity);
-                const mostExpensive = validResults[validResults.length - 1];
-                const savings = validResults.length > 1 ? mostExpensive.totalCost - results[0].totalCost : 0;
+              {results[0] && results[0].totalCost !== Infinity && results[0].itemsFoundCount > 0 && (() => {
+                // Savings only against stores that found as many products as the winner.
+                const comparable = results.filter((r) => r.totalCost !== Infinity && r.itemsFoundCount === results[0].itemsFoundCount);
+                const mostExpensive = comparable[comparable.length - 1];
+                const savings = comparable.length > 1 ? mostExpensive.totalCost - results[0].totalCost : 0;
+                const missingCount = results[0].totalItemsCount - results[0].itemsFoundCount;
 
                 return (
                   <div className="winner-banner">
                     <span className="winner-icon">🏆</span>
                     <div className="winner-info">
-                      <span className="winner-tag">Más barato hoy</span>
+                      <span className="winner-tag">{missingCount > 0 ? 'Mejor opción hoy' : 'Más barato hoy'}</span>
                       <h3>{results[0].brandName}</h3>
                       <p className="winner-price">
                         {results[0].totalCost.toLocaleString('es-AR', { style: 'currency', currency: 'ARS' })}
@@ -555,6 +447,7 @@ const Comparador = () => {
                       )}
                       <p className="winner-stats">
                         Se encontraron {results[0].itemsFoundCount} de {results[0].totalItemsCount} productos.
+                        {missingCount > 0 && ` El total no incluye ${missingCount} sin encontrar.`}
                       </p>
                     </div>
                   </div>
