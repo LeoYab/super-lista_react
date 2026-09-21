@@ -40,18 +40,34 @@ module.exports = async (req, res) => {
     return res.status(429).json({ error: 'Demasiadas solicitudes. Intentá de nuevo en un minuto.' });
   }
 
-  const { brand, ean } = req.query;
+  const { brand, ean, ft, from, to } = req.query;
 
   // Validaciones
   if (!brand || !BRAND_URLS[brand]) {
     return res.status(400).json({ error: 'Brand inválido. Usar: carrefour, dia, o changomas' });
   }
-  if (!ean || !/^\d+$/.test(ean)) {
-    return res.status(400).json({ error: 'EAN inválido' });
-  }
 
   const baseUrl = BRAND_URLS[brand];
-  const apiUrl = `${baseUrl}/api/catalog_system/pub/products/search?fq=alternateIds_Ean:${ean}`;
+  let apiUrl;
+
+  if (ft !== undefined) {
+    // Búsqueda por texto libre (como el buscador de la web del supermercado)
+    const term = String(ft).trim();
+    const first = Number(from ?? 0);
+    const last = Number(to ?? 19);
+    if (!term || term.length > 100) {
+      return res.status(400).json({ error: 'Término de búsqueda inválido' });
+    }
+    if (!Number.isInteger(first) || !Number.isInteger(last) || first < 0 || last < first || last - first > 49 || last > 999) {
+      return res.status(400).json({ error: 'Rango de resultados inválido' });
+    }
+    apiUrl = `${baseUrl}/api/catalog_system/pub/products/search?ft=${encodeURIComponent(term)}&_from=${first}&_to=${last}&O=OrderByScoreDESC`;
+  } else {
+    if (!ean || !/^\d+$/.test(ean)) {
+      return res.status(400).json({ error: 'EAN inválido' });
+    }
+    apiUrl = `${baseUrl}/api/catalog_system/pub/products/search?fq=alternateIds_Ean:${ean}`;
+  }
 
   try {
     const response = await fetch(apiUrl, {

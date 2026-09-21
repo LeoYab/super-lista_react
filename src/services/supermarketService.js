@@ -87,6 +87,64 @@ const DIRECT_URLS = {
 };
 
 /**
+ * Fetches JSON from a supermarket's catalog API, trying each transport in
+ * order until one works: Vercel serverless proxy, dev/nginx proxy, direct
+ * fetch and (optionally) public CORS proxies as a last resort.
+ *
+ * @param {Object} options
+ * @param {string} options.brandKey - 'carrefour' | 'dia' | 'changomas'
+ * @param {string} options.apiPath - Path + query on the store's own domain
+ * @param {string} options.proxyQuery - Query string for the serverless proxy
+ * @param {string} options.describe - Short text for logs
+ * @param {boolean} [options.allowPublicProxies=true] - Public CORS proxies
+ *   see the request, so callers can opt out for anything user-typed.
+ * @returns {Promise<Array|Object|null>} Parsed JSON, or null if all failed
+ */
+const fetchFromBrandApi = async ({ brandKey, apiPath, proxyQuery, describe, allowPublicProxies = true }) => {
+  const directBase = DIRECT_URLS[brandKey];
+
+  const tryFetch = async (url, label) => {
+    console.log(`[${label}] Querying ${brandKey} for ${describe} → ${url}`);
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`${label} failed with status: ${response.status}`);
+    }
+    const text = await response.text();
+    // Verificar que sea JSON válido (no una página HTML de error)
+    if (text.startsWith('[') || text.startsWith('{')) {
+      return JSON.parse(text);
+    }
+    throw new Error(`${label} returned non-JSON response`);
+  };
+
+  const strategies = [
+    // 1. Vercel Serverless Function (funciona en Vercel producción)
+    { label: 'Serverless Proxy', getUrl: () => `/api/supermarket-proxy?brand=${brandKey}&${proxyQuery}` },
+    // 2. Proxy local (setupProxy.js en desarrollo, nginx en Docker)
+    { label: 'Dev Proxy', getUrl: () => `${PROXY_PATHS[brandKey]}${apiPath}` },
+    // 3. Fetch directo (funciona en webviews móviles sin restricción CORS)
+    { label: 'Direct Fetch', getUrl: () => `${directBase}${apiPath}` },
+  ];
+
+  if (allowPublicProxies) {
+    strategies.push(
+      // 4-5. CORS proxies públicos - último recurso
+      { label: 'CORS Proxy (corsproxy.io)', getUrl: () => `https://corsproxy.io/?${encodeURIComponent(`${directBase}${apiPath}`)}` },
+      { label: 'CORS Proxy (allorigins)', getUrl: () => `https://api.allorigins.win/raw?url=${encodeURIComponent(`${directBase}${apiPath}`)}` }
+    );
+  }
+
+  for (const strategy of strategies) {
+    try {
+      return await tryFetch(strategy.getUrl(), strategy.label);
+    } catch (err) {
+      console.warn(`[${strategy.label} Failed] ${err.message}`);
+    }
+  }
+  return null;
+};
+
+/**
  * Searches for a product on a supermarket's catalog API by EAN/barcode.
  * Uses the local dev proxy to avoid CORS issues.
  * Caches the response with a TTL to keep prices fresh.
@@ -125,65 +183,14 @@ export const fetchProductByEan = async (rawEan, brandKey = 'carrefour') => {
     return localCache[ean];
   }
 
-  const directBase = DIRECT_URLS[cacheBrand];
   const apiPath = `/api/catalog_system/pub/products/search?fq=alternateIds_Ean:${ean}`;
 
-  let responseData = null;
-
-  /**
-   * Helper: intenta un fetch y parsea JSON. Retorna los datos o lanza un error.
-   */
-  const tryFetch = async (url, label) => {
-    console.log(`[${label}] Querying ${brandKey} for EAN: ${ean} → ${url}`);
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error(`${label} failed with status: ${response.status}`);
-    }
-    const text = await response.text();
-    // Verificar que sea JSON válido (no una página HTML de error)
-    if (text.startsWith('[') || text.startsWith('{')) {
-      return JSON.parse(text);
-    }
-    throw new Error(`${label} returned non-JSON response`);
-  };
-
-  // Estrategias de fetch en orden de prioridad:
-  const strategies = [
-    // 1. Vercel Serverless Function (funciona en Vercel producción Y en dev con setupProxy)
-    {
-      label: 'Serverless Proxy',
-      getUrl: () => `/api/supermarket-proxy?brand=${cacheBrand}&ean=${ean}`
-    },
-    // 2. Local dev proxy (funciona en desarrollo con npm start / setupProxy.js)
-    {
-      label: 'Dev Proxy',
-      getUrl: () => `${PROXY_PATHS[cacheBrand]}${apiPath}`
-    },
-    // 3. Fetch directo (funciona en webviews móviles sin restricción CORS)
-    {
-      label: 'Direct Fetch',
-      getUrl: () => `${directBase}${apiPath}`
-    },
-    // 4. CORS proxy público (corsproxy.io) - último recurso
-    {
-      label: 'CORS Proxy (corsproxy.io)',
-      getUrl: () => `https://corsproxy.io/?${encodeURIComponent(`${directBase}${apiPath}`)}`
-    },
-    // 5. CORS proxy público (allorigins) - último recurso
-    {
-      label: 'CORS Proxy (allorigins)',
-      getUrl: () => `https://api.allorigins.win/raw?url=${encodeURIComponent(`${directBase}${apiPath}`)}`
-    }
-  ];
-
-  for (const strategy of strategies) {
-    try {
-      responseData = await tryFetch(strategy.getUrl(), strategy.label);
-      break; // Si funciona, salimos del loop
-    } catch (err) {
-      console.warn(`[${strategy.label} Failed] ${err.message}`);
-    }
-  }
+  const responseData = await fetchFromBrandApi({
+    brandKey: cacheBrand,
+    apiPath,
+    proxyQuery: `ean=${ean}`,
+    describe: `EAN: ${ean}`,
+  });
 
   if (!responseData) {
     console.error(`[Fetch Failed] All fetch strategies failed for ${brandKey}, EAN: ${ean}`);
@@ -271,6 +278,89 @@ export const fetchProductByEan = async (rawEan, brandKey = 'carrefour') => {
     console.error(`[Parse Error] Failed to parse product details from ${brandKey}:`, parseError);
     return null;
   }
+};
+
+/** Brands whose website exposes a public VTEX catalog API we can search live. */
+export const LIVE_SEARCH_BRANDS = ['carrefour', 'dia', 'changomas'];
+
+const BRAND_LABELS = { carrefour: 'Carrefour', dia: 'Día', changomas: 'Chango Más' };
+
+// Short cache so "show more" and repeated searches don't re-hit the store.
+const SEARCH_CACHE_TTL_MS = 5 * 60 * 1000;
+const searchCache = new Map();
+
+// Maps a VTEX product to the shape the product cards already render. Returns
+// null for products with no purchasable price (unavailable on the website).
+const parseSearchProduct = (product, brandKey) => {
+  const item = (product.items || []).find(i => i.sellers?.[0]?.commertialOffer?.Price > 0);
+  if (!item) return null;
+
+  const offer = item.sellers[0].commertialOffer;
+  const price = offer.Price;
+  const hasDiscount = offer.ListPrice > price;
+  const highlight = Array.isArray(offer.DiscountHighLight) ? offer.DiscountHighLight[0] : null;
+
+  return {
+    id: `${brandKey}-${product.productId}-${item.itemId}`,
+    nombre: product.productName || item.nameComplete || item.name || '',
+    marca_producto: product.brand || '',
+    precio: hasDiscount ? offer.ListPrice : price,
+    precio_oferta: hasDiscount ? price : null,
+    mejor_precio: price,
+    promo1_leyenda: (highlight && highlight['<Name>k__BackingField']) || '',
+    stock: (offer.AvailableQuantity ?? 0) > 0,
+    ean: item.ean || '',
+    imagen_url: item.images?.[0]?.imageUrl || null,
+    categories: product.categories || [],
+    supermercado_marca: BRAND_LABELS[brandKey] || brandKey,
+  };
+};
+
+/**
+ * Searches a supermarket's website catalog by free text (like typing in the
+ * store's own search box). Prices are the website's, not branch-specific.
+ *
+ * @param {string} term - What the user typed
+ * @param {string} brandKey - One of LIVE_SEARCH_BRANDS
+ * @param {Object} [options]
+ * @param {number} [options.from=0] - Offset of the first result to fetch
+ * @param {number} [options.pageSize=20] - Results per page (VTEX allows up to 50)
+ * @returns {Promise<{products: Array, hasMore: boolean, rawCount: number}|null>}
+ *   `rawCount` is how many results the store returned (before dropping
+ *   unavailable ones), to use as the next offset. Null if the store could not
+ *   be reached, so the caller can fall back to something else.
+ */
+export const searchProductsByText = async (term, brandKey, { from = 0, pageSize = 20 } = {}) => {
+  const cleaned = (term || '').trim();
+  if (!cleaned || !LIVE_SEARCH_BRANDS.includes(brandKey)) return null;
+
+  const cacheKey = `${brandKey}|${cleaned.toLowerCase()}|${from}|${pageSize}`;
+  const cached = searchCache.get(cacheKey);
+  if (cached && Date.now() - cached.ts < SEARCH_CACHE_TTL_MS) return cached.value;
+
+  const to = from + pageSize - 1;
+  const encoded = encodeURIComponent(cleaned);
+
+  const data = await fetchFromBrandApi({
+    brandKey,
+    // OrderByScoreDESC = the store's own relevance order (without it a search
+    // for "leche" lists "arroz con leche" and gadgets before actual milk).
+    apiPath: `/api/catalog_system/pub/products/search?ft=${encoded}&_from=${from}&_to=${to}&O=OrderByScoreDESC`,
+    proxyQuery: `ft=${encoded}&from=${from}&to=${to}`,
+    describe: `search "${cleaned}"`,
+    // What the user types shouldn't go through third-party CORS proxies.
+    allowPublicProxies: false,
+  });
+
+  if (!Array.isArray(data)) return null;
+
+  const value = {
+    products: data.map(p => parseSearchProduct(p, brandKey)).filter(Boolean),
+    hasMore: data.length >= pageSize,
+    rawCount: data.length,
+  };
+  searchCache.set(cacheKey, { ts: Date.now(), value });
+  return value;
 };
 
 /**

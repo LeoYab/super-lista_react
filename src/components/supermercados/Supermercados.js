@@ -14,8 +14,8 @@ import { subscribeToCategories, addCategory } from '../../services/firebaseServi
 import { resolveProductCategory } from '../../utils/categoryMapping';
 import { getDistanceKm } from '../../utils/geo';
 import { filterProductsByTerm } from '../../utils/productSearch';
-import { showErrorAlert } from '../../Notifications/NotificationsServices';
-import { fetchProductByEan } from '../../services/supermarketService';
+import { showErrorAlert, showQuantityAlert } from '../../Notifications/NotificationsServices';
+import { fetchProductByEan, searchProductsByText, LIVE_SEARCH_BRANDS } from '../../services/supermarketService';
 import { BrandGridSkeleton, ProductListSkeleton } from '../Skeleton/Skeleton';
 
 
@@ -34,6 +34,9 @@ const Supermercados = () => {
   const filteredLocalProductsRef = useRef([]);
   const localPaginationIndexRef = useRef(0);
   const isFetchingRef = useRef(false); // Ref para controlar la carga activa de fetchProductsData
+  // Búsqueda en vivo en la web del supermercado (en vez de los archivos locales)
+  const liveSearchActiveRef = useRef(false);
+  const liveSearchOffsetRef = useRef(0);
 
   const [hasMoreProducts, setHasMoreProducts] = useState(true);
   const [isSearching, setIsSearching] = useState(false);
@@ -85,14 +88,29 @@ const Supermercados = () => {
     };
   }, [isBranchDropdownOpen]);
 
-  const handleAddProductToUserList = useCallback((product) => {
+  const handleAddProductToUserList = useCallback(async (product) => {
     if (!currentListId) {
       showErrorAlert('No hay lista seleccionada', 'Por favor, selecciona o crea una lista primero.');
       return;
     }
 
+    const cantidad = await showQuantityAlert({ productName: product.nombre });
+    if (cantidad === null) return;
+
+    // Los productos que vienen de la web traen las categorías de la tienda
+    // (no un id nuestro): se mapean igual que al escanear.
+    let resolvedCategory = null;
+    if (!product.category && product.categories?.length && selectedBrand) {
+      try {
+        resolvedCategory = await resolveProductCategory(product.categories, categories, selectedBrand.id.toLowerCase(), addCategory);
+      } catch (err) {
+        console.warn('No se pudo resolver la categoría del producto:', err);
+      }
+    }
+
     const productCatId = product.category;
-    const matchedCategory = categories.find(cat => cat.id === productCatId) ||
+    const matchedCategory = resolvedCategory ||
+      categories.find(cat => cat.id === productCatId) ||
       categories.find(cat => cat.title.toLowerCase() === 'otros') ||
       categories[0] ||
       { id: 'otros', icon: '🛒' };
@@ -103,13 +121,13 @@ const Supermercados = () => {
       precio_original: product.precio,
       promo_leyenda: product.promo1_leyenda,
       supermercado: product.supermercado_marca,
-      cantidad: 1,
+      cantidad,
       category: matchedCategory.id,
       icon: matchedCategory.icon
     };
 
     addProduct(productData);
-  }, [addProduct, categories, currentListId]);
+  }, [addProduct, categories, currentListId, selectedBrand]);
 
 
   // Unused helper removed
@@ -258,6 +276,31 @@ const Supermercados = () => {
     let currentDataSourceUsed = 'Firestore';
 
     try {
+      // Si el supermercado tiene API pública, buscar directamente en su web.
+      // Al paginar ("Mostrar más") se sigue en la web solo si la primera
+      // página vino de ahí; si la web no respondió, se usan los archivos locales.
+      const liveBrandId = brandId.toLowerCase();
+      if (searchModeParam && searchTermValueParam && LIVE_SEARCH_BRANDS.includes(liveBrandId)
+        && (initialLoad || liveSearchActiveRef.current)) {
+        const from = initialLoad ? 0 : liveSearchOffsetRef.current;
+        const live = await searchProductsByText(searchTermValueParam, liveBrandId, { from, pageSize: PRODUCTS_PER_PAGE });
+
+        if (live) {
+          liveSearchActiveRef.current = true;
+          liveSearchOffsetRef.current = from + live.rawCount;
+          setHasMoreProducts(live.hasMore);
+          setProductsToDisplay(prevProducts => {
+            if (initialLoad) return live.products;
+            const newIds = new Set(live.products.map(p => p.id));
+            return [...prevProducts.filter(p => !newIds.has(p.id)), ...live.products];
+          });
+          setDataSource(`Web de ${selectedBrand?.nombre || brandId}`);
+          return;
+        }
+        console.warn(`No se pudo consultar la web de ${liveBrandId}; se usan los archivos locales.`);
+      }
+      liveSearchActiveRef.current = false;
+
       currentDataSourceUsed = 'Local (Productos - Public)';
       console.log(`Cargando productos para ${brandId}/${branchId} desde archivos locales (public)...`);
 
@@ -856,6 +899,12 @@ const Supermercados = () => {
 
               {error && <p className="error-message">{error}</p>}
 
+              {LIVE_SEARCH_BRANDS.includes(selectedBrand.id.toLowerCase()) && (
+                <p className="live-search-note">
+                  La búsqueda se hace en la web de {selectedBrand.nombre}, con los precios online.
+                </p>
+              )}
+
               <div className="product-search-bar">
                 <Input
                   id="busquedaSuper"
@@ -927,7 +976,9 @@ const Supermercados = () => {
                   </div>
                 ) : (
                   searchTerm.trim() !== '' && selectedBranch && !isLoadingProducts ? (
-                    <p className="no-products-message">No se encontraron productos para "{searchTerm}" en esta sucursal.</p>
+                    <p className="no-products-message">
+                      No se encontraron productos para "{searchTerm}" {liveSearchActiveRef.current ? `en la web de ${selectedBrand.nombre}` : 'en esta sucursal'}.
+                    </p>
                   ) : (
                     <p className="no-products-message">
                       {selectedBranch ? 'Utiliza la barra de búsqueda para encontrar productos.' : 'Selecciona un supermercado para ver los precios.'}
