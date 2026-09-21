@@ -479,13 +479,19 @@ body {
   line-height: 1.5;
 }
 
-/* Detected Supermarket Link — anchored to the bottom-right of the summary
-   banner, on the same line as the total price and under the cart icon, so
-   it adds no height to the header. */
+/* Detected Supermarket Link — sits on its own row at the bottom-right of the
+   summary banner, under the total, so a long total can never run into it.
+   The banner reserves that row with extra bottom padding (see
+   .list-summary-banner--with-location); when the header is collapsed it
+   moves up onto the total's line instead. */
+.list-summary-banner--with-location {
+  padding-bottom: calc(var(--spacing-md) + 30px);
+}
+
 .detected-super-link {
   position: absolute;
   right: var(--spacing-lg);
-  bottom: calc(var(--spacing-md) + 8px);
+  bottom: var(--spacing-md);
   z-index: 1;
   font-size: 0.72rem;
   color: var(--primary-dark-color);
