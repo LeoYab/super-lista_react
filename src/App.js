@@ -376,7 +376,7 @@ function MainAppContent() {
 
   const listHeaderContent = (
     <>
-      <div className="list-summary-banner">
+      <div className={`list-summary-banner ${detectedSupermarket ? 'list-summary-banner--with-location' : ''}`}>
         <div className="list-summary-content">
           {totalAhorro > 0 && (
             <span className="list-summary-savings">
