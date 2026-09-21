@@ -1,6 +1,6 @@
 .scan-fs {
-  --scan-w: min(82vw, 420px);
-  --scan-h: min(34vw, 170px);
+  --scan-w: min(76vw, 340px);
+  --scan-h: var(--scan-w);
   position: fixed;
   inset: 0;
   z-index: 3000;

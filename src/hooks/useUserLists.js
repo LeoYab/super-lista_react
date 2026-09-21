@@ -3,6 +3,16 @@ import { useState, useEffect } from 'react';
 import * as firebaseService from '../services/firebaseService';
 import { showSuccessToast, showErrorAlert } from '../Notifications/NotificationsServices';
 
+// Remembers the selected list per user so a page reload reopens it instead of
+// falling back to the first one. Storage can be unavailable (private mode).
+const storageKey = (uid) => `superlista_current_list_${uid}`;
+const readStoredListId = (uid) => {
+  try { return localStorage.getItem(storageKey(uid)); } catch { return null; }
+};
+const storeListId = (uid, listId) => {
+  try { localStorage.setItem(storageKey(uid), listId); } catch { /* ignore */ }
+};
+
 export function useUserLists(currentUser) {
   const [userLists, setUserLists] = useState([]);
   const [currentListId, setCurrentListId] = useState(null);
@@ -23,8 +33,10 @@ export function useUserLists(currentUser) {
       setUserLists(loadedLists);
       if (loadedLists.length > 0) {
         if (!currentListId || !loadedLists.some(list => list.id === currentListId)) {
-          setCurrentListId(loadedLists[0].id);
-          setCurrentListName(loadedLists[0].nameList);
+          const stored = currentListId ? null : readStoredListId(currentUser.uid);
+          const target = loadedLists.find(list => list.id === stored) || loadedLists[0];
+          setCurrentListId(target.id);
+          setCurrentListName(target.nameList);
         }
       } else {
         setCurrentListId(null);
@@ -34,6 +46,10 @@ export function useUserLists(currentUser) {
     });
 
     return () => unsubscribe();
+  }, [currentUser, currentListId]);
+
+  useEffect(() => {
+    if (currentUser && currentListId) storeListId(currentUser.uid, currentListId);
   }, [currentUser, currentListId]);
 
   const createList = async (listName) => {

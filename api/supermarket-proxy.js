@@ -5,7 +5,9 @@
 const BRAND_URLS = {
   carrefour: 'https://www.carrefour.com.ar',
   dia: 'https://diaonline.supermercadosdia.com.ar',
-  changomas: 'https://www.masonline.com.ar'
+  changomas: 'https://www.masonline.com.ar',
+  jumbo: 'https://www.jumbo.com.ar',
+  vea: 'https://www.vea.com.ar'
 };
 
 // Orígenes desde los que se permite llamar a este endpoint.
@@ -17,7 +19,7 @@ const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGIN || 'http://localhost:3000')
 // Rate limiting básico en memoria (por instancia serverless "caliente").
 // No es robusto entre instancias frías, pero frena ráfagas de abuso baratas.
 const RATE_LIMIT_WINDOW_MS = 60_000;
-const RATE_LIMIT_MAX = 30;
+const RATE_LIMIT_MAX = 120;
 const requestLog = new Map();
 
 function isRateLimited(ip) {
@@ -44,7 +46,7 @@ module.exports = async (req, res) => {
 
   // Validaciones
   if (!brand || !BRAND_URLS[brand]) {
-    return res.status(400).json({ error: 'Brand inválido. Usar: carrefour, dia, o changomas' });
+    return res.status(400).json({ error: 'Brand inválido. Usar: carrefour, dia, changomas, jumbo o vea' });
   }
 
   const baseUrl = BRAND_URLS[brand];

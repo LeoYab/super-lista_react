@@ -11,6 +11,7 @@ import Button from '../Buttons/Button';
 import './Comparador.css';
 import { getDistanceKm } from '../../utils/geo';
 import { textMatchesAllWords } from '../../utils/productSearch';
+import { LIVE_SEARCH_BRANDS, findCheapestCommonProduct } from '../../services/supermarketService';
 
 const Comparador = () => {
   const navigate = useNavigate();
@@ -188,17 +189,42 @@ const Comparador = () => {
 
     const comparisonResults = [];
 
+    // Stores with a live website API: each list item is resolved to ONE product
+    // (by barcode) that exists in all of them, so they are compared on the
+    // exact same item. One item at a time to go easy on the stores' servers.
+    const liveBrandIds = Object.keys(closestBranches).filter((id) => LIVE_SEARCH_BRANDS.includes(id));
+    const liveMatchesByProduct = new Map();
+    if (liveBrandIds.length > 0) {
+      for (let i = 0; i < products.length; i++) {
+        const userProduct = products[i];
+        setLoadingSteps((prev) => {
+          const next = { ...prev };
+          liveBrandIds.forEach((id) => { next[id] = `Buscando "${userProduct.nombre}" (${i + 1}/${products.length})...`; });
+          return next;
+        });
+        try {
+          liveMatchesByProduct.set(userProduct, await findCheapestCommonProduct(userProduct.nombre, liveBrandIds));
+        } catch (e) {
+          console.error(`Error buscando "${userProduct.nombre}":`, e);
+          liveMatchesByProduct.set(userProduct, null);
+        }
+      }
+    }
+
     // Fetch and search catalogs for each supermarket
     await Promise.all(
       Object.entries(closestBranches).map(async ([brandId, info]) => {
         const branchId = info.branchData.id_sucursal || info.branchData.id;
         try {
-          const res = await fetch(`/data/products/${brandId}/${branchId}.json`);
-          if (!res.ok) {
-            throw new Error(`Catálogo no encontrado`);
+          const isLive = liveBrandIds.includes(brandId);
+          let catalog = [];
+          if (!isLive) {
+            const res = await fetch(`/data/products/${brandId}/${branchId}.json`);
+            if (!res.ok) {
+              throw new Error(`Catálogo no encontrado`);
+            }
+            catalog = await res.json();
           }
-
-          const catalog = await res.json();
           setLoadingSteps((prev) => ({ ...prev, [brandId]: 'Procesando...' }));
 
           let totalCost = 0;
@@ -207,6 +233,10 @@ const Comparador = () => {
 
           products.forEach((userProduct) => {
             let cheapestMatch = null;
+
+            if (isLive) {
+              cheapestMatch = liveMatchesByProduct.get(userProduct)?.byBrand[brandId] || null;
+            }
 
             // Search for products that match all words in the user query
             catalog.forEach((item) => {
@@ -467,7 +497,7 @@ const Comparador = () => {
                 <div className="custom-spinner"></div>
                 <div className="spinner-pulse"></div>
               </div>
-              <p className="loader-title">Buscando precios en catálogos locales...</p>
+              <p className="loader-title">Buscando precios en los supermercados...</p>
               <div className="loader-steps">
                 {Object.entries(loadingSteps).map(([brand, status]) => {
                   const isCompleted = status === 'Completado';
