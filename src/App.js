@@ -26,7 +26,7 @@ import CategoryFilter from './components/CategoryFilter/CategoryFilter';
 import { ProductListSkeleton } from './components/Skeleton/Skeleton';
 
 import useBarcodeScanner from './hooks/useBarcodeScanner';
-import { ShoppingBag, MapPin, BarChart2, Plus, ScanBarcode } from 'lucide-react';
+import { ShoppingBag, MapPin, BarChart2, Plus, ScanBarcode, ExternalLink } from 'lucide-react';
 import { showErrorAlert, showSuccessToast } from './Notifications/NotificationsServices';
 import { fetchProductByEan } from './services/supermarketService';
 
@@ -46,6 +46,11 @@ import './components/Buttons/Button.css';
 const AuthPage = lazy(() => import('./pages/AuthPage/AuthPage'));
 const Supermercados = lazy(() => import('./components/supermercados/Supermercados'));
 const Comparador = lazy(() => import('./components/Comparador/Comparador'));
+
+const SUPERMARKET_LOGO_BRANDS = ['carrefour', 'changomas', 'coto', 'dia', 'easy', 'jumbo', 'vea'];
+const getSupermarketLogoUrl = (brandKey) => (
+  SUPERMARKET_LOGO_BRANDS.includes(brandKey) ? `/logo_super/display/logo_${brandKey}.png` : null
+);
 
 function MainAppContent() {
   const navigate = useNavigate();
@@ -74,8 +79,8 @@ function MainAppContent() {
   const [groupByCategory, setGroupByCategory] = useState(false);
 
   // Collapses the list-header (hides the category chips, shrinks the
-  // summary banner) while the user scrolls down the product list, to give
-  // it more vertical room; expands again near the top or on scroll-up.
+  // summary banner) once the user has scrolled down the product list;
+  // expands again when they come back to the top.
   const { isCollapsed: isListHeaderCollapsed, sentinelRef: scrollCollapseSentinelRef } = useScrollCollapse();
 
   // GPS State
@@ -129,7 +134,13 @@ function MainAppContent() {
           if (validBranches.length > 0) {
             const nearestStore = validBranches[0];
             setDetectedSupermarket(nearestStore);
-            showSuccessToast(`📍 Estás en ${nearestStore.name} (${nearestStore.branchData.nombre_sucursal || nearestStore.branchData.id_sucursal})`);
+            const logoUrl = getSupermarketLogoUrl(nearestStore.brandKey);
+            const placeHtml = logoUrl
+              ? `<img src="${logoUrl}" alt="${nearestStore.name}" style="height:28px;max-width:120px;object-fit:contain;" />`
+              : `<strong>${nearestStore.name}</strong>`;
+            showSuccessToast(
+              `<span style="display:inline-flex;align-items:center;gap:8px;">Estás en: ${placeHtml}</span>`
+            );
           }
         });
 
@@ -363,6 +374,60 @@ function MainAppContent() {
     maximumFractionDigits: hasDecimals ? 2 : 0
   });
 
+  const listHeaderContent = (
+    <>
+      <div className="list-summary-banner">
+        <div className="list-summary-content">
+          {totalAhorro > 0 && (
+            <span className="list-summary-savings">
+              ⚡ Ahorrás {totalAhorro.toLocaleString('es-AR', { style: 'currency', currency: 'ARS' })} esta semana
+            </span>
+          )}
+          <div className="list-summary-meta-row">
+            <div className="list-summary-meta">
+              {currentListName || 'Cargando...'} · {totalProductos || 0} producto{totalProductos === 1 ? '' : 's'}
+            </div>
+            <div className="list-summary-icon">
+              <ShoppingBag size={18} strokeWidth={2.2} />
+            </div>
+          </div>
+          <div className="list-summary-total">{formattedTotal}</div>
+        </div>
+        {detectedSupermarket && (
+          <a
+            href={`https://www.google.com/maps/search/?api=1&query=${detectedSupermarket.branchData.latitud},${detectedSupermarket.branchData.longitud}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="detected-super-link"
+            title={`Ver ${detectedSupermarket.name} en el mapa`}
+          >
+            <span className="detected-super-label">Estás en:</span>
+            {getSupermarketLogoUrl(detectedSupermarket.brandKey) ? (
+              <img
+                src={getSupermarketLogoUrl(detectedSupermarket.brandKey)}
+                alt={detectedSupermarket.name}
+                className="detected-super-logo"
+              />
+            ) : (
+              <span className="detected-super-name">{detectedSupermarket.name}</span>
+            )}
+            <ExternalLink size={12} />
+          </a>
+        )}
+      </div>
+
+      <div className="category-tabs-wrapper">
+        <CategoryFilter
+          categories={activeCategories}
+          selectedCategoryId={selectedCategoryId}
+          onSelectCategory={setSelectedCategoryId}
+          groupByCategory={groupByCategory}
+          onToggleGroupBy={() => setGroupByCategory(prev => !prev)}
+        />
+      </div>
+    </>
+  );
+
   return (
     <div className="App">
       <Header />
@@ -375,43 +440,17 @@ function MainAppContent() {
           ) : currentListId ? (
             <>
               <div ref={scrollCollapseSentinelRef} className="scroll-collapse-sentinel" aria-hidden="true"></div>
-              <div className={`list-header ${isListHeaderCollapsed ? 'list-header--collapsed' : ''}`}>
-                <div className="list-summary-banner">
-                  <div className="list-summary-content">
-                    {totalAhorro > 0 && (
-                      <span className="list-summary-savings">
-                        ⚡ Ahorrás {totalAhorro.toLocaleString('es-AR', { style: 'currency', currency: 'ARS' })} esta semana
-                      </span>
-                    )}
-                    <div className="list-summary-meta">
-                      {currentListName || 'Cargando...'} · {totalProductos || 0} producto{totalProductos === 1 ? '' : 's'}
-                    </div>
-                    <div className="list-summary-total">{formattedTotal}</div>
-                    {detectedSupermarket && (
-                      <a
-                        href={`https://www.google.com/maps/search/?api=1&query=${detectedSupermarket.branchData.latitud},${detectedSupermarket.branchData.longitud}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="detected-super-link"
-                      >
-                        📍 {detectedSupermarket.name}
-                        {' '}<span className="detected-super-arrow">↗️</span>
-                      </a>
-                    )}
-                  </div>
-                  <div className="list-summary-icon">
-                    <ShoppingBag size={22} strokeWidth={2.2} />
-                  </div>
+              {/* The slot reserves the header's fully-expanded height through an
+                  invisible copy, while the visible header is absolutely
+                  positioned on top of it. That way it can collapse/expand
+                  with its own animation without ever changing the layout
+                  (and scroll position) of the list below. */}
+              <div className="list-header-slot">
+                <div className="list-header list-header--ghost" aria-hidden="true">
+                  {listHeaderContent}
                 </div>
-
-                <div className="category-tabs-wrapper">
-                  <CategoryFilter
-                    categories={activeCategories}
-                    selectedCategoryId={selectedCategoryId}
-                    onSelectCategory={setSelectedCategoryId}
-                    groupByCategory={groupByCategory}
-                    onToggleGroupBy={() => setGroupByCategory(prev => !prev)}
-                  />
+                <div className={`list-header ${isListHeaderCollapsed ? 'list-header--collapsed' : ''}`}>
+                  {listHeaderContent}
                 </div>
               </div>
               {loadingProducts ? (

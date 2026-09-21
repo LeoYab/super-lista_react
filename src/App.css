@@ -35,15 +35,9 @@ body {
   -moz-osx-font-smoothing: grayscale;
   overflow-y: scroll;
   min-height: 100vh;
-  /* This is the actual scrolling box (html has default 'visible' overflow,
-     so its overflow-y above propagates here). `overflow-anchor: none` on
-     .list-header alone only stops that element from being chosen as the
-     anchor node — it doesn't stop the browser from picking a DIFFERENT
-     anchor (e.g. a product-list item) and adjusting scrollTop to keep it
-     visually still whenever .list-header's height changes above it. That
-     scrollTop correction is what re-triggers useScrollCollapse's scroll
-     listener and produces the expand/collapse loop. Disabling anchoring
-     for the whole scroller removes the correction entirely. */
+  /* Keeps the browser from adjusting scrollTop by itself when content above
+     the list changes size (e.g. products loading in), which would fire
+     useScrollCollapse's scroll listener and could flip the header. */
   overflow-anchor: none;
 }
 
@@ -217,10 +211,9 @@ body {
 /* Invisible marker used by useScrollCollapse (via a scroll listener) to
    detect "has the user scrolled down past this point" without tracking
    scroll position/direction by hand. Positioned absolutely against
-   .main-content-area (position: relative) so it scrolls with the content
-   but doesn't affect layout or take up visual space. The offset is the
-   scroll depth at which the list-header collapses (expanding back needs a
-   further scroll-up past that, per the hysteresis gap in the hook). */
+   .main-content-area so it scrolls with the content but takes no space.
+   Its offset is the scroll depth at which the header collapses; expanding
+   back needs a further scroll-up past that (hysteresis, in the hook). */
 .scroll-collapse-sentinel {
   position: absolute;
   top: 64px;
@@ -230,20 +223,33 @@ body {
   pointer-events: none;
 }
 
-/* Sticky List Header */
-.list-header {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: var(--spacing-md);
+/* Sticky slot for the list header. Its height comes from the invisible
+   .list-header--ghost copy (always the fully-expanded size) and never
+   changes; the visible .list-header is absolutely positioned on top of it.
+   So collapsing/expanding only resizes that overlay: the list below never
+   moves, and the animation can be as gradual as we like without touching
+   the user's scroll. The slot itself ignores pointer events so the empty
+   area under a collapsed header doesn't block the list. */
+.list-header-slot {
   position: sticky;
   top: var(--spacing-md);
-  /* Offset from top */
   z-index: 40;
-  background-color: var(--bg-glass);
-  /* Matches bg color with opacity */
-  backdrop-filter: blur(8px);
+  margin-bottom: var(--spacing-md);
+  pointer-events: none;
+  overflow-anchor: none;
+}
+
+.list-header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  /* Solid (same color as the page) so list items scrolling underneath don't
+     show through, without paying for a backdrop blur on every frame. */
+  background-color: var(--background-color);
   padding: var(--spacing-lg) var(--spacing-md) 0 var(--spacing-md);
   border-radius: var(--border-radius);
   box-shadow: var(--shadow-sm);
@@ -251,22 +257,23 @@ body {
   font-weight: 600;
   color: var(--text-color-primary);
   overflow: hidden;
+  pointer-events: auto;
+  /* Relayouts caused by the collapse animation stay inside this box. */
+  contain: layout;
   transition: padding var(--transition-collapse);
-  /* Belt-and-suspenders alongside the `overflow-anchor: none` on `body`
-     (App.css): stops this element specifically from ever being picked as
-     the scroll anchor, on top of disabling anchoring for the page as a
-     whole. */
-  overflow-anchor: none;
+}
+
+.list-header--ghost {
+  position: relative;
+  visibility: hidden;
+  pointer-events: none;
+  transition: none;
 }
 
 /* Collapsed on scroll-down: shrinks the summary banner and hides the
-   category chips entirely, giving the product list more room. Uses the
-   CSS grid "1fr / 0fr" row-collapse technique instead of animating
-   max-height: animating max-height to a value bigger than the real content
-   (needed since content height isn't known in CSS) makes the easing curve
-   feel uneven — most of the transition happens with nothing visibly
-   changing. Animating the grid row itself tracks the actual content height
-   exactly, so the motion reads as smooth regardless of the chip row's size. */
+   category chips. Uses the CSS grid "1fr / 0fr" row-collapse technique
+   instead of animating max-height, so the motion tracks the real content
+   height and reads as even regardless of the chip row's size. */
 .list-header .category-tabs-wrapper {
   display: grid;
   grid-template-rows: 1fr;
@@ -277,7 +284,7 @@ body {
 
 /* The chip row's own padding/border isn't part of its "content" as far as
    the grid row-collapse is concerned, so it'd otherwise be left behind as a
-   ~17px sliver once collapsed — shrink it along with the row. */
+   sliver once collapsed — shrink it along with the row. */
 .list-header .category-scroll-container {
   transition: padding var(--transition-collapse), border-top-width var(--transition-collapse);
 }
@@ -298,23 +305,40 @@ body {
   border-top-width: 0;
 }
 
+/* Extra right padding keeps the icon and the location clear of the fixed
+   menu button that overlaps the header's top-right corner. */
 .list-header--collapsed .list-summary-banner {
-  padding: 8px var(--spacing-lg);
+  padding: 8px calc(var(--spacing-lg) + 32px) 8px var(--spacing-lg);
   margin-bottom: var(--spacing-sm);
 }
 
-.list-header--collapsed .list-summary-savings,
-.list-header--collapsed .detected-super-link {
+.list-header--collapsed .list-summary-savings {
   display: none;
+}
+
+/* The location stays visible when collapsed: it follows the total's line
+   (which moves down and shrinks) and gets a smaller logo. */
+.list-header--collapsed .detected-super-link {
+  right: calc(var(--spacing-lg) + 32px);
+  bottom: 9px;
+}
+
+.list-header--collapsed .detected-super-logo {
+  height: 20px;
 }
 
 .list-header--collapsed .list-summary-total {
   font-size: 1.15rem;
 }
 
-.list-header--collapsed .list-summary-icon {
-  width: 32px;
-  height: 32px;
+@media (prefers-reduced-motion: reduce) {
+  .list-header,
+  .list-header .category-tabs-wrapper,
+  .list-header .category-scroll-container,
+  .list-summary-banner,
+  .list-summary-total {
+    transition: none;
+  }
 }
 
 /* Summary Banner — flat pastel card replacing the old title/total row */
@@ -358,6 +382,7 @@ body {
 
 .list-summary-content {
   position: relative;
+  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -378,7 +403,16 @@ body {
   margin-bottom: 4px;
 }
 
+.list-summary-meta-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+  width: 100%;
+}
+
 .list-summary-meta {
+  min-width: 0;
   font-size: 0.8rem;
   font-weight: 500;
   color: var(--primary-dark-color);
@@ -399,18 +433,20 @@ body {
   transition: font-size var(--transition-collapse);
 }
 
+/* The icon sits at the end of the meta line; negative vertical margins keep
+   it from making that line taller than its text. */
 .list-summary-icon {
   position: relative;
   flex-shrink: 0;
-  width: 42px;
-  height: 42px;
+  width: 32px;
+  height: 32px;
+  margin: -6px 0;
   border-radius: var(--border-radius);
   background-color: var(--glass-bg-strong);
   color: var(--primary-dark-color);
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: width var(--transition-collapse), height var(--transition-collapse);
 }
 
 /* Empty State */
@@ -443,27 +479,51 @@ body {
   line-height: 1.5;
 }
 
-/* Detected Supermarket Link */
+/* Detected Supermarket Link — anchored to the bottom-right of the summary
+   banner, on the same line as the total price and under the cart icon, so
+   it adds no height to the header. */
 .detected-super-link {
-  font-size: 0.75rem;
+  position: absolute;
+  right: var(--spacing-lg);
+  bottom: calc(var(--spacing-md) + 8px);
+  z-index: 1;
+  font-size: 0.72rem;
   color: var(--primary-dark-color);
   font-weight: 600;
   text-decoration: none;
   cursor: pointer;
-  transition: opacity var(--transition-fast);
+  transition: right var(--transition-collapse), bottom var(--transition-collapse), opacity var(--transition-fast);
   display: inline-flex;
   align-items: center;
-  gap: 2px;
-  margin-top: 4px;
+  gap: 6px;
+  max-width: 100%;
 }
 
 .detected-super-link:hover {
   opacity: 0.8;
-  text-decoration: underline;
 }
 
-.detected-super-arrow {
-  font-size: 0.7rem;
+.detected-super-label {
+  flex-shrink: 0;
+}
+
+.detected-super-logo {
+  height: 24px;
+  max-width: 72px;
+  width: auto;
+  object-fit: contain;
+  transition: height var(--transition-collapse);
+}
+
+.detected-super-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.detected-super-link svg {
+  flex-shrink: 0;
 }
 
 /* SweetAlert2 Overrides for Consistency */
@@ -562,9 +622,12 @@ body {
     flex: 0 1 auto;
   }
 
-  .list-header {
+  .list-header-slot {
     top: 0;
     margin: 0 0 var(--spacing-md) 0;
+  }
+
+  .list-header {
     border-radius: 0 0 var(--border-radius) var(--border-radius);
   }
 }

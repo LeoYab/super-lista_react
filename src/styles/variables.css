@@ -90,12 +90,10 @@
   /* Transitions */
   --transition-fast: 0.15s ease;
   --transition-normal: 0.3s ease;
-  /* Ease-out curve for content that grows/shrinks (e.g. the collapsing
-     list-header). Kept short deliberately: this animates while the user's
-     finger/wheel is still actively scrolling, so anything much slower reads
-     as the scroll itself snagging rather than a header collapsing. */
-  --transition-collapse: 0.18s cubic-bezier(0.4, 0, 0.2, 1);
-
+  /* Ease-in-out curve for the list header collapsing/expanding. It runs on
+     an overlay that doesn't affect the list layout, so it can afford to be
+     gradual instead of snapping. */
+  --transition-collapse: 0.32s cubic-bezier(0.4, 0, 0.2, 1);
   /* Swipe Threshold */
   --swipe-threshold: 90px;
 
