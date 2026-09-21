@@ -533,6 +533,67 @@ body {
 }
 
 /* SweetAlert2 Overrides for Consistency */
+/* Above the scanner overlays (z-index 2000) and the menu button (2000), so a
+   prompt opened from inside them (e.g. asking a quantity) isn't hidden. */
+.swal2-container {
+  z-index: 3000 !important;
+}
+
+/* Quantity prompt: a numeric text field with our own up/down arrows (see
+   attachQuantityStepper in NotificationsServices.js). */
+.qty-product-name {
+  margin: 0;
+  color: var(--text-color-secondary);
+  overflow-wrap: anywhere;
+}
+
+.qty-stepper {
+  position: relative;
+  margin: 1em auto;
+  width: 100%;
+  max-width: 260px;
+}
+
+.qty-stepper .swal2-input {
+  width: 100%;
+  margin: 0;
+  padding-right: 52px;
+  text-align: center;
+  font-size: 1.3rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  box-sizing: border-box;
+}
+
+.qty-stepper-arrows {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  bottom: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.qty-stepper-arrow {
+  flex: 1;
+  width: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 6px;
+  background-color: var(--primary-light-color);
+  color: var(--primary-dark-color);
+  cursor: pointer;
+  padding: 0;
+}
+
+.qty-stepper-arrow:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
 .swal2-popup {
   border-radius: var(--border-radius-lg) !important;
   font-family: var(--font-family) !important;

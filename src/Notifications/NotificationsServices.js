@@ -113,4 +113,103 @@ export const showInputAlert = async ({
   return result.isConfirmed ? result.value : null;
 };
 
+const MIN_QUANTITY = 1;
+const MAX_QUANTITY = 999;
+
+const ARROW_UP_SVG = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="18 15 12 9 6 15"></polyline></svg>';
+const ARROW_DOWN_SVG = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"></polyline></svg>';
+
+// Own markup instead of SweetAlert2's built-in `input`: it looks the input up
+// as a *direct child* of the popup, so moving it inside the arrows wrapper
+// made every value read as null. Static string only; the product name is
+// added with textContent in didOpen so it can never be interpreted as HTML.
+const QUANTITY_DIALOG_HTML = `
+  <p class="qty-product-name"></p>
+  <div class="qty-stepper">
+    <input class="swal2-input qty-input" type="text" inputmode="numeric" pattern="[0-9]*"
+      maxlength="${String(MAX_QUANTITY).length}" autocomplete="off" aria-label="Cantidad" />
+    <div class="qty-stepper-arrows">
+      <button type="button" class="qty-stepper-arrow" data-dir="up" aria-label="Aumentar cantidad">${ARROW_UP_SVG}</button>
+      <button type="button" class="qty-stepper-arrow" data-dir="down" aria-label="Disminuir cantidad">${ARROW_DOWN_SVG}</button>
+    </div>
+  </div>`;
+
+const readQuantity = (input) => parseInt(input.value, 10);
+
+/**
+ * Pregunta cuántas unidades agregar de un producto, con flechas para subir o
+ * bajar de a 1. Solo se pueden escribir dígitos, y las flechas se deshabilitan
+ * en los límites (1 y 999), así nunca dejan un número inválido.
+ * @param {object} [options]
+ * @param {string} [options.productName=''] - Nombre del producto, se muestra como texto de apoyo.
+ * @param {number} [options.defaultQuantity=1] - Cantidad inicial.
+ * @returns {Promise<number|null>} La cantidad (entero entre 1 y 999) o null si se canceló.
+ */
+export const showQuantityAlert = async ({ productName = '', defaultQuantity = 1 } = {}) => {
+  const result = await Swal.fire({
+    title: '¿Cuántas unidades?',
+    html: QUANTITY_DIALOG_HTML,
+    showCancelButton: true,
+    confirmButtonText: 'Agregar',
+    cancelButtonText: 'Cancelar',
+    focusConfirm: false,
+    didOpen: (popup) => {
+      const input = popup.querySelector('.qty-input');
+      const up = popup.querySelector('[data-dir="up"]');
+      const down = popup.querySelector('[data-dir="down"]');
+      popup.querySelector('.qty-product-name').textContent = productName;
+      input.value = String(defaultQuantity);
+
+      const refresh = () => {
+        const value = readQuantity(input);
+        up.disabled = Number.isFinite(value) && value >= MAX_QUANTITY;
+        down.disabled = Number.isFinite(value) && value <= MIN_QUANTITY;
+      };
+      const step = (delta) => {
+        const value = readQuantity(input);
+        const next = Number.isFinite(value)
+          ? Math.min(MAX_QUANTITY, Math.max(MIN_QUANTITY, value + delta))
+          : MIN_QUANTITY;
+        if (next === value) return;
+        input.value = String(next);
+        Swal.resetValidationMessage();
+        refresh();
+      };
+
+      up.addEventListener('click', () => step(1));
+      down.addEventListener('click', () => step(-1));
+      input.addEventListener('input', () => {
+        // Only digits (no signs, decimals, "e" or letters), typed or pasted.
+        const digits = input.value.replace(/\D/g, '').slice(0, String(MAX_QUANTITY).length);
+        if (digits !== input.value) input.value = digits;
+        Swal.resetValidationMessage();
+        refresh();
+      });
+      input.addEventListener('keydown', (event) => {
+        if (event.key === 'ArrowUp') { event.preventDefault(); step(1); }
+        else if (event.key === 'ArrowDown') { event.preventDefault(); step(-1); }
+        else if (event.key === 'Enter') { event.preventDefault(); Swal.clickConfirm(); }
+      });
+
+      refresh();
+      input.focus();
+      // Select the default so typing replaces it directly.
+      input.select();
+    },
+    preConfirm: () => {
+      const quantity = readQuantity(Swal.getPopup().querySelector('.qty-input'));
+      if (!Number.isInteger(quantity) || quantity < MIN_QUANTITY) {
+        Swal.showValidationMessage(`Ingresá una cantidad de ${MIN_QUANTITY} o más.`);
+        return false;
+      }
+      if (quantity > MAX_QUANTITY) {
+        Swal.showValidationMessage(`La cantidad máxima es ${MAX_QUANTITY}.`);
+        return false;
+      }
+      return quantity;
+    }
+  });
+  return result.isConfirmed ? result.value : null;
+};
+
 // Puedes añadir más funciones aquí según necesites otros tipos de SweetAlerts.
