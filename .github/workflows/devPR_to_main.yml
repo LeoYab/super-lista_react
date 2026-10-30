@@ -15,7 +15,7 @@ jobs:
 
     steps:  
     - name: Install Node.js
-      run: curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash - && sudo apt-get install -y nodejs
+      run: curl -fsSL https://deb.nodesource.com/setup_24.x | sudo -E bash - && sudo apt-get install -y nodejs
 
     - name: Verify Node.js and npm versions
       run: node -v && npm -v
@@ -25,7 +25,7 @@ jobs:
       with:
         ref: dev
         
-    - name: Install dependencies & run tests
+    - name: Install dependencies, run tests & build
       env:
         REACT_APP_FIREBASE_API_KEY: ${{ secrets.REACT_APP_FIREBASE_API_KEY }}
         REACT_APP_FIREBASE_AUTH_DOMAIN: ${{ secrets.REACT_APP_FIREBASE_AUTH_DOMAIN }}
@@ -37,6 +37,7 @@ jobs:
       run: |
         npm install
         npm test
+        npm run build
 
     - name: Create Pull Request to main
       if: success()

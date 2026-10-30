@@ -3,63 +3,54 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@testing-library/dom": "^10.4.0",
-    "@testing-library/jest-dom": "^6.6.3",
-    "@testing-library/react": "^16.3.0",
-    "@testing-library/user-event": "^13.5.0",
-    "axios": "^1.20.0",
-    "dotenv": "^17.2.1",
-    "firebase": "^12.18.0",
+    "firebase": "^13.1.0",
     "html5-qrcode": "^2.3.8",
-    "lucide-react": "^1.41.0",
-    "react": "^19.2.3",
-    "react-dom": "^19.2.3",
-    "react-router-dom": "^7.18.3",
-    "react-scripts": "^5.0.1",
+    "lucide-react": "^1.65.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "react-router-dom": "^7.18.5",
     "sweetalert2": "^11.26.25",
-    "web-vitals": "^6.2.1",
-    "workbox-core": "^6.6.0",
-    "workbox-precaching": "^6.6.0",
-    "workbox-routing": "^6.6.0"
+    "web-vitals": "^6.2.3",
+    "workbox-core": "^7.4.1",
+    "workbox-precaching": "^7.4.1",
+    "workbox-routing": "^7.4.1"
   },
   "devDependencies": {
-    "csv-parser": "^3.2.0",
-    "firebase-admin": "^14.3.0",
-    "unzipper": "^0.12.3"
-  },
-  "overrides": {
-    "@tootallnate/once": "^2.0.1",
-    "underscore": "^1.13.8",
-    "qs": "^6.16.0",
-    "uuid": "^11.1.1",
-    "nth-check": "^2.1.1",
-    "css-select": "^4.3.0",
-    "serialize-javascript": "^7.1.1"
+    "@eslint/js": "^10.0.1",
+    "@testing-library/dom": "^10.4.2",
+    "@testing-library/jest-dom": "^7.0.1",
+    "@testing-library/react": "^16.3.3",
+    "@testing-library/user-event": "^14.6.8",
+    "@vitejs/plugin-basic-ssl": "^2.3.0",
+    "@vitejs/plugin-react": "^6.1.2",
+    "axios": "^1.21.0",
+    "csv-parser": "^3.2.1",
+    "dotenv": "^18.0.9",
+    "eslint": "^10.13.0",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "firebase-admin": "^14.5.0",
+    "globals": "^17.13.0",
+    "jsdom": "^30.1.3",
+    "unzipper": "^0.12.5",
+    "vite": "^8.3.5",
+    "vite-plugin-pwa": "^2.0.0",
+    "vitest": "^5.0.5"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "vite",
     "data:copy": "node scripts/organize_data_for_public.js",
-    "start-https": "set HTTPS=true&&react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "start-https": "vite --mode https",
+    "build": "vite build",
+    "test": "vitest run",
+    "preview": "vite preview",
+    "test:watch": "vitest",
+    "lint": "eslint src api",
+    "penpot": "node scripts/start-penpot.cjs"
   },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
+  "engines": {
+    "node": "24.x"
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+  "overrides": {
+    "@grpc/grpc-js": "^1.14.0"
   }
 }

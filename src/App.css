@@ -127,7 +127,7 @@ body {
 .main-content-area {
   flex-grow: 1;
   padding: 0;
-  padding-bottom: 180px;
+  padding-bottom: 160px;
   /* Space for bottom controls */
   position: relative;
   display: flex;
@@ -160,17 +160,47 @@ body {
 
 .bottom-controls-header {
   display: flex;
-  flex-wrap: nowrap;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
   width: 100%;
-  gap: var(--spacing-md);
+  gap: var(--spacing-sm);
 }
 
-.action-buttons-container {
+.bottom-search-row {
   display: flex;
-  gap: var(--spacing-sm);
   align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.bottom-search-row .search-bar {
+  flex: 1;
+  min-width: 0;
+}
+
+.bottom-search-row .search-input-container {
+  max-width: none;
+  margin-right: 0;
+}
+
+.bottom-icon-button {
+  flex-shrink: 0;
+  width: 48px;
+  height: 44px;
+  padding: 0;
+}
+
+.bottom-icon-button .btn-icon {
+  margin: 0;
+}
+
+.bottom-actions-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-sm);
+}
+
+.bottom-action-button {
+  height: 52px;
+  font-size: 1rem;
 }
 
 /* Form inside bottom controls */
@@ -250,10 +280,7 @@ body {
   /* Solid (same color as the page) so list items scrolling underneath don't
      show through, without paying for a backdrop blur on every frame. */
   background-color: var(--background-color);
-  padding: var(--spacing-lg) var(--spacing-md) 0 var(--spacing-md);
-  border-radius: var(--border-radius);
-  box-shadow: var(--shadow-sm);
-  border: 1px solid var(--border-color-light);
+  padding-top: var(--spacing-xs);
   font-weight: 600;
   color: var(--text-color-primary);
   overflow: hidden;
@@ -312,7 +339,9 @@ body {
   margin-bottom: var(--spacing-sm);
 }
 
-.list-header--collapsed .list-summary-savings {
+.list-header--collapsed .list-summary-savings,
+.list-header--collapsed .list-summary-label,
+.list-header--collapsed .list-summary-progress {
   display: none;
 }
 
@@ -350,34 +379,12 @@ body {
   justify-content: space-between;
   gap: var(--spacing-md);
   width: 100%;
-  margin-bottom: var(--spacing-md);
-  padding: var(--spacing-md) var(--spacing-lg);
+  margin-bottom: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-md) var(--spacing-md);
   border-radius: var(--border-radius-lg);
-  background-color: var(--primary-light-color);
+  background-color: var(--card-bg-color);
+  border: 1px solid var(--border-color);
   transition: padding var(--transition-collapse), margin-bottom var(--transition-collapse);
-}
-
-.list-summary-banner::before,
-.list-summary-banner::after {
-  content: '';
-  position: absolute;
-  border-radius: 999px;
-  background-color: var(--glass-bg-soft);
-  pointer-events: none;
-}
-
-.list-summary-banner::before {
-  top: -30px;
-  right: -20px;
-  width: 110px;
-  height: 110px;
-}
-
-.list-summary-banner::after {
-  bottom: -40px;
-  right: 30px;
-  width: 80px;
-  height: 80px;
 }
 
 .list-summary-content {
@@ -386,7 +393,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 4px;
+  gap: 2px;
   min-width: 0;
 }
 
@@ -412,11 +419,10 @@ body {
 }
 
 .list-summary-meta {
-  min-width: 0;
+  flex-shrink: 0;
   font-size: 0.8rem;
   font-weight: 500;
-  color: var(--primary-dark-color);
-  opacity: 0.85;
+  color: var(--text-color-secondary);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -426,27 +432,73 @@ body {
 .list-summary-total {
   font-family: var(--font-family-display);
   font-weight: 700;
-  font-size: 1.6rem;
+  font-size: 1.9rem;
+  line-height: 1.15;
   font-variant-numeric: tabular-nums;
-  color: var(--primary-dark-color);
+  color: var(--primary-color);
   letter-spacing: -0.01em;
   transition: font-size var(--transition-collapse);
 }
 
-/* The icon sits at the end of the meta line; negative vertical margins keep
-   it from making that line taller than its text. */
-.list-summary-icon {
+.list-summary-label {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--text-color-secondary);
+}
+
+.list-summary-progress {
+  width: 100%;
+  height: 6px;
+  margin-top: 6px;
+  border-radius: var(--border-radius-full);
+  background-color: var(--border-color-light);
+  overflow: hidden;
+}
+
+.list-summary-progress-bar {
+  height: 100%;
+  border-radius: inherit;
+  background-color: var(--primary-color);
+  transition: width var(--transition-normal);
+}
+
+.list-selector {
   position: relative;
-  flex-shrink: 0;
-  width: 32px;
-  height: 32px;
-  margin: -6px 0;
-  border-radius: var(--border-radius);
-  background-color: var(--glass-bg-strong);
-  color: var(--primary-dark-color);
   display: flex;
   align-items: center;
-  justify-content: center;
+  min-width: 0;
+  color: var(--text-color-primary);
+}
+
+.list-selector-input {
+  appearance: none;
+  -webkit-appearance: none;
+  field-sizing: content;
+  min-width: 0;
+  max-width: 100%;
+  min-height: 32px;
+  padding: 0 22px 0 0;
+  border: none;
+  background: transparent;
+  color: inherit;
+  font-family: var(--font-family-display);
+  font-size: 1.1rem;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  cursor: pointer;
+}
+
+.list-selector-input option {
+  background-color: var(--card-bg-color);
+  color: var(--text-color-primary);
+  font-family: var(--font-family);
+  font-size: 1rem;
+}
+
+.list-selector-icon {
+  position: absolute;
+  right: 0;
+  pointer-events: none;
 }
 
 /* Empty State */
@@ -657,8 +709,7 @@ body {
   }
 
   .main-content-area {
-    padding-bottom: 220px;
-    /* More space for stacked controls */
+    padding-bottom: 160px;
   }
 
   .fixed-bottom-controls {
@@ -670,43 +721,9 @@ body {
     align-items: stretch;
   }
 
-  .bottom-controls-header {
-    flex-direction: column;
-    align-items: stretch;
-    gap: var(--spacing-sm);
-  }
-
-  .action-buttons-container {
-    justify-content: center;
-    /* Center buttons on mobile, wrap to a 2nd row instead of
-       overflowing/cutting off on narrow phones (4 x 72px buttons
-       don't fit in ~320px of width). */
-    flex-wrap: wrap;
-    width: 100%;
-  }
-
-  .action-buttons-container .btn-square {
-    flex: 0 1 auto;
-  }
-
   .list-header-slot {
     top: 0;
     margin: 0 0 var(--spacing-md) 0;
   }
 
-  .list-header {
-    border-radius: 0 0 var(--border-radius) var(--border-radius);
-  }
-}
-
-@media (max-width: 360px) {
-  /* Shrink the square action buttons a bit so all 4 have a better
-     chance of fitting on one row on very narrow phones before the
-     flex-wrap fallback above kicks in. */
-  .action-buttons-container .btn-square {
-    min-width: 64px;
-    height: 64px;
-    padding: 6px;
-    font-size: 0.7rem;
-  }
 }

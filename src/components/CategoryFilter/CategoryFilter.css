@@ -95,3 +95,62 @@
 .tone-purple .category-icon-circle {
   background-color: #ede9fe;
 }
+
+/* Compact pill chips on the list screen, to leave more room for products.
+   ProductForm keeps the circle look. */
+.list-header .category-scroll-container {
+  width: 100%;
+  margin: 0;
+  padding-left: 0;
+  padding-right: 0;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding-top: 0;
+  padding-bottom: var(--spacing-sm);
+  border-top: none;
+}
+
+.list-header .category-circle-item {
+  flex-direction: row;
+  gap: 6px;
+  width: auto;
+  min-height: 40px;
+  padding: 0 var(--spacing-md);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-full);
+  background-color: var(--card-bg-color);
+}
+
+.list-header .category-icon-circle,
+.list-header .category-circle-item:hover .category-icon-circle,
+.list-header .category-circle-item.active .category-icon-circle {
+  width: auto;
+  height: auto;
+  background: none;
+  box-shadow: none;
+  transform: none;
+  color: inherit;
+}
+
+.list-header .category-icon-circle svg {
+  width: 16px;
+  height: 16px;
+}
+
+.list-header .category-icon-emoji {
+  font-size: 15px;
+}
+
+.list-header .category-circle-label {
+  font-size: 13px;
+}
+
+.list-header .category-circle-item.active {
+  background-color: var(--primary-solid-end);
+  border-color: var(--primary-solid-end);
+  color: var(--primary-solid-text);
+}
+
+.list-header .category-circle-item.active .category-circle-label {
+  color: var(--primary-solid-text);
+}
