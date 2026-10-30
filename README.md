@@ -69,7 +69,7 @@ Ejecuta la aplicación en modo de desarrollo.
 
 ### `npm test`
 
-Lanza el corredor de pruebas en modo interactivo.
+Ejecuta las pruebas una vez con Vitest (`npm run test:watch` para modo interactivo).
 
 ### `npm run build`
 
@@ -81,8 +81,8 @@ Compila la aplicación para producción en la carpeta `build`. Esto empaqueta Re
 
 ```
 superlista/
+├── index.html
 ├── public/
-│   └── index.html
 ├── src/
 │   ├── components/
 │   │   ├── ProductItem/

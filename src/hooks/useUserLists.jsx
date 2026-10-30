@@ -73,7 +73,7 @@ export function useUserLists(currentUser) {
       await firebaseService.deleteList(currentUser.uid, listIdToDelete);
     } catch (error) {
       console.error("Error al eliminar lista:", error);
-      throw new Error('Failed to delete list');
+      throw new Error('Failed to delete list', { cause: error });
     }
   };
 

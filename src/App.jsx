@@ -26,7 +26,7 @@ import CategoryFilter from './components/CategoryFilter/CategoryFilter';
 import { ProductListSkeleton } from './components/Skeleton/Skeleton';
 
 import useBarcodeScanner from './hooks/useBarcodeScanner';
-import { ShoppingBag, MapPin, BarChart2, Plus, ScanBarcode, ExternalLink } from 'lucide-react';
+import { ChevronDown, MapPin, BarChart2, Plus, ScanBarcode, ExternalLink } from 'lucide-react';
 import { showErrorAlert, showSuccessToast } from './Notifications/NotificationsServices';
 import { fetchProductByEan } from './services/supermarketService';
 
@@ -56,8 +56,9 @@ function MainAppContent() {
   const navigate = useNavigate();
   const {
 
+    userLists,
+    selectList,
     currentListId,
-    currentListName,
     loading: loadingLists,
   } = useUserListsContext();
 
@@ -127,7 +128,7 @@ function MainAppContent() {
             if (nearestForBrand && nearestForBrand.distance < THRESHOLD_KM) {
               return nearestForBrand;
             }
-          } catch (e) { }
+          } catch (e) { /* sucursal sin datos: se ignora esta marca */ }
           return null;
         })).then(foundBranches => {
           const validBranches = foundBranches.filter(b => b !== null).sort((a, b) => a.distance - b.distance);
@@ -348,7 +349,8 @@ function MainAppContent() {
       return a.nombre.localeCompare(b.nombre);
     });
 
-  const totalProductos = filteredProducts.length;
+  const totalComprados = products.filter(producto => producto.completed).length;
+  const progresoCompra = products.length > 0 ? (totalComprados / products.length) * 100 : 0;
   const totalGeneral = products.reduce((sum, producto) => {
     if (!producto.completed) {
       return sum + ((producto.valor || 0) * (producto.cantidad || 0));
@@ -384,14 +386,35 @@ function MainAppContent() {
             </span>
           )}
           <div className="list-summary-meta-row">
-            <div className="list-summary-meta">
-              {currentListName || 'Cargando...'} · {totalProductos || 0} producto{totalProductos === 1 ? '' : 's'}
+            <div className="list-selector">
+              <select
+                className="list-selector-input"
+                aria-label="Cambiar de lista"
+                value={currentListId || ''}
+                onChange={(e) => selectList(e.target.value)}
+              >
+                {userLists.map(list => (
+                  <option key={list.id} value={list.id}>{list.nameList}</option>
+                ))}
+              </select>
+              <ChevronDown size={16} aria-hidden="true" className="list-selector-icon" />
             </div>
-            <div className="list-summary-icon">
-              <ShoppingBag size={18} strokeWidth={2.2} />
+            <div className="list-summary-meta">
+              {totalComprados} de {products.length} comprado{products.length === 1 ? '' : 's'}
             </div>
           </div>
+          <span className="list-summary-label">Por comprar</span>
           <div className="list-summary-total">{formattedTotal}</div>
+          <div
+            className="list-summary-progress"
+            role="progressbar"
+            aria-label="Productos comprados"
+            aria-valuemin={0}
+            aria-valuemax={products.length}
+            aria-valuenow={totalComprados}
+          >
+            <div className="list-summary-progress-bar" style={{ width: `${progresoCompra}%` }} />
+          </div>
         </div>
         {detectedSupermarket && (
           <a
@@ -480,49 +503,46 @@ function MainAppContent() {
           <div className="fixed-bottom-controls">
             {!showProductForm && (
               <div className="bottom-controls-header">
-                <SearchBar
-                  busqueda={searchTerm}
-                  setBusqueda={setSearchTerm}
-                />
-                <div className="action-buttons-container">
+                <div className="bottom-search-row">
+                  <SearchBar
+                    busqueda={searchTerm}
+                    setBusqueda={setSearchTerm}
+                  />
                   <Button
                     onClick={() => navigate('/supermercados')}
                     variant="secondary"
                     icon={<MapPin size={20} />}
-                    className="explore-super-button btn-square"
+                    className="bottom-icon-button"
                     title="Explorar Precios"
-                  >
-                    Precios
-                  </Button>
+                  />
                   <Button
                     onClick={() => navigate('/comparar')}
                     variant="secondary"
                     icon={<BarChart2 size={20} />}
-                    className="compare-button btn-square"
+                    className="bottom-icon-button"
                     title="Comparar Precios"
+                  />
+                </div>
+                <div className="bottom-actions-row">
+                  <Button
+                    onClick={() => setShowScanner(true)}
+                    variant="secondary"
+                    icon={<ScanBarcode size={20} />}
+                    className="bottom-action-button"
                   >
-                    Comparar
+                    Escanear
                   </Button>
                   <Button
                     onClick={handleToggleForm}
                     variant="primary"
                     icon={<Plus size={20} />}
-                    className="toggle-form-button btn-square"
+                    className="bottom-action-button"
                   >
                     Agregar
-                  </Button>
-                  <Button
-                    onClick={() => setShowScanner(true)}
-                    variant="secondary"
-                    icon={<ScanBarcode size={20} />}
-                    className="scan-product-button btn-square"
-                  >
-                    Escanear
                   </Button>
                 </div>
               </div>
             )}
-
             {showProductForm && (
               loadingCategories ? (
                 <p className="loading-message">Cargando categorías...</p>

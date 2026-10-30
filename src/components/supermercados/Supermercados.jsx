@@ -273,7 +273,7 @@ const Supermercados = () => {
     setIsLoadingProducts(true);
     setError(null);
     let loadedProductsChunk = [];
-    let currentDataSourceUsed = 'Firestore';
+    let currentDataSourceUsed;
 
     try {
       // Si el supermercado tiene API pública, buscar directamente en su web.
@@ -460,7 +460,6 @@ const Supermercados = () => {
       setError(null);
       console.log("Debug - Ni selectedBrand ni selectedBranch, estados limpios.");
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedBranch, selectedBrand]); // Eliminada fetchProductsData de las dependencias ya que no se llama directamente
 
   const handleSelectBrand = (brand) => {

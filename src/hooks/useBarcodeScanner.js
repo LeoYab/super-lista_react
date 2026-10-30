@@ -1,7 +1,8 @@
 import { useEffect, useRef } from 'react';
-import { Html5Qrcode, Html5QrcodeSupportedFormats } from 'html5-qrcode';
 
-const SCANNER_CONFIG = {
+// html5-qrcode is heavy and only needed once the camera opens, so it's loaded
+// on demand to keep it out of the main bundle.
+const getScannerConfig = (Html5QrcodeSupportedFormats) => ({
   fps: 15,
   videoConstraints: {
     facingMode: 'environment',
@@ -15,7 +16,7 @@ const SCANNER_CONFIG = {
     Html5QrcodeSupportedFormats.UPC_E,
     Html5QrcodeSupportedFormats.CODE_128
   ]
-};
+});
 
 // Starts the rear camera in the element with id "reader" while `active`.
 // Starts/stops are serialized through `pendingStopRef`: without that, React
@@ -43,11 +44,13 @@ export default function useBarcodeScanner(active, onScan, onStartError) {
     const started = pendingStopRef.current
       .then(async () => {
         if (cancelled) return;
+        const { Html5Qrcode, Html5QrcodeSupportedFormats } = await import('html5-qrcode');
+        if (cancelled) return;
         scanner = new Html5Qrcode('reader');
         scannerRef.current = scanner;
         await scanner.start(
           { facingMode: 'environment' },
-          SCANNER_CONFIG,
+          getScannerConfig(Html5QrcodeSupportedFormats),
           (text, result) => onScanRef.current(text, result),
           () => { }
         );

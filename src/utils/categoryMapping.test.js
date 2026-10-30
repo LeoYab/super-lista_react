@@ -86,21 +86,21 @@ describe('resolveProductCategory', () => {
   const currentCategories = [OTROS_CATEGORY, ...CARREFOUR_CATEGORIES, ...CHANGOMAS_CATEGORIES];
 
   test('unmapped brand always resolves to Otros without ever adding a category', async () => {
-    const addCategoryFn = jest.fn();
+    const addCategoryFn = vi.fn();
     const result = await resolveProductCategory(['Cualquier/Cosa/'], currentCategories, 'dia', addCategoryFn);
     expect(result).toEqual(OTROS_CATEGORY);
     expect(addCategoryFn).not.toHaveBeenCalled();
   });
 
   test('no detected brand resolves to Otros without ever adding a category', async () => {
-    const addCategoryFn = jest.fn();
+    const addCategoryFn = vi.fn();
     const result = await resolveProductCategory(['Bebidas/Gaseosas/'], currentCategories, null, addCategoryFn);
     expect(result).toEqual(OTROS_CATEGORY);
     expect(addCategoryFn).not.toHaveBeenCalled();
   });
 
   test('Carrefour scan resolves to the matching category already present in Firebase, without adding one', async () => {
-    const addCategoryFn = jest.fn();
+    const addCategoryFn = vi.fn();
     const result = await resolveProductCategory(
       ['Bebidas/Gaseosas/'],
       currentCategories,
@@ -114,7 +114,7 @@ describe('resolveProductCategory', () => {
 
   test('calls addCategoryFn as a last-resort when the target category is missing from Firebase', async () => {
     const addedCategory = { id: 999, title: 'Bebidas', icon: '🥤', brand: CATEGORY_BRANDS.CARREFOUR };
-    const addCategoryFn = jest.fn().mockResolvedValue(addedCategory);
+    const addCategoryFn = vi.fn().mockResolvedValue(addedCategory);
     // currentCategories deliberately omits every Carrefour category.
     const sparseCategories = [OTROS_CATEGORY];
 
@@ -130,7 +130,7 @@ describe('resolveProductCategory', () => {
   });
 
   test('falls back to Otros if addCategoryFn throws', async () => {
-    const addCategoryFn = jest.fn().mockRejectedValue(new Error('network error'));
+    const addCategoryFn = vi.fn().mockRejectedValue(new Error('network error'));
     const sparseCategories = [OTROS_CATEGORY];
 
     const result = await resolveProductCategory(

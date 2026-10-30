@@ -128,7 +128,7 @@ export const useSwipeable = ({
     if (itemRef.current && e.pointerId !== undefined) {
       try {
         itemRef.current.releasePointerCapture(e.pointerId);
-      } catch (err) { }
+      } catch (err) { /* el puntero ya fue liberado */ }
     }
   }, [isDragging, translateX, swipeThreshold, onSwipeLeftAction, onSwipeRightAction, closeSwipe]);
 
@@ -139,7 +139,7 @@ export const useSwipeable = ({
       if (itemRef.current && e.pointerId !== undefined) {
         try {
           itemRef.current.releasePointerCapture(e.pointerId);
-        } catch (err) { }
+        } catch (err) { /* el puntero ya fue liberado */ }
       }
     }
   }, [isDragging, closeSwipe]);

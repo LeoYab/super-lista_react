@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project overview
 
-SuperLista is a mobile-first PWA (Create React App) for managing supermarket shopping lists: add products manually or by scanning a barcode, browse live prices at Carrefour/Día/ChangoMas/Coto/Vea/Jumbo/Easy, and compare which supermarket is cheapest for the current list. Data persists per-user in Firebase Realtime Database.
+SuperLista is a mobile-first PWA (Vite + React) for managing supermarket shopping lists: add products manually or by scanning a barcode, browse live prices at Carrefour/Día/ChangoMas/Coto/Vea/Jumbo/Easy, and compare which supermarket is cheapest for the current list. Data persists per-user in Firebase Realtime Database.
 
 ## Commands
 
@@ -12,15 +12,17 @@ SuperLista is a mobile-first PWA (Create React App) for managing supermarket sho
 npm install          # install dependencies
 npm start             # dev server on http://localhost:3000
 npm run build          # production build to build/
-npm test               # Jest + React Testing Library, interactive watch mode
-npm test -- --watchAll=false --testPathPattern=App.test.js   # run a single test file, non-interactively
+npm test               # Vitest + React Testing Library, single run
+npm run test:watch     # watch mode
+npx vitest run src/App.test.jsx   # run a single test file
+npm run lint           # ESLint
 npm run data:copy      # copy scraped supermarket JSON from src/data/ into public/data/ (see "Local supermarket data" below)
-npm run start-https    # dev server with HTTPS=true (needed to test the camera-based barcode scanner over LAN/on a phone)
+npm run start-https    # dev server with a self-signed certificate (needed to test the camera-based barcode scanner over LAN/on a phone)
 ```
 
 Docker (alternative to a local Node install): `docker-compose up` builds and runs the dev server on port 3000 with the source tree bind-mounted for hot reload; requires a `.env` file (see below).
 
-There is no separate lint script; ESLint runs as part of `react-scripts start`/`build` via the `react-app` config in `package.json`.
+Node 24 is the deployment target (`engines` in `package.json`).
 
 ## Environment setup
 
@@ -34,7 +36,7 @@ REACT_APP_FIREBASE_STORAGE_BUCKET=
 REACT_APP_FIREBASE_MESSAGING_SENDER_ID=
 REACT_APP_FIREBASE_APP_ID=
 ```
-`.env.test` in the repo shows the expected shape (values are for the project's own Firebase instance — a Firebase web API key is not a secret, security comes from Realtime Database rules). Never re-add `DANGEROUSLY_DISABLE_HOST_CHECK=true`; it was removed as a security fix (DNS-rebinding exposure on the dev server).
+`.env.test` in the repo shows the expected shape (values are for the project's own Firebase instance — a Firebase web API key is not a secret, security comes from Realtime Database rules). The `REACT_APP_` prefix is kept on purpose through `envPrefix` in `vite.config.mjs`, read via `import.meta.env`. Never disable the dev server host check (`server.allowedHosts: true`); it protects against DNS rebinding.
 
 `api/supermarket-proxy.js` (the Vercel serverless proxy) additionally reads `ALLOWED_ORIGIN` to restrict CORS — set it to the deployed domain(s) in Vercel's project settings, comma-separated for multiple.
 
@@ -72,13 +74,13 @@ The `scripts/` directory holds one-off Node scripts (not run automatically) that
 ### Live price lookups (barcode scanning)
 
 Scanning a barcode (`html5-qrcode`) tries a live EAN lookup first for the three brands with a working API (Carrefour, Día, ChangoMas), then falls back to the static branch JSON above:
-- **Dev**: `src/setupProxy.js` proxies `/proxy-api/{carrefour|dia|changomas}` to each brand's site via `http-proxy-middleware` (avoids CORS).
+- **Dev**: `server.proxy` in `vite.config.mjs` proxies `/proxy-api/{carrefour|dia|changomas|jumbo|vea}` to each brand's site (avoids CORS).
 - **Prod (Vercel)**: `api/supermarket-proxy.js` is a serverless function that does the same via `/api/supermarket-proxy?brand=...&ean=...`, with an `ALLOWED_ORIGIN` CORS allowlist and a 120-req/min-per-IP in-memory rate limit.
 - `src/services/supermarketService.js` calls whichever endpoint is live and caches results in `localStorage` (`superlista_{brand}_ean_cache`, TTL-based).
 
 ### Theming (dark mode)
 
-All colors/spacing/shadows are CSS custom properties in `src/styles/variables.css`, with a `:root[data-theme="dark"]` override block. `src/hooks/useTheme.js` toggles `data-theme` on `<html>` and persists the choice to `localStorage` (`superlista_theme`); an inline blocking script in `public/index.html` applies the saved/OS-preferred theme before first paint to avoid a flash of the wrong theme.
+All colors/spacing/shadows are CSS custom properties in `src/styles/variables.css`, with a `:root[data-theme="dark"]` override block. `src/hooks/useTheme.js` toggles `data-theme` on `<html>` and persists the choice to `localStorage` (`superlista_theme`); the blocking script `public/theme-init.js` (external because the CSP forbids inline scripts) applies the saved/OS-preferred theme before first paint to avoid a flash of the wrong theme.
 
 **Important gotcha**: several tokens are theme-adaptive for use as *text/icon* color on a themed background (e.g. `--primary-color`, `--accent-color`, `--danger-color` get lighter in dark mode for legibility). Using those as a *solid fill behind white button text* fails WCAG contrast in dark mode. Use the dedicated non-adaptive fill tokens instead: `--primary-solid-end`/`--primary-solid-hover`, `--success-solid`/`--success-solid-hover`, `--danger-solid`/`--danger-solid-hover` (see `.btn-primary`/`.btn-success`/`.btn-danger` in `src/components/Buttons/Button.css` for the pattern). Similarly, `--glass-bg-strong`/`--glass-bg-soft`/`--glass-border`/`--bg-glass`/`--scrim-color`/`--hairline-shade` exist so translucent "glass" surfaces (headers, modals, overlays) adapt per theme instead of hardcoding `rgba(255,255,255,...)`.
 

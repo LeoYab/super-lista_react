@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { Pencil, Trash2 } from 'lucide-react';
+import { Check, Pencil, Trash2 } from 'lucide-react';
 import './ProductItem.css';
 import Button from '../Buttons/Button';
 import { showConfirmAlert, showSuccessToast } from '../../Notifications/NotificationsServices';
@@ -128,7 +128,9 @@ const ProductItem = ({ producto, onEditar }) => {
         {/* Left content */}
         <div className="product-item-left-content">
           <div className="product-item-image">
-            <span className="emoji-icon">{producto.icon || '❓'}</span>
+            {producto.completed
+              ? <Check size={22} strokeWidth={3} aria-label="Comprado" />
+              : <span className="emoji-icon">{producto.icon || '❓'}</span>}
           </div>
           <div className="product-item-details">
             <span className="product-item-name" title={producto.nombre}>{producto.nombre}</span>
@@ -136,14 +138,14 @@ const ProductItem = ({ producto, onEditar }) => {
               {Number(producto.precio_original) > Number(producto.valor) ? (
                 <div className="discount-price-stack">
                   <span className="original-price-strikethrough">
-                    Unidad: {Number(producto.precio_original).toLocaleString('es-AR', { style: 'currency', currency: 'ARS' })}
+                    {producto.cantidad} × {Number(producto.precio_original).toLocaleString('es-AR', { style: 'currency', currency: 'ARS' })}
                   </span>
                   <span className="product-item-promo-price">
-                    Promoción: {formattedPrice}
+                    Promo: {producto.cantidad} × {formattedPrice}
                   </span>
                 </div>
               ) : (
-                <span className="product-item-unit-detail">Unidad: {formattedPrice}</span>
+                <span className="product-item-unit-detail">{producto.cantidad} × {formattedPrice}</span>
               )}
             </div>
             {producto.promo_leyenda && (
@@ -154,7 +156,6 @@ const ProductItem = ({ producto, onEditar }) => {
 
         {/* Right content - quantity and total */}
         <div className="product-item-right-content">
-          <span className="product-item-quantity-text">Cantidad: {producto.cantidad}</span>
           <span className="product-item-total-price">{formattedTotal}</span>
         </div>
 
